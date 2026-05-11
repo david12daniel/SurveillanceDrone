@@ -1,0 +1,28 @@
+# GitHub Repo
+# ======================
+# Exclude OpenClaw workspace and temporary files.
+
+# OpenClaw config & state
+.openclaw/
+
+# Agent-specific files that aren't part of the core project
+agents/
+
+# Local memory, logs, and caches
+memory/
+*.log
+
+# Python compiled files
+*.pyc
+__pycache__/
+
+# System files
+.DS_Store
+
+# IDE specific
+.vscode/
+.idea/
+*.sublime-
+
+# Ignore session handoffs -- proceed with care! Uncomment if you want to version them
+#session-handoffs/
