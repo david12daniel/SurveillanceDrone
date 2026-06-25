@@ -31,6 +31,6 @@ The Surveillance Drone SysML V2 model (`model.md`) is a critical engineering art
 
 **Details are maintained in a dedicated research file:**
 
-- [[/home/david12daniel/.openclaw/agents/thermal-surveillance-drone/airframe-research.md]]
+- [[analysis/airframe-research.md]]
 
 **Source:** External CSV upload 2026-05-16
