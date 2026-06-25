@@ -1,0 +1,6 @@
+ID,Model,Approach,Connection to Laptop,Frequency,Range at 2.8 km,macOS Compatible?,Price (USD),Extra Hardware Needed,Notes
+TLM1,EdgeTX Radio USB Passthrough,Radio USB serial,USB-C (virtual COM port),2.4 GHz / 900 MHz,✅ 10+ km,Yes,0,None,"No extra hardware. Radio forwards telemetry natively over USB. Works with Boxer, T20, TX16S, TX12, T-Pro."
+TLM2,HGLRC Hermes ELRS SIM USB Dongle,Standalone ELRS RX USB dongle,USB-A (serial),2.4 GHz,✅ 10+ km,Yes,14-18,None,"ESP32 + SX1280. Originally for FPV sims. Can be reflashed with ELRS backpack firmware for telemetry."
+TLM3,CubeFPV USB ELRS Dongle,Standalone ELRS RX USB dongle,USB (serial),2.4 GHz,✅ 10+ km,Yes,15-20,None,"Built-in ELRS receiver + solder pads for external CRSF RX. Reflashable for telemetry use."
+TLM4,DIY ESP32 Dev Board + ELRS RX,DIY ESP32 + RX module,USB (serial),2.4 GHz,✅ 10+ km,Yes,10-15,ELRS RX module (~$5-10),"Requires soldering and firmware flashing. Violates R5 (minimize DIY)."
+TLM5,RadioMaster Ranger Module + AirPort,External TX module direct USB,USB (serial / AirPort firmware),2.4 GHz,✅ 10+ km,Yes,70,2nd ELRS RX on drone (~$15-25),"AirPort replaces RC link. Requires 2nd RX on drone + different frequency band for RC. Complex. Not recommended."
