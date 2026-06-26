@@ -7,11 +7,11 @@
 
 ## Requirement
 
-From model.md — requirement **R7**:
+From model.sysml — requirement **R7**:
 
 > Minimum linear distance during surveillance: **2800 meters** (2.8 km) when performing surveillance at 2.2 m/s in sustained wind conditions of 4.5 m/s.
 
-From model.md — requirement **R4_GCS_RANGE**:
+From model.sysml — requirement **R4_GCS_RANGE**:
 
 > The GCS control link and video receiver shall maintain a reliable connection with the drone at a slant range of at least **2800 meters** under clear line-of-sight conditions.
 

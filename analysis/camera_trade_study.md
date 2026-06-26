@@ -3,7 +3,7 @@
 ## Purpose
 Identify commercially-available 640×512 LWIR thermal camera modules that satisfy the CameraSubsystem requirements (R3_CAM_WT, R3_CAM_PWR, R3_CAM_FOV, R3_CAM_NETD, R3_CAM_RES, R3_CAM_COST, R3_CAM_IF) within a $2,500 total system budget.
 
-## Requirement Summary (from model.md)
+## Requirement Summary (from model.sysml)
 
 | ID | Constraint | Limit |
 |---|---|---|

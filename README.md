@@ -7,12 +7,12 @@ We are currently in the design phase with high-level system requirements defined
 
 ## Project Structure
 
-The system model (`model.md`) is a SysML v2 textual model organized into three top-level packages:
+The system model (`model.sysml`) is a SysML v2 textual model organized into three top-level packages:
 
 ### Requirements
 System-level and subsystem-level requirements with traceability:
 - **R1–R8**: Top-level mission requirements (altitude, speed, thermal detection, cost, DIY minimization, flight time, range, stretch goal)
-- **CameraSubsystem**: 7 requirements (mass, power, FOV, NETD, resolution, cost, interface)
+- **CameraRequirements**: 7 requirements (mass, power, FOV, NETD, resolution, cost, interface)
 - **BatterySubsystem**: 7 requirements (voltage, energy x2, mass, discharge, cost, interface)
 - **SBCSubsystem**: 6 requirements (power, mass, cost, video input, video processing, data interface, temperature)
 - **GCSSubsystem**: 8 requirements (range, video display, telemetry, control, battery, portability, cost, interface)
@@ -36,9 +36,19 @@ Component part definitions with attributes, ports, and formal `satisfy` traceabi
 - **GroundControlStation**: Composes RadioControlTransmitter + TelemetryReceiver + VideoReceiver; `satisfy` ×8
 
 ### Analysis
-Executable constraints for design verification and trade studies:
-- **BudgetLimit**: total cost ≤ $2,500
-- **FlightTimeCalc**: flight time = battery energy / total power
-- **ScoreCalc**: score = flight time / total cost
-- **MinFlightTimeCheck**: Evaluates a system instance against budget, flight time, and cost constraints
-- **TradeSpaceEvaluation**: Reusable analysis for comparing candidate configurations
+Parametric calculations, requirement constraints, and analysis cases for design
+verification and trade studies:
+- **FlightTimeCalc** (`calc def`): flight time = battery energy / total power
+- **ScoreCalc** (`calc def`): endurance-per-dollar = flight-time magnitude / total cost
+- **BudgetLimit** (`constraint def`): total cost ≤ $2,500 (R4)
+- **MinFlightTimeReq** (`constraint def`): flight time ≥ 1800 s / 30 min (R6)
+- **StretchFlightTimeReq** (`constraint def`): flight time ≥ 3600 s / 60 min (R8)
+- **MinFlightTimeCheck** (`analysis def`): verifies a system instance — computes
+  flight time, asserts budget (R4) + min flight time (R6), reports the R8 stretch
+  goal, returns a pass/fail verdict
+- **TradeSpaceEvaluation** (`analysis def`): scores a candidate configuration
+  (flight time + endurance-per-dollar) and asserts the budget, for ranking alternatives
+
+Battery energy is expressed in joules `[J]` so `energy / power` reduces to seconds.
+Syside validates the parametric structure; numeric execution of the `calc def`s
+requires a SysML v2 execution engine.

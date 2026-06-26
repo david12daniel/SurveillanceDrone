@@ -68,7 +68,7 @@ from typing import Dict, List, Optional
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# 1.  Domain constants  (from model.md system-level requirements)
+# 1.  Domain constants  (from model.sysml system-level requirements)
 # ═══════════════════════════════════════════════════════════════════════════
 
 @dataclass(frozen=True)
@@ -405,7 +405,7 @@ def _report(result: Dict) -> None:
     print()
 
     # ── Altitudes ─────────────────────────────────────────────────────
-    print("── FLYING ALTITUDE REQUIREMENTS (from model.md) ──────")
+    print("── FLYING ALTITUDE REQUIREMENTS (from model.sysml) ──────")
     print(f"  R1: nominal altitude range = {r['mission']['altitude_min_m']}–"
           f"{r['mission']['altitude_max_m']} m AGL")
     print(f"  R3.1: detection at {r['mission']['altitude_max_m']} m (worst case)")

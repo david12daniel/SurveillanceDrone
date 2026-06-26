@@ -1,9 +1,15 @@
 ## Surveillance Drone Model Location
 
-**Location:** `/home/david12daniel/.openclaw/agents/thermal-surveillance-drone/model.md`
+**File:** `model.sysml` (renamed from `model.md` on 2026-06-25 so the Syside VS Code extension activates natively on the `.sysml` extension; still raw SysML v2 textual notation).
+
+**Locations (same repo, two checkouts):**
+- **Linux (OpenClaw agent):** `/home/david12daniel/.openclaw/agents/thermal-surveillance-drone/model.sysml`
+- **Windows:** `c:\Users\Josiah Laperriere\Documents\Coding\SurveillanceDrone\SurveillanceDrone\model.sysml`
+
+This project is worked on from both locations. **Git is the single source of truth** — sync via git, not by copying files. Only one user (David) works on the file at a time, so there is no concern about concurrent-edit conflicts; just pull before starting and push when done.
 
 **Policy Statement:**  
-The Surveillance Drone SysML V2 model (`model.md`) is a critical engineering artifact that **cannot be modified, updated, moved, or removed** without **explicit prior approval** from the user (David Daniel).
+The Surveillance Drone SysML V2 model (`model.sysml`) is a critical engineering artifact that **cannot be modified, updated, moved, or removed** without **explicit prior approval** from the user (David Daniel).
 
 **Rationale:**  
 - Ensures traceability and integrity of systems engineering decisions.  
@@ -11,7 +17,7 @@ The Surveillance Drone SysML V2 model (`model.md`) is a critical engineering art
 - Maintains compliance with Agile MBSE principles (git as source of truth).  
 
 **Enforcement:**  
-- Any attempt to alter `model.md` must be preceded by a formal request to the user.  
+- Any attempt to alter `model.sysml` must be preceded by a formal request to the user.  
 - Changes require documented justification and approval.  
 - All modifications must be tracked via git commits with clear change logs.  
 
