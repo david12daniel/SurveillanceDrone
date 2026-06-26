@@ -11,11 +11,15 @@ Purpose:
   model plus a forward-flight parasitic-drag term.
 
   The script READS the SysML model (model.sysml + candidates.sysml) for every
-  component candidate, GENERATES a grid of realistic generic battery packs, and
-  SWEEPS complete, buildable drone configurations — fully crossing the
-  flight-time drivers (airframe × battery × SBC × VTX × thermal camera × DVR)
-  while holding the sub-1 W peripherals (FPV camera, GPS, RX) at a lightest
-  representative. It then WRITES the results back out as:
+  component candidate (including the real battery candidates BAT01–BAT21; it
+  falls back to a generic LiPo/Li-ion grid only if none are present), SWEEPS
+  complete drone configurations — fully crossing the flight-time drivers
+  (airframe × battery × SBC × VTX × thermal camera) while holding the sub-1 W
+  peripherals (FPV camera, GPS, RX) at a lightest representative — and FILTERS
+  out interface-incompatible pairings (see Compatibility filtering below). The
+  DVR is NOT crossed: it is excluded from the flight-time calc (SBC-stage build)
+  but each thermal must still have a compatible DVR for the earlier stages. It
+  then WRITES the results back out as:
     • flight_time_results.csv      — EVERY instance: all components (+ generic
                                      battery attributes) and its max flight time
     • flight_time_instances.sysml  — SysML v2 instance table for the baseline +
@@ -29,6 +33,20 @@ Purpose:
     weight, so only its POWER draw is added (propulsion power excludes avionics),
     using a representative draw for the category. Non-bundled peripherals are
     added with their own mass and power.
+
+  Compatibility filtering (removes non-real configurations):
+    The executable counterpart of the interface rules declared in
+    DroneSystemModel::Architecture::Compatibility. A pairing is dropped if:
+      • P1 battery↔airframe: the battery series-cell count (cells_s) falls
+        outside the airframe's [minCells_s, maxCells_s] ESC/motor window — e.g.
+        a 4S pack on a 6S-only frame, or a 6S pack on the 3–5S Darwin 129.
+      • V2 thermal↔DVR: the thermal camera's video output must be recordable by
+        SOME DVR (CVBS via DVR1-6, or digital HDMI/USB via DVR7-9). A thermal
+        with no compatible recorder (raw SPI/CSI/CMOS only) can't be recorded in
+        the pre-SBC stages and is dropped. The DVR is excluded from the flight-
+        time calc (the SBC records at the SBC stage); it is kept only for
+        earlier-stage compatibility and cost (see MODEL_ISSUES.md §C11/C12).
+    Pruned counts are printed and reported in flight_time_results.md.
 
 Traceability:
   R2  – cruise ground speed 2.23 m/s             (forward-flight regime)
@@ -153,6 +171,9 @@ class Airframe:
     fpv_incl: bool
     gps_incl: bool
     rx_incl: bool
+    min_cells: Optional[int] = None   # min battery series cells (ESC/motor rated)
+    max_cells: Optional[int] = None   # max battery series cells (ESC/motor rated)
+    max_thrust_g: Optional[float] = None  # published max static thrust per motor [g] (B5); None → prop-size heuristic
 
 
 @dataclass
@@ -163,6 +184,7 @@ class Component:
     name: str
     mass_g: float
     power_w: float
+    video_formats: frozenset = frozenset()   # canonical video-link formats (see _video_formats)
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -304,12 +326,41 @@ _CATEGORY_BY_TYPE = {
 }
 
 
+# Map a free-text video-interface string (e.g. "CVBS / USB / UART") to the set
+# of canonical video-LINK formats it can carry. This is the executable analogue
+# of DroneSystemModel::Architecture::Compatibility::VideoFormat — a video link is
+# real only when the source and sink share at least one format. Raw sensor buses
+# (SPI/I2C/UART/CMOS/LVCMOS) are NOT video links and are intentionally ignored,
+# so a sensor that only exposes those cannot feed a display/record chain.
+def _video_formats(s: Optional[str]) -> frozenset:
+    if not s:
+        return frozenset()
+    t = s.lower()
+    out = set()
+    if "cvbs" in t or "composite" in t or "analog" in t:
+        out.add("CVBS")
+    if "usb" in t:                              # USB UVC capture-capable
+        out.add("USB")
+    if "csi" in t or "mipi" in t:
+        out.add("MIPI")
+    if "hdmi" in t:
+        out.add("HDMI")
+    if "dji" in t:
+        out.add("DJI")
+    if "hdzero" in t:
+        out.add("HDZERO")
+    if "walksnail" in t:
+        out.add("WALKSNAIL")
+    return frozenset(out)
+
+
 def load_model():
-    """Parse airframes and all payload component candidates from candidates.sysml."""
+    """Parse airframes, payload component candidates, and battery candidates from candidates.sysml."""
     blocks = parse_part_blocks(CANDIDATES_SYSML.read_text(encoding="utf-8"))
 
     airframes: list[Airframe] = []
     components: dict[str, list[Component]] = {c: [] for c in _CATEGORY_BY_TYPE.values()}
+    real_batteries: list[Battery] = []
 
     for b in blocks:
         a = b["attrs"]
@@ -325,6 +376,29 @@ def load_model():
                 fpv_incl=bool(a.get("fpvCameraIncluded", False)),
                 gps_incl=bool(a.get("gpsIncluded", False)),
                 rx_incl=bool(a.get("receiverIncluded", False)),
+                min_cells=int(a["minCells_s"]) if "minCells_s" in a else None,
+                max_cells=int(a["maxCells_s"]) if "maxCells_s" in a else None,
+                max_thrust_g=float(a["maxThrustPerMotor_g"]) if "maxThrustPerMotor_g" in a else None,
+            ))
+        elif b["type"] == "Battery":
+            required = {"cells_s", "capacity_mAh", "nominalVoltage", "usableDoD", "mass"}
+            if not required.issubset(a):
+                continue
+            v_nom = float(a["nominalVoltage"])
+            cap_mah = float(a["capacity_mAh"])
+            dod = float(a["usableDoD"])
+            energy_wh = v_nom * cap_mah / 1000.0
+            usable_j = energy_wh * 3600.0 * dod
+            real_batteries.append(Battery(
+                name=str(a.get("name", b["ident"])),
+                chemistry=str(a.get("chemistry", "Li-ion")),
+                cells_s=int(a["cells_s"]),
+                capacity_mah=cap_mah,
+                nominal_v=v_nom,
+                usable_dod=dod,
+                mass_g=float(a["mass"]),
+                energy_wh=round(energy_wh, 1),
+                usable_energy_j=round(usable_j, 1),
             ))
         elif b["type"] in _CATEGORY_BY_TYPE:
             cat = _CATEGORY_BY_TYPE[b["type"]]
@@ -338,11 +412,15 @@ def load_model():
                 power_w = round(float(a["currentDraw"]) * RAIL_VOLTAGE_V, 3)
             else:
                 continue
+            # Video-link capability: thermal cams expose their OUTPUT via
+            # outputInterface; DVRs/VTX expose their INPUT via videoInput.
+            fmt_src = a.get("outputInterface") or a.get("videoInput") or a.get("outputType")
             components[cat].append(Component(
                 category=cat, ident=b["ident"], name=a.get("name", b["ident"]),
                 mass_g=float(a["mass"]), power_w=power_w,
+                video_formats=_video_formats(fmt_src),
             ))
-    return airframes, components
+    return airframes, components, real_batteries
 
 
 def lightest(comps: list[Component]) -> Component:
@@ -399,10 +477,12 @@ def evaluate(af: Airframe, bat: Battery, thermal: Component, sbc: Component,
     gps_id, gps_name, gps_src, gps_m, gps_p = _peripheral(af.gps_incl, None, reps["gps"], rep_pow["gps"])
     rx_id, rx_name, rx_src, rx_m, rx_p = _peripheral(af.rx_incl, None, reps["rx"], rep_pow["rx"])
 
-    # Mission additions (never bundled) always add mass + power.
-    added_mass = (thermal.mass_g + sbc.mass_g + dvr.mass_g
+    # Mission additions (never bundled) add mass + power. The DVR is EXCLUDED —
+    # the headline endurance is the SBC-stage build (SBC present, no DVR); the
+    # DVR (`dvr`) is the earlier-stage recorder, reported but not flown here.
+    added_mass = (thermal.mass_g + sbc.mass_g
                   + vtx_m + fpv_m + gps_m + rx_m)
-    payload_power = (thermal.power_w + sbc.power_w + dvr.power_w
+    payload_power = (thermal.power_w + sbc.power_w
                      + vtx_p + fpv_p + gps_p + rx_p)
 
     auw_g = af.mass_g + bat.mass_g + added_mass
@@ -418,7 +498,10 @@ def evaluate(af: Airframe, bat: Battery, thermal: Component, sbc: Component,
     t_cruise = endurance(bat.usable_energy_j, p_cruise) / 60.0
     t_hw = endurance(bat.usable_energy_j, p_hw) / 60.0
 
-    throttle = (auw_g / p.n_rotors) / _max_thrust_per_motor_g(af.prop_in)
+    # Per-motor max thrust: prefer the airframe's bound figure (B5); else the
+    # prop-size heuristic (which under-rates LR motors — see MODEL_ISSUES B5).
+    mt_per_motor = af.max_thrust_g if af.max_thrust_g else _max_thrust_per_motor_g(af.prop_in)
+    throttle = (auw_g / p.n_rotors) / mt_per_motor
 
     return {
         "config_id": config_id,
@@ -458,23 +541,61 @@ def evaluate(af: Airframe, bat: Battery, thermal: Component, sbc: Component,
     }
 
 
-def iter_configs(airframes, components, batteries, p: PhysicsParams):
-    """Yield one result dict per buildable configuration (generator → low memory)."""
+def iter_configs(airframes, components, batteries, p: PhysicsParams,
+                 stats: Optional[dict] = None):
+    """Yield one result dict per REAL (compatibility-filtered) configuration.
+
+    Two interface-compatibility filters prune non-buildable pairings — the
+    executable counterpart of the rules declared in
+    DroneSystemModel::Architecture::Compatibility:
+      • P1 battery↔airframe (BatteryVoltageCompatible): the battery series-cell
+        count must fall within the airframe's [min_cells, max_cells] ESC/motor
+        window. (Drops e.g. a 4S pack on a 6S-only frame.)
+      • V2 thermal↔DVR (VideoFormatCompatible): the thermal camera's video
+        output must share a format with SOME DVR's input (CVBS, HDMI, or USB —
+        DVR1-6 are CVBS, DVR7-9 are digital). A thermal with no compatible
+        recorder cannot be recorded in the pre-SBC stages and is dropped.
+
+    DVR HANDLING: the DVR is NOT a flight-time sweep dimension and its mass/power
+    are EXCLUDED from the endurance calc — the headline "max flight time" is the
+    SBC-stage build (SBC present, DVR removed). The DVR is still required for the
+    earlier (pre-SBC) stages, so each thermal must have a compatible DVR; the
+    lightest compatible one is carried into the CSV for earlier-stage / cost
+    reference (its cost rolls up in the SysML model's totalCost, not here).
+    """
     reps = {cat: lightest(components[cat]) for cat in ("vtx", "fpv", "gps", "rx")}
     rep_pow = {cat: representative_power(components[cat]) for cat in ("vtx", "fpv", "gps", "rx")}
     thermals, sbcs, dvrs = components["thermal"], components["sbc"], components["dvr"]
+
+    # Lightest DVR whose input format can record this thermal's output, or None.
+    def compatible_dvr(thermal: Component) -> Optional[Component]:
+        cands = [d for d in dvrs if thermal.video_formats & d.video_formats]
+        return min(cands, key=lambda d: d.mass_g) if cands else None
+
     n = 0
     for af in airframes:
         # VTX is swept only when not bundled; otherwise a single "included" pass.
         vtx_opts = [None] if af.vtx_incl else components["vtx"]
+        inner_per_bat = len(thermals) * len(sbcs) * len(vtx_opts)
+        inner_per_thermal = len(sbcs) * len(vtx_opts)
         for bat in batteries:
+            # ── Filter P1: battery cell count must fit the airframe window ──
+            if af.min_cells is not None and not (af.min_cells <= bat.cells_s <= af.max_cells):
+                if stats is not None:
+                    stats["voltage_pruned"] += inner_per_bat
+                continue
             for thermal in thermals:
+                # ── Filter V2: thermal must have a compatible (recordable) DVR ──
+                dvr = compatible_dvr(thermal)
+                if dvr is None:
+                    if stats is not None:
+                        stats["video_pruned"] += inner_per_thermal
+                    continue
                 for sbc in sbcs:
-                    for dvr in dvrs:
-                        for vtx in vtx_opts:
-                            n += 1
-                            yield evaluate(af, bat, thermal, sbc, dvr, vtx,
-                                           reps, rep_pow, p, f"C{n:06d}")
+                    for vtx in vtx_opts:
+                        n += 1
+                        yield evaluate(af, bat, thermal, sbc, dvr, vtx,
+                                       reps, rep_pow, p, f"C{n:06d}")
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -583,7 +704,9 @@ def write_sysml(top, baseline, total, p, reps, rep_pow) -> None:
     OUT_SYSML.write_text("\n".join(L) + "\n", encoding="utf-8")
 
 
-def write_markdown(top, baseline, total, n_af, n_bat, n_comp, p, reps, rep_pow) -> None:
+def write_markdown(top, baseline, total, n_af, n_bat, n_comp, p, reps, rep_pow,
+                   bat_label: str = "battery packs", stats: Optional[dict] = None,
+                   unfiltered: Optional[int] = None) -> None:
     L = ["# Flight-Time Analysis — Holistic Configuration Sweep", "",
          "**Auto-generated** by [`flight_time_model.py`](flight_time_model.py). "
          "Regenerate with `python analysis/flight_time_model.py`.", "",
@@ -591,17 +714,28 @@ def write_markdown(top, baseline, total, n_af, n_bat, n_comp, p, reps, rep_pow) 
          "parasitic drag. \"Max flight time\" = still-air hover endurance "
          "(R6 ≥ 30 min / R8 ≥ 60 min metric).", "",
          "## Sweep scope", "",
-         f"- **{total:,} buildable configurations** = airframe × battery × SBC × "
-         "VTX × thermal camera × DVR, fully crossed (respecting airframe component "
-         "inclusion).",
+         f"- **{total:,} real configurations** = airframe × battery × SBC × "
+         "VTX × thermal camera, fully crossed (respecting airframe component "
+         "inclusion) and **filtered for interface compatibility**. The DVR is "
+         "compatibility-gated, not crossed, and excluded from flight time (it is "
+         "an earlier-stage part; the SBC records at the SBC stage).",
          f"- Flight-time drivers swept in full; sub-1 W peripherals held at lightest "
          f"representatives: FPV `{reps['fpv'].ident}`, GPS `{reps['gps'].ident}`, "
          f"RX `{reps['rx'].ident}`.",
          "- **Inclusion logic:** airframe-bundled VTX/FPV/GPS/RX contribute power "
          "only (their mass is already in the airframe's as-built weight); non-bundled "
          "peripherals contribute mass + power.",
-         f"- Candidates: {n_af} airframes (with mass data), {n_bat} generic battery "
-         f"packs, {n_comp} swept payload components.",
+         f"- Candidates: {n_af} airframes (with mass data), {bat_label}, "
+         f"{n_comp} swept payload components.",
+         (f"- **Compatibility filtering** (declared in "
+          f"`DroneSystemModel::Architecture::Compatibility`): {unfiltered:,} raw "
+          f"pairings reduced to {total:,} real configs — pruned "
+          f"{stats['voltage_pruned']:,} on battery↔airframe cell-count (P1, e.g. a "
+          f"4S pack on a 6S-only frame) and {stats['video_pruned']:,} on "
+          f"thermal↔DVR video format (V2, a thermal whose output no DVR can "
+          f"record — CVBS via DVR1-6 or digital HDMI/USB via DVR7-9)."
+          if stats and unfiltered is not None else
+          "- Compatibility filtering: not applied (no cell/format data)."),
          "",
          "## Model assumptions", "",
          f"- Rotors **{p.n_rotors}** · ρ **{p.air_density} kg/m³** · FoM "
@@ -645,24 +779,35 @@ def write_markdown(top, baseline, total, n_af, n_bat, n_comp, p, reps, rep_pow) 
 # ──────────────────────────────────────────────────────────────────────────
 def main() -> None:
     p = PhysicsParams()
-    airframes, components = load_model()
-    batteries = generate_generic_batteries()
+    airframes, components, real_batteries = load_model()
+    if real_batteries:
+        batteries = real_batteries
+        bat_label = f"{len(batteries)} real battery candidates"
+    else:
+        batteries = generate_generic_batteries()
+        bat_label = f"{len(batteries)} generic battery packs (fallback)"
     reps = {cat: lightest(components[cat]) for cat in ("vtx", "fpv", "gps", "rx")}
     rep_pow = {cat: representative_power(components[cat]) for cat in ("vtx", "fpv", "gps", "rx")}
 
-    total, top = write_csv(iter_configs(airframes, components, batteries, p))
+    stats = {"voltage_pruned": 0, "video_pruned": 0}
+    total, top = write_csv(iter_configs(airframes, components, batteries, p, stats))
+    unfiltered = total + stats["voltage_pruned"] + stats["video_pruned"]
     baseline = pick_baseline(top)
     n_comp = sum(len(components[c]) for c in ("thermal", "sbc", "dvr", "vtx", "fpv", "gps", "rx"))
     write_sysml(top, baseline, total, p, reps, rep_pow)
-    write_markdown(top, baseline, total, len(airframes), len(batteries), n_comp, p, reps, rep_pow)
+    write_markdown(top, baseline, total, len(airframes), len(batteries), n_comp, p, reps, rep_pow,
+                   bat_label, stats, unfiltered)
 
     print(f"Airframes (with mass) : {len(airframes)}")
-    print(f"Battery grid          : {len(batteries)}")
+    print(f"Batteries             : {bat_label}")
     for c in ("thermal", "sbc", "dvr", "vtx", "fpv", "gps", "rx"):
         print(f"  {c:8s} candidates  : {len(components[c])}")
     print(f"Peripheral reps       : fpv={reps['fpv'].ident}, gps={reps['gps'].ident}, "
           f"rx={reps['rx'].ident}  (vtx swept when not bundled)")
-    print(f"TOTAL configurations  : {total:,}")
+    print(f"Unfiltered pairings   : {unfiltered:,}")
+    print(f"  pruned voltage (P1) : {stats['voltage_pruned']:,}  (battery cells vs airframe window)")
+    print(f"  pruned video   (V2) : {stats['video_pruned']:,}  (thermal output vs CVBS DVR)")
+    print(f"REAL configurations   : {total:,}")
     if baseline:
         print(f"Recommended baseline  : {baseline['airframe']} ({baseline['airframe_id']}) + "
               f"{baseline['battery']} -> {baseline['max_flight_time_hover_min']} min hover")

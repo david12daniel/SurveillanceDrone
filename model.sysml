@@ -226,16 +226,131 @@ package DroneSystemModel {
  // Bring requirement names into scope so satisfy statements resolve unqualified.
  private import Requirements::**;
 
+ // ════════════════════════════════════════════════════════════════════
+ // Interface compatibility layer  (added 2026-06-26)
+ // ════════════════════════════════════════════════════════════════════
+ // Typed ports, constraint defs, and interface defs declare which component
+ // pairings form a REAL configuration. Syside validates the structure; the
+ // executable filtering that prunes the configuration sweep lives in
+ // analysis/flight_time_model.py, which reads these attributes. Interfaces
+ // are formalized one at a time — see the interface inventory in the latest
+ // session handoff.
+ package Compatibility {
+
+ // ── Interface P1: Battery -> Airframe power  (R4_BAT_VOLT, R4_BAT_IF) ──
+ // The battery pack's series-cell count must fall within the cell-count
+ // window the airframe's ESC and motors are rated for. Cell count (not raw
+ // voltage) is the market-standard compatibility key for FPV gear and avoids
+ // the 3.6 vs 3.7 V/cell nominal-voltage ambiguity.
+
+ // Typed power ports: a source advertises its pack cell count; a sink
+ // advertises the cell-count window it accepts.
+ port def PowerSourcePort {
+ attribute cells_s : ScalarValues::Integer;
+ }
+ port def PowerSinkPort {
+ attribute minCells_s : ScalarValues::Integer;
+ attribute maxCells_s : ScalarValues::Integer;
+ }
+
+ // Compatibility predicate (boolean body — no trailing ';').
+ constraint def BatteryVoltageCompatible {
+ in batteryCells : ScalarValues::Integer;
+ in afMinCells : ScalarValues::Integer;
+ in afMaxCells : ScalarValues::Integer;
+ (batteryCells >= afMinCells) and (batteryCells <= afMaxCells)
+ }
+
+ // Interface binds a source port to a sink port and asserts the rule.
+ interface def BatteryPowerInterface {
+ end source : PowerSourcePort;
+ end sink : PowerSinkPort;
+ constraint voltageOk : BatteryVoltageCompatible {
+ in batteryCells = source.cells_s;
+ in afMinCells = sink.minCells_s;
+ in afMaxCells = sink.maxCells_s;
+ }
+ }
+
+ // ── Interface V1-V4: Video signal chain  (R3_CAM_IF, R4_SBC_VIDEO_IN) ──
+ // A video link is real only when the source's signal format is one the sink
+ // accepts. The project's record/downlink chain is analog CVBS:
+ //   thermal cam (CVBS) -> DVR (CVBS-in) -> analog VTX -> analog VRX.
+ // A USB/CSI/MIPI-only thermal cannot feed the CVBS-only DVR. The canonical
+ // rule here is format equality; the executable sweep matches richer
+ // multi-format capability strings (e.g. "CVBS / USB") by substring.
+ enum def VideoFormat {
+ CVBS;
+ USB_UVC;
+ MIPI_CSI;
+ HDMI;
+ DJI_DIGITAL;
+ HDZERO;
+ WALKSNAIL;
+ }
+ port def VideoSourcePort { attribute format : VideoFormat; }
+ port def VideoSinkPort { attribute format : VideoFormat; }
+ constraint def VideoFormatCompatible {
+ in src : VideoFormat;
+ in snk : VideoFormat;
+ src == snk
+ }
+ interface def VideoLink {
+ end source : VideoSourcePort;
+ end sink : VideoSinkPort;
+ constraint fmtOk : VideoFormatCompatible {
+ in src = source.format;
+ in snk = sink.format;
+ }
+ }
+
+ // ── Interface R1-R2: Wireless RF links  (R4_GCS_IF) ──
+ // R1 video downlink: VTX band must match the VRX band (all candidates are
+ // analog 5.8 GHz -> compatible). R2 ELRS control+telemetry: the airborne RX
+ // band must be one the ground TX supports (2.4 GHz, 900 MHz, or dual). The
+ // canonical rule is band equality; dual-band TX membership is handled in the
+ // executable sweep.
+ enum def RfBand {
+ GHZ_5_8;
+ GHZ_2_4;
+ MHZ_900;
+ }
+ port def RfSourcePort { attribute band : RfBand; }
+ port def RfSinkPort { attribute band : RfBand; }
+ constraint def RfBandCompatible {
+ in src : RfBand;
+ in snk : RfBand;
+ src == snk
+ }
+ interface def RfLink {
+ end source : RfSourcePort;
+ end sink : RfSinkPort;
+ constraint bandOk : RfBandCompatible {
+ in src = source.band;
+ in snk = sink.band;
+ }
+ }
+ }
+
  part def Battery {
+ attribute name : String;
  attribute cost_USD : ScalarValues::Real;
  attribute mass : ISQBase::MassValue;
  attribute energy : ISQThermodynamics::EnergyValue;
+ attribute chemistry : String;
+ attribute cells_s : Integer;
+ attribute capacity_mAh : Real;
+ attribute nominalVoltage : ISQElectromagnetism::ElectricPotentialDifferenceValue;
+ attribute usableDoD : Real;
+ attribute cellModel : String;
+ attribute maxContinuousDischarge_A : Real;
+ attribute connector : String;
 
  // Derived specific energy
  attribute specificEnergy : ISQThermodynamics::SpecificEnergyValue =
  energy / mass;
 
- port power_out;
+ port power_out : Compatibility::PowerSourcePort;
 
  satisfy R4_BAT_VOLT;
  satisfy R4_BAT_ENERGY;
@@ -258,6 +373,9 @@ package DroneSystemModel {
  attribute wheelbase : ISQBase::LengthValue;
  attribute flightController : String;
  attribute esc : String;
+ attribute minCells_s : ScalarValues::Integer;  // min battery series cells the ESC/motors are rated for
+ attribute maxCells_s : ScalarValues::Integer;  // max battery series cells the ESC/motors are rated for
+ attribute maxThrustPerMotor_g : ScalarValues::Real;  // published max static thrust per motor at the build's cell count [g] (B5)
  attribute motors : String;
  attribute propModel : String;
  attribute uartCount : ScalarValues::Integer;
@@ -273,7 +391,7 @@ package DroneSystemModel {
  attribute gpsModel : String;
  attribute sourceConfidence : String;         // research confidence: High / Moderate / Low
 
- port power_battery;
+ port power_battery : Compatibility::PowerSinkPort;
  port power_sbc;
  port power_tp;
  port data_sbc;
@@ -314,7 +432,7 @@ package DroneSystemModel {
  attribute operatingTempMax_C : ScalarValues::Real;  // [degC]
  attribute detectionRange : ISQBase::LengthValue;    // est. human/animal detection [m]
 
- port video_out;
+ port video_out : Compatibility::VideoSourcePort;
  port power_in;
 
  satisfy R3_CAM_WT;
@@ -352,7 +470,7 @@ package DroneSystemModel {
  attribute dimensions : String;                       // [mm]
  attribute osSupport : String;
 
- port video_in;
+ port video_in : Compatibility::VideoSinkPort;
  port data_af;
  port power_in;
 
@@ -371,6 +489,7 @@ package DroneSystemModel {
  attribute mass : ISQBase::MassValue;
  attribute power : ISQMechanics::PowerValue;
  attribute includedWithAirframe : Boolean;
+ attribute maxRange : ISQBase::LengthValue;           // video-link range when integrated cam+VTX (checked vs R7); N/A for separate-VTX cams
  attribute cameraType : String;                       // Analog CMOS / Digital MIPI / etc.
  attribute cameraModel : String;
  attribute sensorSize : String;                       // e.g. 1/3", 1/1.8"
@@ -385,7 +504,7 @@ package DroneSystemModel {
  attribute vtxTypeRequired : String;
  attribute goggleCompatibility : String;
 
- port video_out;
+ port video_out : Compatibility::VideoSourcePort;
  port power_in;
 
  doc /* Non-IR FPV camera used for piloting. May be included with the airframe purchase (BNF/PNP bundles) or purchased separately. Distinct from the thermal CameraSubsystem which is the mission payload. */
@@ -443,7 +562,7 @@ package DroneSystemModel {
  port control_signal_out; // RC control to flight controller
  port telemetry_data_in;   // telemetry data from flight controller (CRSF)
  port power_in;
- port rf_in;               // combined RF: RC control in + telemetry out
+ port rf_in : Compatibility::RfSinkPort;               // combined RF: RC control in + telemetry out
 
  doc /* Bidirectional RF link using ELRS (ExpressLRS) protocol. Handles both RC control input (uplink) and telemetry return (downlink) over a single RF link, eliminating the need for a separate telemetry radio. Telemetry capability based on ELRS range analysis — see analysis/ELRS_telemetry_range_analysis.md. */
  }
@@ -477,7 +596,7 @@ package DroneSystemModel {
 
  port user_controls;
  port telemetry_data_out;
- port rf_out;               // combined RF: RC control out + telemetry in
+ port rf_out : Compatibility::RfSourcePort;               // combined RF: RC control out + telemetry in
 
  satisfy R4_GCS_CTRL;
  satisfy R4_GCS_TELEM;
@@ -505,9 +624,9 @@ package DroneSystemModel {
  attribute pitMode : Boolean;
  attribute includedWithAirframe : Boolean;
 
- port video_in;
+ port video_in : Compatibility::VideoSinkPort;
  port power_in;
- port rf_out;
+ port rf_out : Compatibility::RfSourcePort;
 
  doc /* 5.8 GHz video transmitter for FPV piloting downlink. May be included with the airframe purchase (BNF/PNP) or purchased separately. */
  }
@@ -534,8 +653,8 @@ package DroneSystemModel {
  attribute audioRecording : Boolean;
  attribute startStopControl : String;
 
- port video_in;   // from CameraSubsystem
- port video_out;  // pass-through to VideoTransmitter
+ port video_in : Compatibility::VideoSinkPort;   // from CameraSubsystem
+ port video_out : Compatibility::VideoSourcePort;  // pass-through to VideoTransmitter
  port power_in;
 
  doc /* Inline DVR that records analog CVBS video to microSD card while passing video through to the VTX. Enables onboard storage of thermal footage without requiring the SBC (Phase 4). Survives RF signal loss — footage is on the card regardless of downlink quality. */
@@ -555,8 +674,8 @@ package DroneSystemModel {
  attribute macOsCompatible : Boolean;
  attribute includedWithAirframe : Boolean;
 
- port rf_in;
- port video_out;  // Analog CVBS/composite (RCA)
+ port rf_in : Compatibility::RfSinkPort;
+ port video_out : Compatibility::VideoSourcePort;  // Analog CVBS/composite (RCA)
 
  satisfy R4_GCS_VIDEO_DISP;
 
@@ -578,7 +697,7 @@ package DroneSystemModel {
  attribute driverlessUVC : Boolean;
  attribute busPowered : Boolean;
 
- port video_in;   // from VideoReceiver (RCA/AV composite)
+ port video_in : Compatibility::VideoSinkPort;   // from VideoReceiver (RCA/AV composite)
  port usb_out;    // to ViewingComputer (USB-C / UVC)
 
  doc /* Analog-to-USB video capture dongle. Converts analog CVBS/composite video from the VRX to USB Video Class (UVC) format readable by the laptop's OS. Used to pipe live FPV video into QGC / Mission Planner. Typical cost $10-25. */
@@ -649,7 +768,7 @@ package DroneSystemModel {
  part rx : RadioReceiver;  // ELRS — handles both RC control and telemetry
  part vtx : VideoTransmitter;
 
- interface connect battery.power_out to platform.power_battery;
+ interface batteryPwr : Compatibility::BatteryPowerInterface connect battery.power_out to platform.power_battery;
  interface connect platform.power_tp to camera.power_in;
  interface connect platform.power_sbc to fpvCam.power_in;
  interface connect platform.power_sbc to gps.power_in;
@@ -657,10 +776,10 @@ package DroneSystemModel {
  interface connect platform.power_sbc to sbc.power_in;
  interface connect platform.power_sbc to rx.power_in;
  interface connect platform.power_sbc to vtx.power_in;
- interface connect fpvCam.video_out to vtx.video_in;  // FPV camera feeds pilot VTX
- interface connect camera.video_out to recorder.video_in; // thermal camera feeds recorder
- interface connect recorder.video_out to vtx.video_in; // recorder also passes through to VTX (optional)
- interface connect camera.video_out to sbc.video_in;   // thermal camera also feeds SBC for inference (Phase 4)
+ interface fpvToVtx : Compatibility::VideoLink connect fpvCam.video_out to vtx.video_in;  // FPV camera feeds pilot VTX
+ interface camToRec : Compatibility::VideoLink connect camera.video_out to recorder.video_in; // thermal camera feeds recorder
+ interface recToVtx : Compatibility::VideoLink connect recorder.video_out to vtx.video_in; // recorder also passes through to VTX (optional)
+ interface camToSbc : Compatibility::VideoLink connect camera.video_out to sbc.video_in;   // thermal camera also feeds SBC for inference (Phase 4)
  interface connect gps.data_out to platform.data_sbc;   // GPS data to flight controller
  interface connect sbc.data_af to platform.data_sbc;
  interface connect rx.control_signal_out to platform.control_input;
@@ -826,6 +945,93 @@ package DroneSystemModel {
  }
 
  return score : ScalarValues::Real = tradeScore;
+ }
+
+ // ========================================================================
+ // Thermal detection analysis  (B3 — Johnson-criteria pixels-on-target)
+ // ========================================================================
+ // Migrates the computed detection columns from
+ // analysis/thermal_camera_analysis_expanded.csv into the model layer. Uses
+ // Real magnitudes (suffix _m / _deg) to sidestep the dimensional '/'-narrowing
+ // issue (see C10/A10). Syside validates the structure; a SysML v2 execution
+ // engine is needed for numeric verdicts — the per-camera numbers stay in the
+ // analysis CSV until such a tool is available.
+
+ // Ground sample distance [m/px] at nadir, small-angle approximation:
+ //   GSD = altitude * (HFOV in radians) / horizontal pixels
+ calc def GroundSampleDistance {
+  in altitude_m : ScalarValues::Real;
+  in hfov_deg : ScalarValues::Real;
+  in resolutionH : ScalarValues::Integer;
+  return gsd_m : ScalarValues::Real = altitude_m * (hfov_deg * 0.0174532925) / resolutionH;
+ }
+
+ // Pixels spanning the target across one dimension.
+ calc def PixelsAcrossTarget {
+  in targetSize_m : ScalarValues::Real;
+  in gsd_m : ScalarValues::Real;
+  return px : ScalarValues::Real = targetSize_m / gsd_m;
+ }
+
+ // Johnson criteria (50% probability): detection ~1.5 px; recognition/
+ // classification >= 4 px across the target (R3_CAM_RES uses 4 px on a 0.5 m
+ // target at 90 m AGL).
+ constraint def DetectionCriterion {
+  in px : ScalarValues::Real;
+  px >= 1.5
+ }
+ constraint def RecognitionCriterion {
+  in px : ScalarValues::Real;
+  px >= 4.0
+ }
+
+ // Recognition/classification check: does a 0.5 m target at 90 m AGL span
+ // >= 4 px? (R3_CAM_RES, supporting R3_2.)
+ analysis def ThermalRecognitionCheck {
+  subject cam : Architecture::CameraSubsystem;
+  attribute altitude_m : ScalarValues::Real = 90.0;
+  attribute targetSize_m : ScalarValues::Real = 0.5;
+
+  calc gsd : GroundSampleDistance {
+   in altitude_m = altitude_m;
+   in hfov_deg = cam.hfov;
+   in resolutionH = cam.resolutionH;
+  }
+  calc pot : PixelsAcrossTarget {
+   in targetSize_m = targetSize_m;
+   in gsd_m = gsd.gsd_m;
+  }
+  attribute pixelsOnTarget : ScalarValues::Real = pot.px;
+
+  assert constraint recog : RecognitionCriterion {
+   in px = pixelsOnTarget;
+  }
+
+  return verdict : ScalarValues::Boolean = pixelsOnTarget >= 4.0;
+ }
+
+ // Detection check at the 120 m detection altitude (R3_1).
+ analysis def ThermalDetectionCheck {
+  subject cam : Architecture::CameraSubsystem;
+  attribute altitude_m : ScalarValues::Real = 120.0;
+  attribute targetSize_m : ScalarValues::Real = 0.5;
+
+  calc gsd : GroundSampleDistance {
+   in altitude_m = altitude_m;
+   in hfov_deg = cam.hfov;
+   in resolutionH = cam.resolutionH;
+  }
+  calc pot : PixelsAcrossTarget {
+   in targetSize_m = targetSize_m;
+   in gsd_m = gsd.gsd_m;
+  }
+  attribute pixelsOnTarget : ScalarValues::Real = pot.px;
+
+  assert constraint detect : DetectionCriterion {
+   in px = pixelsOnTarget;
+  }
+
+  return verdict : ScalarValues::Boolean = pixelsOnTarget >= 1.5;
  }
  }
 }

@@ -20,20 +20,23 @@ System-level and subsystem-level requirements with traceability:
 
 ### Architecture
 Component part definitions with attributes, ports, and formal `satisfy` traceability to requirements:
-- **SurveillanceDrone**: Composes Airframe, Battery, CameraSubsystem, SingleBoardComputerPayload, RadioReceiver, TelemetryTransmitter, and VideoTransmitter with defined power, signal, and data interfaces; derives `totalPower`
-- **AerialThermalObservationSystem**: Composes SurveillanceDrone + GroundControlStation + ViewingComputer; connects wireless RF links (RC control, telemetry, video); derives `totalCost` (display computer excluded — existing MacBook Air, not procured)
+- **SurveillanceDrone**: Composes Airframe, Battery, CameraSubsystem (thermal), FpvCamera, GpsModule, ThermalVideoRecorder, SingleBoardComputerPayload, RadioReceiver, and VideoTransmitter with defined power, video, and data interfaces; derives `totalPower`
+- **AerialThermalObservationSystem**: Composes SurveillanceDrone + GroundControlStation + ViewingComputer; connects the wireless RF links (ELRS RC control + telemetry over one link; 5.8 GHz video downlink); derives `totalCost` (display computer excluded — existing MacBook Air, not procured)
 - **ViewingComputer**: External actor — existing MacBook Air, not a procured component
-- **Battery**: energy, mass, cost, specificEnergy; `satisfy` ×7
-- **Airframe**: mass, power, maxTakeoffMass, propDiameter, control/telemetry ports; `satisfy` ×8
-- **CameraSubsystem**: mass, power, hfov, netd; `satisfy` ×7
-- **SingleBoardComputerPayload**: mass, power; `satisfy` ×7
-- **RadioReceiver** (onboard): RC control input from ground; `maxRange`, `protocol`
-- **TelemetryTransmitter** (onboard): Status broadcast to ground; `maxRange`
-- **VideoTransmitter** (onboard): Thermal video downlink; `maxRange`
-- **RadioControlTransmitter** (ground): Pilot controls; `satisfy` R4_GCS_CTRL
-- **TelemetryReceiver** (ground): Telemetry display; `satisfy` R4_GCS_TELEM
-- **VideoReceiver** (ground): Video feed; `satisfy` R4_GCS_VIDEO_DISP
-- **GroundControlStation**: Composes RadioControlTransmitter + TelemetryReceiver + VideoReceiver; `satisfy` ×8
+- **Battery**: energy, mass, cost, specificEnergy, chemistry, cells_s, nominalVoltage, …; `satisfy` ×7
+- **Airframe**: mass, power, maxTakeoffMass, propDiameter, minCells_s/maxCells_s, control/telemetry ports; `satisfy` ×8
+- **CameraSubsystem** (thermal payload): mass, power, hfov, netd, resolution; `satisfy` ×7
+- **FpvCamera**: piloting camera (analog, or integrated digital cam+VTX with `maxRange`)
+- **GpsModule**: position/velocity/time to the flight controller
+- **SingleBoardComputerPayload**: onboard inference (Phase 4); `satisfy` ×7
+- **ThermalVideoRecorder** (onboard DVR): records thermal video in the earlier stages; CVBS + digital (HDMI/USB) variants
+- **RadioReceiver** (onboard): ELRS — RC control + telemetry over one RF link; `maxRange`, `protocol`
+- **VideoTransmitter** (onboard): 5.8 GHz FPV video downlink; `maxRange`
+- **RadioControlTransmitter** (ground): pilot controls + telemetry forwarded to the GCS; `satisfy` R4_GCS_CTRL, R4_GCS_TELEM
+- **VideoReceiver** (ground): 5.8 GHz video feed; `satisfy` R4_GCS_VIDEO_DISP
+- **UsbVideoCapture** (ground): bridges the analog VRX to the laptop over USB-UVC
+- **GroundControlStation**: Composes RadioControlTransmitter + VideoReceiver + UsbVideoCapture; `satisfy` ×8
+- **Compatibility** (sub-package): typed ports + `enum`/`constraint`/`interface` defs declaring which component pairings are valid (battery↔airframe cell-count, video-format chain, RF band); enforced by the flight-time sweep
 
 ### Analysis
 Parametric calculations, requirement constraints, and analysis cases for design
@@ -48,6 +51,9 @@ verification and trade studies:
   goal, returns a pass/fail verdict
 - **TradeSpaceEvaluation** (`analysis def`): scores a candidate configuration
   (flight time + endurance-per-dollar) and asserts the budget, for ranking alternatives
+- **GroundSampleDistance / PixelsAcrossTarget** (`calc def`): thermal ground sample distance [m/px] and Johnson-criteria pixels-on-target
+- **DetectionCriterion / RecognitionCriterion** (`constraint def`): ≥1.5 px (detect) / ≥4 px (recognize) across a target
+- **ThermalDetectionCheck / ThermalRecognitionCheck** (`analysis def`): verify a thermal camera detects a 0.5 m target at 120 m (R3_1) and classifies it at 90 m (R3_2 / R3_CAM_RES)
 
 Battery energy is expressed in joules `[J]` so `energy / power` reduces to seconds.
 Syside validates the parametric structure; numeric execution of the `calc def`s

@@ -6,10 +6,11 @@ Momentum-theory (actuator-disk) propulsion model + forward-flight parasitic drag
 
 ## Sweep scope
 
-- **137,088 buildable configurations** = airframe × battery × SBC × VTX × thermal camera × DVR, fully crossed (respecting airframe component inclusion).
+- **14,112 real configurations** = airframe × battery × SBC × VTX × thermal camera, fully crossed (respecting airframe component inclusion) and **filtered for interface compatibility**. The DVR is compatibility-gated, not crossed, and excluded from flight time (it is an earlier-stage part; the SBC records at the SBC stage).
 - Flight-time drivers swept in full; sub-1 W peripherals held at lightest representatives: FPV `A7`, GPS `G6`, RX `GEPRCNanoPA100`.
 - **Inclusion logic:** airframe-bundled VTX/FPV/GPS/RX contribute power only (their mass is already in the airframe's as-built weight); non-bundled peripherals contribute mass + power.
-- Candidates: 8 airframes (with mass data), 28 generic battery packs, 67 swept payload components.
+- Candidates: 14 airframes (with mass data), 21 real battery candidates, 70 swept payload components.
+- **Compatibility filtering** (declared in `DroneSystemModel::Architecture::Compatibility`): 23,184 raw pairings reduced to 14,112 real configs — pruned 7,056 on battery↔airframe cell-count (P1, e.g. a 4S pack on a 6S-only frame) and 2,016 on thermal↔DVR video format (V2, a thermal whose output no DVR can record — CVBS via DVR1-6 or digital HDMI/USB via DVR7-9).
 
 ## Model assumptions
 
@@ -21,109 +22,109 @@ Momentum-theory (actuator-disk) propulsion model + forward-flight parasitic drag
 
 ## Recommended baseline
 
-**Axisflying KOLAS7** (AF2b) + **Li-ion 6S 10000mAh**, SBC SBC1, VTX included, thermal T1 → **56.4 min** hover (1304.2 g AUW, 18.6% throttle).
+**Axisflying KOLAS7** (AF2a) + **Lumenier NAV 12000mAh 6S 21700 Amprius**, SBC SBC1, VTX V8, thermal T1 → **74.6 min** hover (1250.4 g AUW, 11.2% throttle).
 
 ## Top 100 configurations (ranked by max flight time)
 
 | Cfg | Airframe | Battery | SBC | VTX | Therm | AUW g | Pld W | Max FT | Cruise | Wind | Thr% | R6 | R8 | Fly |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| C096193 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T1 | 1304.2 | 17.12 | 56.4 | 57.6 | 66.6 | 18.6 | ✅ | — | ✅ |
-| C096211 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T2 | 1304.2 | 17.12 | 56.4 | 57.6 | 66.6 | 18.6 | ✅ | — | ✅ |
-| C096229 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T3 | 1304.2 | 17.12 | 56.4 | 57.6 | 66.6 | 18.6 | ✅ | — | ✅ |
-| C104257 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T1 | 1302.2 | 17.57 | 56.4 | 57.5 | 66.6 | 18.6 | ✅ | — | ✅ |
-| C104275 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T2 | 1302.2 | 17.57 | 56.4 | 57.5 | 66.6 | 18.6 | ✅ | — | ✅ |
-| C104293 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T3 | 1302.2 | 17.57 | 56.4 | 57.5 | 66.6 | 18.6 | ✅ | — | ✅ |
-| C096301 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T7 | 1303.9 | 17.27 | 56.3 | 57.5 | 66.6 | 18.6 | ✅ | — | ✅ |
-| C104365 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T7 | 1301.9 | 17.72 | 56.3 | 57.5 | 66.5 | 18.6 | ✅ | — | ✅ |
-| C094465 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T1 | 1107.9 | 17.12 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C094483 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T2 | 1107.9 | 17.12 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C094501 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T3 | 1107.9 | 17.12 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C094573 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T7 | 1107.6 | 17.27 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C095905 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T1 | 1107.9 | 17.12 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C095923 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T2 | 1107.9 | 17.12 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C095941 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T3 | 1107.9 | 17.12 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C096013 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T7 | 1107.6 | 17.27 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C096198 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T1 | 1308.7 | 16.92 | 56.2 | 57.3 | 66.4 | 18.7 | ✅ | — | ✅ |
-| C096216 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T2 | 1308.7 | 16.92 | 56.2 | 57.3 | 66.4 | 18.7 | ✅ | — | ✅ |
-| C096234 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T3 | 1308.7 | 16.92 | 56.2 | 57.3 | 66.4 | 18.7 | ✅ | — | ✅ |
-| C096247 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T4 | 1305.6 | 17.42 | 56.2 | 57.4 | 66.4 | 18.7 | ✅ | — | ✅ |
-| C102529 | Axisflying KOLAS7 (AF2c) | Li-ion 4S 12000mAh | SBC1 | included | T1 | 1105.9 | 17.57 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C102547 | Axisflying KOLAS7 (AF2c) | Li-ion 4S 12000mAh | SBC1 | included | T2 | 1105.9 | 17.57 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C102565 | Axisflying KOLAS7 (AF2c) | Li-ion 4S 12000mAh | SBC1 | included | T3 | 1105.9 | 17.57 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C102637 | Axisflying KOLAS7 (AF2c) | Li-ion 4S 12000mAh | SBC1 | included | T7 | 1105.6 | 17.72 | 56.2 | 57.5 | 67.6 | 15.8 | ✅ | — | ✅ |
-| C103969 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 8000mAh | SBC1 | included | T1 | 1105.9 | 17.57 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C103987 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 8000mAh | SBC1 | included | T2 | 1105.9 | 17.57 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C104005 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 8000mAh | SBC1 | included | T3 | 1105.9 | 17.57 | 56.2 | 57.6 | 67.7 | 15.8 | ✅ | — | ✅ |
-| C104077 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 8000mAh | SBC1 | included | T7 | 1105.6 | 17.72 | 56.2 | 57.5 | 67.6 | 15.8 | ✅ | — | ✅ |
-| C104311 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T4 | 1303.6 | 17.87 | 56.2 | 57.4 | 66.4 | 18.6 | ✅ | — | ✅ |
-| C096194 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T1 | 1309.7 | 17.02 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C096195 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T1 | 1310.6 | 16.82 | 56.1 | 57.3 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C096197 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T1 | 1309.7 | 17.02 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C096212 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T2 | 1309.7 | 17.02 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C096213 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T2 | 1310.6 | 16.82 | 56.1 | 57.3 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C096215 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T2 | 1309.7 | 17.02 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C096230 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T3 | 1309.7 | 17.02 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C096231 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T3 | 1310.6 | 16.82 | 56.1 | 57.3 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C096233 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T3 | 1309.7 | 17.02 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C096306 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T7 | 1308.4 | 17.07 | 56.1 | 57.3 | 66.3 | 18.7 | ✅ | — | ✅ |
-| C104258 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T1 | 1307.7 | 17.47 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C104259 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T1 | 1308.6 | 17.27 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C104261 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T1 | 1307.7 | 17.47 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C104262 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T1 | 1306.7 | 17.37 | 56.1 | 57.3 | 66.3 | 18.7 | ✅ | — | ✅ |
-| C104276 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T2 | 1307.7 | 17.47 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C104277 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T2 | 1308.6 | 17.27 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C104279 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T2 | 1307.7 | 17.47 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C104280 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T2 | 1306.7 | 17.37 | 56.1 | 57.3 | 66.3 | 18.7 | ✅ | — | ✅ |
-| C104294 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T3 | 1307.7 | 17.47 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C104295 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T3 | 1308.6 | 17.27 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C104297 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T3 | 1307.7 | 17.47 | 56.1 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C104298 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T3 | 1306.7 | 17.37 | 56.1 | 57.3 | 66.3 | 18.7 | ✅ | — | ✅ |
-| C104370 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T7 | 1306.4 | 17.52 | 56.1 | 57.3 | 66.3 | 18.7 | ✅ | — | ✅ |
-| C082952 | Axisflying KOLAS7 (AF2a) | Li-ion 6S 10000mAh | SBC1 | V8 | T1 | 1315.7 | 16.0 | 56.0 | 57.2 | 66.2 | 18.8 | ✅ | — | ✅ |
-| C083132 | Axisflying KOLAS7 (AF2a) | Li-ion 6S 10000mAh | SBC1 | V8 | T2 | 1315.7 | 16.0 | 56.0 | 57.2 | 66.2 | 18.8 | ✅ | — | ✅ |
-| C083312 | Axisflying KOLAS7 (AF2a) | Li-ion 6S 10000mAh | SBC1 | V8 | T3 | 1315.7 | 16.0 | 56.0 | 57.2 | 66.2 | 18.8 | ✅ | — | ✅ |
-| C084032 | Axisflying KOLAS7 (AF2a) | Li-ion 6S 10000mAh | SBC1 | V8 | T7 | 1315.4 | 16.15 | 56.0 | 57.2 | 66.2 | 18.8 | ✅ | — | ✅ |
-| C094470 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T1 | 1112.4 | 16.92 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C094488 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T2 | 1112.4 | 16.92 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C094506 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T3 | 1112.4 | 16.92 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C094519 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T4 | 1109.3 | 17.42 | 56.0 | 57.4 | 67.4 | 15.8 | ✅ | — | ✅ |
-| C094578 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T7 | 1112.1 | 17.07 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C095910 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T1 | 1112.4 | 16.92 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C095928 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T2 | 1112.4 | 16.92 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C095946 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T3 | 1112.4 | 16.92 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C095959 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T4 | 1109.3 | 17.42 | 56.0 | 57.4 | 67.4 | 15.8 | ✅ | — | ✅ |
-| C096018 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T7 | 1112.1 | 17.07 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C096252 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T4 | 1310.1 | 17.22 | 56.0 | 57.2 | 66.1 | 18.7 | ✅ | — | ✅ |
-| C096302 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T7 | 1309.4 | 17.17 | 56.0 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C096303 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T7 | 1310.3 | 16.97 | 56.0 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C096305 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 10000mAh | SBC1 | included | T7 | 1309.4 | 17.17 | 56.0 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C102534 | Axisflying KOLAS7 (AF2c) | Li-ion 4S 12000mAh | SBC1 | included | T1 | 1110.4 | 17.37 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C102552 | Axisflying KOLAS7 (AF2c) | Li-ion 4S 12000mAh | SBC1 | included | T2 | 1110.4 | 17.37 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C102570 | Axisflying KOLAS7 (AF2c) | Li-ion 4S 12000mAh | SBC1 | included | T3 | 1110.4 | 17.37 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C102583 | Axisflying KOLAS7 (AF2c) | Li-ion 4S 12000mAh | SBC1 | included | T4 | 1107.3 | 17.87 | 56.0 | 57.3 | 67.4 | 15.8 | ✅ | — | ✅ |
-| C103974 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 8000mAh | SBC1 | included | T1 | 1110.4 | 17.37 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C103992 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 8000mAh | SBC1 | included | T2 | 1110.4 | 17.37 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C104010 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 8000mAh | SBC1 | included | T3 | 1110.4 | 17.37 | 56.0 | 57.3 | 67.4 | 15.9 | ✅ | — | ✅ |
-| C104023 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 8000mAh | SBC1 | included | T4 | 1107.3 | 17.87 | 56.0 | 57.3 | 67.4 | 15.8 | ✅ | — | ✅ |
-| C104316 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T4 | 1308.1 | 17.67 | 56.0 | 57.2 | 66.1 | 18.7 | ✅ | — | ✅ |
-| C104366 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T7 | 1307.4 | 17.62 | 56.0 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C104367 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T7 | 1308.3 | 17.42 | 56.0 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C104369 | Axisflying KOLAS7 (AF2c) | Li-ion 6S 10000mAh | SBC1 | included | T7 | 1307.4 | 17.62 | 56.0 | 57.2 | 66.2 | 18.7 | ✅ | — | ✅ |
-| C094466 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T1 | 1113.4 | 17.02 | 55.9 | 57.2 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C094467 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T1 | 1114.3 | 16.82 | 55.9 | 57.3 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C094469 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T1 | 1113.4 | 17.02 | 55.9 | 57.2 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C094484 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T2 | 1113.4 | 17.02 | 55.9 | 57.2 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C094485 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T2 | 1114.3 | 16.82 | 55.9 | 57.3 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C094487 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T2 | 1113.4 | 17.02 | 55.9 | 57.2 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C094502 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T3 | 1113.4 | 17.02 | 55.9 | 57.2 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C094503 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T3 | 1114.3 | 16.82 | 55.9 | 57.3 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C094505 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T3 | 1113.4 | 17.02 | 55.9 | 57.2 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C094574 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T7 | 1113.1 | 17.17 | 55.9 | 57.2 | 67.2 | 15.9 | ✅ | — | ✅ |
-| C094575 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T7 | 1114.0 | 16.97 | 55.9 | 57.2 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C094577 | Axisflying KOLAS7 (AF2b) | Li-ion 4S 12000mAh | SBC1 | included | T7 | 1113.1 | 17.17 | 55.9 | 57.2 | 67.2 | 15.9 | ✅ | — | ✅ |
-| C095906 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T1 | 1113.4 | 17.02 | 55.9 | 57.2 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C095907 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T1 | 1114.3 | 16.82 | 55.9 | 57.3 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C095909 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T1 | 1113.4 | 17.02 | 55.9 | 57.2 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C095924 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T2 | 1113.4 | 17.02 | 55.9 | 57.2 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C095925 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T2 | 1114.3 | 16.82 | 55.9 | 57.3 | 67.3 | 15.9 | ✅ | — | ✅ |
-| C095927 | Axisflying KOLAS7 (AF2b) | Li-ion 6S 8000mAh | SBC1 | included | T2 | 1113.4 | 17.02 | 55.9 | 57.2 | 67.3 | 15.9 | ✅ | — | ✅ |
+| C003578 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T1 | 1250.4 | 14.7 | 74.6 | 76.3 | 88.8 | 11.2 | ✅ | ✅ | ✅ |
+| C003608 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T2 | 1250.4 | 14.7 | 74.6 | 76.3 | 88.8 | 11.2 | ✅ | ✅ | ✅ |
+| C003638 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T3 | 1250.4 | 14.7 | 74.6 | 76.3 | 88.8 | 11.2 | ✅ | ✅ | ✅ |
+| C003668 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T4 | 1251.8 | 15.0 | 74.4 | 76.0 | 88.5 | 11.2 | ✅ | ✅ | ✅ |
+| C003575 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T1 | 1255.6 | 14.7 | 74.2 | 75.8 | 88.3 | 11.2 | ✅ | ✅ | ✅ |
+| C003579 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T1 | 1253.2 | 15.2 | 74.2 | 75.8 | 88.2 | 11.2 | ✅ | ✅ | ✅ |
+| C003605 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T2 | 1255.6 | 14.7 | 74.2 | 75.8 | 88.3 | 11.2 | ✅ | ✅ | ✅ |
+| C003609 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T2 | 1253.2 | 15.2 | 74.2 | 75.8 | 88.2 | 11.2 | ✅ | ✅ | ✅ |
+| C003635 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T3 | 1255.6 | 14.7 | 74.2 | 75.8 | 88.3 | 11.2 | ✅ | ✅ | ✅ |
+| C003639 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T3 | 1253.2 | 15.2 | 74.2 | 75.8 | 88.2 | 11.2 | ✅ | ✅ | ✅ |
+| C003577 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T1 | 1256.6 | 15.2 | 73.9 | 75.5 | 87.9 | 11.2 | ✅ | ✅ | ✅ |
+| C003607 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T2 | 1256.6 | 15.2 | 73.9 | 75.5 | 87.9 | 11.2 | ✅ | ✅ | ✅ |
+| C003637 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T3 | 1256.6 | 15.2 | 73.9 | 75.5 | 87.9 | 11.2 | ✅ | ✅ | ✅ |
+| C003665 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T4 | 1257.0 | 15.0 | 73.9 | 75.6 | 88.0 | 11.2 | ✅ | ✅ | ✅ |
+| C003669 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T4 | 1254.6 | 15.5 | 73.9 | 75.6 | 87.9 | 11.2 | ✅ | ✅ | ✅ |
+| C003667 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T4 | 1258.0 | 15.5 | 73.7 | 75.3 | 87.6 | 11.2 | ✅ | ✅ | ✅ |
+| C003573 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T1 | 1259.6 | 15.7 | 73.5 | 75.1 | 87.3 | 11.2 | ✅ | ✅ | ✅ |
+| C003603 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T2 | 1259.6 | 15.7 | 73.5 | 75.1 | 87.3 | 11.2 | ✅ | ✅ | ✅ |
+| C003633 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T3 | 1259.6 | 15.7 | 73.5 | 75.1 | 87.3 | 11.2 | ✅ | ✅ | ✅ |
+| C013231 | DarwinFPV 129 7in (AF9a) | Lumenier NAV 12000mAh 4S 21700 Amprius | SBC1 | included | T1 | 927.6 | 16.2 | 73.5 | 75.6 | 90.7 | 15.6 | ✅ | ✅ | ✅ |
+| C013234 | DarwinFPV 129 7in (AF9a) | Lumenier NAV 12000mAh 4S 21700 Amprius | SBC1 | included | T2 | 927.6 | 16.2 | 73.5 | 75.6 | 90.7 | 15.6 | ✅ | ✅ | ✅ |
+| C013237 | DarwinFPV 129 7in (AF9a) | Lumenier NAV 12000mAh 4S 21700 Amprius | SBC1 | included | T3 | 927.6 | 16.2 | 73.5 | 75.6 | 90.7 | 15.6 | ✅ | ✅ | ✅ |
+| C003728 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T6 | 1264.5 | 14.85 | 73.4 | 75.0 | 87.3 | 11.3 | ✅ | ✅ | ✅ |
+| C003571 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V1 | T1 | 1262.5 | 15.7 | 73.2 | 74.8 | 87.0 | 11.3 | ✅ | ✅ | ✅ |
+| C003601 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V1 | T2 | 1262.5 | 15.7 | 73.2 | 74.8 | 87.0 | 11.3 | ✅ | ✅ | ✅ |
+| C003631 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V1 | T3 | 1262.5 | 15.7 | 73.2 | 74.8 | 87.0 | 11.3 | ✅ | ✅ | ✅ |
+| C003663 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T4 | 1261.0 | 16.0 | 73.2 | 74.8 | 87.0 | 11.3 | ✅ | ✅ | ✅ |
+| C003698 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T5 | 1264.5 | 15.35 | 73.2 | 74.8 | 87.0 | 11.3 | ✅ | ✅ | ✅ |
+| C013240 | DarwinFPV 129 7in (AF9a) | Lumenier NAV 12000mAh 4S 21700 Amprius | SBC1 | included | T4 | 929.0 | 16.5 | 73.2 | 75.3 | 90.2 | 15.6 | ✅ | ✅ | ✅ |
+| C003661 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V1 | T4 | 1263.9 | 16.0 | 73.0 | 74.6 | 86.7 | 11.3 | ✅ | ✅ | ✅ |
+| C003725 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T6 | 1269.7 | 14.85 | 73.0 | 74.6 | 86.7 | 11.3 | ✅ | ✅ | ✅ |
+| C003729 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T6 | 1267.3 | 15.35 | 73.0 | 74.6 | 86.7 | 11.3 | ✅ | ✅ | ✅ |
+| C003598 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V8 | T1 | 1271.4 | 14.7 | 72.9 | 74.5 | 86.6 | 11.4 | ✅ | ✅ | ✅ |
+| C003628 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V8 | T2 | 1271.4 | 14.7 | 72.9 | 74.5 | 86.6 | 11.4 | ✅ | ✅ | ✅ |
+| C003658 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V8 | T3 | 1271.4 | 14.7 | 72.9 | 74.5 | 86.6 | 11.4 | ✅ | ✅ | ✅ |
+| C003695 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T5 | 1269.7 | 15.35 | 72.8 | 74.4 | 86.4 | 11.3 | ✅ | ✅ | ✅ |
+| C003699 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T5 | 1267.3 | 15.85 | 72.8 | 74.4 | 86.4 | 11.3 | ✅ | ✅ | ✅ |
+| C003758 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T8 | 1270.5 | 15.25 | 72.8 | 74.4 | 86.4 | 11.3 | ✅ | ✅ | ✅ |
+| C003788 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T9 | 1270.5 | 15.25 | 72.8 | 74.4 | 86.4 | 11.3 | ✅ | ✅ | ✅ |
+| C003688 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V8 | T4 | 1272.8 | 15.0 | 72.7 | 74.3 | 86.3 | 11.4 | ✅ | ✅ | ✅ |
+| C003727 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T6 | 1270.7 | 15.35 | 72.7 | 74.3 | 86.3 | 11.3 | ✅ | ✅ | ✅ |
+| C003818 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T10 | 1270.5 | 15.3 | 72.7 | 74.3 | 86.4 | 11.3 | ✅ | ✅ | ✅ |
+| C003878 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T12 | 1270.5 | 15.3 | 72.7 | 74.3 | 86.4 | 11.3 | ✅ | ✅ | ✅ |
+| C003908 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T13 | 1270.5 | 15.35 | 72.7 | 74.3 | 86.4 | 11.3 | ✅ | ✅ | ✅ |
+| C003998 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V8 | T1 | 1249.4 | 14.7 | 72.7 | 74.3 | 86.5 | 11.2 | ✅ | ✅ | ✅ |
+| C004028 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V8 | T2 | 1249.4 | 14.7 | 72.7 | 74.3 | 86.5 | 11.2 | ✅ | ✅ | ✅ |
+| C004058 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V8 | T3 | 1249.4 | 14.7 | 72.7 | 74.3 | 86.5 | 11.2 | ✅ | ✅ | ✅ |
+| C003576 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V6 | T1 | 1258.6 | 18.2 | 72.6 | 74.1 | 86.0 | 11.2 | ✅ | ✅ | ✅ |
+| C003606 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V6 | T2 | 1258.6 | 18.2 | 72.6 | 74.1 | 86.0 | 11.2 | ✅ | ✅ | ✅ |
+| C003636 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V6 | T3 | 1258.6 | 18.2 | 72.6 | 74.1 | 86.0 | 11.2 | ✅ | ✅ | ✅ |
+| C003595 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V5 | T1 | 1276.6 | 14.7 | 72.5 | 74.1 | 86.1 | 11.4 | ✅ | ✅ | ✅ |
+| C003599 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V10 | T1 | 1274.2 | 15.2 | 72.5 | 74.1 | 86.1 | 11.4 | ✅ | ✅ | ✅ |
+| C003625 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V5 | T2 | 1276.6 | 14.7 | 72.5 | 74.1 | 86.1 | 11.4 | ✅ | ✅ | ✅ |
+| C003629 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V10 | T2 | 1274.2 | 15.2 | 72.5 | 74.1 | 86.1 | 11.4 | ✅ | ✅ | ✅ |
+| C003655 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V5 | T3 | 1276.6 | 14.7 | 72.5 | 74.1 | 86.1 | 11.4 | ✅ | ✅ | ✅ |
+| C003659 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V10 | T3 | 1274.2 | 15.2 | 72.5 | 74.1 | 86.1 | 11.4 | ✅ | ✅ | ✅ |
+| C003697 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T5 | 1270.7 | 15.85 | 72.5 | 74.1 | 86.1 | 11.3 | ✅ | ✅ | ✅ |
+| C003755 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T8 | 1275.7 | 15.25 | 72.4 | 73.9 | 85.9 | 11.4 | ✅ | ✅ | ✅ |
+| C003759 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T8 | 1273.3 | 15.75 | 72.4 | 73.9 | 85.9 | 11.4 | ✅ | ✅ | ✅ |
+| C003785 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T9 | 1275.7 | 15.25 | 72.4 | 73.9 | 85.9 | 11.4 | ✅ | ✅ | ✅ |
+| C003789 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T9 | 1273.3 | 15.75 | 72.4 | 73.9 | 85.9 | 11.4 | ✅ | ✅ | ✅ |
+| C004088 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V8 | T4 | 1250.8 | 15.0 | 72.4 | 74.0 | 86.2 | 11.2 | ✅ | ✅ | ✅ |
+| C003588 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC2 | V8 | T1 | 1269.4 | 16.7 | 72.3 | 73.9 | 85.7 | 11.3 | ✅ | ✅ | ✅ |
+| C003618 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC2 | V8 | T2 | 1269.4 | 16.7 | 72.3 | 73.9 | 85.7 | 11.3 | ✅ | ✅ | ✅ |
+| C003648 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC2 | V8 | T3 | 1269.4 | 16.7 | 72.3 | 73.9 | 85.7 | 11.3 | ✅ | ✅ | ✅ |
+| C003666 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V6 | T4 | 1260.0 | 18.5 | 72.3 | 73.9 | 85.7 | 11.2 | ✅ | ✅ | ✅ |
+| C003685 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V5 | T4 | 1278.0 | 15.0 | 72.3 | 73.8 | 85.8 | 11.4 | ✅ | ✅ | ✅ |
+| C003689 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V10 | T4 | 1275.6 | 15.5 | 72.3 | 73.8 | 85.8 | 11.4 | ✅ | ✅ | ✅ |
+| C003723 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T6 | 1273.7 | 15.85 | 72.3 | 73.9 | 85.8 | 11.4 | ✅ | ✅ | ✅ |
+| C003815 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T10 | 1275.7 | 15.3 | 72.3 | 73.9 | 85.9 | 11.4 | ✅ | ✅ | ✅ |
+| C003819 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T10 | 1273.3 | 15.8 | 72.3 | 73.9 | 85.8 | 11.4 | ✅ | ✅ | ✅ |
+| C003848 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T11 | 1274.5 | 15.55 | 72.3 | 73.9 | 85.9 | 11.4 | ✅ | ✅ | ✅ |
+| C003875 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T12 | 1275.7 | 15.3 | 72.3 | 73.9 | 85.9 | 11.4 | ✅ | ✅ | ✅ |
+| C003879 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T12 | 1273.3 | 15.8 | 72.3 | 73.9 | 85.8 | 11.4 | ✅ | ✅ | ✅ |
+| C003905 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T13 | 1275.7 | 15.35 | 72.3 | 73.9 | 85.8 | 11.4 | ✅ | ✅ | ✅ |
+| C003909 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T13 | 1273.3 | 15.85 | 72.3 | 73.9 | 85.8 | 11.4 | ✅ | ✅ | ✅ |
+| C003968 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T15 | 1274.5 | 15.55 | 72.3 | 73.9 | 85.9 | 11.4 | ✅ | ✅ | ✅ |
+| C003995 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V5 | T1 | 1254.6 | 14.7 | 72.3 | 73.9 | 86.0 | 11.2 | ✅ | ✅ | ✅ |
+| C003999 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V10 | T1 | 1252.2 | 15.2 | 72.3 | 73.8 | 86.0 | 11.2 | ✅ | ✅ | ✅ |
+| C004025 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V5 | T2 | 1254.6 | 14.7 | 72.3 | 73.9 | 86.0 | 11.2 | ✅ | ✅ | ✅ |
+| C004029 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V10 | T2 | 1252.2 | 15.2 | 72.3 | 73.8 | 86.0 | 11.2 | ✅ | ✅ | ✅ |
+| C004055 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V5 | T3 | 1254.6 | 14.7 | 72.3 | 73.9 | 86.0 | 11.2 | ✅ | ✅ | ✅ |
+| C004059 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V10 | T3 | 1252.2 | 15.2 | 72.3 | 73.8 | 86.0 | 11.2 | ✅ | ✅ | ✅ |
+| C003572 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V2 | T1 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | ✅ | ✅ | ✅ |
+| C003574 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V4 | T1 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | ✅ | ✅ | ✅ |
+| C003597 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V7 | T1 | 1277.6 | 15.2 | 72.2 | 73.8 | 85.7 | 11.4 | ✅ | ✅ | ✅ |
+| C003602 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V2 | T2 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | ✅ | ✅ | ✅ |
+| C003604 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V4 | T2 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | ✅ | ✅ | ✅ |
+| C003627 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V7 | T2 | 1277.6 | 15.2 | 72.2 | 73.8 | 85.7 | 11.4 | ✅ | ✅ | ✅ |
+| C003632 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V2 | T3 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | ✅ | ✅ | ✅ |
+| C003634 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V4 | T3 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | ✅ | ✅ | ✅ |
+| C003657 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V7 | T3 | 1277.6 | 15.2 | 72.2 | 73.8 | 85.7 | 11.4 | ✅ | ✅ | ✅ |
+| C003678 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC2 | V8 | T4 | 1270.8 | 17.0 | 72.1 | 73.6 | 85.4 | 11.3 | ✅ | ✅ | ✅ |
+| C003693 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T5 | 1273.7 | 16.35 | 72.1 | 73.7 | 85.5 | 11.4 | ✅ | ✅ | ✅ |
+| C003721 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V1 | T6 | 1276.6 | 15.85 | 72.1 | 73.6 | 85.5 | 11.4 | ✅ | ✅ | ✅ |
+| C003757 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T8 | 1276.7 | 15.75 | 72.1 | 73.7 | 85.5 | 11.4 | ✅ | ✅ | ✅ |
+| C003787 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T9 | 1276.7 | 15.75 | 72.1 | 73.7 | 85.5 | 11.4 | ✅ | ✅ | ✅ |
+| C003817 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T10 | 1276.7 | 15.8 | 72.1 | 73.6 | 85.5 | 11.4 | ✅ | ✅ | ✅ |
+| C003877 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T12 | 1276.7 | 15.8 | 72.1 | 73.6 | 85.5 | 11.4 | ✅ | ✅ | ✅ |
+| C003907 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T13 | 1276.7 | 15.85 | 72.1 | 73.6 | 85.5 | 11.4 | ✅ | ✅ | ✅ |

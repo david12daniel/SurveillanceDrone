@@ -37,6 +37,6 @@ The Surveillance Drone SysML V2 model (`model.sysml`) is a critical engineering 
 
 **Details are maintained in a dedicated research file:**
 
-- [[analysis/airframe-research.md]]
+- [[airframe-research]]
 
 **Source:** External CSV upload 2026-05-16

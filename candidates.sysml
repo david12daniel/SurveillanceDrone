@@ -33,6 +33,9 @@ package DroneCandidates {
  package AirframeCandidates {
 
   part AF1 : Airframe {
+   :>> minCells_s = 6;  // 6S build (2806.5 1350KV @6S; GEPRC "6S")
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2700.0;  // GEPRC 2806.5 1350KV (SPEEDX2 family, ~2.7 kg @6S)
    :>> name = "GEPRC MARK4 LR7";
    :>> purchaseType = "PNP";
    :>> cost_USD = 285.0;            // range 240-330
@@ -57,6 +60,9 @@ package DroneCandidates {
   }
 
   part AF2a : Airframe {
+   :>> minCells_s = 6;  // 6S build (C287 1350KV @6S; Axisflying)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2800.0;  // Axisflying C287 2807.5 1350KV (>2.8 kg @6S)
    :>> name = "Axisflying KOLAS7";
    :>> purchaseType = "PNP";
    :>> cost_USD = 175.0;            // est. range 150-200
@@ -78,10 +84,13 @@ package DroneCandidates {
   }
 
   part AF2b : Airframe {
+   :>> minCells_s = 6;  // 6S build (C287 1350KV @6S; Axisflying)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2800.0;  // Axisflying C287 2807.5 1350KV (>2.8 kg @6S)
    :>> name = "Axisflying KOLAS7";
    :>> purchaseType = "BNF Analog";
    :>> cost_USD = 419.90;
-   :>> mass = 257.0 [g];
+   :>> mass = 300.0 [g];            // est: 257g base + ~15g analog VTX + ~20g GPS + ~5.5g TBS Nano RX + ~2.5g cables
    :>> propSize_in = 7.0;
    :>> wheelbase = 298.0 [mm];
    :>> flightController = "iStack F722 / Argus F722";
@@ -101,10 +110,13 @@ package DroneCandidates {
   }
 
   part AF2c : Airframe {
+   :>> minCells_s = 6;  // 6S build (C287 1350KV @6S; Axisflying)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2800.0;  // Axisflying C287 2807.5 1350KV (>2.8 kg @6S)
    :>> name = "Axisflying KOLAS7";
    :>> purchaseType = "BNF HD";
    :>> cost_USD = 713.0;            // range 649-777
-   :>> mass = 257.0 [g];
+   :>> mass = 333.0 [g];            // est: 257g base + ~48g DJI O3 assembly (36.4g unit+cam + 3g ant + 8.3g cable) + ~20g GPS + ~5.5g TBS Nano RX
    :>> propSize_in = 7.0;
    :>> wheelbase = 298.0 [mm];
    :>> flightController = "iStack F722 / Argus F722";
@@ -126,6 +138,9 @@ package DroneCandidates {
   }
 
   part AF3a : Airframe {
+   :>> minCells_s = 6;  // 6S build (XING-E 2809 800KV; iFlight "6S")
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2933.0;  // iFlight XING-E 2809 800KV (2933 g @6S, confirmed)
    :>> name = "iFlight Chimera9 ECO";
    :>> purchaseType = "PNP";
    :>> cost_USD = 346.99;
@@ -149,10 +164,13 @@ package DroneCandidates {
   }
 
   part AF3b : Airframe {
+   :>> minCells_s = 6;  // 6S build (XING-E 2809 800KV; iFlight "6S")
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2933.0;  // iFlight XING-E 2809 800KV (2933 g @6S, confirmed)
    :>> name = "iFlight Chimera9 ECO";
    :>> purchaseType = "BNF";
    :>> cost_USD = 372.0;            // ~372
-   :>> mass = 721.0 [g];
+   :>> mass = 727.0 [g];            // 721g PNP + ~5.5g TBS Crossfire Nano RX
    :>> propSize_in = 9.0;
    :>> wheelbase = 405.0 [mm];
    :>> flightController = "BLITZ F7 (updated Jun 2026)";
@@ -173,9 +191,13 @@ package DroneCandidates {
   }
 
   part AF4a : Airframe {
+   :>> minCells_s = 6;  // 6S build (2812 1100KV; Darwin "6S 6000-8500mAh")
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 3245.0;  // DarwinFPV 2812 1100KV ~3245 g @6S 9" (Gemfan 9045-3, full throttle; research)
    :>> name = "DarwinFPV X9";
    :>> purchaseType = "PNP";
    :>> cost_USD = 340.0;            // range 280-400
+   :>> mass = 747.0 [g];            // confirmed: darwinfpv.com "747g±5g without package"; includes VTX + FPV cam, no GPS
    :>> propSize_in = 9.0;
    :>> wheelbase = 363.0 [mm];
    :>> flightController = "F411 MPU6500";
@@ -185,13 +207,17 @@ package DroneCandidates {
    :>> uartCount = 2;               // 2 HW + 2 softserial
    :>> receiverProtocols = "SBUS, PPM, CRSF (UART2), DSMX/iBus via softserial";
    :>> receiverIncluded = false;
-   :>> vtxIncluded = false;          // CSV: Unlikely
-   :>> fpvCameraIncluded = false;    // CSV: Unlikely
-   :>> gpsIncluded = false;          // not confirmed
-   :>> sourceConfidence = "Low-Moderate";
+   :>> vtxIncluded = true;           // confirmed: 1000mW analog VTX integrated (5.8G or 1.2G versions)
+   :>> vtxModel = "Darwin 1000mW analog VTX (5.8G or 1.2G, integrated)";
+   :>> fpvCameraIncluded = true;     // confirmed: Darwin "cement" waterproof analog camera included
+   :>> fpvCameraType = "Analog CMOS (Darwin cement waterproof)";
+   :>> gpsIncluded = false;          // confirmed: "GPS: Non" on product page
+   :>> sourceConfidence = "Moderate";
   }
 
   part AF5 : Airframe {
+   :>> minCells_s = 6;  // 6S build (7" ECOII2807 class); skipped in sweep (no mass)
+   :>> maxCells_s = 6;
    :>> name = "EMAX Hawk 7";
    :>> purchaseType = "BNF";
    :>> cost_USD = 398.86;
@@ -213,9 +239,13 @@ package DroneCandidates {
   }
 
   part AF6a : Airframe {
+   :>> minCells_s = 6;  // 6S build (Redline 2807 1350KV, 7" LR)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2000.0;  // DeepSpace Redline 2807 1350KV ~1.9-2.0 kg @6S 7" (research)
    :>> name = "DeepSpace ROC7 O4 PRO";
    :>> purchaseType = "PNP+GPS";
    :>> cost_USD = 369.0;
+   :>> mass = 667.0 [g];            // derived: BNF (with ELRS RX) confirmed 672g at RaceDayQuads; subtract ~5g RX
    :>> propSize_in = 7.0;
    :>> flightController = "Argus F722 (STM32F722)";
    :>> esc = "60A BLHeli_32";
@@ -234,9 +264,13 @@ package DroneCandidates {
   }
 
   part AF6b : Airframe {
+   :>> minCells_s = 6;  // 6S build (Redline 2807 1350KV, 7" LR)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2000.0;  // DeepSpace Redline 2807 1350KV ~1.9-2.0 kg @6S 7" (research)
    :>> name = "DeepSpace ROC7 O4 PRO";
    :>> purchaseType = "BNF";
    :>> cost_USD = 394.0;            // ~394
+   :>> mass = 672.0 [g];            // confirmed: RaceDayQuads listing (BNF with O4 Pro + GPS + True Diversity ELRS RX = 672g)
    :>> propSize_in = 7.0;
    :>> flightController = "Argus F722 (STM32F722)";
    :>> esc = "60A BLHeli_32";
@@ -256,9 +290,13 @@ package DroneCandidates {
   }
 
   part AF7 : Airframe {
+   :>> minCells_s = 6;  // 6S build (SPEEDX2 2806.5 1350KV, 7.5" LR)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2700.0;  // GEPRC SPEEDX2 2806.5 1350KV (~2.7 kg @6S, confirmed)
    :>> name = "GEPRC Crocodile75 V3";
    :>> purchaseType = "PNP";
    :>> cost_USD = 510.0;            // range 470-550
+   :>> mass = 597.5 [g];            // confirmed: fpv24.com + multiple sources; PNP includes analog VTX + FPV cam, no GPS, no RX
    :>> propSize_in = 7.5;
    :>> wheelbase = 342.0 [mm];
    :>> flightController = "SPAN F722-BT-HD V2";
@@ -277,10 +315,13 @@ package DroneCandidates {
   }
 
   part AF8a : Airframe {
+   :>> minCells_s = 6;  // 6S build (XING2 2809 1250KV; iFlight "6S")
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2000.0;  // iFlight XING2 2809 1250KV ~2.0 kg @6S 7" (research; ~2.5 kg @8")
    :>> name = "iFlight Chimera7 Pro V2";
    :>> purchaseType = "PNP";
    :>> cost_USD = 499.99;
-   :>> mass = 725.0 [g];
+   :>> mass = 705.0 [g];            // confirmed: shop.iflight.com "705g(Without Battery)" for analog 6S variant; 725g is the HD (DJI O3/O4) variant
    :>> propSize_in = 7.5;
    :>> wheelbase = 327.0 [mm];
    :>> flightController = "BLITZ F722";
@@ -300,10 +341,13 @@ package DroneCandidates {
   }
 
   part AF8b : Airframe {
+   :>> minCells_s = 6;  // 6S build (XING2 2809 1250KV; iFlight "6S")
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2000.0;  // iFlight XING2 2809 1250KV ~2.0 kg @6S 7" (research; ~2.5 kg @8")
    :>> name = "iFlight Chimera7 Pro V2";
    :>> purchaseType = "BNF";
    :>> cost_USD = 525.0;            // ~525
-   :>> mass = 725.0 [g];
+   :>> mass = 711.0 [g];            // 705g PNP + ~5.5g TBS Crossfire Nano RX
    :>> propSize_in = 7.5;
    :>> wheelbase = 327.0 [mm];
    :>> flightController = "BLITZ F722";
@@ -324,10 +368,15 @@ package DroneCandidates {
   }
 
   part AF9a : Airframe {
+   :>> minCells_s = 3;  // 3-5S airframe: 2507 1800KV motors rated <=5S, 4S recommended, 6S not advised (Darwin/Oscar Liang)
+   :>> maxCells_s = 5;
+   :>> maxThrustPerMotor_g = 1488.0;  // DarwinFPV 2507 1800KV @4S 7" (1488 g, confirmed)
    :>> name = "DarwinFPV 129 7in";
    :>> purchaseType = "PNP";
    :>> cost_USD = 222.0;            // range 180-264
+   :>> mass = 402.0 [g];            // confirmed: Oscar Liang review "402 grams without battery"; includes VTX + FPV cam + GPS
    :>> propSize_in = 7.0;
+   :>> wheelbase = 280.0 [mm];      // confirmed: Oscar Liang review
    :>> flightController = "F4 (STM32F405, MATEKF405 firmware)";
    :>> esc = "50A";
    :>> motors = "2507";
@@ -335,17 +384,23 @@ package DroneCandidates {
    :>> uartCount = 6;
    :>> receiverProtocols = "SBUS, PPM, CRSF, DSMX, iBus";
    :>> receiverIncluded = false;
-   :>> vtxIncluded = false;          // CSV: Unlikely
-   :>> fpvCameraIncluded = false;    // CSV: Unlikely
+   :>> vtxIncluded = true;           // confirmed: 800mW analog VTX integrated (Oscar Liang review + product page)
+   :>> vtxModel = "Darwin 800mW analog VTX (integrated)";
+   :>> fpvCameraIncluded = true;     // confirmed: Oscar Liang review lists FPV camera in 402g weight
+   :>> fpvCameraType = "Analog CMOS (model unconfirmed)";
    :>> gpsIncluded = true;
-   :>> gpsModel = "Darwin unbranded (likely BN-220/BN-880 class)";
-   :>> sourceConfidence = "Moderate";
+   :>> gpsModel = "Darwin unbranded (M80 GPS, confirmed in product listing)";
+   :>> sourceConfidence = "High";
   }
 
   part AF10 : Airframe {
+   :>> minCells_s = 6;  // 6S build (same ROC7 hardware as AF6; Redline 2807 1350KV)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2000.0;  // Redline 2807 1350KV ~2.0 kg @6S 7" (same hardware as AF6)
    :>> name = "NewBeeDrone ROC7 O4PRO";
    :>> purchaseType = "BNF only";
    :>> cost_USD = 699.0;
+   :>> mass = 672.0 [g];            // same DeepSpace ROC7 hardware as AF6b (672g BNF with O4 Pro + GPS + RX)
    :>> propSize_in = 7.0;
    :>> flightController = "Argus F722 (STM32F722)";
    :>> esc = "60A";
@@ -905,6 +960,7 @@ package DroneCandidates {
 
   part D1 : FpvCamera {
    :>> name = "DJI O4 Pro Air Unit";
+   :>> maxRange = 20.0 [km];        // ~20 km; >> R7 (2.8 km) — PASS
    :>> cameraModel = "DJI O4 Pro Air Unit";
    :>> cameraType = "Integrated Digital (DJI)";
    :>> cost_USD = 229.0;
@@ -923,6 +979,7 @@ package DroneCandidates {
 
   part D2 : FpvCamera {
    :>> name = "DJI O3 Air Unit";
+   :>> maxRange = 10.0 [km];        // ~10-15 km; >> R7 (2.8 km) — PASS
    :>> cameraModel = "DJI O3 Air Unit";
    :>> cameraType = "Integrated Digital (DJI)";
    :>> cost_USD = 174.0;            // 149-199
@@ -941,6 +998,7 @@ package DroneCandidates {
 
   part D3 : FpvCamera {
    :>> name = "Walksnail Avatar Pro";
+   :>> maxRange = 4.0 [km];         // ~4 km practical; > R7 (2.8 km) — PASS (marginal)
    :>> cameraModel = "Walksnail Avatar Pro";
    :>> cameraType = "Integrated Digital (Walksnail)";
    :>> cost_USD = 275.0;            // 250-300
@@ -2344,6 +2402,79 @@ package DroneCandidates {
    :>> audioRecording = true;
    :>> startStopControl = "Push-button";
   }
+
+  // ── Digital-input DVRs (HDMI / USB-UVC) ──────────────────────────────
+  // Standalone recorders for DIGITAL thermal outputs (DVR1-6 are CVBS-only).
+  // These are far heavier than analog FPV DVRs, but the DVR is excluded from
+  // the max-flight-time (SBC-stage) calc — it only affects cost and earlier-
+  // stage camera↔DVR compatibility, so the weight is acceptable.
+  part DVR7 : ThermalVideoRecorder {
+   :>> name = "ezcap273 Portable HDMI Recorder";
+   :>> cost_USD = 65.99;           // ~60-75
+   :>> mass = 180.0 [g];           // confirmed: ezcap.com spec (150x66.5x23mm, 3.5in LCD, 3000mAh)
+   :>> power = 2.5 [W];            // 5V 2A supply
+   :>> storageCapacity = 256.0;    // microSD (up to)
+   :>> recordingFormat = "H.264 MP4";
+   :>> dimensions = "150x66.5x23 mm";
+   :>> mountPattern = "N/A (handheld unit)";
+   :>> inputVoltageMin = 5.0 [V];
+   :>> inputVoltageMax = 5.0 [V];
+   :>> currentMax = 2.0 [A];
+   :>> videoInput = "HDMI";
+   :>> inputPortType = "HDMI Type-A";
+   :>> videoPassThrough = false;   // capture-to-SD; no analog VTX loop
+   :>> passThroughMethod = "N/A (standalone HDMI capture; no VTX loop-through)";
+   :>> maxResolution = "1920x1080 @ 60fps";
+   :>> frameRate_fps = 60.0;
+   :>> storageType = "microSD";
+   :>> audioRecording = true;
+   :>> startStopControl = "On-unit buttons / 3.5in touchscreen";
+  }
+
+  part DVR8 : ThermalVideoRecorder {
+   :>> name = "Zowietek megaDVR III (HDMI/SDI)";
+   :>> cost_USD = 650.0;           // est (professional dual-input recorder)
+   :>> mass = 430.0 [g];           // est: megaDVR II spec = 431g; III similar (4.3in touch)
+   :>> power = 5.0 [W];            // est (USB-C powered)
+   :>> storageCapacity = 256.0;    // TF / USB
+   :>> recordingFormat = "H.264 MP4";
+   :>> dimensions = "handheld, 4.3in touchscreen";
+   :>> mountPattern = "N/A (handheld + tripod mount)";
+   :>> inputVoltageMin = 5.0 [V];
+   :>> inputVoltageMax = 5.0 [V];
+   :>> currentMax = 2.0 [A];
+   :>> videoInput = "HDMI / SDI";
+   :>> inputPortType = "HDMI Type-A + 3G-SDI";
+   :>> videoPassThrough = true;    // HDMI/SDI loop-out
+   :>> passThroughMethod = "HDMI/SDI loop-out to monitor/air-unit";
+   :>> maxResolution = "1920x1080 @ 60fps";
+   :>> frameRate_fps = 60.0;
+   :>> storageType = "TF / USB";
+   :>> audioRecording = true;
+   :>> startStopControl = "Touchscreen / buttons";
+  }
+
+  part DVR9 : ThermalVideoRecorder {
+   :>> name = "Monster UVC Recorder (standalone USB-UVC DVR)";
+   :>> cost_USD = 129.0;           // EST — emerging 2026 product, price not finalized
+   :>> mass = 60.0 [g];            // EST — specs not yet published
+   :>> power = 2.5 [W];            // EST
+   :>> storageCapacity = 256.0;    // microSD (est)
+   :>> recordingFormat = "H.264 MP4";
+   :>> dimensions = "small box (est)";
+   :>> mountPattern = "N/A (adhesive, est)";
+   :>> inputVoltageMin = 5.0 [V];
+   :>> inputVoltageMax = 5.0 [V];
+   :>> currentMax = 1.0 [A];       // EST
+   :>> videoInput = "USB UVC";
+   :>> inputPortType = "USB-A host (UVC)";
+   :>> videoPassThrough = false;   // records UVC camera to SD; no analog loop
+   :>> passThroughMethod = "N/A (records a UVC USB camera to SD, no VTX loop)";
+   :>> maxResolution = "1920x1080";
+   :>> frameRate_fps = 30.0;
+   :>> audioRecording = true;
+   :>> startStopControl = "On-unit button";
+  }
  }
 
  // =========================================================================
@@ -2406,5 +2537,349 @@ package DroneCandidates {
    :>> extraHardwareNeeded = "2nd ELRS RX on drone (~$15-25); different band for RC";
   }
  }
+
+ // =========================================================================
+ // BATTERY CANDIDATES  (source: market research 2026-06-25)
+ // Li-ion types only — specifically those capable of >50 min hover on best airframe.
+ // Voltage convention: Upgrade Energy uses 21.6 V / 14.4 V (3.6 V/cell);
+ // Lumenier, iFlight, GNB, Pyrodrone, DOGCOM use 22.2 V / 14.8 V (3.7 V/cell avg).
+ // energy is total energy [J] = nominalVoltage × capacity_Ah × 3600.
+ // =========================================================================
+ package BatteryCandidates {
+
+  // ── Category: Li-ion 6S 10000mAh ─────────────────────────────────────
+
+  part BAT01 : Battery {
+   :>> name = "Lumenier NAV 10000mAh 6S 21700 Li-Ion";
+   :>> cost_USD = 149.99;
+   :>> mass = 975.0 [g];
+   :>> energy = 799200.0 [J];    // 22.2 V × 10 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 10000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Samsung/generic 21700 graphite NCM";
+   :>> maxContinuousDischarge_A = 35.0;
+   :>> connector = "XT60";
+  }
+
+  part BAT02 : Battery {
+   :>> name = "Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S";
+   :>> cost_USD = 269.99;
+   :>> mass = 900.0 [g];
+   :>> energy = 777600.0 [J];    // 21.6 V × 10 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 10000.0;
+   :>> nominalVoltage = 21.6 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Samsung INR21700-50S";
+   :>> maxContinuousDischarge_A = 40.0;
+   :>> connector = "XT60";
+  }
+
+  part BAT03 : Battery {
+   :>> name = "Upgrade Energy RED V3 6S2P 10Ah Molicel P50B";
+   :>> cost_USD = 252.0;
+   :>> mass = 868.0 [g];
+   :>> energy = 777600.0 [J];    // 21.6 V × 10 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 10000.0;
+   :>> nominalVoltage = 21.6 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Molicel INR21700-P50B";
+   :>> maxContinuousDischarge_A = 50.0;
+   :>> connector = "XT60";
+  }
+
+  // ── Category: Li-ion 4S 12000mAh ─────────────────────────────────────
+  // Only one confirmed commercial product exists at this spec (sold out as of 2026-06).
+
+  part BAT04 : Battery {
+   :>> name = "Lumenier NAV 12000mAh 4S 21700 Amprius";
+   :>> cost_USD = 218.99;
+   :>> mass = 465.0 [g];
+   :>> energy = 639360.0 [J];    // 14.8 V × 12 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 4;
+   :>> capacity_mAh = 12000.0;
+   :>> nominalVoltage = 14.8 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Amprius SA17 silicon-anode 21700";
+   :>> maxContinuousDischarge_A = 36.0;
+   :>> connector = "XT60";
+  }
+
+  // ── Category: Li-ion 6S 8000mAh ──────────────────────────────────────
+
+  part BAT05 : Battery {
+   :>> name = "GNB 8000mAh 6S2P Samsung 21700 40T";
+   :>> cost_USD = 135.99;
+   :>> mass = 904.0 [g];
+   :>> energy = 639360.0 [J];    // 22.2 V × 8 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 8000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Samsung INR21700-40T";
+   :>> maxContinuousDischarge_A = 80.0;
+   :>> connector = "XT60";
+  }
+
+  part BAT06 : Battery {
+   :>> name = "iFlight Fullsend 6S 8000mAh EVE INR21700-40PL";
+   :>> cost_USD = 73.91;
+   :>> mass = 840.0 [g];
+   :>> energy = 639360.0 [J];    // 22.2 V × 8 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 8000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "EVE INR21700-40PL";
+   :>> maxContinuousDischarge_A = 35.0;  // practical long-range draw; 140 A peak thermal-limited
+   :>> connector = "XT60";
+  }
+
+  part BAT07 : Battery {
+   :>> name = "Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10";
+   :>> cost_USD = 194.0;
+   :>> mass = 617.0 [g];
+   :>> energy = 622080.0 [J];    // 21.6 V × 8 Ah × 3600 (173 Wh confirmed)
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 8000.0;
+   :>> nominalVoltage = 21.6 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Amprius SA10 silicon-anode 18650";
+   :>> maxContinuousDischarge_A = 12.0;  // silicon-anode current-limited; 187 W / 16 V avg
+   :>> connector = "XT60";
+  }
+
+  // ── Category: Li-ion 6S 12000mAh ─────────────────────────────────────
+
+  part BAT08 : Battery {
+   :>> name = "Lumenier NAV 12000mAh 6S 21700 XT90";
+   :>> cost_USD = 189.99;
+   :>> mass = 1402.0 [g];
+   :>> energy = 959040.0 [J];    // 22.2 V × 12 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 12000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "21700 graphite NCM (standard)";
+   :>> maxContinuousDischarge_A = 50.0;
+   :>> connector = "XT90";
+  }
+
+  part BAT09 : Battery {
+   :>> name = "Lumenier NAV 12000mAh 6S 21700 Amprius";
+   :>> cost_USD = 321.49;
+   :>> mass = 920.0 [g];
+   :>> energy = 959040.0 [J];    // 22.2 V × 12 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 12000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Amprius SA17 silicon-anode 21700";
+   :>> maxContinuousDischarge_A = 36.0;
+   :>> connector = "XT60";
+  }
+
+  part BAT10 : Battery {
+   :>> name = "Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10";
+   :>> cost_USD = 275.0;
+   :>> mass = 919.0 [g];
+   :>> energy = 932160.0 [J];    // 21.6 V × 12 Ah × 3600 (259 Wh confirmed)
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 12000.0;
+   :>> nominalVoltage = 21.6 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Amprius SA10 silicon-anode 18650";
+   :>> maxContinuousDischarge_A = 38.0;
+   :>> connector = "XT60";
+  }
+
+  // ── Category: Li-ion 4S 10000mAh ─────────────────────────────────────
+
+  part BAT11 : Battery {
+   :>> name = "Upgrade Energy GREEN V1 4S2P 10Ah Samsung 50S";
+   :>> cost_USD = 129.99;
+   :>> mass = 592.0 [g];
+   :>> energy = 518400.0 [J];    // 14.4 V × 10 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 4;
+   :>> capacity_mAh = 10000.0;
+   :>> nominalVoltage = 14.4 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Samsung INR21700-50S";
+   :>> maxContinuousDischarge_A = 40.0;
+   :>> connector = "XT60";
+  }
+
+  part BAT12 : Battery {
+   :>> name = "Upgrade Energy RED V3 4S2P 10Ah Molicel P50B";
+   :>> cost_USD = 139.99;
+   :>> mass = 578.0 [g];
+   :>> energy = 518400.0 [J];    // 14.4 V × 10 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 4;
+   :>> capacity_mAh = 10000.0;
+   :>> nominalVoltage = 14.4 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Molicel INR21700-P50B";
+   :>> maxContinuousDischarge_A = 55.0;
+   :>> connector = "XT60";
+  }
+
+  // ── Category: Li-ion 6S 6000mAh ──────────────────────────────────────
+
+  part BAT13 : Battery {
+   :>> name = "Pyrodrone Hyperjuice 6S2P 6000mAh Sony VTC6";
+   :>> cost_USD = 172.99;
+   :>> mass = 590.0 [g];
+   :>> energy = 479520.0 [J];    // 22.2 V × 6 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 6000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Sony INR18650-VTC6";
+   :>> maxContinuousDischarge_A = 30.0;
+   :>> connector = "XT60";
+  }
+
+  part BAT14 : Battery {
+   :>> name = "iFlight Fullsend 6S2P 6000mAh Samsung 30Q";
+   :>> cost_USD = 84.47;
+   :>> mass = 608.0 [g];
+   :>> energy = 479520.0 [J];    // 22.2 V × 6 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 6000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Samsung INR18650-30Q";
+   :>> maxContinuousDischarge_A = 35.0;
+   :>> connector = "XT60";
+  }
+
+  part BAT15 : Battery {
+   :>> name = "Lumenier NAV 6000mAh 6S 18650";
+   :>> cost_USD = 188.99;
+   :>> mass = 635.0 [g];
+   :>> energy = 479520.0 [J];    // 22.2 V × 6 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 6000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "18650 NCM (high-performance)";
+   :>> maxContinuousDischarge_A = 30.0;
+   :>> connector = "XT60";
+  }
+
+  // ── Category: Li-ion 4S 8000mAh ──────────────────────────────────────
+
+  part BAT16 : Battery {
+   :>> name = "Upgrade Energy GREEN V2 4S2P 8Ah Amprius SA10";
+   :>> cost_USD = 155.0;
+   :>> mass = 409.0 [g];
+   :>> energy = 414720.0 [J];    // 14.4 V × 8 Ah × 3600 (115 Wh confirmed)
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 4;
+   :>> capacity_mAh = 8000.0;
+   :>> nominalVoltage = 14.4 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Amprius SA10 silicon-anode 18650";
+   :>> maxContinuousDischarge_A = 16.0;  // 156 W / 16 V avg; silicon-anode limited
+   :>> connector = "XT60";
+  }
+
+  part BAT17 : Battery {
+   :>> name = "Upgrade Energy Dark Lithium V2 4S 8400mAh Molicel P42A";
+   :>> cost_USD = 148.99;
+   :>> mass = 556.0 [g];
+   :>> energy = 435456.0 [J];    // 14.4 V × 8.4 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 4;
+   :>> capacity_mAh = 8400.0;
+   :>> nominalVoltage = 14.4 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Molicel INR21700-P42A";
+   :>> maxContinuousDischarge_A = 60.0;  // 2P × 30 A/cell
+   :>> connector = "XT60";
+  }
+
+  part BAT18 : Battery {
+   :>> name = "Lumenier NAV 8000mAh 4S 18650 Amprius";
+   :>> cost_USD = 134.99;
+   :>> mass = 415.0 [g];
+   :>> energy = 426240.0 [J];    // 14.8 V × 8 Ah × 3600 (118 Wh)
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 4;
+   :>> capacity_mAh = 8000.0;
+   :>> nominalVoltage = 14.8 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Amprius SA10 silicon-anode 18650";
+   :>> maxContinuousDischarge_A = 16.0;  // 2C constant per Lumenier spec
+   :>> connector = "XT60";
+  }
+
+  // ── Category: Li-ion 6S 5000mAh ──────────────────────────────────────
+
+  part BAT19 : Battery {
+   :>> name = "Lumenier NAV 5000mAh 6S 21700";
+   :>> cost_USD = 95.99;
+   :>> mass = 499.0 [g];
+   :>> energy = 399600.0 [J];    // 22.2 V × 5 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 5000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "21700 graphite NCM (standard)";
+   :>> maxContinuousDischarge_A = 35.0;
+   :>> connector = "XT60";
+  }
+
+  part BAT20 : Battery {
+   :>> name = "Upgrade Energy RED V3 6S1P 5Ah Molicel P50B";
+   :>> cost_USD = 119.0;
+   :>> mass = 432.0 [g];
+   :>> energy = 388800.0 [J];    // 21.6 V × 5 Ah × 3600 (108 Wh confirmed)
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 5000.0;
+   :>> nominalVoltage = 21.6 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Molicel INR21700-P50B";
+   :>> maxContinuousDischarge_A = 50.0;
+   :>> connector = "XT60";
+  }
+
+  part BAT21 : Battery {
+   :>> name = "DOGCOM 6S1P 5000mAh Samsung 50S";
+   :>> cost_USD = 50.0;           // range 34-67 depending on sale
+   :>> mass = 445.0 [g];
+   :>> energy = 399600.0 [J];    // 22.2 V × 5 Ah × 3600 (111 Wh confirmed)
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 5000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Samsung INR21700-50S";
+   :>> maxContinuousDischarge_A = 20.0;
+   :>> connector = "XT60";
+  }
+
+ }
+
 }
 // End of the DroneCandidates library. See MODEL_ISSUES.md for data gaps.

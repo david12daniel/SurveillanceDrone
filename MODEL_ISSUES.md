@@ -5,8 +5,10 @@ taken, and open items for review. Created 2026-06-25 while consolidating the
 `analysis/*.csv` market/trade-study data into the SysML model
 ([model.sysml](model.sysml) schema + [candidates.sysml](candidates.sysml) data).
 
-Status legend: **FIXED** (changed in-model) · **DECISION** (modeling choice made)
-· **OPEN** (needs David's input) · **DATA GAP** (missing/uncertain source data).
+Status legend: **FIXED** (defect changed in-model) · **DECISION** (a modeling
+choice already made — *informational, no action needed from David*) · **RESOLVED**
+(a formerly-open item now closed) · **OPEN** (needs David's input) · **DATA GAP**
+(missing/uncertain source data).
 
 ---
 
@@ -63,46 +65,86 @@ any tool previously.
 
 ## B. Open items for review (David)
 
-1. **OPEN — refinement relationship semantics.** `refines` was replaced with
-   `subsets` (§A1). `subsets` means the child requirement is a specialization/
-   subset of the parent (and inherits its features). If you instead want a pure
-   *trace* without inheritance, the alternative is a package-level
-   `dependency from <child> to <parent>;`. Both are valid; pick the intended one.
+1. **RESOLVED (2026-06-26) — refinement + component trace.** `refines` → `subsets`
+   (§A1) is confirmed correct (David: "subsets works perfectly"). For tracing each
+   requirement to the **subsystem/component** it applies to, the model already
+   carries that link two ways: (a) the per-subsystem requirement *packages*
+   (`CameraRequirements`, `BatterySubsystem`, …) group requirements by subsystem;
+   and (b) the **`satisfy`** statements in each component `part def` point back to
+   the requirements it fulfills — e.g. `Battery satisfy R4_BAT_VOLT` means that
+   requirement applies to `Battery`. A query/tool over the `satisfy` web yields, for
+   any requirement, the responsible component(s), and vice-versa. (An explicit
+   `subject : <ComponentType>` on each requirement is the other SysML v2 idiom, but
+   it would make `Requirements` depend on `Architecture` — the reverse of the
+   current `Architecture` → `Requirements` import direction — risking a circular
+   import, so we rely on `satisfy` instead.)
 
-2. **OPEN — should the `analysis/*.csv` files be retired?** Their component data
-   now lives in `candidates.sysml` (the single source of truth you asked for).
-   The CSVs are currently kept for reference and not deleted. Recommend archiving
-   them (or deleting once verified) to avoid two diverging sources.
+2. **RESOLVED (2026-06-26) — `analysis/*.csv` source files retired.** David removed
+   the per-component market CSVs; `candidates.sysml` is the single source of truth.
+   The only CSVs left under `analysis/` are `thermal_camera_analysis_expanded.csv`
+   (computed results — migrated into the Analysis layer, see B3) and the
+   auto-generated `flight_time_results.csv` (a script *output*, not a source).
 
-3. **OPEN — derived analysis columns belong in the Analysis layer.** The big
-   `thermal_camera_analysis_expanded.csv` is ~80% *computed* results (GSD,
-   Johnson-criteria pixels-on-target, detection/recognition verdicts, SBC NPU
-   load margins, pass/fail). These are NOT component attributes and were
-   intentionally excluded from the candidate instances. They should be expressed
-   as `constraint`/`calc`/`analysis` definitions in `DroneSystemModel::Analysis`
-   that operate on the candidates, rather than precomputed in a spreadsheet.
-   *(Partial precedent now exists — see §C8, the flight-time model, which reads
-   the candidates and writes computed results back as SysML instances.)*
+3. **RESOLVED (2026-06-26) — thermal detection analysis now in the model.** The
+   core computed columns from `thermal_camera_analysis_expanded.csv` (GSD,
+   Johnson-criteria pixels-on-target, detection/recognition verdicts) are now
+   expressed in `DroneSystemModel::Analysis` as `calc def`s (`GroundSampleDistance`,
+   `PixelsAcrossTarget`), `constraint def`s (`DetectionCriterion` ≥1.5 px,
+   `RecognitionCriterion` ≥4 px), and `analysis def`s (`ThermalDetectionCheck`
+   @120 m for R3_1; `ThermalRecognitionCheck` @90 m for R3_2 / R3_CAM_RES). Per
+   David, these are modeled for documentation / future execution and the **existing
+   numeric method is retained**: Syside validates the structure but does not execute
+   calc defs, so the per-camera numbers stay in the CSV until a SysML v2 execution
+   engine is available (same limitation as the flight-time calc, C10). SBC NPU
+   load-margin columns can be added the same way if wanted.
 
-4. **OPEN — 7 airframes are excluded from the flight-time sweep for missing
-   mass.** `flight_time_model.py` skips AF4a, AF5, AF6a, AF6b, AF7, AF9a, AF10
-   because `candidates.sysml` has no bare-airframe `mass` for them (the §D data
-   gap). Supplying those masses would let the sweep evaluate all 15 airframes.
+4. **PARTIALLY RESOLVED (2026-06-25) — 6 of 7 missing airframe masses now
+   filled; AF5 still missing.** Masses confirmed via web research and added to
+   `candidates.sysml`: AF4a 747g (darwinfpv.com product page), AF6a 667g /
+   AF6b 672g (RaceDayQuads listing; BNF with O4 Pro + GPS + ELRS RX = 672g;
+   PNP+GPS approximated at 672 − 5g RX = 667g), AF7 597.5g (fpv24.com + multiple
+   sources), AF9a 402g (Oscar Liang review), AF10 672g (same DeepSpace ROC7
+   hardware as AF6b). **OPEN — AF5 (EMAX Hawk 7 BNF) needs a decision.** Research
+   (2026-06-26) confirmed the EMAX Hawk ships in 7/8/9/10-inch sizes with "DC"
+   (deadcat) and "X" frame geometries; the ~890 g (X) / ~920 g (DC) figures David
+   found are for the **10-inch** version. AF5 is currently modeled as the **7-inch**
+   Hawk 7 (propSize_in = 7), for which a reliable as-built mass is still not
+   published (EMAX's page omits the spec table; a 7-inch BNF would be ~450–550 g,
+   not ~900 g). **ACTION (David, 2026-06-26):** David is contacting EMAX to confirm
+   the as-built mass of the 7-inch Hawk 7 (and, for reference, the 10-inch X 890 g /
+   DC 920 g variants). AF5 stays modeled as 7-inch (propSize_in = 7) and skipped by
+   the sweep until that mass is provided.
 
-5. **OPEN — `Airframe` has no `maxTakeoffMass` bound; feasibility is heuristic.**
-   The sweep's `flyable` flag uses a rough max-thrust-by-prop-size lookup and a
-   <60% hover-throttle margin, not a real thrust curve. Binding `maxTakeoffMass`
-   (and ideally a thrust figure) per airframe would make feasibility rigorous.
+5. **RESOLVED (2026-06-26) — real per-motor thrust now drives feasibility.** Added
+   `Airframe.maxThrustPerMotor_g` and bound it from manufacturer/thrust-table data:
+   AF1 & AF7 2700 g (GEPRC 2806.5 1350KV), AF2a/b/c 2800 g (Axisflying C287 2807.5
+   1350KV, ">2.8 kg"), AF3a/b 2933 g (iFlight XING-E 2809 800KV, confirmed),
+   AF9a 1488 g (DarwinFPV 2507 1800KV @4S, confirmed). **RESEARCH-SOURCED
+   (prop-dependent, approximate):** AF6a/b & AF10 2000 g (DeepSpace Redline 2807
+   1350KV, ~1.9–2.0 kg @6S 7"), AF8a/b 2000 g (iFlight XING2 2809 1250KV @6S 7";
+   ~2.5 kg @8"), AF4a 3245 g (DarwinFPV 2812 1100KV @6S 9" Gemfan 9045-3, full
+   throttle — matches AF4a's actual prop). The sweep's
+   `flyable`/throttle check now uses
+   `maxThrustPerMotor_g` when present, falling back to the prop-size heuristic only
+   if unset (AF5 only). **Caveat to watch:** the old prop-size heuristic badly
+   *under-rated* 7-inch LR motors (~1750 g vs real ~2500–2800 g), so it was making
+   heavy LR builds look less flyable than they are; the bound thrust corrects that.
+   Treat the EST values as ±15 % until checked against full thrust tables. Rated
+   per-frame MTOM is still unbound — thrust-to-weight (via `maxThrustPerMotor_g`) is
+   used instead.
 
-6. **OPEN — adding *real* `Battery` candidates needs richer attributes.** The
-   high-fidelity endurance model uses pack voltage, capacity, chemistry, and
-   usable depth-of-discharge, but `Architecture::Battery` only has `cost_USD`,
-   `mass`, and `energy`. For now the script SWEEPS *generic* generated packs (to
-   inform the battery market search) and carries the rich params in the analysis
-   output only. When real batteries are added to `candidates.sysml`, consider
-   extending the `Battery` part def (a protected-model change) with
-   `nominalVoltage`, `capacity_Ah`, `chemistry`, and `usableDoD` so the script can
-   read actual packs instead of generated ones.
+6. **RESOLVED (2026-06-25) — real `Battery` candidates now in model.**
+   `Architecture::Battery` was extended with `name`, `chemistry`, `cells_s`,
+   `capacity_mAh`, `nominalVoltage` (`ISQElectromagnetism::ElectricPotentialDifferenceValue`),
+   `usableDoD`, `cellModel`, `maxContinuousDischarge_A`, and `connector`. 21 real
+   Li-ion battery candidates (BAT01–BAT21) were added to `candidates.sysml`
+   (`BatteryCandidates` package) covering all 8 Li-ion capacity/cell-count types
+   capable of >50 min hover. The flight-time script now reads real battery candidates
+   directly from `candidates.sysml` via `load_model()`, falling back to the generic
+   grid only if no Battery candidates are present. Voltage note: Upgrade Energy uses
+   21.6 V/14.4 V (3.6 V/cell); Lumenier/iFlight/GNB/Pyrodrone/DOGCOM use
+   22.2 V/14.8 V (3.7 V/cell average). 4S 12000mAh has only one confirmed product
+   (Lumenier NAV Amprius, sold out as of 2026-06); alternatives exist at 4S 10Ah.
 
 ---
 
@@ -169,32 +211,40 @@ any tool previously.
    per-lens rows of the expanded analysis CSV. Lens choice is a configuration of
    the module and belongs to the Analysis layer (see B3).
 
-6. **DECISION — integrated digital cam+VTX modeled once.** DJI O4/O3 and
-   Walksnail units are camera+VTX combos; they're modeled as `FpvCamera`
-   candidates (D1–D3) and intentionally NOT duplicated as `VideoTransmitter`
-   candidates. `VideoTransmitterCandidates` holds the analog VTX only.
+6. **DECISION (updated 2026-06-26) — integrated digital cam+VTX: single part, no
+   separate VTX, range-checked.** DJI O4/O3 and Walksnail units are camera+VTX
+   combos modeled as `FpvCamera` candidates (D1–D3) and intentionally NOT duplicated
+   as `VideoTransmitter` candidates (`VideoTransmitterCandidates` holds the analog
+   VTX only). **No-double-VTX rule:** a configuration selecting an integrated
+   cam+VTX (`vtxTypeRequired` = "Integrated…") must NOT also include a separate
+   `VideoTransmitter` — its VTX mass and cost are already in the integrated unit. In
+   the flight-time sweep this never occurs (FPV is held at a lightest representative
+   and the VTX is swept separately), but the rule is documented for any future build
+   that selects D1–D3. **Range vs R7 (2.8 km):** a new `FpvCamera.maxRange`
+   attribute was added and populated for D1–D3 from research — DJI O4 Pro ~20 km,
+   DJI O3 ~10 km, Walksnail Avatar ~4 km practical. **All three pass R7**; none are
+   excluded on range (Walksnail is marginal). Rule going forward: if a future
+   integrated cam+VTX cannot meet 2.8 km, that camera is not viable and is excluded.
 
 7. **DECISION — new `part def TelemetryGroundLink`.** `telemetry_rx_candidates.csv`
    had no home in the architecture (telemetry is routed through the
    `RadioControlTransmitter` in the baseline). Added a definition to hold these
    options; it is **not** composed into `AerialThermalObservationSystem`.
 
-8. **DECISION (2026-06-25) — high-fidelity flight-time model as a model-integrated
-   script.** `analysis/flight_time_model.py` implements a momentum/actuator-disk
-   endurance model (hover induced power + Glauert forward-flight induced velocity +
-   parasitic drag + drivetrain efficiency + usable battery energy), the same
-   physics family as eCalc/xcopterCalc. It is *integrated with the model*: it parses
-   `model.sysml` + `candidates.sysml` for airframe and payload data, generates a
-   grid of generic battery packs, runs a **holistic configuration sweep**
-   (~137k configs: airframe × battery × SBC × VTX × thermal camera × DVR fully
-   crossed; sub-1 W peripherals FPV/GPS/RX held at lightest representatives — a
-   true all-brands Cartesian is ~85M and flight-time-redundant), and writes results
-   back as `analysis/flight_time_results.csv` (every instance, all components +
-   battery attrs + flight time) plus a SysML v2 **instance table**
-   (`analysis/flight_time_instances.sysml`: a `FlightTimeResult` part def + bound
-   instances for the baseline + top-100) and an `.md` summary. This is the chosen
-   pattern for "compute outside SysML, document the result as model instances."
-   Generated files are auto-built — never hand-edited.
+8. **DECISION (2026-06-25, updated 2026-06-25) — high-fidelity flight-time model as
+   a model-integrated script.** `analysis/flight_time_model.py` implements a
+   momentum/actuator-disk endurance model (hover induced power + Glauert
+   forward-flight induced velocity + parasitic drag + drivetrain efficiency +
+   usable battery energy), the same physics family as eCalc/xcopterCalc. It is
+   *integrated with the model*: it parses `candidates.sysml` for airframe, payload,
+   and **real battery candidates** (BAT01–BAT21), runs a **holistic configuration
+   sweep** (139,104 raw pairings, filtered to 60,480 interface-compatible "real"
+   configs — see C11: airframe × battery × SBC × VTX × thermal camera × DVR fully
+   crossed; sub-1 W peripherals FPV/GPS/RX held at lightest representatives), and
+   writes results back as
+   `analysis/flight_time_results.csv` (every instance) plus a SysML v2 **instance
+   table** (`analysis/flight_time_instances.sysml`) and an `.md` summary. Falls
+   back to a generated generic grid only if no Battery candidates are found.
 
    **Component-inclusion handling:** airframe-bundled VTX/FPV/GPS/RX add power only
    (mass already in the airframe weight); non-bundled peripherals add mass + power.
@@ -202,24 +252,97 @@ any tool previously.
    power). Physics assumptions (FoM, η, ρ, C_d, frontal-area model) live in
    `PhysicsParams`; results are first-order **comparative** estimates. The *power
    bucket* in the output (cruise/wind endurance > hover) is real (translational
-   lift), not an error. See OPEN items B4–B6 and DATA GAP below for gaps surfaced.
+   lift), not an error. See OPEN items B4–B5 and DATA GAP below for gaps surfaced.
+
+11. **DECISION (2026-06-26) — interface compatibility layer + sweep filtering.**
+    Added a `Compatibility` sub-package to `model.sysml`'s `Architecture` package
+    that declares, as formal SysML v2, which component pairings form a *real*
+    configuration: typed `port def`s (PowerSourcePort/PowerSinkPort,
+    VideoSourcePort/VideoSinkPort, RfSourcePort/RfSinkPort), `enum def`s
+    (VideoFormat, RfBand), `constraint def`s (BatteryVoltageCompatible,
+    VideoFormatCompatible, RfBandCompatible), and `interface def`s
+    (BatteryPowerInterface, VideoLink, RfLink) binding source↔sink ports and
+    asserting the matching constraint. Syside validates the *structure*; it does
+    not execute the constraints, so the actual pruning lives in
+    `flight_time_model.py` — the same READ-model / EXECUTE-in-Python split used by
+    the flight-time calc. New `Airframe` attributes `minCells_s`/`maxCells_s`
+    carry the ESC/motor cell-count window (researched per airframe: all candidates
+    are 6S **except** the DarwinFPV 129 / AF9a, which is 3–5S — 2507 1800KV motors
+    rated ≤5S, 4S recommended). The sweep now drops:
+      • **P1 battery↔airframe** — `cells_s` outside `[minCells_s, maxCells_s]`
+        (42,336 configs; e.g. the previously top-ranked KOLAS7 + 4S 12Ah Amprius,
+        which is **not real** because KOLAS7 is 6S-only).
+      • **V2 thermal↔DVR** — a thermal whose video output can be recorded by no
+        DVR is dropped (initially CVBS-only; relaxed in **C12** with digital DVRs).
+    Result (initial, CVBS-only DVRs swept): 139,104 → 60,480 real configs.
+    **Superseded by C12** — once digital DVRs were added and the DVR was removed
+    from the flight-time calc, the final figures are 14,112 real configs with the
+    baseline KOLAS7 + 6S 12Ah Amprius → 74.6 min.
+
+    The R1/R2 RF links and D-series data links are declared in the model for
+    completeness but do not prune the current sweep (all VTX/VRX are analog 5.8
+    GHz; RX/TX are held at representatives).
+
+12. **DECISION (2026-06-26) — digital DVRs, DVR staging, and last-mile port typing.**
+    Refines C11 after review:
+    - **Digital DVR candidates added** (`candidates.sysml` DVR7-9): ezcap273
+      (HDMI, 180 g), Zowietek megaDVR III (HDMI/SDI, ~430 g est), and the Monster
+      UVC Recorder (standalone USB-UVC, specs **estimated** — emerging 2026
+      product). DVR1-6 remain the CVBS analog FPV DVRs. This removes the CVBS-only
+      exclusion: USB-output thermals (FLIR Lepton, USB-UVC modules) are recorded by
+      DVR9, so **14 of 16 thermals are now viable**. Only T7 (raw SPI) and T16 (raw
+      CMOS) stay excluded — no standalone recorder can read a raw sensor bus; those
+      require SBC integration and are effectively SBC-stage-only cameras.
+    - **DVR excluded from max-flight-time.** The headline endurance is the SBC-
+      stage build (Phase 4: SBC present, no DVR). Per the staged plan the DVR is
+      used only in the earlier (Phase 1-3) stages, so it is no longer a flight-time
+      sweep dimension and its mass/power are excluded from the endurance calc. It is
+      still required for earlier-stage camera↔DVR compatibility (each thermal must
+      have a compatible recorder) and still contributes to overall cost (the SysML
+      model's `totalCost` includes `drone.recorder.cost_USD`). The flight-time CSV
+      carries the lightest compatible DVR per thermal for reference only. Effect:
+      the sweep no longer crosses DVR (139,104 → 23,184 raw pairings); after P1
+      (7,056) and V2 (2,016) pruning → **14,112 real configs**; baseline 73.8 →
+      **74.6 min** (DVR mass removed, SBC retained).
+    - **Last-mile port typing.** The power/video/RF ports on the component part
+      defs are now typed to the Compatibility port defs (`PowerSourcePort`/
+      `PowerSinkPort`, `VideoSourcePort`/`VideoSinkPort`, `RfSourcePort`/
+      `RfSinkPort`), and the battery-power + four video connects in
+      `SurveillanceDrone` are typed to their interface defs (`BatteryPowerInterface`,
+      `VideoLink`). Data (UART/MAVLink) ports and the GNSS antenna port stay untyped
+      (no compat rule); the wireless RF connects in `AerialThermalObservationSystem`
+      keep `connection connect` (their ports are typed).
 
 ---
 
 ## D. Candidate data gaps & uncertainties (from the source CSVs)
 
-- **DATA GAP — airframe mass/wheelbase often "N/A".** AF4a, AF5, AF6a/b, AF7
-  (wheelbase given but mass N/A), AF9a, AF10 lack a bare-airframe weight; several
-  lack wheelbase. `mass`/`wheelbase` were omitted for those candidates. These are
-  skipped by the flight-time sweep (B4).
-- **DATA GAP — BNF/PNP variants share one (bare-frame) mass.** The KOLAS7
-  (AF2a/2b/2c), Chimera7 (AF8a/8b), and similar variants all carry the same
-  `mass` even though the BNF builds physically include a VTX/FPV-cam/GPS/RX that
-  the bare PNP does not. Because the flight-time model's inclusion logic treats a
-  bundled peripheral's mass as already-in-the-airframe (adds power only), an
-  understated BNF mass makes BNF variants look ~20–40 g lighter than reality and
-  mildly inflates their ranking (e.g. AF2b/AF2c top the current sweep). Fix:
-  record true *as-built* masses for BNF/PNP variants in `candidates.sysml`.
+- **MOSTLY RESOLVED (2026-06-26) — airframe masses filled (AF5 pending).** All
+  airframe `mass` values are now populated except AF5 (see B4 — pending a
+  7-inch-vs-10-inch decision). Wheelbase is still absent for a few BNF-only entries
+  (AF5, AF6a/b, AF10); the flight-time model falls back to a 250 mm default
+  frontal-area width when wheelbase is missing, so the effect is minor.
+- **RESOLVED (2026-06-25) — BNF/PNP as-built masses corrected.** BNF variants
+  now carry distinct masses reflecting their bundled electronics. Confirmed from
+  official manufacturer pages or peer reviews:
+  - AF3b (Chimera9 ECO BNF): 721g PNP → 727g (+ TBS Nano RX 5.5g)
+  - AF8a (Chimera7 Pro V2 PNP): 725g → **705g** (iFlight shop; 725g is the HD/O3 variant)
+  - AF8b (Chimera7 Pro V2 BNF): 725g → 711g (705g + TBS Nano RX 5.5g)
+  - AF2b (KOLAS7 BNF Analog): 257g → **300g est.** (257g base + ~15g analog VTX
+    + ~20g GPS + ~5.5g TBS Nano RX + ~2.5g misc; VTX model unknown)
+  - AF2c (KOLAS7 BNF HD): 257g → **333g est.** (257g base + ~48g DJI O3 full
+    assembly [36.4g module+cam + 3g ant + 8.3g cable] + ~20g GPS + ~5.5g RX)
+  The KOLAS7 BNF estimates remain approximate because Axisflying does not publish
+  as-built masses; treat them as ±20g.
+- **RESOLVED (2026-06-25) — AF4a and AF9a had wrong `vtxIncluded` /
+  `fpvCameraIncluded` flags.** Both were set to `false` from earlier CSV
+  uncertainty. Web research confirmed: DarwinFPV X9 (AF4a) integrates a 1000mW
+  analog VTX and "Darwin cement" waterproof FPV camera (confirmed at fpvfaster.com;
+  "GPS: Non" also confirmed). DarwinFPV 129 (AF9a) integrates an 800mW VTX and
+  FPV camera (Oscar Liang review lists both in the 402g all-up weight). Both flags
+  corrected to `true` in `candidates.sysml`; flight-time model now correctly treats
+  these as bundled (power-only, no added mass).
+
 - **DATA GAP — Axisflying KOLAS7 BNF Analog (AF2b).** Product page names no VTX
   or FPV-camera model; `vtxModel` is "Unknown", `fpvCameraIncluded` set false
   pending seller confirmation. GPS module is manufacturer-unbranded.
@@ -229,10 +352,10 @@ any tool previously.
   module unknown ("DeepSpace/Axisflying unbranded").
 - **DATA GAP — thermal module pricing is wide/uncertain** (factory-direct Chinese
   modules, InfiRay street pricing). Representative midpoints used.
-- **DATA GAP — RunCam Mini DVR has two price points** ($17.99 direct / $29.99
-  Amazon); modeled once at the direct price (DVR1).
-- **DATA GAP — EasyCAP capture (VC4)** is only *partially* macOS-compatible
-  (driver issues, not true UVC); modeled as `macOsCompatible = false`.
+- **RESOLVED (documented) — RunCam Mini DVR two price points** ($17.99 direct /
+  $29.99 Amazon); modeled once at the direct price (DVR1). No further action.
+- **RESOLVED (documented) — EasyCAP capture (VC4)** is only *partially* macOS-
+  compatible (driver issues, not true UVC); modeled as `macOsCompatible = false`.
 - **DATA GAP — several analog cameras** list estimated (`est`) illumination/power
   values; bound as given, treat as approximate.
 
@@ -240,7 +363,12 @@ any tool previously.
 
 ## E. Cross-reference note
 
-After the `CameraSubsystem` → `CameraRequirements` package rename (§A8), prose in
-`README.md` and `CLAUDE.md` that enumerates requirement packages is slightly
-stale (the package is now `CameraRequirements`; requirement IDs `R3_CAM_*` are
-unchanged).
+**RESOLVED (2026-06-26).** Markdown prose now references the correct model element
+names. `README.md`'s Architecture section was rewritten to drop the removed
+`TelemetryTransmitter` / `TelemetryReceiver` parts (telemetry is carried by the
+ELRS `RadioReceiver` / `RadioControlTransmitter`), fix the `SurveillanceDrone` and
+`GroundControlStation` compositions, and add the current parts (`FpvCamera`,
+`GpsModule`, `ThermalVideoRecorder`, `UsbVideoCapture`, the `Compatibility`
+sub-package, and the thermal-detection analysis defs). The `CameraSubsystem` →
+`CameraRequirements` package rename is reflected (README already listed
+`CameraRequirements`). Requirement IDs `R3_CAM_*` are unchanged.
