@@ -213,6 +213,20 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
 
+## Lessons Learned
+
+### BNF vs PNP Mass Data (2026-06-25)
+
+**Don't share bare-frame masses between PNP and BNF variants.**
+
+When airframe candidates have both PNP and BNF purchase types, each needs its own `Airframe Wt` entry. The PNP mass excludes VTX, camera, GPS, and receiver — the BNF includes them. Sharing one mass understates the BNF's true as-built weight and biases rank scoring toward BNF builds.
+
+Fix: estimate BNF mass by summing bare-frame + electronics (VTX ~15g analog / ~40g DJI O3, camera ~15g, GPS ~10g, RX ~5g). Document estimates with `(est.)` suffix and note the source components.
+
+### Missing Mass = Excluded from Analysis (2026-06-25)
+
+Seven airframes had `N/A` in the mass column and were silently skipped from trade-space analysis. Always fill the mass field — even with an estimate — so every candidate enters the sweep. See `MODEL_ISSUES.md §B4` for the mass derivation methodology.
+
 ## Related
 
 - [Default AGENTS.md](/reference/agents.default)

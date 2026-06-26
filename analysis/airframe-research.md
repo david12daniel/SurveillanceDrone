@@ -11,6 +11,29 @@
 | 2d | Axisflying KOLAS7 — BNF HD (O3/Walksnail) | iStack F722 / Argus F722 | iStack 50A / Argus 65A | Axisflying C287 1350KV | HQ 7035 / GF 7042 |
 | 3 | iFlight Chimera9 ECO | BLITZ ATF435 | BLITZ E55S 55A 4-in-1 | XING-E 2809 800KV | HQ 9X4X3 |
 | 4 | DarwinFPV X9 | F411 MPU6500 | 100A BLHeli_32 4-in-1 | 2812 1100KV | Gemfan 9045-3 |
+
+### 🔨 Airframe Mass Audit (2026-06-25)
+All 15 airframe rows now have masses — 8 verified from manufacturer/review sources, 7 estimated from component sums.
+
+| Airframe | Purchase Type | Mass | Source Classification |
+|----------|--------------|------|----------------------|
+| GEPRC MARK4 LR7 | PNP | 455g | ✅ Verified (rotorama) |
+| Axisflying KOLAS7 | PNP | 257g | ✅ Verified (Axisflying) |
+| Axisflying KOLAS7 | BNF Analog | 302g (est.) | 📐 Estimated (257g + VTX + cam + GPS + RX) |
+| Axisflying KOLAS7 | BNF HD | 312g (est.) | 📐 Estimated (257g + DJI O3 + GPS + RX) |
+| iFlight Chimera9 ECO | PNP | 721g | ✅ Verified (iFlight) |
+| iFlight Chimera9 ECO | BNF | 726g (est.) | 📐 Estimated (721g + RX) |
+| DarwinFPV X9 | PNP | 664g (est.) | 📐 Estimated (287.8g frame + 4×71.6g motors + all electronics) |
+| EMAX Hawk 7 | BNF | ~550g | ✅ Verified (Alibaba listing) |
+| DeepSpace ROC7 O4 PRO | PNP+GPS | ~672g | ✅ Verified (unmanned.tech review) |
+| DeepSpace ROC7 O4 PRO | BNF | ~677g (est.) | 📐 Estimated (672g + RX) |
+| GEPRC Crocodile75 V3 | PNP | ~593g (est.) | ✅ Semi-verified (235g frame + infer from 597.5g BNF) |
+| iFlight Chimera7 Pro V2 | PNP | 725g | ✅ Verified (iFlight) |
+| iFlight Chimera7 Pro V2 | BNF | 730g (est.) | 📐 Estimated (725g + RX) |
+| DarwinFPV 129 7" | PNP | ~360g (est.) | 📐 Estimated (frame + 4×39g motors + all electronics) |
+| NewBeeDrone ROC7 O4PRO | BNF only | ~672g (est.) | 📐 Estimated (same hardware as DeepSpace ROC7) |
+
+See `MODEL_ISSUES.md` for full methodology and open items.
 | 5 | EMAX Hawk 7 | F4 | 60A | ECOII2807 | 7" (model TBD) |
 | 6 | DeepSpace ROC7 O4 PRO | Argus F722 | 60A BLHeli_32 | Redline 2807 1350KV | 7" (model TBD) |
 | 7 | GEPRC Crocodile75 V3 | SPAN F722-BT-HD V2 | SPAN G50A / TAKER 32-bit 60A | SPEEDX2 2806.5 1350KV | HQ 7.5x3.7x3 |
