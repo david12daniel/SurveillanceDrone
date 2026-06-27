@@ -713,15 +713,15 @@ package DroneSystemModel {
  attribute cost_USD : ScalarValues::Real;
  attribute extraHardwareNeeded : String;
 
- port rf_in;       // telemetry RF downlink from the drone
- port usb_out;     // serial telemetry to the GCS laptop
+ port rf_out : Compatibility::RfSourcePort;  // combined ELRS RF: RC control uplink + telemetry downlink (bidirectional dongle)
+ port usb_out;     // control + telemetry serial to the GCS laptop (USB)
 
- doc /* Ground-side path that delivers ELRS telemetry to the GCS laptop. In the
- baseline architecture this function is performed by the RadioControlTransmitter
- (EdgeTX radio USB passthrough). These candidates capture the alternative
- telemetry-to-laptop approaches evaluated in analysis/ (standalone USB dongles,
- DIY ESP32 builds). Not composed into AerialThermalObservationSystem — kept as a
- definition holding the trade-study options. */
+ doc /* Ground-side ELRS USB dongle: plugs into the GCS laptop and provides the
+ PRIMARY bidirectional control + telemetry link for Phase 2+ autonomous operation,
+ in place of a handheld radio. (The RadioControlTransmitter is retained as a
+ Phase-1 / backup manual-control path.) The candidates in analysis/ capture the
+ standalone-dongle vs radio-passthrough vs DIY options. Composed into
+ GroundControlStation as `laptopLink`. */
  }
 
  part def GroundControlStation {
@@ -735,16 +735,19 @@ package DroneSystemModel {
  port user_interface;
  port status_and_control;
 
- part rcTx : RadioControlTransmitter;  // ELRS — handles both RC control and telemetry
- part videoRx : VideoReceiver;          // Analog 5.8 GHz VRX
- part capture : UsbVideoCapture;        // Bridges analog VRX to laptop USB
+ // PRIMARY (Phase 2+): ELRS USB dongle to the laptop carries control + telemetry.
+ part laptopLink : TelemetryGroundLink;  // PRIMARY control + telemetry via laptop USB
+ // BACKUP / Phase 1: handheld ELRS radio for manual control if the laptop fails.
+ part rcTx : RadioControlTransmitter;    // BACKUP / Phase-1 manual control
+ part videoRx : VideoReceiver;           // Analog 5.8 GHz VRX (live video to laptop)
+ part capture : UsbVideoCapture;         // Bridges analog VRX to laptop USB
 
  // Internal GCS wiring: VRX analog output → USB capture dongle
  connect videoRx.video_out to capture.video_in;
 
- // Derived total GCS component cost
+ // Derived total GCS component cost (laptop dongle + backup radio + VRX + capture)
  attribute subTotalCost : ScalarValues::Real =
- rcTx.cost_USD + videoRx.cost_USD + capture.cost_USD;
+ laptopLink.cost_USD + rcTx.cost_USD + videoRx.cost_USD + capture.cost_USD;
 
  satisfy R4_GCS_RANGE;
  satisfy R4_GCS_VIDEO_DISP;
@@ -754,6 +757,13 @@ package DroneSystemModel {
  satisfy R4_GCS_WT;
  satisfy R4_GCS_COST;
  satisfy R4_GCS_IF;
+
+ doc /* Ground control station = the operator's laptop plus a minimal RF front-end.
+ PRIMARY link (Phase 2+): an ELRS USB dongle (laptopLink) for bidirectional control
+ + telemetry, plus an analog 5.8 GHz VRX + USB capture for live video — all through
+ the laptop. A handheld ELRS radio (rcTx) is retained for Phase-1 manual flight and
+ as a backup if the laptop link fails. The laptop itself (ViewingComputer) is
+ existing equipment, excluded from procurement cost. */
  }
 
  part def SurveillanceDrone {
@@ -804,16 +814,19 @@ package DroneSystemModel {
  part gcs : GroundControlStation;
  part displayComputer : ViewingComputer;
 
- // Wireless RF links — ELRS handles RC control + telemetry on one link
+ // Video downlink: drone analog VTX → GCS 5.8 GHz VRX
  connection connect drone.vtx.rf_out to gcs.videoRx.rf_in;
+
+ // PRIMARY control + telemetry (Phase 2+): ELRS USB dongle <-> drone RX, to the laptop
+ connection connect gcs.laptopLink.rf_out to drone.rx.rf_in;
+ connection connect gcs.laptopLink.usb_out to displayComputer.user_interface;
+
+ // BACKUP / Phase-1 control + telemetry: handheld ELRS radio <-> drone RX, telemetry to laptop
  connection connect drone.rx.rf_in to gcs.rcTx.rf_out;
-
- // Video receiver path: VRX → USB capture dongle → laptop (USB-C)
- connection connect gcs.capture.usb_out to displayComputer.video_in;
-
- // Telemetry from ELRS TX module to GCS laptop (USB)
- // The radio controller forwards ELRS telemetry over USB as a virtual serial port
  connection connect gcs.rcTx.telemetry_data_out to displayComputer.user_interface;
+
+ // Live video to laptop: VRX → USB capture dongle → laptop (USB-C)
+ connection connect gcs.capture.usb_out to displayComputer.video_in;
 
  // Derived total acquisition cost
  // Note: displayComputer excluded — existing equipment, not procured
@@ -1033,5 +1046,50 @@ package DroneSystemModel {
 
   return verdict : ScalarValues::Boolean = pixelsOnTarget >= 1.5;
  }
+ }
+
+ // ════════════════════════════════════════════════════════════════════
+ // Views — viewpoint-organized presentations of the model (added 2026-06-27)
+ // ════════════════════════════════════════════════════════════════════
+ // SysML v2 views: each `view` exposes a slice of the model for a stakeholder
+ // concern. Syside validates the structure; actual diagram/table rendering needs
+ // a SysML v2 viewer. (Views/viewpoints were not previously used in this model.)
+ package Views {
+
+  // ── 1. Operational mission view ──
+  // Mission requirements + the system-of-interest in its operating context.
+  view def OperationalMissionView;
+  view operationalMission : OperationalMissionView {
+   expose Requirements::**;
+   expose Architecture::AerialThermalObservationSystem;
+   expose Architecture::ViewingComputer;
+  }
+
+  // ── 2. Logical architecture view ──
+  // Component decomposition: the system, drone, and GCS compositions (a tree
+  // rendering shows their nested parts).
+  view def LogicalArchitectureView;
+  view logicalArchitecture : LogicalArchitectureView {
+   expose Architecture::AerialThermalObservationSystem;
+   expose Architecture::SurveillanceDrone;
+   expose Architecture::GroundControlStation;
+  }
+
+  // ── 3. Interface & behavior view ──
+  // The compatibility interface layer (typed ports, enums, interface defs,
+  // constraints) plus the connections wiring the airborne system together.
+  view def InterfaceBehaviorView;
+  view interfaceBehavior : InterfaceBehaviorView {
+   expose Architecture::Compatibility::**;
+   expose Architecture::SurveillanceDrone;
+  }
+
+  // ── 4. Verification view ──
+  // The parametric/analysis layer that verifies the requirements (flight time
+  // R6/R8, budget R4, thermal detection R3).
+  view def VerificationView;
+  view systemVerification : VerificationView {
+   expose Analysis::**;
+  }
  }
 }

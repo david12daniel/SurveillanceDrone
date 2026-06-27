@@ -58,3 +58,12 @@ verification and trade studies:
 Battery energy is expressed in joules `[J]` so `energy / power` reduces to seconds.
 Syside validates the parametric structure; numeric execution of the `calc def`s
 requires a SysML v2 execution engine.
+
+### Views
+SysML v2 `view def` + `view` presentations that `expose` model slices by stakeholder concern:
+- **operationalMission** (`OperationalMissionView`): mission requirements (R1–R8 + decomposition) and the `AerialThermalObservationSystem` in its operating context
+- **logicalArchitecture** (`LogicalArchitectureView`): the system / drone / GCS component decomposition
+- **interfaceBehavior** (`InterfaceBehaviorView`): the `Compatibility` interface layer (typed ports, enums, interface defs, constraints) plus the airborne connections
+- **systemVerification** (`VerificationView`): the Analysis layer (flight-time, budget, and thermal-detection calcs / constraints / cases)
+
+Syside validates the view structure; diagram/table rendering needs a SysML v2 viewer. (`verification` is a reserved keyword, so the usage is `systemVerification`.)

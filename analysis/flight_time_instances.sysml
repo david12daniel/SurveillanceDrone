@@ -43,6 +43,11 @@ package FlightTimeAnalysis {
   attribute meetsR6_30min : Boolean;
   attribute meetsR8_60min : Boolean;
   attribute flyable : Boolean;
+  attribute droneCost_USD : Real;
+  attribute gcsCost_USD : Real;
+  attribute totalSystemCost_USD : Real;
+  attribute endurancePer1000USD : Real;
+  attribute meetsBudgetR4 : Boolean;
  }
 
  // ── Recommended baseline (best flyable config meeting R6) ──
@@ -75,6 +80,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 912.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1038.48;
+  :>> endurancePer1000USD = 71.84;
+  :>> meetsBudgetR4 = true;
  }
 
  // ── Top 100 configurations by max flight time ──
@@ -107,6 +117,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 912.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1038.48;
+  :>> endurancePer1000USD = 71.84;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003608 : FlightTimeResult {
@@ -138,6 +153,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 977.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1103.48;
+  :>> endurancePer1000USD = 67.61;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003638 : FlightTimeResult {
@@ -169,6 +189,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1023.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1149.48;
+  :>> endurancePer1000USD = 64.91;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003668 : FlightTimeResult {
@@ -200,6 +225,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 966.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1092.47;
+  :>> endurancePer1000USD = 68.08;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003575 : FlightTimeResult {
@@ -231,6 +261,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 907.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1033.48;
+  :>> endurancePer1000USD = 71.78;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003579 : FlightTimeResult {
@@ -262,6 +297,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 904.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1030.48;
+  :>> endurancePer1000USD = 71.98;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003605 : FlightTimeResult {
@@ -293,6 +333,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 972.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1098.48;
+  :>> endurancePer1000USD = 67.53;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003609 : FlightTimeResult {
@@ -324,6 +369,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 969.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1095.48;
+  :>> endurancePer1000USD = 67.71;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003635 : FlightTimeResult {
@@ -355,6 +405,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1018.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1144.48;
+  :>> endurancePer1000USD = 64.82;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003639 : FlightTimeResult {
@@ -386,6 +441,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1015.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1141.48;
+  :>> endurancePer1000USD = 64.98;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003577 : FlightTimeResult {
@@ -417,6 +477,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 925.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1051.48;
+  :>> endurancePer1000USD = 70.28;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003607 : FlightTimeResult {
@@ -448,6 +513,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 990.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1116.48;
+  :>> endurancePer1000USD = 66.19;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003637 : FlightTimeResult {
@@ -479,6 +549,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1036.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1162.48;
+  :>> endurancePer1000USD = 63.57;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003665 : FlightTimeResult {
@@ -510,6 +585,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 961.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1087.47;
+  :>> endurancePer1000USD = 68.0;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003669 : FlightTimeResult {
@@ -541,6 +621,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 958.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1084.47;
+  :>> endurancePer1000USD = 68.18;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003667 : FlightTimeResult {
@@ -572,6 +657,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 979.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1105.47;
+  :>> endurancePer1000USD = 66.64;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003573 : FlightTimeResult {
@@ -603,6 +693,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 902.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1028.48;
+  :>> endurancePer1000USD = 71.42;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003603 : FlightTimeResult {
@@ -634,6 +729,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 967.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1093.48;
+  :>> endurancePer1000USD = 67.18;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003633 : FlightTimeResult {
@@ -665,6 +765,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1013.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1139.48;
+  :>> endurancePer1000USD = 64.47;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C013231 : FlightTimeResult {
@@ -696,6 +801,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 772.98;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 898.98;
+  :>> endurancePer1000USD = 81.81;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C013234 : FlightTimeResult {
@@ -727,6 +837,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 837.98;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 963.98;
+  :>> endurancePer1000USD = 76.29;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C013237 : FlightTimeResult {
@@ -758,6 +873,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 883.98;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1009.98;
+  :>> endurancePer1000USD = 72.82;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003728 : FlightTimeResult {
@@ -789,6 +909,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 922.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1048.48;
+  :>> endurancePer1000USD = 70.01;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003571 : FlightTimeResult {
@@ -820,6 +945,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 907.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1033.48;
+  :>> endurancePer1000USD = 70.85;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003601 : FlightTimeResult {
@@ -851,6 +981,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 972.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1098.48;
+  :>> endurancePer1000USD = 66.66;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003631 : FlightTimeResult {
@@ -882,6 +1017,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1018.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1144.48;
+  :>> endurancePer1000USD = 63.98;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003663 : FlightTimeResult {
@@ -913,6 +1053,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 956.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1082.47;
+  :>> endurancePer1000USD = 67.65;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003698 : FlightTimeResult {
@@ -944,6 +1089,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 971.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1097.47;
+  :>> endurancePer1000USD = 66.7;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C013240 : FlightTimeResult {
@@ -975,6 +1125,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 826.97;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 952.97;
+  :>> endurancePer1000USD = 76.83;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003661 : FlightTimeResult {
@@ -1006,6 +1161,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 961.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1087.47;
+  :>> endurancePer1000USD = 67.13;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003725 : FlightTimeResult {
@@ -1037,6 +1197,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 917.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1043.48;
+  :>> endurancePer1000USD = 69.95;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003729 : FlightTimeResult {
@@ -1068,6 +1233,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 914.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1040.48;
+  :>> endurancePer1000USD = 70.14;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003598 : FlightTimeResult {
@@ -1099,6 +1269,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 925.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1051.48;
+  :>> endurancePer1000USD = 69.34;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003628 : FlightTimeResult {
@@ -1130,6 +1305,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 990.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1116.48;
+  :>> endurancePer1000USD = 65.31;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003658 : FlightTimeResult {
@@ -1161,6 +1341,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1036.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1162.48;
+  :>> endurancePer1000USD = 62.72;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003695 : FlightTimeResult {
@@ -1192,6 +1377,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 966.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1092.47;
+  :>> endurancePer1000USD = 66.63;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003699 : FlightTimeResult {
@@ -1223,6 +1413,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 963.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1089.47;
+  :>> endurancePer1000USD = 66.81;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003758 : FlightTimeResult {
@@ -1254,6 +1449,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 876.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1002.47;
+  :>> endurancePer1000USD = 72.59;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003788 : FlightTimeResult {
@@ -1285,6 +1485,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1046.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1172.47;
+  :>> endurancePer1000USD = 62.07;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003688 : FlightTimeResult {
@@ -1316,6 +1521,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 979.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1105.47;
+  :>> endurancePer1000USD = 65.75;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003727 : FlightTimeResult {
@@ -1347,6 +1557,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 935.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1061.48;
+  :>> endurancePer1000USD = 68.5;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003818 : FlightTimeResult {
@@ -1378,6 +1593,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1276.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1402.47;
+  :>> endurancePer1000USD = 51.87;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003878 : FlightTimeResult {
@@ -1409,6 +1629,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1301.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1427.47;
+  :>> endurancePer1000USD = 50.96;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003908 : FlightTimeResult {
@@ -1440,6 +1665,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1176.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1302.47;
+  :>> endurancePer1000USD = 55.84;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003998 : FlightTimeResult {
@@ -1471,6 +1701,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 865.99;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 991.99;
+  :>> endurancePer1000USD = 73.26;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C004028 : FlightTimeResult {
@@ -1502,6 +1737,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 930.99;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1056.99;
+  :>> endurancePer1000USD = 68.75;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C004058 : FlightTimeResult {
@@ -1533,6 +1773,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 976.99;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1102.99;
+  :>> endurancePer1000USD = 65.89;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003576 : FlightTimeResult {
@@ -1564,6 +1809,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 944.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1070.48;
+  :>> endurancePer1000USD = 67.78;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003606 : FlightTimeResult {
@@ -1595,6 +1845,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1009.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1135.48;
+  :>> endurancePer1000USD = 63.9;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003636 : FlightTimeResult {
@@ -1626,6 +1881,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1055.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1181.48;
+  :>> endurancePer1000USD = 61.41;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003595 : FlightTimeResult {
@@ -1657,6 +1917,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 920.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1046.48;
+  :>> endurancePer1000USD = 69.28;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003599 : FlightTimeResult {
@@ -1688,6 +1953,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 917.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1043.48;
+  :>> endurancePer1000USD = 69.48;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003625 : FlightTimeResult {
@@ -1719,6 +1989,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 985.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1111.48;
+  :>> endurancePer1000USD = 65.23;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003629 : FlightTimeResult {
@@ -1750,6 +2025,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 982.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1108.48;
+  :>> endurancePer1000USD = 65.4;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003655 : FlightTimeResult {
@@ -1781,6 +2061,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1031.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1157.48;
+  :>> endurancePer1000USD = 62.64;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003659 : FlightTimeResult {
@@ -1812,6 +2097,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1028.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1154.48;
+  :>> endurancePer1000USD = 62.8;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003697 : FlightTimeResult {
@@ -1843,6 +2133,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 984.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1110.47;
+  :>> endurancePer1000USD = 65.31;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003755 : FlightTimeResult {
@@ -1874,6 +2169,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 871.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 997.47;
+  :>> endurancePer1000USD = 72.54;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003759 : FlightTimeResult {
@@ -1905,6 +2205,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 868.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 994.47;
+  :>> endurancePer1000USD = 72.76;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003785 : FlightTimeResult {
@@ -1936,6 +2241,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1041.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1167.47;
+  :>> endurancePer1000USD = 61.98;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003789 : FlightTimeResult {
@@ -1967,6 +2277,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1038.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1164.47;
+  :>> endurancePer1000USD = 62.14;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C004088 : FlightTimeResult {
@@ -1998,6 +2313,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 919.98;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1045.98;
+  :>> endurancePer1000USD = 69.26;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003588 : FlightTimeResult {
@@ -2029,6 +2349,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 949.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1075.48;
+  :>> endurancePer1000USD = 67.22;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003618 : FlightTimeResult {
@@ -2060,6 +2385,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1014.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1140.48;
+  :>> endurancePer1000USD = 63.39;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003648 : FlightTimeResult {
@@ -2091,6 +2421,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1060.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1186.48;
+  :>> endurancePer1000USD = 60.93;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003666 : FlightTimeResult {
@@ -2122,6 +2457,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 998.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1124.47;
+  :>> endurancePer1000USD = 64.33;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003685 : FlightTimeResult {
@@ -2153,6 +2493,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 974.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1100.47;
+  :>> endurancePer1000USD = 65.68;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003689 : FlightTimeResult {
@@ -2184,6 +2529,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 971.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1097.47;
+  :>> endurancePer1000USD = 65.85;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003723 : FlightTimeResult {
@@ -2215,6 +2565,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 912.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1038.48;
+  :>> endurancePer1000USD = 69.61;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003815 : FlightTimeResult {
@@ -2246,6 +2601,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1271.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1397.47;
+  :>> endurancePer1000USD = 51.77;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003819 : FlightTimeResult {
@@ -2277,6 +2637,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1268.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1394.47;
+  :>> endurancePer1000USD = 51.87;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003848 : FlightTimeResult {
@@ -2308,6 +2673,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1176.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1302.47;
+  :>> endurancePer1000USD = 55.54;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003875 : FlightTimeResult {
@@ -2339,6 +2709,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1296.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1422.47;
+  :>> endurancePer1000USD = 50.86;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003879 : FlightTimeResult {
@@ -2370,6 +2745,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1293.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1419.47;
+  :>> endurancePer1000USD = 50.96;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003905 : FlightTimeResult {
@@ -2401,6 +2781,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1171.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1297.47;
+  :>> endurancePer1000USD = 55.74;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003909 : FlightTimeResult {
@@ -2432,6 +2817,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1168.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1294.47;
+  :>> endurancePer1000USD = 55.87;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003968 : FlightTimeResult {
@@ -2463,6 +2853,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1237.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1363.48;
+  :>> endurancePer1000USD = 53.05;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003995 : FlightTimeResult {
@@ -2494,6 +2889,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 860.99;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 986.99;
+  :>> endurancePer1000USD = 73.21;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003999 : FlightTimeResult {
@@ -2525,6 +2925,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 857.99;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 983.99;
+  :>> endurancePer1000USD = 73.43;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C004025 : FlightTimeResult {
@@ -2556,6 +2961,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 925.99;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1051.99;
+  :>> endurancePer1000USD = 68.69;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C004029 : FlightTimeResult {
@@ -2587,6 +2997,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 922.99;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1048.99;
+  :>> endurancePer1000USD = 68.88;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C004055 : FlightTimeResult {
@@ -2618,6 +3033,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 971.99;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1097.99;
+  :>> endurancePer1000USD = 65.81;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C004059 : FlightTimeResult {
@@ -2649,6 +3069,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 968.99;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1094.99;
+  :>> endurancePer1000USD = 65.98;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003572 : FlightTimeResult {
@@ -2680,6 +3105,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 917.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1043.48;
+  :>> endurancePer1000USD = 69.16;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003574 : FlightTimeResult {
@@ -2711,6 +3141,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 902.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1028.48;
+  :>> endurancePer1000USD = 70.17;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003597 : FlightTimeResult {
@@ -2742,6 +3177,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 938.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1064.48;
+  :>> endurancePer1000USD = 67.86;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003602 : FlightTimeResult {
@@ -2773,6 +3213,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 982.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1108.48;
+  :>> endurancePer1000USD = 65.11;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003604 : FlightTimeResult {
@@ -2804,6 +3249,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 967.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1093.48;
+  :>> endurancePer1000USD = 66.0;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003627 : FlightTimeResult {
@@ -2835,6 +3285,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1003.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1129.48;
+  :>> endurancePer1000USD = 63.95;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003632 : FlightTimeResult {
@@ -2866,6 +3321,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1028.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1154.48;
+  :>> endurancePer1000USD = 62.51;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003634 : FlightTimeResult {
@@ -2897,6 +3357,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1013.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1139.48;
+  :>> endurancePer1000USD = 63.33;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003657 : FlightTimeResult {
@@ -2928,6 +3393,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1049.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1175.48;
+  :>> endurancePer1000USD = 61.45;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003678 : FlightTimeResult {
@@ -2959,6 +3429,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1003.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1129.47;
+  :>> endurancePer1000USD = 63.81;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003693 : FlightTimeResult {
@@ -2990,6 +3465,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 961.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1087.47;
+  :>> endurancePer1000USD = 66.3;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003721 : FlightTimeResult {
@@ -3021,6 +3501,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 917.48;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1043.48;
+  :>> endurancePer1000USD = 69.06;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003757 : FlightTimeResult {
@@ -3052,6 +3537,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 889.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1015.47;
+  :>> endurancePer1000USD = 70.99;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003787 : FlightTimeResult {
@@ -3083,6 +3573,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1059.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1185.47;
+  :>> endurancePer1000USD = 60.81;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003817 : FlightTimeResult {
@@ -3114,6 +3609,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1289.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1415.47;
+  :>> endurancePer1000USD = 50.92;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003877 : FlightTimeResult {
@@ -3145,6 +3645,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1314.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1440.47;
+  :>> endurancePer1000USD = 50.03;
+  :>> meetsBudgetR4 = true;
  }
 
  part inst_C003907 : FlightTimeResult {
@@ -3176,6 +3681,11 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = true;
   :>> flyable = true;
+  :>> droneCost_USD = 1189.47;
+  :>> gcsCost_USD = 126.0;
+  :>> totalSystemCost_USD = 1315.47;
+  :>> endurancePer1000USD = 54.77;
+  :>> meetsBudgetR4 = true;
  }
 
 }

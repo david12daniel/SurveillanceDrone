@@ -652,7 +652,7 @@ package DroneCandidates {
   part T11 : CameraSubsystem {
    :>> name = "Axisflying 640 Thermal";
    :>> brand = "Axisflying";
-   :>> cost_USD = 450.0;            // 350-550
+   :>> cost_USD = 650.00;            // 350-550
    :>> mass = 25.0 [g];
    :>> power = 1.0 [W];
    :>> resolutionH = 640;
@@ -677,7 +677,7 @@ package DroneCandidates {
   part T12 : CameraSubsystem {
    :>> name = "iVcan Mini-640-CVBS";
    :>> brand = "iVcan";
-   :>> cost_USD = 575.0;            // 450-700
+   :>> cost_USD = 980.00;            // 450-700
    :>> mass = 21.0 [g];
    :>> power = 0.75 [W];
    :>> resolutionH = 640;
@@ -702,7 +702,7 @@ package DroneCandidates {
   part T13 : CameraSubsystem {
    :>> name = "PurpleRiver Mini 640";
    :>> brand = "PurpleRiver";
-   :>> cost_USD = 450.0;            // 350-550
+   :>> cost_USD = 590.00;            // 350-550
    :>> mass = 21.0 [g];
    :>> power = 0.8 [W];
    :>> resolutionH = 640;
@@ -2180,6 +2180,38 @@ package DroneCandidates {
    :>> outputToLaptop = "USB-A (UVC)";
    :>> diversity = "N/A";
    :>> macOsCompatible = true;
+   :>> includedWithAirframe = false;
+  }
+
+  // ── Better-range ground receivers (market research 2026-06-27) ──────────
+  // The hard 2.8 km video link is gated by the GROUND side; these add margin.
+  part VRX6 : VideoReceiver {
+   :>> name = "Skydroid 150CH 5.8GHz True-Diversity UVC Receiver";
+   :>> vrxType = "True-diversity UVC receiver (laptop-direct)";
+   :>> cost_USD = 45.0;            // 37-48
+   :>> mass = 29.0 [g];
+   :>> power = 1.0 [W];            // USB 5V ~190 mA
+   :>> inputFrequency = "5.8 GHz";
+   :>> outputToLaptop = "USB OTG / UVC direct (QuickTime on macOS — no separate capture)";
+   :>> antenna = "Dual RP-SMA (stock 5 dBi; fit a 9-13 dBi patch for range)";
+   :>> range = 5.0 [km];          // true diversity + patch (vs 2.8 km single-antenna VRX1)
+   :>> diversity = "True (dual antenna)";
+   :>> macOsCompatible = true;     // confirmed: works via QuickTime Player on macOS
+   :>> includedWithAirframe = false;
+  }
+
+  part VRX7 : VideoReceiver {
+   :>> name = "TBS Fusion Diversity Module + USB capture";
+   :>> vrxType = "Premium diversity module (AV out -> UVC capture for laptop)";
+   :>> cost_USD = 137.0;           // ~120 Fusion module + ~17 macOS UVC capture
+   :>> mass = 35.0 [g];            // module only
+   :>> power = 2.0 [W];
+   :>> inputFrequency = "5.8 GHz";
+   :>> outputToLaptop = "AV out -> macOS-compatible UVC capture dongle (e.g. VRX3)";
+   :>> antenna = "Pair of 10-13 dBi patches for maximum range";
+   :>> range = 8.0 [km];          // top-tier sensitivity + high-gain patch
+   :>> diversity = "True (dual antenna)";
+   :>> macOsCompatible = true;     // via the UVC capture dongle (analog AV)
    :>> includedWithAirframe = false;
   }
  }

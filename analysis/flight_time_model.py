@@ -125,6 +125,8 @@ CANDIDATES_SYSML = ROOT / "candidates.sysml"
 OUT_SYSML = HERE / "flight_time_instances.sysml"
 OUT_MD = HERE / "flight_time_results.md"
 OUT_CSV = HERE / "flight_time_results.csv"
+OUT_VALUE_MD = HERE / "flight_time_value_ranking.md"
+OUT_CHART = HERE / "cost_vs_flighttime.png"
 
 G = 9.80665             # gravitational acceleration [m/s²]
 RAIL_VOLTAGE_V = 5.0    # avionics rail voltage for deriving power from currentDraw
@@ -157,6 +159,7 @@ class Battery:
     mass_g: float
     energy_wh: float
     usable_energy_j: float
+    cost: float = 0.0
 
 
 @dataclass
@@ -174,6 +177,7 @@ class Airframe:
     min_cells: Optional[int] = None   # min battery series cells (ESC/motor rated)
     max_cells: Optional[int] = None   # max battery series cells (ESC/motor rated)
     max_thrust_g: Optional[float] = None  # published max static thrust per motor [g] (B5); None → prop-size heuristic
+    cost: float = 0.0                     # airframe cost_USD (incl. bundled VTX/FPV/GPS/RX for BNF/PNP)
 
 
 @dataclass
@@ -185,6 +189,7 @@ class Component:
     mass_g: float
     power_w: float
     video_formats: frozenset = frozenset()   # canonical video-link formats (see _video_formats)
+    cost: float = 0.0                        # component cost_USD
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -325,6 +330,13 @@ _CATEGORY_BY_TYPE = {
     "RadioReceiver": "rx",
 }
 
+# GCS cost (R4): the laptop is the ground station. PRIMARY link = cheapest
+# standalone ELRS USB dongle (control + telemetry) + cheapest 5.8 GHz VRX with
+# range margin (>= 4 km, e.g. the Skydroid true-diversity UVC). BOTH control and
+# video are hard 2.8 km links (R4_GCS_RANGE); the video link needs a patch/
+# directional ground antenna. A cheapest integrated handheld radio is added as the
+# Phase-1 / backup manual control path. Fixed across configs (not swept).
+
 
 # Map a free-text video-interface string (e.g. "CVBS / USB / UART") to the set
 # of canonical video-LINK formats it can carry. This is the executable analogue
@@ -361,6 +373,9 @@ def load_model():
     airframes: list[Airframe] = []
     components: dict[str, list[Component]] = {c: [] for c in _CATEGORY_BY_TYPE.values()}
     real_batteries: list[Battery] = []
+    radio_min: Optional[float] = None; radio_name: Optional[str] = None  # handheld radio (Phase-1 / backup)
+    tlm_min: Optional[float] = None; tlm_name: Optional[str] = None       # ELRS USB dongle (primary control+telemetry)
+    vrx_min: Optional[float] = None; vrx_name: Optional[str] = None       # analog VRX w/ capture (live video)
 
     for b in blocks:
         a = b["attrs"]
@@ -379,6 +394,7 @@ def load_model():
                 min_cells=int(a["minCells_s"]) if "minCells_s" in a else None,
                 max_cells=int(a["maxCells_s"]) if "maxCells_s" in a else None,
                 max_thrust_g=float(a["maxThrustPerMotor_g"]) if "maxThrustPerMotor_g" in a else None,
+                cost=float(a.get("cost_USD", 0.0)),
             ))
         elif b["type"] == "Battery":
             required = {"cells_s", "capacity_mAh", "nominalVoltage", "usableDoD", "mass"}
@@ -399,6 +415,7 @@ def load_model():
                 mass_g=float(a["mass"]),
                 energy_wh=round(energy_wh, 1),
                 usable_energy_j=round(usable_j, 1),
+                cost=float(a.get("cost_USD", 0.0)),
             ))
         elif b["type"] in _CATEGORY_BY_TYPE:
             cat = _CATEGORY_BY_TYPE[b["type"]]
@@ -419,8 +436,34 @@ def load_model():
                 category=cat, ident=b["ident"], name=a.get("name", b["ident"]),
                 mass_g=float(a["mass"]), power_w=power_w,
                 video_formats=_video_formats(fmt_src),
+                cost=float(a.get("cost_USD", 0.0)),
             ))
-    return airframes, components, real_batteries
+        elif b["type"] == "RadioControlTransmitter":
+            # cheapest full integrated handheld radio (Phase-1 / backup manual control);
+            # skip bare TX modules that need a host radio.
+            c = float(a.get("cost_USD", 0.0))
+            if c > 0 and "integrated" in str(a.get("txType", "")).lower() and (radio_min is None or c < radio_min):
+                radio_min = c; radio_name = str(a.get("name", b["ident"]))
+        elif b["type"] == "TelemetryGroundLink":
+            # standalone laptop dongle only: cost > 0 and no extra hardware/soldering
+            # (excludes the $0 "reuse your radio" option and DIY/2nd-RX approaches).
+            c = float(a.get("cost_USD", 0.0))
+            if c > 0 and str(a.get("extraHardwareNeeded", "")).strip().lower() == "none" and (tlm_min is None or c < tlm_min):
+                tlm_min = c; tlm_name = str(a.get("name", b["ident"]))
+        elif b["type"] == "VideoReceiver":
+            # a real 5.8 GHz RF receiver (not a bare AV-capture dongle) with range
+            # MARGIN over the hard 2.8 km video link — require >= 4 km so the costed
+            # default isn't sitting exactly at the limit (VRX1 = 2.8 km, zero margin).
+            c = float(a.get("cost_USD", 0.0))
+            rng = float(a["range"]) if "range" in a else 0.0
+            if (c > 0 and "ghz" in str(a.get("inputFrequency", "")).lower() and rng >= 4.0
+                    and (vrx_min is None or c < vrx_min)):
+                vrx_min = c; vrx_name = str(a.get("name", b["ident"]))
+    gcs_cost = round((radio_min or 0.0) + (tlm_min or 0.0) + (vrx_min or 0.0), 2)
+    gcs_parts = {"radio": radio_name, "radio_cost": radio_min or 0.0,
+                 "dongle": tlm_name, "dongle_cost": tlm_min or 0.0,
+                 "vrx": vrx_name, "vrx_cost": vrx_min or 0.0}
+    return airframes, components, real_batteries, gcs_cost, gcs_parts
 
 
 def lightest(comps: list[Component]) -> Component:
@@ -452,30 +495,36 @@ CSV_FIELDS = [
     "hover_power_w", "cruise_power_w", "headwind_power_w",
     "max_flight_time_hover_min", "flight_time_cruise_min", "flight_time_headwind_min",
     "hover_throttle_pct", "meets_r6_30min", "meets_r8_60min", "flyable",
+    "airframe_cost_usd", "battery_cost_usd", "thermal_cost_usd", "sbc_cost_usd",
+    "dvr_cost_usd", "vtx_cost_usd", "fpv_cost_usd", "gps_cost_usd", "rx_cost_usd",
+    "drone_cost_usd", "gcs_cost_usd", "total_system_cost_usd", "endurance_per_1000usd",
+    "meets_budget_r4",
 ]
 
 
 def _peripheral(airframe_incl: bool, swept: Optional[Component],
                 rep: Component, rep_power: float):
-    """Resolve a peripheral to (id, name, source, mass_added_g, power_w).
+    """Resolve a peripheral to (id, name, source, mass_added_g, power_w, cost_added).
 
-    If bundled with the airframe: mass already in airframe weight (0 added),
-    power = representative category draw. Otherwise use the given component.
+    If bundled with the airframe: mass AND cost are already in the airframe
+    weight/price (0 added), power = representative category draw. Otherwise use
+    the given component (adds its own mass, power, and cost).
     """
     if airframe_incl:
-        return ("included", "bundled with airframe", "included", 0.0, rep_power)
+        return ("included", "bundled with airframe", "included", 0.0, rep_power, 0.0)
     c = swept if swept is not None else rep
-    return (c.ident, c.name, "external", c.mass_g, c.power_w)
+    return (c.ident, c.name, "external", c.mass_g, c.power_w, c.cost)
 
 
 def evaluate(af: Airframe, bat: Battery, thermal: Component, sbc: Component,
              dvr: Component, vtx: Optional[Component], reps: dict,
-             rep_pow: dict, p: PhysicsParams, config_id: str) -> dict:
+             rep_pow: dict, p: PhysicsParams, config_id: str,
+             gcs_cost: float = 0.0) -> dict:
     # Resolve peripherals with inclusion logic.
-    vtx_id, vtx_name, vtx_src, vtx_m, vtx_p = _peripheral(af.vtx_incl, vtx, reps["vtx"], rep_pow["vtx"])
-    fpv_id, fpv_name, fpv_src, fpv_m, fpv_p = _peripheral(af.fpv_incl, None, reps["fpv"], rep_pow["fpv"])
-    gps_id, gps_name, gps_src, gps_m, gps_p = _peripheral(af.gps_incl, None, reps["gps"], rep_pow["gps"])
-    rx_id, rx_name, rx_src, rx_m, rx_p = _peripheral(af.rx_incl, None, reps["rx"], rep_pow["rx"])
+    vtx_id, vtx_name, vtx_src, vtx_m, vtx_p, vtx_c = _peripheral(af.vtx_incl, vtx, reps["vtx"], rep_pow["vtx"])
+    fpv_id, fpv_name, fpv_src, fpv_m, fpv_p, fpv_c = _peripheral(af.fpv_incl, None, reps["fpv"], rep_pow["fpv"])
+    gps_id, gps_name, gps_src, gps_m, gps_p, gps_c = _peripheral(af.gps_incl, None, reps["gps"], rep_pow["gps"])
+    rx_id, rx_name, rx_src, rx_m, rx_p, rx_c = _peripheral(af.rx_incl, None, reps["rx"], rep_pow["rx"])
 
     # Mission additions (never bundled) add mass + power. The DVR is EXCLUDED —
     # the headline endurance is the SBC-stage build (SBC present, no DVR); the
@@ -502,6 +551,13 @@ def evaluate(af: Airframe, bat: Battery, thermal: Component, sbc: Component,
     # prop-size heuristic (which under-rates LR motors — see MODEL_ISSUES B5).
     mt_per_motor = af.max_thrust_g if af.max_thrust_g else _max_thrust_per_motor_g(af.prop_in)
     throttle = (auw_g / p.n_rotors) / mt_per_motor
+
+    # Cost (R4): bundled VTX/FPV/GPS/RX add $0 (already in the airframe price);
+    # the DVR IS included (it is used in the earlier stages). The GCS is a fixed
+    # system add-on (cheapest representative ground set).
+    drone_cost = (af.cost + bat.cost + thermal.cost + sbc.cost + dvr.cost
+                  + vtx_c + fpv_c + gps_c + rx_c)
+    total_cost = drone_cost + gcs_cost
 
     return {
         "config_id": config_id,
@@ -538,11 +594,20 @@ def evaluate(af: Airframe, bat: Battery, thermal: Component, sbc: Component,
         "hover_throttle_pct": round(throttle * 100.0, 1),
         "meets_r6_30min": t_hover >= 30.0, "meets_r8_60min": t_hover >= 60.0,
         "flyable": throttle <= 0.60,
+        "airframe_cost_usd": round(af.cost, 2), "battery_cost_usd": round(bat.cost, 2),
+        "thermal_cost_usd": round(thermal.cost, 2), "sbc_cost_usd": round(sbc.cost, 2),
+        "dvr_cost_usd": round(dvr.cost, 2), "vtx_cost_usd": round(vtx_c, 2),
+        "fpv_cost_usd": round(fpv_c, 2), "gps_cost_usd": round(gps_c, 2),
+        "rx_cost_usd": round(rx_c, 2),
+        "drone_cost_usd": round(drone_cost, 2), "gcs_cost_usd": round(gcs_cost, 2),
+        "total_system_cost_usd": round(total_cost, 2),
+        "endurance_per_1000usd": round(t_hover / total_cost * 1000.0, 2) if total_cost > 0 else 0.0,
+        "meets_budget_r4": total_cost <= 2500.0,
     }
 
 
 def iter_configs(airframes, components, batteries, p: PhysicsParams,
-                 stats: Optional[dict] = None):
+                 stats: Optional[dict] = None, gcs_cost: float = 0.0):
     """Yield one result dict per REAL (compatibility-filtered) configuration.
 
     Two interface-compatibility filters prune non-buildable pairings — the
@@ -595,7 +660,7 @@ def iter_configs(airframes, components, batteries, p: PhysicsParams,
                     for vtx in vtx_opts:
                         n += 1
                         yield evaluate(af, bat, thermal, sbc, dvr, vtx,
-                                       reps, rep_pow, p, f"C{n:06d}")
+                                       reps, rep_pow, p, f"C{n:06d}", gcs_cost)
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -605,9 +670,11 @@ def _sysml_str(s) -> str:
     return '"' + str(s).replace('"', "'") + '"'
 
 
-def write_csv(rows_iter) -> tuple[int, list[dict]]:
-    """Stream every instance to CSV; return (count, top-N by hover endurance)."""
+def write_csv(rows_iter) -> tuple[int, list[dict], list[dict]]:
+    """Stream every instance to CSV; return (count, top-N by hover endurance,
+    top-N by endurance-per-dollar among R6-viable & flyable configs)."""
     top: list[dict] = []
+    top_val: list[dict] = []
     count = 0
     with OUT_CSV.open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=CSV_FIELDS)
@@ -616,11 +683,17 @@ def write_csv(rows_iter) -> tuple[int, list[dict]]:
             w.writerow(r)
             count += 1
             top.append(r)
+            if r["meets_r6_30min"] and r["flyable"]:
+                top_val.append(r)
             if len(top) > SYSML_TOP_N * 4:  # trim periodically to bound memory
                 top.sort(key=lambda x: x["max_flight_time_hover_min"], reverse=True)
                 del top[SYSML_TOP_N:]
+            if len(top_val) > SYSML_TOP_N * 4:
+                top_val.sort(key=lambda x: x["endurance_per_1000usd"], reverse=True)
+                del top_val[SYSML_TOP_N:]
     top.sort(key=lambda x: x["max_flight_time_hover_min"], reverse=True)
-    return count, top[:SYSML_TOP_N]
+    top_val.sort(key=lambda x: x["endurance_per_1000usd"], reverse=True)
+    return count, top[:SYSML_TOP_N], top_val[:SYSML_TOP_N]
 
 
 def pick_baseline(top: list[dict]) -> Optional[dict]:
@@ -649,6 +722,10 @@ _SYSML_ATTRS = [
     ("hoverThrottle_pct", "Real", "hover_throttle_pct"),
     ("meetsR6_30min", "Boolean", "meets_r6_30min"),
     ("meetsR8_60min", "Boolean", "meets_r8_60min"), ("flyable", "Boolean", "flyable"),
+    ("droneCost_USD", "Real", "drone_cost_usd"), ("gcsCost_USD", "Real", "gcs_cost_usd"),
+    ("totalSystemCost_USD", "Real", "total_system_cost_usd"),
+    ("endurancePer1000USD", "Real", "endurance_per_1000usd"),
+    ("meetsBudgetR4", "Boolean", "meets_budget_r4"),
 ]
 
 
@@ -706,7 +783,7 @@ def write_sysml(top, baseline, total, p, reps, rep_pow) -> None:
 
 def write_markdown(top, baseline, total, n_af, n_bat, n_comp, p, reps, rep_pow,
                    bat_label: str = "battery packs", stats: Optional[dict] = None,
-                   unfiltered: Optional[int] = None) -> None:
+                   unfiltered: Optional[int] = None, gcs_cost: float = 0.0) -> None:
     L = ["# Flight-Time Analysis — Holistic Configuration Sweep", "",
          "**Auto-generated** by [`flight_time_model.py`](flight_time_model.py). "
          "Regenerate with `python analysis/flight_time_model.py`.", "",
@@ -727,6 +804,11 @@ def write_markdown(top, baseline, total, n_af, n_bat, n_comp, p, reps, rep_pow,
          "peripherals contribute mass + power.",
          f"- Candidates: {n_af} airframes (with mass data), {bat_label}, "
          f"{n_comp} swept payload components.",
+         (f"- **Cost (R4 ≤ $2,500):** each config's drone cost + a fixed "
+          f"laptop-based GCS (ELRS USB dongle + analog VRX/capture + a Phase-1/backup "
+          f"handheld radio = ${gcs_cost:,.0f}; the laptop is the ground station); bundled "
+          f"VTX/FPV/GPS/RX add $0 (already in the airframe price); the DVR is "
+          f"included (earlier-stage part)."),
          (f"- **Compatibility filtering** (declared in "
           f"`DroneSystemModel::Architecture::Compatibility`): {unfiltered:,} raw "
           f"pairings reduced to {total:,} real configs — pruned "
@@ -759,11 +841,14 @@ def write_markdown(top, baseline, total, n_af, n_bat, n_comp, p, reps, rep_pow,
               f"{baseline['vtx_id']}, thermal {baseline['thermal_id']} → "
               f"**{baseline['max_flight_time_hover_min']} min** hover "
               f"({baseline['all_up_mass_g']} g AUW, "
-              f"{baseline['hover_throttle_pct']}% throttle).", ""]
+              f"{baseline['hover_throttle_pct']}% throttle; drone "
+              f"${baseline['drone_cost_usd']:.0f} / system "
+              f"${baseline['total_system_cost_usd']:.0f} "
+              f"{'≤' if baseline['meets_budget_r4'] else '>'} $2,500 R4).", ""]
     L += [f"## Top {len(top)} configurations (ranked by max flight time)", "",
           "| Cfg | Airframe | Battery | SBC | VTX | Therm | AUW g | Pld W | "
-          "Max FT | Cruise | Wind | Thr% | R6 | R8 | Fly |",
-          "|" + "|".join(["---"] * 15) + "|"]
+          "Max FT | Cruise | Wind | Thr% | Drone $ | Sys $ | R4 | R6 | R8 | Fly |",
+          "|" + "|".join(["---"] * 18) + "|"]
     tick = lambda b: "✅" if b else "—"
     for r in top:
         L.append("| " + " | ".join(str(x) for x in [
@@ -771,15 +856,115 @@ def write_markdown(top, baseline, total, n_af, n_bat, n_comp, p, reps, rep_pow,
             r["sbc_id"], r["vtx_id"], r["thermal_id"], r["all_up_mass_g"],
             r["total_payload_power_w"], r["max_flight_time_hover_min"],
             r["flight_time_cruise_min"], r["flight_time_headwind_min"],
-            r["hover_throttle_pct"], tick(r["meets_r6_30min"]),
+            r["hover_throttle_pct"],
+            r["drone_cost_usd"], r["total_system_cost_usd"], tick(r["meets_budget_r4"]),
+            tick(r["meets_r6_30min"]),
             tick(r["meets_r8_60min"]), tick(r["flyable"])]) + " |")
     OUT_MD.write_text("\n".join(L) + "\n", encoding="utf-8")
+
+
+def write_value_markdown(top_val, gcs_cost: float, gcs_parts: Optional[dict] = None) -> None:
+    """Endurance-per-dollar ranking with the FULL per-instance bill of materials
+    (every component by its actual product name)."""
+    gcs_parts = gcs_parts or {}
+    radio = gcs_parts.get("radio") or "cheapest integrated handheld radio"
+    dongle = gcs_parts.get("dongle") or "cheapest ELRS USB dongle"
+    vrx = gcs_parts.get("vrx") or "cheapest diversity VRX"
+    L = ["# Flight-Time Analysis — Best Value (Endurance per Dollar)", "",
+         "**Auto-generated** by [`flight_time_model.py`](flight_time_model.py). "
+         "Regenerate with `python analysis/flight_time_model.py`.", "",
+         "Ranked by **endurance-per-dollar** = max hover flight time (min) ÷ total "
+         "system cost (USD) × 1000 — i.e. **minutes of hover per $1,000**. Only "
+         "configs meeting R6 (≥ 30 min) and the thrust/feasibility check are ranked. "
+         "Each entry lists the **complete system bill of materials** by actual product "
+         "name. Peripherals shown as *included with airframe* are bundled in a BNF/PNP "
+         "airframe (no separate part or cost); the DVR is an earlier-stage recorder "
+         "(counted in cost, excluded from flight time).", "",
+         "**Ground control station** (fixed — same on every instance; the laptop *is* "
+         "the GCS and is existing kit, not costed):",
+         f"- Control + telemetry, primary: **{dongle}** (${gcs_parts.get('dongle_cost', 0):.0f})",
+         f"- Live video receiver: **{vrx}** (${gcs_parts.get('vrx_cost', 0):.0f})",
+         f"- Manual control, Phase-1 / backup: **{radio}** (${gcs_parts.get('radio_cost', 0):.0f})",
+         f"- **GCS subtotal: ${gcs_cost:,.0f}**",
+         "",
+         "Full per-config dataset: [`flight_time_results.csv`](flight_time_results.csv); "
+         "endurance-ranked view: [`flight_time_results.md`](flight_time_results.md).", "",
+         f"## Top {len(top_val)} by endurance-per-dollar", ""]
+
+    def comp(name, ident) -> str:
+        if str(ident).lower() == "included" or str(name).lower().startswith("bundled"):
+            return "*included with airframe*"
+        return f"{name} (`{ident}`)"
+
+    for i, r in enumerate(top_val, 1):
+        budget = "✅ R4" if r["meets_budget_r4"] else "⚠️ over R4"
+        L.append(
+            f"### {i}. {r['endurance_per_1000usd']} min/$1k — "
+            f"{r['max_flight_time_hover_min']} min hover · "
+            f"drone ${r['drone_cost_usd']:.0f} / system ${r['total_system_cost_usd']:.0f} · {budget}")
+        L.append(f"- Airframe **{r['airframe']}** (`{r['airframe_id']}`) · "
+                 f"Battery **{r['battery']}**")
+        L.append(f"- Thermal camera: {comp(r['thermal_name'], r['thermal_id'])} · "
+                 f"SBC: {comp(r['sbc_name'], r['sbc_id'])} · "
+                 f"DVR: {comp(r['dvr_name'], r['dvr_id'])}")
+        L.append(f"- VTX: {comp(r['vtx_name'], r['vtx_id'])} · "
+                 f"FPV cam: {comp(r['fpv_name'], r['fpv_id'])} · "
+                 f"GPS: {comp(r['gps_name'], r['gps_id'])} · "
+                 f"RX: {comp(r['rx_name'], r['rx_id'])}")
+        L.append("")
+    OUT_VALUE_MD.write_text("\n".join(L) + "\n", encoding="utf-8")
+
+
+def write_chart() -> bool:
+    """Cost-vs-flight-time scatter of every real config (reads the CSV).
+
+    Returns True if the PNG was written, False if matplotlib is unavailable.
+    """
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+    except Exception:
+        return False
+    import collections
+    rows = list(csv.DictReader(OUT_CSV.open(encoding="utf-8")))
+    if not rows:
+        return False
+    by_af: dict = collections.defaultdict(lambda: ([], []))
+    for r in rows:
+        xs, ys = by_af[r["airframe_id"]]
+        xs.append(float(r["total_system_cost_usd"]))
+        ys.append(float(r["max_flight_time_hover_min"]))
+
+    fig, ax = plt.subplots(figsize=(10.0, 6.5))
+    cmap = plt.get_cmap("tab20")
+    for i, af in enumerate(sorted(by_af)):
+        xs, ys = by_af[af]
+        ax.scatter(xs, ys, s=10, color=cmap(i % 20), label=af, alpha=0.55, edgecolors="none")
+
+    # Requirement reference lines
+    ax.axhline(30.0, color="red", ls="--", lw=1.0)
+    ax.text(ax.get_xlim()[1], 30.4, "R6  30 min", color="red", fontsize=8, ha="right", va="bottom")
+    ax.axhline(60.0, color="darkorange", ls="--", lw=1.0)
+    ax.text(ax.get_xlim()[1], 60.4, "R8  60 min", color="darkorange", fontsize=8, ha="right", va="bottom")
+    ax.axvline(2500.0, color="green", ls="--", lw=1.0)
+    ax.text(2500.0, ax.get_ylim()[0], " R4  $2,500", color="green", fontsize=8, ha="left", va="bottom")
+
+    ax.set_xlabel("Total system cost (USD)")
+    ax.set_ylabel("Max hover flight time (min)")
+    ax.set_title("Cost vs. flight time — all real (compatibility-filtered) configurations")
+    ax.grid(True, alpha=0.3)
+    ax.legend(title="Airframe", fontsize=7, ncol=2, loc="lower right", framealpha=0.9)
+    fig.tight_layout()
+    fig.savefig(OUT_CHART, dpi=130)
+    plt.close(fig)
+    return True
 
 
 # ──────────────────────────────────────────────────────────────────────────
 def main() -> None:
     p = PhysicsParams()
-    airframes, components, real_batteries = load_model()
+    airframes, components, real_batteries, gcs_cost, gcs_parts = load_model()
     if real_batteries:
         batteries = real_batteries
         bat_label = f"{len(batteries)} real battery candidates"
@@ -790,13 +975,15 @@ def main() -> None:
     rep_pow = {cat: representative_power(components[cat]) for cat in ("vtx", "fpv", "gps", "rx")}
 
     stats = {"voltage_pruned": 0, "video_pruned": 0}
-    total, top = write_csv(iter_configs(airframes, components, batteries, p, stats))
+    total, top, top_val = write_csv(iter_configs(airframes, components, batteries, p, stats, gcs_cost))
     unfiltered = total + stats["voltage_pruned"] + stats["video_pruned"]
     baseline = pick_baseline(top)
     n_comp = sum(len(components[c]) for c in ("thermal", "sbc", "dvr", "vtx", "fpv", "gps", "rx"))
     write_sysml(top, baseline, total, p, reps, rep_pow)
     write_markdown(top, baseline, total, len(airframes), len(batteries), n_comp, p, reps, rep_pow,
-                   bat_label, stats, unfiltered)
+                   bat_label, stats, unfiltered, gcs_cost)
+    write_value_markdown(top_val, gcs_cost, gcs_parts)
+    chart_ok = write_chart()
 
     print(f"Airframes (with mass) : {len(airframes)}")
     print(f"Batteries             : {bat_label}")
@@ -808,10 +995,14 @@ def main() -> None:
     print(f"  pruned voltage (P1) : {stats['voltage_pruned']:,}  (battery cells vs airframe window)")
     print(f"  pruned video   (V2) : {stats['video_pruned']:,}  (thermal output vs CVBS DVR)")
     print(f"REAL configurations   : {total:,}")
+    print(f"GCS (fixed) cost      : ${gcs_cost:,.0f}  (laptop dongle + VRX + backup radio)")
     if baseline:
         print(f"Recommended baseline  : {baseline['airframe']} ({baseline['airframe_id']}) + "
-              f"{baseline['battery']} -> {baseline['max_flight_time_hover_min']} min hover")
+              f"{baseline['battery']} -> {baseline['max_flight_time_hover_min']} min hover, "
+              f"drone ${baseline['drone_cost_usd']:.0f} / system ${baseline['total_system_cost_usd']:.0f}")
     print(f"Wrote: {OUT_CSV.name} (all {total:,}), {OUT_SYSML.name} (top {len(top)}), {OUT_MD.name}")
+    print(f"       {OUT_VALUE_MD.name} (value top {len(top_val)})"
+          + (f", {OUT_CHART.name}" if chart_ok else "  [chart skipped: matplotlib unavailable]"))
 
 
 if __name__ == "__main__":

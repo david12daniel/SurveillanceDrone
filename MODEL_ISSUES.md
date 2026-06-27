@@ -313,6 +313,67 @@ any tool previously.
       (no compat rule); the wireless RF connects in `AerialThermalObservationSystem`
       keep `connection connect` (their ports are typed).
 
+13. **DECISION (2026-06-26) — cost in the sweep + laptop-based GCS.** The flight
+    model now computes cost alongside endurance:
+    - **Per-config cost** (drone + total system) with bundled-inclusion: a BNF/PNP
+      airframe's price already includes its VTX/FPV/GPS/RX, so those add $0; the DVR
+      IS included (earlier-stage part, R4 cost). New CSV columns
+      (`*_cost_usd`, `drone_cost_usd`, `gcs_cost_usd`, `total_system_cost_usd`,
+      `endurance_per_1000usd`, `meets_budget_r4`) + SysML instance attrs. Outputs
+      added: `flight_time_value_ranking.md` (top-100 by endurance-per-dollar) and
+      `cost_vs_flighttime.png` (scatter). **All top-100 endurance configs are far
+      under R4** ($820–$1,360 system; ~$1,100–1,700 headroom).
+    - **GCS = the laptop, two-tier** (David's decision, refined 2026-06-27). The
+      laptop is the ground station. **PRIMARY (Phase 2+):** an ELRS USB dongle
+      (control + telemetry) + analog VRX/capture (live video) — all through the
+      laptop. **BACKUP / Phase 1:** a cheap handheld ELRS radio for manual control
+      if the laptop link fails. **Model updated** (`model.sysml`): `TelemetryGroundLink`
+      gained an `rf_out : RfSourcePort` (combined ELRS control+telemetry) and is now
+      composed into `GroundControlStation` as `laptopLink` (primary); `rcTx`
+      (RadioControlTransmitter) is documented as backup; `subTotalCost` now =
+      laptopLink + rcTx + videoRx + capture; `AerialThermalObservationSystem` wires
+      the dongle as primary control/telemetry (drone RX ↔ laptopLink → laptop) with
+      the radio path retained as backup. The sweep's GCS cost basis = cheapest
+      integrated handheld radio (backup) + cheapest standalone ELRS dongle
+      (`extraHardwareNeeded = None`, e.g. TLM2 $16) + cheapest 5.8 GHz VRX+capture
+      (VRX1 $40) ≈ **$121** (was a $47/$56 estimate).
+    - **Range (R7 / R4_GCS_RANGE) — BOTH links hard at 2.8 km** (David, 2026-06-27:
+      video is a hard requirement, not best-effort, so `R4_GCS_RANGE` stands as
+      written). **Control + telemetry (ELRS):** trivially met (2.4 GHz: 25 mW =
+      3.5–4.6 km, 100 mW = 10 km; all onboard RX candidates ≥ 3 km; dongles
+      TLM2/TLM3 flagged range-OK). **Video (5.8 GHz analog):** all 10 VTX candidates
+      were checked — every one is ≥ 4.0 km (V1/V3/V5/V8/V10 = 4.0; V7 = 5.0; V2/V4 =
+      6.5; V11 = 7.0; V6 = 8.0), and the integrated cam+VTX (D1–D3 = 4–20 km) and
+      bundled VTX all pass — so **no VTX candidate was removed**. The binding element
+      is the **ground VRX + antenna**: VRX1 is rated exactly 2.8 km *and only with a
+      patch/directional antenna* (zero margin) — a better ground antenna is
+      recommended for headroom. Going forward, any VTX with maxRange < 2.8 km is not
+      viable and must be dropped.
+    - **Better-range ground VRX (market research 2026-06-27).** Because the video
+      link is gated by the ground receiver, added margin options to `candidates.sysml`:
+      **VRX6 — Skydroid 150CH true-diversity UVC** (~$45, ~5 km, dual-antenna,
+      laptop-direct via USB/UVC, confirmed working on macOS via QuickTime) and
+      **VRX7 — TBS Fusion + UVC capture** (~$137, ~8 km, top-tier sensitivity, macOS
+      via the capture dongle). A high-gain **patch antenna (9–13 dBi)** is the single
+      biggest range lever. The sweep's GCS cost basis now selects the cheapest VRX
+      with **≥ 4 km margin** (Skydroid $45) rather than the zero-margin VRX1 (2.8 km),
+      so GCS ≈ **$126** (radio $65 + dongle $16 + diversity VRX $45). VRX1 remains a
+      budget floor option but is no longer the costed default.
+
+14. **DECISION (2026-06-27) — model views added (`DroneSystemModel::Views`).** A
+    fourth sub-package holds four SysML v2 `view def` + `view` presentations that
+    `expose` model slices by stakeholder concern: `operationalMission`
+    (Requirements + `AerialThermalObservationSystem`), `logicalArchitecture`
+    (system/drone/GCS decomposition), `interfaceBehavior` (the `Compatibility`
+    layer + airborne connections), and `systemVerification` (the `Analysis` layer).
+    Syside validates the structure; diagram/table rendering needs a SysML v2 viewer
+    (none in the free Syside extension). **Lesson:** `verification` is a reserved
+    keyword (like `interface`, `view`, `analysis`, `requirement`) — a bare usage
+    named `verification` fails to parse ("Expected ';'"), so the usage is named
+    `systemVerification`. View-def names (e.g. `VerificationView`) are fine since
+    they don't collide. Optional future enhancement: add `viewpoint def`s
+    (stakeholder concerns + `frame`/`require`) and `rendering`/`filter` clauses.
+
 ---
 
 ## D. Candidate data gaps & uncertainties (from the source CSVs)
