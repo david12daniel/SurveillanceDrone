@@ -334,6 +334,7 @@ package DroneSystemModel {
 
  part def Battery {
  attribute name : String;
+ attribute purchaseUrl : String;
  attribute cost_USD : ScalarValues::Real;
  attribute mass : ISQBase::MassValue;
  attribute energy : ISQThermodynamics::EnergyValue;
@@ -363,6 +364,7 @@ package DroneSystemModel {
 
  part def Airframe {
  attribute name : String;
+ attribute purchaseUrl : String;
  attribute purchaseType : String;             // PNP, BNF Analog, BNF HD, frame kit, etc.
  attribute cost_USD : ScalarValues::Real;
  attribute mass : ISQBase::MassValue;         // bare airframe weight
@@ -411,6 +413,7 @@ package DroneSystemModel {
  part def CameraSubsystem {
  attribute name : String;
  attribute brand : String;
+ attribute purchaseUrl : String;
  attribute cost_USD : ScalarValues::Real;
  attribute mass : ISQBase::MassValue;
  attribute power : ISQMechanics::PowerValue;
@@ -446,6 +449,7 @@ package DroneSystemModel {
 
  part def SingleBoardComputerPayload {
  attribute name : String;
+ attribute purchaseUrl : String;
  attribute cost_USD : ScalarValues::Real;             // total solution cost
  attribute boardCost_USD : ScalarValues::Real;
  attribute additionalCost_USD : ScalarValues::Real;
@@ -485,6 +489,7 @@ package DroneSystemModel {
 
  part def FpvCamera {
  attribute name : String;
+ attribute purchaseUrl : String;
  attribute cost_USD : ScalarValues::Real;
  attribute mass : ISQBase::MassValue;
  attribute power : ISQMechanics::PowerValue;
@@ -512,6 +517,7 @@ package DroneSystemModel {
 
  part def GpsModule {
  attribute name : String;
+ attribute purchaseUrl : String;
  attribute cost_USD : ScalarValues::Real;
  attribute mass : ISQBase::MassValue;
  attribute power : ISQMechanics::PowerValue;
@@ -540,6 +546,7 @@ package DroneSystemModel {
  part def RadioReceiver {
  attribute name : String;
  attribute manufacturer : String;
+ attribute purchaseUrl : String;
  attribute cost_USD : ScalarValues::Real;
  attribute mass : ISQBase::MassValue;
  attribute power : ISQMechanics::PowerValue;
@@ -570,6 +577,7 @@ package DroneSystemModel {
  part def RadioControlTransmitter {
  attribute name : String;
  attribute brand : String;
+ attribute purchaseUrl : String;
  attribute txType : String;                          // Integrated Controller / Standalone TX Module
  attribute formFactor : String;
  attribute cost_USD : ScalarValues::Real;
@@ -606,6 +614,7 @@ package DroneSystemModel {
 
  part def VideoTransmitter {
  attribute name : String;
+ attribute purchaseUrl : String;
  attribute vtxType : String;                         // Analog VTX / Integrated Digital VTX+Cam
  attribute cost_USD : ScalarValues::Real;
  attribute mass : ISQBase::MassValue;
@@ -633,6 +642,7 @@ package DroneSystemModel {
 
  part def ThermalVideoRecorder {
  attribute name : String;
+ attribute purchaseUrl : String;
  attribute cost_USD : ScalarValues::Real;
  attribute mass : ISQBase::MassValue;
  attribute power : ISQMechanics::PowerValue;       // max power draw
@@ -662,6 +672,7 @@ package DroneSystemModel {
 
  part def VideoReceiver {
  attribute name : String;
+ attribute purchaseUrl : String;
  attribute vrxType : String;
  attribute cost_USD : ScalarValues::Real;
  attribute mass : ISQBase::MassValue;
@@ -684,6 +695,7 @@ package DroneSystemModel {
 
  part def UsbVideoCapture {
  attribute name : String;
+ attribute purchaseUrl : String;
  attribute captureType : String;
  attribute cost_USD : ScalarValues::Real;
  attribute mass : ISQBase::MassValue;
@@ -705,6 +717,7 @@ package DroneSystemModel {
 
  part def TelemetryGroundLink {
  attribute name : String;
+ attribute purchaseUrl : String;
  attribute approach : String;                      // radio USB passthrough / standalone dongle / DIY
  attribute connectionToLaptop : String;            // USB-C virtual COM, USB-A serial, etc.
  attribute frequency : String;                     // 2.4 GHz / 900 MHz

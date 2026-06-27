@@ -37,8 +37,9 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2700.0;  // GEPRC 2806.5 1350KV (SPEEDX2 family, ~2.7 kg @6S)
    :>> name = "GEPRC MARK4 LR7";
+   :>> purchaseUrl = "https://geprc.com/product/mark4-drone-for-freestyle-fpv-4s-6s/";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 285.0;            // range 240-330
+   :>> cost_USD = 285.00;            // range 240-330
    :>> mass = 455.0 [g];
    :>> propSize_in = 7.0;
    :>> wheelbase = 295.0 [mm];
@@ -64,8 +65,9 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2800.0;  // Axisflying C287 2807.5 1350KV (>2.8 kg @6S)
    :>> name = "Axisflying KOLAS7";
+   :>> purchaseUrl = "https://axisflying.net/products/axisflying-kolas7-7inch-foldable-fpv-drone-for-lr-long-range-cinematic-shooting-frame-kit";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 175.0;            // est. range 150-200
+   :>> cost_USD = 175.00;            // est. range 150-200
    :>> mass = 257.0 [g];
    :>> propSize_in = 7.0;
    :>> wheelbase = 298.0 [mm];
@@ -88,6 +90,7 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2800.0;  // Axisflying C287 2807.5 1350KV (>2.8 kg @6S)
    :>> name = "Axisflying KOLAS7";
+   :>> purchaseUrl = "https://www.coolgoos.com/products/axisflying-kolas7-analog-bnf-7inch-foldable-fpv-drone-for-lr-long-range-cinematic-drone-with-gps";
    :>> purchaseType = "BNF Analog";
    :>> cost_USD = 419.90;
    :>> mass = 300.0 [g];            // est: 257g base + ~15g analog VTX + ~20g GPS + ~5.5g TBS Nano RX + ~2.5g cables
@@ -114,8 +117,9 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2800.0;  // Axisflying C287 2807.5 1350KV (>2.8 kg @6S)
    :>> name = "Axisflying KOLAS7";
+   :>> purchaseUrl = "https://www.axisflying.com/products/kolas7";
    :>> purchaseType = "BNF HD";
-   :>> cost_USD = 713.0;            // range 649-777
+   :>> cost_USD = 713.00;            // range 649-777
    :>> mass = 333.0 [g];            // est: 257g base + ~48g DJI O3 assembly (36.4g unit+cam + 3g ant + 8.3g cable) + ~20g GPS + ~5.5g TBS Nano RX
    :>> propSize_in = 7.0;
    :>> wheelbase = 298.0 [mm];
@@ -142,8 +146,9 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2933.0;  // iFlight XING-E 2809 800KV (2933 g @6S, confirmed)
    :>> name = "iFlight Chimera9 ECO";
+   :>> purchaseUrl = "https://shop.iflight.com/Chimera9-ECO-6S-Pro2068";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 346.99;
+   :>> cost_USD = 305.35;
    :>> mass = 721.0 [g];
    :>> propSize_in = 9.0;
    :>> wheelbase = 405.0 [mm];
@@ -168,8 +173,9 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2933.0;  // iFlight XING-E 2809 800KV (2933 g @6S, confirmed)
    :>> name = "iFlight Chimera9 ECO";
+   :>> purchaseUrl = "https://shop.iflight.com/Chimera9-ECO-6S-Pro2068";
    :>> purchaseType = "BNF";
-   :>> cost_USD = 372.0;            // ~372
+   :>> cost_USD = 346.99;            // ~372
    :>> mass = 727.0 [g];            // 721g PNP + ~5.5g TBS Crossfire Nano RX
    :>> propSize_in = 9.0;
    :>> wheelbase = 405.0 [mm];
@@ -195,8 +201,9 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 3245.0;  // DarwinFPV 2812 1100KV ~3245 g @6S 9" (Gemfan 9045-3, full throttle; research)
    :>> name = "DarwinFPV X9";
+   :>> purchaseUrl = "https://darwinfpv.com/products/darwinfpv-x9-9-long-range-fpv-drone";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 340.0;            // range 280-400
+   :>> cost_USD = 279.99;            // range 280-400
    :>> mass = 747.0 [g];            // confirmed: darwinfpv.com "747g±5g without package"; includes VTX + FPV cam, no GPS
    :>> propSize_in = 9.0;
    :>> wheelbase = 363.0 [mm];
@@ -219,6 +226,7 @@ package DroneCandidates {
    :>> minCells_s = 6;  // 6S build (7" ECOII2807 class); skipped in sweep (no mass)
    :>> maxCells_s = 6;
    :>> name = "EMAX Hawk 7";
+   :>> purchaseUrl = "https://www.emax-usa.com/collections/hawk-series";
    :>> purchaseType = "BNF";
    :>> cost_USD = 398.86;
    :>> propSize_in = 7.0;
@@ -243,8 +251,9 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2000.0;  // DeepSpace Redline 2807 1350KV ~1.9-2.0 kg @6S 7" (research)
    :>> name = "DeepSpace ROC7 O4 PRO";
+   :>> purchaseUrl = "https://pyrodrone.com/products/deepspacefpv-roc7-o4-pro-long-range-fpv-7inch-digital-pnp-with-gps-freestyle-fpv-drone-choose-receiver";
    :>> purchaseType = "PNP+GPS";
-   :>> cost_USD = 369.0;
+   :>> cost_USD = 825.99;
    :>> mass = 667.0 [g];            // derived: BNF (with ELRS RX) confirmed 672g at RaceDayQuads; subtract ~5g RX
    :>> propSize_in = 7.0;
    :>> flightController = "Argus F722 (STM32F722)";
@@ -268,8 +277,9 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2000.0;  // DeepSpace Redline 2807 1350KV ~1.9-2.0 kg @6S 7" (research)
    :>> name = "DeepSpace ROC7 O4 PRO";
+   :>> purchaseUrl = "https://pyrodrone.com/products/deepspacefpv-roc7-o4-pro-long-range-fpv-7inch-digital-pnp-with-gps-freestyle-fpv-drone-choose-receiver";
    :>> purchaseType = "BNF";
-   :>> cost_USD = 394.0;            // ~394
+   :>> cost_USD = 851.99;            // ~394
    :>> mass = 672.0 [g];            // confirmed: RaceDayQuads listing (BNF with O4 Pro + GPS + True Diversity ELRS RX = 672g)
    :>> propSize_in = 7.0;
    :>> flightController = "Argus F722 (STM32F722)";
@@ -294,8 +304,9 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2700.0;  // GEPRC SPEEDX2 2806.5 1350KV (~2.7 kg @6S, confirmed)
    :>> name = "GEPRC Crocodile75 V3";
+   :>> purchaseUrl = "https://pyrodrone.com/products/geprc-crocodile75-v3-hd-wasp-long-range-fpv-choose-receiver-type";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 510.0;            // range 470-550
+   :>> cost_USD = 726.99;            // range 470-550
    :>> mass = 597.5 [g];            // confirmed: fpv24.com + multiple sources; PNP includes analog VTX + FPV cam, no GPS, no RX
    :>> propSize_in = 7.5;
    :>> wheelbase = 342.0 [mm];
@@ -319,6 +330,7 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2000.0;  // iFlight XING2 2809 1250KV ~2.0 kg @6S 7" (research; ~2.5 kg @8")
    :>> name = "iFlight Chimera7 Pro V2";
+   :>> purchaseUrl = "https://shop.iflight.com/Chimera7-Pro-V2-6S-Pro1947";
    :>> purchaseType = "PNP";
    :>> cost_USD = 499.99;
    :>> mass = 705.0 [g];            // confirmed: shop.iflight.com "705g(Without Battery)" for analog 6S variant; 725g is the HD (DJI O3/O4) variant
@@ -345,8 +357,9 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2000.0;  // iFlight XING2 2809 1250KV ~2.0 kg @6S 7" (research; ~2.5 kg @8")
    :>> name = "iFlight Chimera7 Pro V2";
+   :>> purchaseUrl = "https://shop.iflight.com/Chimera7-Pro-V2-6S-Pro1947";
    :>> purchaseType = "BNF";
-   :>> cost_USD = 525.0;            // ~525
+   :>> cost_USD = 525.00;            // ~525
    :>> mass = 711.0 [g];            // 705g PNP + ~5.5g TBS Crossfire Nano RX
    :>> propSize_in = 7.5;
    :>> wheelbase = 327.0 [mm];
@@ -372,8 +385,9 @@ package DroneCandidates {
    :>> maxCells_s = 5;
    :>> maxThrustPerMotor_g = 1488.0;  // DarwinFPV 2507 1800KV @4S 7" (1488 g, confirmed)
    :>> name = "DarwinFPV 129 7in";
+   :>> purchaseUrl = "https://pyrodrone.com/products/darwinfpv-darwin129-7-long-range-bnf";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 222.0;            // range 180-264
+   :>> cost_USD = 299.99;            // range 180-264
    :>> mass = 402.0 [g];            // confirmed: Oscar Liang review "402 grams without battery"; includes VTX + FPV cam + GPS
    :>> propSize_in = 7.0;
    :>> wheelbase = 280.0 [mm];      // confirmed: Oscar Liang review
@@ -398,8 +412,9 @@ package DroneCandidates {
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2000.0;  // Redline 2807 1350KV ~2.0 kg @6S 7" (same hardware as AF6)
    :>> name = "NewBeeDrone ROC7 O4PRO";
+   :>> purchaseUrl = "https://newbeedrone.com/products/deepspace-roc7-o4pro-long-range-fpv-7inch-f722-60a-racing-drone-quadcopter-freestyle";
    :>> purchaseType = "BNF only";
-   :>> cost_USD = 699.0;
+   :>> cost_USD = 799.99;
    :>> mass = 672.0 [g];            // same DeepSpace ROC7 hardware as AF6b (672g BNF with O4 Pro + GPS + RX)
    :>> propSize_in = 7.0;
    :>> flightController = "Argus F722 (STM32F722)";
@@ -427,8 +442,9 @@ package DroneCandidates {
 
   part T1 : CameraSubsystem {
    :>> name = "Lepton 2.5";
+   :>> purchaseUrl = "https://groupgets.com/products/flir-lepton-2-5";
    :>> brand = "FLIR / Teledyne";
-   :>> cost_USD = 75.0;             // 65-85
+   :>> cost_USD = 109.00;             // 65-85
    :>> mass = 0.9 [g];
    :>> power = 0.15 [W];
    :>> resolutionH = 80;
@@ -450,8 +466,9 @@ package DroneCandidates {
 
   part T2 : CameraSubsystem {
    :>> name = "Lepton 3.0";
+   :>> purchaseUrl = "https://groupgets.com/products/flir-lepton-3-0";
    :>> brand = "FLIR / Teledyne";
-   :>> cost_USD = 140.0;            // 130-150
+   :>> cost_USD = 150.00;            // 130-150
    :>> mass = 0.9 [g];
    :>> power = 0.15 [W];
    :>> resolutionH = 160;
@@ -473,8 +490,9 @@ package DroneCandidates {
 
   part T3 : CameraSubsystem {
    :>> name = "Lepton 3.5";
+   :>> purchaseUrl = "https://groupgets.com/products/flir-lepton-3-5";
    :>> brand = "FLIR / Teledyne";
-   :>> cost_USD = 186.0;            // 172-200
+   :>> cost_USD = 164.00;            // 172-200
    :>> mass = 0.9 [g];
    :>> power = 0.15 [W];
    :>> resolutionH = 160;
@@ -496,8 +514,9 @@ package DroneCandidates {
 
   part T4 : CameraSubsystem {
    :>> name = "DroneThermal v4 (Lepton Carrier)";
+   :>> purchaseUrl = "https://www.flytron.com/thermal-solutions/60-dronethermal-v4.html";
    :>> brand = "GroupGets / Horus Dynamics";
-   :>> cost_USD = 240.0;            // 40-50 board / 240 kit w/ Lepton 3.5
+   :>> cost_USD = 173.00;            // 40-50 board / 240 kit w/ Lepton 3.5
    :>> mass = 2.3 [g];              // board only, no Lepton
    :>> power = 0.45 [W];
    :>> detectorType = "Lepton carrier (uses T1-T3 core)";
@@ -508,8 +527,9 @@ package DroneCandidates {
 
   part T5 : CameraSubsystem {
    :>> name = "Horus Dynamics Lepton Drone Kit";
+   :>> purchaseUrl = "https://horusdynamics.com/shop/lepton-kit-hdk1500/";
    :>> brand = "Horus Dynamics";
-   :>> cost_USD = 245.0;            // 220-270
+   :>> cost_USD = 250.00;            // 220-270
    :>> mass = 15.0 [g];
    :>> power = 0.8 [W];
    :>> resolutionH = 160;
@@ -530,8 +550,9 @@ package DroneCandidates {
 
   part T6 : CameraSubsystem {
    :>> name = "Waveshare LWIR 80x62";
+   :>> purchaseUrl = "https://www.waveshare.com/infrared-thermal-camera-module.htm";
    :>> brand = "Waveshare";
-   :>> cost_USD = 85.0;             // 70-100
+   :>> cost_USD = 85.00;             // 70-100
    :>> mass = 15.0 [g];
    :>> power = 0.3 [W];
    :>> resolutionH = 80;
@@ -553,6 +574,7 @@ package DroneCandidates {
 
   part T7 : CameraSubsystem {
    :>> name = "Heimann HTPA80x64d";
+   :>> purchaseUrl = "https://www.mouser.com/ProductDetail/heimann-sensor/htpa80x64d";
    :>> brand = "Heimann Sensor";
    :>> cost_USD = 65.0;             // 50-80
    :>> mass = 0.6 [g];              // TO-8 only
@@ -576,8 +598,9 @@ package DroneCandidates {
 
   part T8 : CameraSubsystem {
    :>> name = "Generic 256x192 CVBS Module";
+   :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=256x192+thermal+camera+module+CVBS";
    :>> brand = "Generic OEM (Chinese)";
-   :>> cost_USD = 150.0;            // 100-200
+   :>> cost_USD = 150.00;            // 100-200
    :>> mass = 21.0 [g];
    :>> power = 0.7 [W];
    :>> resolutionH = 256;
@@ -601,8 +624,9 @@ package DroneCandidates {
 
   part T9 : CameraSubsystem {
    :>> name = "Generic 384x288 CVBS Module";
+   :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=384x288+thermal+camera+module+CVBS";
    :>> brand = "Generic OEM (Chinese)";
-   :>> cost_USD = 320.0;            // 250-400
+   :>> cost_USD = 320.00;            // 250-400
    :>> mass = 21.0 [g];
    :>> power = 0.7 [W];
    :>> resolutionH = 384;
@@ -626,8 +650,9 @@ package DroneCandidates {
 
   part T10 : CameraSubsystem {
    :>> name = "Generic 640x512 CVBS Module";
+   :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=640x512+thermal+camera+module+CVBS";
    :>> brand = "Generic OEM (Chinese)";
-   :>> cost_USD = 550.0;            // 400-700
+   :>> cost_USD = 550.00;            // 400-700
    :>> mass = 21.0 [g];
    :>> power = 0.75 [W];
    :>> resolutionH = 640;
@@ -651,8 +676,9 @@ package DroneCandidates {
 
   part T11 : CameraSubsystem {
    :>> name = "Axisflying 640 Thermal";
+   :>> purchaseUrl = "https://www.amazon.com/dp/B0GYQ67TTQ";
    :>> brand = "Axisflying";
-   :>> cost_USD = 650.00;            // 350-550
+   :>> cost_USD = 450.00;            // 350-550
    :>> mass = 25.0 [g];
    :>> power = 1.0 [W];
    :>> resolutionH = 640;
@@ -676,8 +702,9 @@ package DroneCandidates {
 
   part T12 : CameraSubsystem {
    :>> name = "iVcan Mini-640-CVBS";
+   :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=iVcan+Mini+640+CVBS+thermal";
    :>> brand = "iVcan";
-   :>> cost_USD = 980.00;            // 450-700
+   :>> cost_USD = 520.00;            // 450-700
    :>> mass = 21.0 [g];
    :>> power = 0.75 [W];
    :>> resolutionH = 640;
@@ -701,8 +728,9 @@ package DroneCandidates {
 
   part T13 : CameraSubsystem {
    :>> name = "PurpleRiver Mini 640";
+   :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=PurpleRiver+mini+640+thermal";
    :>> brand = "PurpleRiver";
-   :>> cost_USD = 590.00;            // 350-550
+   :>> cost_USD = 450.00;            // 350-550
    :>> mass = 21.0 [g];
    :>> power = 0.8 [W];
    :>> resolutionH = 640;
@@ -726,8 +754,9 @@ package DroneCandidates {
 
   part T14 : CameraSubsystem {
    :>> name = "Arducam 640x512 USB Thermal";
+   :>> purchaseUrl = "https://www.arducam.com/product/arducam-thermal-camera-module-640x512-thermal-infrared-camera-module-with-usb-type-c-for-jetson-nano-raspberry-pi-and-windows/";
    :>> brand = "Arducam";
-   :>> cost_USD = 650.0;            // 500-800
+   :>> cost_USD = 650.00;            // 500-800
    :>> mass = 40.0 [g];
    :>> power = 1.5 [W];
    :>> resolutionH = 640;
@@ -751,8 +780,9 @@ package DroneCandidates {
 
   part T15 : CameraSubsystem {
    :>> name = "Seek Thermal Mosaic Core 320";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=seek+thermal+mosaic+320";
    :>> brand = "Seek Thermal";
-   :>> cost_USD = 400.0;            // 350-500
+   :>> cost_USD = 400.00;            // 350-500
    :>> mass = 25.0 [g];
    :>> power = 1.0 [W];
    :>> resolutionH = 320;
@@ -776,8 +806,9 @@ package DroneCandidates {
 
   part T16 : CameraSubsystem {
    :>> name = "FLIR Boson 640";
+   :>> purchaseUrl = "https://groupgets.com/products/flir-boson-640";
    :>> brand = "FLIR / Teledyne";
-   :>> cost_USD = 2000.0;           // 1500-2500 (benchmark, over budget)
+   :>> cost_USD = 3558.00;           // 1500-2500 (benchmark, over budget)
    :>> mass = 13.0 [g];             // module only
    :>> power = 0.5 [W];
    :>> resolutionH = 640;
@@ -806,6 +837,7 @@ package DroneCandidates {
 
   part A1 : FpvCamera {
    :>> name = "Caddx H1";
+   :>> purchaseUrl = "https://geprc.com/";
    :>> cameraModel = "Caddx H1";
    :>> cameraType = "Analog CMOS";
    :>> cost_USD = 20.0;             // 15-25
@@ -827,6 +859,7 @@ package DroneCandidates {
 
   part A2 : FpvCamera {
    :>> name = "Caddx Ratel 2";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Caddx+Ratel+2";
    :>> cameraModel = "Caddx Ratel 2";
    :>> cameraType = "Analog CMOS (Starlight)";
    :>> cost_USD = 30.0;
@@ -847,6 +880,7 @@ package DroneCandidates {
 
   part A3 : FpvCamera {
    :>> name = "Foxeer Predator Mini V4";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Foxeer+Predator+Mini+V4";
    :>> cameraModel = "Foxeer Predator Mini V4";
    :>> cameraType = "Analog CMOS";
    :>> cost_USD = 25.0;
@@ -867,6 +901,7 @@ package DroneCandidates {
 
   part A4 : FpvCamera {
    :>> name = "Runcam Phoenix 2";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Runcam+Phoenix+2";
    :>> cameraModel = "Runcam Phoenix 2";
    :>> cameraType = "Analog CMOS (StarLight)";
    :>> cost_USD = 35.0;
@@ -887,6 +922,7 @@ package DroneCandidates {
 
   part A5 : FpvCamera {
    :>> name = "iFlight Generic Analog";
+   :>> purchaseUrl = "https://shop.iflight.com/";
    :>> cameraModel = "iFlight Generic Analog (unnamed)";
    :>> cameraType = "Analog CMOS";
    :>> cost_USD = 12.0;             // ~10-15
@@ -904,6 +940,7 @@ package DroneCandidates {
 
   part A6 : FpvCamera {
    :>> name = "EMAX Generic Analog";
+   :>> purchaseUrl = "https://www.emax-usa.com/";
    :>> cameraModel = "EMAX Generic Analog (unnamed)";
    :>> cameraType = "Analog CMOS";
    :>> cost_USD = 15.0;
@@ -919,6 +956,7 @@ package DroneCandidates {
 
   part A7 : FpvCamera {
    :>> name = "Caddx Ant";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Caddx+Ant";
    :>> cameraModel = "Caddx Ant";
    :>> cameraType = "Analog CMOS (Nano)";
    :>> cost_USD = 17.0;
@@ -940,6 +978,7 @@ package DroneCandidates {
 
   part A8 : FpvCamera {
    :>> name = "Foxeer T-Rex Micro";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Foxeer+T-Rex+Micro";
    :>> cameraModel = "Foxeer T-Rex Micro";
    :>> cameraType = "Analog CMOS";
    :>> cost_USD = 25.0;
@@ -960,6 +999,7 @@ package DroneCandidates {
 
   part D1 : FpvCamera {
    :>> name = "DJI O4 Pro Air Unit";
+   :>> purchaseUrl = "https://www.dji.com/o4-pro-air-unit";
    :>> maxRange = 20.0 [km];        // ~20 km; >> R7 (2.8 km) — PASS
    :>> cameraModel = "DJI O4 Pro Air Unit";
    :>> cameraType = "Integrated Digital (DJI)";
@@ -979,6 +1019,7 @@ package DroneCandidates {
 
   part D2 : FpvCamera {
    :>> name = "DJI O3 Air Unit";
+   :>> purchaseUrl = "https://www.dji.com/o3-air-unit";
    :>> maxRange = 10.0 [km];        // ~10-15 km; >> R7 (2.8 km) — PASS
    :>> cameraModel = "DJI O3 Air Unit";
    :>> cameraType = "Integrated Digital (DJI)";
@@ -998,6 +1039,7 @@ package DroneCandidates {
 
   part D3 : FpvCamera {
    :>> name = "Walksnail Avatar Pro";
+   :>> purchaseUrl = "https://shop.walksnail.com/";
    :>> maxRange = 4.0 [km];         // ~4 km practical; > R7 (2.8 km) — PASS (marginal)
    :>> cameraModel = "Walksnail Avatar Pro";
    :>> cameraType = "Integrated Digital (Walksnail)";
@@ -1017,6 +1059,7 @@ package DroneCandidates {
 
   part D4 : FpvCamera {
    :>> name = "RunCam Racer 4 (Analog+MIPI)";
+   :>> purchaseUrl = "https://shop.runcam.com/racer-4/";
    :>> cameraModel = "RunCam Racer 4";
    :>> cameraType = "Hybrid Analog / Digital MIPI";
    :>> cost_USD = 40.0;             // 35-45
@@ -1037,6 +1080,7 @@ package DroneCandidates {
 
   part D5 : FpvCamera {
    :>> name = "Foxeer Apollo Digital (DJI)";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Foxeer+Apollo+Digital";
    :>> cameraModel = "Foxeer Apollo Digital";
    :>> cameraType = "Digital MIPI (DJI)";
    :>> cost_USD = 50.0;             // 45-55
@@ -1056,6 +1100,7 @@ package DroneCandidates {
 
   part D6 : FpvCamera {
    :>> name = "HDZero Nano V3 (Camera only)";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=HDZero+Nano+V3";
    :>> cameraModel = "HDZero Nano V3";
    :>> cameraType = "Digital MIPI (HDZero)";
    :>> cost_USD = 30.0;             // 25-35
@@ -1075,6 +1120,7 @@ package DroneCandidates {
 
   part D7 : FpvCamera {
    :>> name = "Foxeer Digisight 3 (HDZero)";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Foxeer+Digisight+3";
    :>> cameraModel = "Foxeer Digisight 3";
    :>> cameraType = "Digital MIPI (HDZero)";
    :>> cost_USD = 40.0;             // 35-45
@@ -1094,6 +1140,7 @@ package DroneCandidates {
 
   part D8 : FpvCamera {
    :>> name = "Walksnail Avatar Nano Kit V3";
+   :>> purchaseUrl = "https://shop.walksnail.com/products/walksnail-avatar-nano-kit-v3";
    :>> cameraModel = "Walksnail Avatar Nano Kit V3";
    :>> cameraType = "Digital VTX+Camera Kit (Walksnail)";
    :>> cost_USD = 135.0;            // 120-150
@@ -1119,6 +1166,7 @@ package DroneCandidates {
 
   part G1 : GpsModule {
    :>> name = "Beitian BN-220";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Beitian+BN-220+GPS";
    :>> chipset = "M10050 (M8N-class)";
    :>> cost_USD = 18.0;             // 15-20
    :>> mass = 5.0 [g];
@@ -1140,6 +1188,7 @@ package DroneCandidates {
 
   part G2 : GpsModule {
    :>> name = "Beitian BN-880";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Beitian+BN-880+GPS";
    :>> chipset = "M8N clone (u-blox)";
    :>> cost_USD = 12.0;             // 10-14
    :>> mass = 8.0 [g];
@@ -1161,6 +1210,7 @@ package DroneCandidates {
 
   part G3 : GpsModule {
    :>> name = "Matek M10Q-5883";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Matek+M10Q-5883";
    :>> chipset = "u-blox SAM-M10Q";
    :>> cost_USD = 25.0;             // 22-28
    :>> mass = 5.0 [g];
@@ -1182,6 +1232,7 @@ package DroneCandidates {
 
   part G4 : GpsModule {
    :>> name = "iFlight BLITZ M10 GPS V2 (Mini)";
+   :>> purchaseUrl = "https://shop.iflight.com/";
    :>> chipset = "u-blox M10";
    :>> cost_USD = 41.99;
    :>> mass = 8.0 [g];
@@ -1203,6 +1254,7 @@ package DroneCandidates {
 
   part G5 : GpsModule {
    :>> name = "iFlight BLITZ M10 GPS V2 (Standard)";
+   :>> purchaseUrl = "https://shop.iflight.com/";
    :>> chipset = "u-blox M10";
    :>> cost_USD = 41.99;
    :>> mass = 16.0 [g];
@@ -1224,6 +1276,7 @@ package DroneCandidates {
 
   part G6 : GpsModule {
    :>> name = "TBS M10 GPS";
+   :>> purchaseUrl = "https://www.team-blacksheep.com/";
    :>> chipset = "u-blox M10";
    :>> cost_USD = 32.0;             // 30-35
    :>> mass = 4.0 [g];
@@ -1251,6 +1304,7 @@ package DroneCandidates {
 
   part SBC1 : SingleBoardComputerPayload {
    :>> name = "Radxa ZERO 2 Pro";
+   :>> purchaseUrl = "https://radxa.com/products/zero/zero2pro";
    :>> cost_USD = 113.0;            // total solution
    :>> boardCost_USD = 75.0;
    :>> additionalCost_USD = 38.0;
@@ -1278,6 +1332,7 @@ package DroneCandidates {
 
   part SBC2 : SingleBoardComputerPayload {
    :>> name = "Orange Pi 5 (8 GB)";
+   :>> purchaseUrl = "https://www.orangepi.org/";
    :>> cost_USD = 150.0;
    :>> boardCost_USD = 110.0;
    :>> additionalCost_USD = 40.0;
@@ -1305,6 +1360,7 @@ package DroneCandidates {
 
   part SBC3 : SingleBoardComputerPayload {
    :>> name = "NanoPi M5 (4 GB)";
+   :>> purchaseUrl = "https://www.friendlyelec.com/index.php?route=product/product&path=69&product_id=309";
    :>> cost_USD = 126.0;
    :>> boardCost_USD = 87.0;
    :>> additionalCost_USD = 39.0;
@@ -1338,6 +1394,7 @@ package DroneCandidates {
 
   part RP3V2 : RadioReceiver {
    :>> name = "RadioMaster RP3 V2";
+   :>> purchaseUrl = "https://www.amazon.com/dp/B0CGCM2GQ5";
    :>> manufacturer = "RadioMaster";
    :>> cost_USD = 27.0;            // 24.99-29.99
    :>> mass = 4.6 [g];
@@ -1359,6 +1416,7 @@ package DroneCandidates {
 
   part RP4TD : RadioReceiver {
    :>> name = "RadioMaster RP4TD";
+   :>> purchaseUrl = "https://www.amazon.com/dp/B0CT3H5493";
    :>> manufacturer = "RadioMaster";
    :>> cost_USD = 42.0;            // 39.99-44.99
    :>> mass = 3.0 [g];
@@ -1380,6 +1438,7 @@ package DroneCandidates {
 
   part RP4TD_M : RadioReceiver {
    :>> name = "RadioMaster RP4TD-M";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=RadioMaster+RP4TD";
    :>> manufacturer = "RadioMaster";
    :>> cost_USD = 34.99;
    :>> mass = 1.0 [g];
@@ -1401,6 +1460,7 @@ package DroneCandidates {
 
   part EP1 : RadioReceiver {
    :>> name = "Happymodel EP1 Dual TCXO";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Happymodel+EP1+TCXO";
    :>> manufacturer = "Happymodel";
    :>> cost_USD = 16.0;            // 14.39-18.99
    :>> mass = 1.5 [g];
@@ -1422,6 +1482,7 @@ package DroneCandidates {
 
   part SuperD : RadioReceiver {
    :>> name = "BetaFPV SuperD";
+   :>> purchaseUrl = "https://betafpv.com/";
    :>> manufacturer = "BetaFPV";
    :>> cost_USD = 24.99;
    :>> mass = 1.1 [g];
@@ -1441,6 +1502,7 @@ package DroneCandidates {
 
   part iFlightTD : RadioReceiver {
    :>> name = "iFlight True Diversity";
+   :>> purchaseUrl = "https://shop.iflight.com/";
    :>> manufacturer = "iFlight";
    :>> cost_USD = 29.99;
    :>> mass = 3.3 [g];
@@ -1460,6 +1522,7 @@ package DroneCandidates {
 
   part TBSNano : RadioReceiver {
    :>> name = "TBS Nano RX";
+   :>> purchaseUrl = "https://www.team-blacksheep.com/";
    :>> manufacturer = "Team BlackSheep (TBS)";
    :>> cost_USD = 24.99;
    :>> mass = 1.7 [g];
@@ -1481,6 +1544,7 @@ package DroneCandidates {
 
   part TBSCrossfireNano : RadioReceiver {
    :>> name = "TBS Crossfire Nano";
+   :>> purchaseUrl = "https://www.team-blacksheep.com/";
    :>> manufacturer = "Team BlackSheep (TBS)";
    :>> cost_USD = 24.99;
    :>> mass = 1.7 [g];
@@ -1502,6 +1566,7 @@ package DroneCandidates {
 
   part GEPRC2G4Dual : RadioReceiver {
    :>> name = "GEPRC ELRS 2.4G Dual";
+   :>> purchaseUrl = "https://geprc.com/";
    :>> manufacturer = "GEPRC";
    :>> cost_USD = 19.99;
    :>> mass = 1.2 [g];
@@ -1523,6 +1588,7 @@ package DroneCandidates {
 
   part GEPRCNanoPA100 : RadioReceiver {
    :>> name = "GEPRC ELRS Nano 2.4G PA100";
+   :>> purchaseUrl = "https://geprc.com/";
    :>> manufacturer = "GEPRC";
    :>> cost_USD = 14.99;
    :>> mass = 0.7 [g];
@@ -1544,6 +1610,7 @@ package DroneCandidates {
 
   part MatekR24D : RadioReceiver {
    :>> name = "MATEK ELRS-R24-D";
+   :>> purchaseUrl = "https://www.mateksys.com/";
    :>> manufacturer = "MATEK";
    :>> cost_USD = 24.99;
    :>> maxRange = 4.0 [km];
@@ -1569,6 +1636,7 @@ package DroneCandidates {
 
   part TX1 : RadioControlTransmitter {
    :>> name = "RadioMaster Boxer (M2) ELRS";
+   :>> purchaseUrl = "https://www.radiomasterrc.com/products/boxer";
    :>> brand = "RadioMaster";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Gamepad (full-size)";
@@ -1595,6 +1663,7 @@ package DroneCandidates {
 
   part TX2 : RadioControlTransmitter {
    :>> name = "RadioMaster TX16S Mark II ELRS";
+   :>> purchaseUrl = "https://www.radiomasterrc.com/products/tx16s";
    :>> brand = "RadioMaster";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Full-size tray";
@@ -1621,6 +1690,7 @@ package DroneCandidates {
 
   part TX3 : RadioControlTransmitter {
    :>> name = "RadioMaster TX16S MK3 ELRS";
+   :>> purchaseUrl = "https://www.radiomasterrc.com/products/tx16s-mk3";
    :>> brand = "RadioMaster";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Full-size tray";
@@ -1647,6 +1717,7 @@ package DroneCandidates {
 
   part TX4 : RadioControlTransmitter {
    :>> name = "RadioMaster TX15 ELRS";
+   :>> purchaseUrl = "https://www.radiomasterrc.com/products/tx15";
    :>> brand = "RadioMaster";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Gamepad (compact)";
@@ -1673,6 +1744,7 @@ package DroneCandidates {
 
   part TX5 : RadioControlTransmitter {
    :>> name = "RadioMaster TX12 Mark II ELRS";
+   :>> purchaseUrl = "https://www.radiomasterrc.com/products/tx12";
    :>> brand = "RadioMaster";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Compact box";
@@ -1699,6 +1771,7 @@ package DroneCandidates {
 
   part TX6 : RadioControlTransmitter {
    :>> name = "RadioMaster Zorro ELRS";
+   :>> purchaseUrl = "https://www.radiomasterrc.com/products/zorro";
    :>> brand = "RadioMaster";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Gamepad (compact)";
@@ -1725,6 +1798,7 @@ package DroneCandidates {
 
   part TX7 : RadioControlTransmitter {
    :>> name = "RadioMaster Pocket ELRS";
+   :>> purchaseUrl = "https://www.radiomasterrc.com/products/pocket";
    :>> brand = "RadioMaster";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Ultra-compact gamepad";
@@ -1750,6 +1824,7 @@ package DroneCandidates {
 
   part TX8 : RadioControlTransmitter {
    :>> name = "Jumper T20 V2 ELRS";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Jumper+T20+V2+ELRS";
    :>> brand = "Jumper";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Compact (gamepad-ish)";
@@ -1776,6 +1851,7 @@ package DroneCandidates {
 
   part TX9 : RadioControlTransmitter {
    :>> name = "Jumper T-Pro V2 ELRS";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Jumper+T-Pro+V2+ELRS";
    :>> brand = "Jumper";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Gamepad (pocket)";
@@ -1802,6 +1878,7 @@ package DroneCandidates {
 
   part TX10 : RadioControlTransmitter {
    :>> name = "BetaFPV LiteRadio 3 Pro ELRS";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=BetaFPV+LiteRadio+3+Pro";
    :>> brand = "BetaFPV";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Gamepad (ultra-compact)";
@@ -1828,6 +1905,7 @@ package DroneCandidates {
 
   part TXM1 : RadioControlTransmitter {
    :>> name = "RadioMaster Ranger ELRS 2.4GHz Module";
+   :>> purchaseUrl = "https://www.radiomasterrc.com/products/ranger";
    :>> brand = "RadioMaster";
    :>> txType = "Standalone TX Module";
    :>> formFactor = "External module";
@@ -1846,6 +1924,7 @@ package DroneCandidates {
 
   part TXM2 : RadioControlTransmitter {
    :>> name = "RadioMaster Ranger Micro ELRS 2.4GHz Module";
+   :>> purchaseUrl = "https://www.radiomasterrc.com/products/ranger-micro";
    :>> brand = "RadioMaster";
    :>> txType = "Standalone TX Module";
    :>> formFactor = "External module";
@@ -1864,6 +1943,7 @@ package DroneCandidates {
 
   part TXM3 : RadioControlTransmitter {
    :>> name = "Happymodel ES24TX Pro ELRS Module";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Happymodel+ES24TX+Pro";
    :>> brand = "Happymodel";
    :>> txType = "Standalone TX Module";
    :>> formFactor = "External module";
@@ -1882,6 +1962,7 @@ package DroneCandidates {
 
   part TXM4 : RadioControlTransmitter {
    :>> name = "Happymodel ES24TX Slim Pro ELRS Module";
+   :>> purchaseUrl = "https://shop.iflight.com/";
    :>> brand = "Happymodel";
    :>> txType = "Standalone TX Module";
    :>> formFactor = "External module";
@@ -1900,6 +1981,7 @@ package DroneCandidates {
 
   part TXM5 : RadioControlTransmitter {
    :>> name = "BetaFPV ELRS Nano TX Module";
+   :>> purchaseUrl = "https://betafpv.com/";
    :>> brand = "BetaFPV";
    :>> txType = "Standalone TX Module";
    :>> formFactor = "External module";
@@ -1926,6 +2008,7 @@ package DroneCandidates {
 
   part V1 : VideoTransmitter {
    :>> name = "BLITZ Whoop 1.6W";
+   :>> purchaseUrl = "https://www.team-blacksheep.com/";
    :>> vtxType = "Analog VTX";
    :>> cost_USD = 30.0;
    :>> mass = 18.9 [g];
@@ -1947,6 +2030,7 @@ package DroneCandidates {
 
   part V2 : VideoTransmitter {
    :>> name = "BLITZ Whoop 2.5W";
+   :>> purchaseUrl = "https://www.racedayquads.com/";
    :>> vtxType = "Analog VTX";
    :>> cost_USD = 40.0;
    :>> mass = 20.0 [g];
@@ -1968,6 +2052,7 @@ package DroneCandidates {
 
   part V3 : VideoTransmitter {
    :>> name = "GEPRC RAD 1.6W";
+   :>> purchaseUrl = "https://www.racedayquads.com/";
    :>> vtxType = "Analog VTX";
    :>> cost_USD = 25.0;
    :>> mass = 16.0 [g];
@@ -1988,6 +2073,7 @@ package DroneCandidates {
 
   part V4 : VideoTransmitter {
    :>> name = "EMAX 2.5W VTX";
+   :>> purchaseUrl = "https://speedybee.com/";
    :>> vtxType = "Analog VTX";
    :>> cost_USD = 25.0;
    :>> mass = 20.0 [g];
@@ -2008,6 +2094,7 @@ package DroneCandidates {
 
   part V5 : VideoTransmitter {
    :>> name = "RushFPV Tank SOLO 1W";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+TX805";
    :>> vtxType = "Analog VTX";
    :>> cost_USD = 30.0;
    :>> mass = 12.0 [g];
@@ -2029,6 +2116,7 @@ package DroneCandidates {
 
   part V6 : VideoTransmitter {
    :>> name = "RushFPV Tank MAX SOLO 2.5W";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+TX1200";
    :>> vtxType = "Analog VTX";
    :>> cost_USD = 67.0;            // 50-85
    :>> mass = 15.0 [g];
@@ -2050,6 +2138,7 @@ package DroneCandidates {
 
   part V7 : VideoTransmitter {
    :>> name = "HGLRC Zeus 1.6W VTX PRO";
+   :>> purchaseUrl = "https://www.racedayquads.com/";
    :>> vtxType = "Analog VTX";
    :>> cost_USD = 48.0;            // 42-55
    :>> mass = 13.0 [g];
@@ -2071,6 +2160,7 @@ package DroneCandidates {
 
   part V8 : VideoTransmitter {
    :>> name = "AKK X2-Ultimate 1W";
+   :>> purchaseUrl = "https://www.racedayquads.com/";
    :>> vtxType = "Analog VTX";
    :>> cost_USD = 35.0;            // 30-40
    :>> mass = 6.8 [g];
@@ -2092,6 +2182,7 @@ package DroneCandidates {
 
   part V10 : VideoTransmitter {
    :>> name = "AKK A1918 1W";
+   :>> purchaseUrl = "https://www.getfpv.com/";
    :>> vtxType = "Analog VTX";
    :>> cost_USD = 27.0;            // 25-30
    :>> mass = 9.6 [g];
@@ -2113,6 +2204,7 @@ package DroneCandidates {
 
   part V11 : VideoTransmitter {
    :>> name = "SoloGood TS582000 2W";
+   :>> purchaseUrl = "https://www.getfpv.com/";
    :>> vtxType = "Analog VTX";
    :>> cost_USD = 30.0;            // 25-35
    :>> mass = 30.0 [g];
@@ -2140,6 +2232,7 @@ package DroneCandidates {
 
   part VRX1 : VideoReceiver {
    :>> name = "Standard Analog VRX + USB Capture Dongle";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=TBS+Fusion+diversity";
    :>> vrxType = "Separate stack (VRX + capture)";
    :>> cost_USD = 40.0;            // 15-60
    :>> inputFrequency = "5.8 GHz";
@@ -2152,6 +2245,7 @@ package DroneCandidates {
 
   part VRX3 : VideoReceiver {
    :>> name = "Flying Tech USB-C Analog FPV Capture Adapter";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+ROTG01";
    :>> vrxType = "Capture dongle only";
    :>> cost_USD = 17.0;            // 15-20
    :>> inputFrequency = "N/A (AV input)";
@@ -2163,6 +2257,7 @@ package DroneCandidates {
 
   part VRX4 : VideoReceiver {
    :>> name = "Generic AV-to-USB Capture Card (ATCCPYDM)";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+ROTG02";
    :>> vrxType = "Capture dongle only";
    :>> cost_USD = 13.0;            // 10-16
    :>> inputFrequency = "N/A (AV input)";
@@ -2174,6 +2269,7 @@ package DroneCandidates {
 
   part VRX5 : VideoReceiver {
    :>> name = "CVBS/AV to USB Module Board (bare PCB)";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Flysight+FSV200";
    :>> vrxType = "Capture dongle only";
    :>> cost_USD = 11.0;            // 7-15
    :>> inputFrequency = "N/A (AV input)";
@@ -2187,6 +2283,7 @@ package DroneCandidates {
   // The hard 2.8 km video link is gated by the GROUND side; these add margin.
   part VRX6 : VideoReceiver {
    :>> name = "Skydroid 150CH 5.8GHz True-Diversity UVC Receiver";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Skydroid+150CH+UVC+receiver";
    :>> vrxType = "True-diversity UVC receiver (laptop-direct)";
    :>> cost_USD = 45.0;            // 37-48
    :>> mass = 29.0 [g];
@@ -2202,6 +2299,7 @@ package DroneCandidates {
 
   part VRX7 : VideoReceiver {
    :>> name = "TBS Fusion Diversity Module + USB capture";
+   :>> purchaseUrl = "https://www.team-blacksheep.com/";
    :>> vrxType = "Premium diversity module (AV out -> UVC capture for laptop)";
    :>> cost_USD = 137.0;           // ~120 Fusion module + ~17 macOS UVC capture
    :>> mass = 35.0 [g];            // module only
@@ -2223,6 +2321,7 @@ package DroneCandidates {
 
   part VC1 : UsbVideoCapture {
    :>> name = "Flying Tech USB-C Analog FPV Capture Adapter";
+   :>> purchaseUrl = "https://www.flyingtech.co.uk/product/usb-c-analog-fpv-video-capture-adapter";
    :>> captureType = "USB Capture Adapter";
    :>> cost_USD = 17.0;            // 15-20
    :>> inputType = "RCA composite (CVBS)";
@@ -2237,6 +2336,7 @@ package DroneCandidates {
 
   part VC2 : UsbVideoCapture {
    :>> name = "CVBS/AV to USB Module Board";
+   :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=CVBS+to+USB+UVC+capture";
    :>> captureType = "USB Capture Module (bare PCB)";
    :>> cost_USD = 11.0;            // 7-15
    :>> inputType = "CVBS (pin header)";
@@ -2251,6 +2351,7 @@ package DroneCandidates {
 
   part VC3 : UsbVideoCapture {
    :>> name = "ATCCPYDM / Generic AV-to-USB Capture Card";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=AV+to+USB+capture+card+UVC";
    :>> captureType = "USB Capture Card";
    :>> cost_USD = 13.0;            // 10-16
    :>> inputType = "RCA composite (female jack)";
@@ -2265,6 +2366,7 @@ package DroneCandidates {
 
   part VC4 : UsbVideoCapture {
    :>> name = "EasyCAP USB 2.0";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=EasyCAP+USB+2.0";
    :>> captureType = "USB Capture Adapter";
    :>> cost_USD = 13.0;            // 11-15
    :>> inputType = "RCA / S-Video";
@@ -2279,6 +2381,7 @@ package DroneCandidates {
 
   part VC5 : UsbVideoCapture {
    :>> name = "Magewell USB Capture HDMI";
+   :>> purchaseUrl = "https://www.magewell.com/";
    :>> captureType = "USB Capture Dongle";
    :>> cost_USD = 225.0;           // 150-300
    :>> inputType = "HDMI";
@@ -2299,6 +2402,7 @@ package DroneCandidates {
 
   part DVR1 : ThermalVideoRecorder {
    :>> name = "RunCam Mini FPV DVR (RUNCAM-DVR-S)";
+   :>> purchaseUrl = "https://shop.runcam.com/runcam-dvr-mini/";
    :>> cost_USD = 17.99;           // 29.99 at Amazon
    :>> mass = 3.5 [g];
    :>> power = 1.3 [W];
@@ -2322,6 +2426,7 @@ package DroneCandidates {
 
   part DVR2 : ThermalVideoRecorder {
    :>> name = "Eachine EV100 Micro AV Recorder";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+EV100+Micro+DVR";
    :>> cost_USD = 16.14;
    :>> mass = 9.0 [g];
    :>> power = 1.2 [W];
@@ -2345,6 +2450,7 @@ package DroneCandidates {
 
   part DVR3 : ThermalVideoRecorder {
    :>> name = "Eachine ProDVR";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+ProDVR";
    :>> cost_USD = 16.46;
    :>> mass = 9.9 [g];
    :>> power = 1.0 [W];
@@ -2368,6 +2474,7 @@ package DroneCandidates {
 
   part DVR4 : ThermalVideoRecorder {
    :>> name = "Generic Mini FPV DVR (Aluminum Case)";
+   :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=Mini+FPV+DVR+CVBS";
    :>> cost_USD = 14.99;
    :>> mass = 12.0 [g];
    :>> power = 1.3 [W];
@@ -2391,6 +2498,7 @@ package DroneCandidates {
 
   part DVR5 : ThermalVideoRecorder {
    :>> name = "Generic Mini FPV DVR (eBay)";
+   :>> purchaseUrl = "https://speedybee.com/";
    :>> cost_USD = 11.99;
    :>> mass = 9.0 [g];
    :>> power = 1.2 [W];
@@ -2414,6 +2522,7 @@ package DroneCandidates {
 
   part DVR6 : ThermalVideoRecorder {
    :>> name = "Generic Mini FPV DVR (no card)";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Flytron+Micro+DVR";
    :>> cost_USD = 8.99;
    :>> mass = 8.0 [g];
    :>> power = 1.1 [W];
@@ -2442,6 +2551,7 @@ package DroneCandidates {
   // stage camera↔DVR compatibility, so the weight is acceptable.
   part DVR7 : ThermalVideoRecorder {
    :>> name = "ezcap273 Portable HDMI Recorder";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=ezcap273";
    :>> cost_USD = 65.99;           // ~60-75
    :>> mass = 180.0 [g];           // confirmed: ezcap.com spec (150x66.5x23mm, 3.5in LCD, 3000mAh)
    :>> power = 2.5 [W];            // 5V 2A supply
@@ -2465,6 +2575,7 @@ package DroneCandidates {
 
   part DVR8 : ThermalVideoRecorder {
    :>> name = "Zowietek megaDVR III (HDMI/SDI)";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Zowietek+mega+DVR+III";
    :>> cost_USD = 650.0;           // est (professional dual-input recorder)
    :>> mass = 430.0 [g];           // est: megaDVR II spec = 431g; III similar (4.3in touch)
    :>> power = 5.0 [W];            // est (USB-C powered)
@@ -2488,6 +2599,7 @@ package DroneCandidates {
 
   part DVR9 : ThermalVideoRecorder {
    :>> name = "Monster UVC Recorder (standalone USB-UVC DVR)";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Monster+UVC+Recorder";
    :>> cost_USD = 129.0;           // EST — emerging 2026 product, price not finalized
    :>> mass = 60.0 [g];            // EST — specs not yet published
    :>> power = 2.5 [W];            // EST
@@ -2516,6 +2628,7 @@ package DroneCandidates {
 
   part TLM1 : TelemetryGroundLink {
    :>> name = "EdgeTX Radio USB Passthrough";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=Happymodel+ELRS+USB+dongle";
    :>> approach = "Radio USB serial";
    :>> connectionToLaptop = "USB-C (virtual COM port)";
    :>> frequency = "2.4 GHz / 900 MHz";
@@ -2527,6 +2640,7 @@ package DroneCandidates {
 
   part TLM2 : TelemetryGroundLink {
    :>> name = "HGLRC Hermes ELRS SIM USB Dongle";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=HGLRC+Hermes+ELRS+USB+dongle";
    :>> approach = "Standalone ELRS RX USB dongle";
    :>> connectionToLaptop = "USB-A (serial)";
    :>> frequency = "2.4 GHz";
@@ -2538,6 +2652,7 @@ package DroneCandidates {
 
   part TLM3 : TelemetryGroundLink {
    :>> name = "CubeFPV USB ELRS Dongle";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=RadioMaster+ELRS+USB+dongle";
    :>> approach = "Standalone ELRS RX USB dongle";
    :>> connectionToLaptop = "USB (serial)";
    :>> frequency = "2.4 GHz";
@@ -2549,6 +2664,7 @@ package DroneCandidates {
 
   part TLM4 : TelemetryGroundLink {
    :>> name = "DIY ESP32 Dev Board + ELRS RX";
+   :>> purchaseUrl = "https://www.amazon.com/s?k=BetaFPV+ELRS+nano+dongle";
    :>> approach = "DIY ESP32 + RX module";
    :>> connectionToLaptop = "USB (serial)";
    :>> frequency = "2.4 GHz";
@@ -2560,6 +2676,7 @@ package DroneCandidates {
 
   part TLM5 : TelemetryGroundLink {
    :>> name = "RadioMaster Ranger Module + AirPort";
+   :>> purchaseUrl = "https://www.racedayquads.com/";
    :>> approach = "External TX module direct USB (AirPort firmware)";
    :>> connectionToLaptop = "USB (serial / AirPort firmware)";
    :>> frequency = "2.4 GHz";
@@ -2583,6 +2700,7 @@ package DroneCandidates {
 
   part BAT01 : Battery {
    :>> name = "Lumenier NAV 10000mAh 6S 21700 Li-Ion";
+   :>> purchaseUrl = "https://www.racedayquads.com/products/lumenier-nav-10000mah-6s-21700-lithium-ion-battery-xt60";
    :>> cost_USD = 149.99;
    :>> mass = 975.0 [g];
    :>> energy = 799200.0 [J];    // 22.2 V × 10 Ah × 3600
@@ -2598,6 +2716,7 @@ package DroneCandidates {
 
   part BAT02 : Battery {
    :>> name = "Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S";
+   :>> purchaseUrl = "https://www.upgrade-energy.com/";
    :>> cost_USD = 269.99;
    :>> mass = 900.0 [g];
    :>> energy = 777600.0 [J];    // 21.6 V × 10 Ah × 3600
@@ -2613,6 +2732,7 @@ package DroneCandidates {
 
   part BAT03 : Battery {
    :>> name = "Upgrade Energy RED V3 6S2P 10Ah Molicel P50B";
+   :>> purchaseUrl = "https://www.upgrade-energy.com/";
    :>> cost_USD = 252.0;
    :>> mass = 868.0 [g];
    :>> energy = 777600.0 [J];    // 21.6 V × 10 Ah × 3600
@@ -2631,6 +2751,7 @@ package DroneCandidates {
 
   part BAT04 : Battery {
    :>> name = "Lumenier NAV 12000mAh 4S 21700 Amprius";
+   :>> purchaseUrl = "https://www.racedayquads.com/products/lumenier-nav-12000mah-4s-21700-amprius-lithium-ion-battery-xt60";
    :>> cost_USD = 218.99;
    :>> mass = 465.0 [g];
    :>> energy = 639360.0 [J];    // 14.8 V × 12 Ah × 3600
@@ -2648,6 +2769,7 @@ package DroneCandidates {
 
   part BAT05 : Battery {
    :>> name = "GNB 8000mAh 6S2P Samsung 21700 40T";
+   :>> purchaseUrl = "https://pyrodrone.com/products/gaoneng-gnb-8000mah-22-2v-6s-10c-6s2p-made-with-samsung-21700-40t-long-range-cinelifter-lipo-battery-xt60";
    :>> cost_USD = 135.99;
    :>> mass = 904.0 [g];
    :>> energy = 639360.0 [J];    // 22.2 V × 8 Ah × 3600
@@ -2663,7 +2785,8 @@ package DroneCandidates {
 
   part BAT06 : Battery {
    :>> name = "iFlight Fullsend 6S 8000mAh EVE INR21700-40PL";
-   :>> cost_USD = 73.91;
+   :>> purchaseUrl = "https://pyrodrone.com/products/iflight-fullsend-e-6s-8000mah-22-2v-6s1p-lipo-battery-xt60";
+   :>> cost_USD = 122.99;
    :>> mass = 840.0 [g];
    :>> energy = 639360.0 [J];    // 22.2 V × 8 Ah × 3600
    :>> chemistry = "Li-ion";
@@ -2678,6 +2801,7 @@ package DroneCandidates {
 
   part BAT07 : Battery {
    :>> name = "Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10";
+   :>> purchaseUrl = "https://www.upgrade-energy.com/";
    :>> cost_USD = 194.0;
    :>> mass = 617.0 [g];
    :>> energy = 622080.0 [J];    // 21.6 V × 8 Ah × 3600 (173 Wh confirmed)
@@ -2695,6 +2819,7 @@ package DroneCandidates {
 
   part BAT08 : Battery {
    :>> name = "Lumenier NAV 12000mAh 6S 21700 XT90";
+   :>> purchaseUrl = "https://www.racedayquads.com/products/lumenier-nav-12000mah-6s-21700-lithium-ion-battery-xt90";
    :>> cost_USD = 189.99;
    :>> mass = 1402.0 [g];
    :>> energy = 959040.0 [J];    // 22.2 V × 12 Ah × 3600
@@ -2710,6 +2835,7 @@ package DroneCandidates {
 
   part BAT09 : Battery {
    :>> name = "Lumenier NAV 12000mAh 6S 21700 Amprius";
+   :>> purchaseUrl = "https://www.racedayquads.com/products/lumenier-nav-12000mah-6s-21700-amprius-lithium-ion-battery-xt60";
    :>> cost_USD = 321.49;
    :>> mass = 920.0 [g];
    :>> energy = 959040.0 [J];    // 22.2 V × 12 Ah × 3600
@@ -2725,6 +2851,7 @@ package DroneCandidates {
 
   part BAT10 : Battery {
    :>> name = "Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10";
+   :>> purchaseUrl = "https://www.upgrade-energy.com/";
    :>> cost_USD = 275.0;
    :>> mass = 919.0 [g];
    :>> energy = 932160.0 [J];    // 21.6 V × 12 Ah × 3600 (259 Wh confirmed)
@@ -2742,6 +2869,7 @@ package DroneCandidates {
 
   part BAT11 : Battery {
    :>> name = "Upgrade Energy GREEN V1 4S2P 10Ah Samsung 50S";
+   :>> purchaseUrl = "https://www.upgrade-energy.com/";
    :>> cost_USD = 129.99;
    :>> mass = 592.0 [g];
    :>> energy = 518400.0 [J];    // 14.4 V × 10 Ah × 3600
@@ -2757,6 +2885,7 @@ package DroneCandidates {
 
   part BAT12 : Battery {
    :>> name = "Upgrade Energy RED V3 4S2P 10Ah Molicel P50B";
+   :>> purchaseUrl = "https://www.upgrade-energy.com/";
    :>> cost_USD = 139.99;
    :>> mass = 578.0 [g];
    :>> energy = 518400.0 [J];    // 14.4 V × 10 Ah × 3600
@@ -2774,6 +2903,7 @@ package DroneCandidates {
 
   part BAT13 : Battery {
    :>> name = "Pyrodrone Hyperjuice 6S2P 6000mAh Sony VTC6";
+   :>> purchaseUrl = "https://pyrodrone.com/products/pyrodrone-hyperjuice-6000mah-6s2p-li-ion-long-range-battery-xt60";
    :>> cost_USD = 172.99;
    :>> mass = 590.0 [g];
    :>> energy = 479520.0 [J];    // 22.2 V × 6 Ah × 3600
@@ -2789,6 +2919,7 @@ package DroneCandidates {
 
   part BAT14 : Battery {
    :>> name = "iFlight Fullsend 6S2P 6000mAh Samsung 30Q";
+   :>> purchaseUrl = "https://shop.iflight.com/";
    :>> cost_USD = 84.47;
    :>> mass = 608.0 [g];
    :>> energy = 479520.0 [J];    // 22.2 V × 6 Ah × 3600
@@ -2804,6 +2935,7 @@ package DroneCandidates {
 
   part BAT15 : Battery {
    :>> name = "Lumenier NAV 6000mAh 6S 18650";
+   :>> purchaseUrl = "https://www.racedayquads.com/products/lumenier-nav-22-2v-6s-18650-6000mah-10c-li-ion-battery-xt60";
    :>> cost_USD = 188.99;
    :>> mass = 635.0 [g];
    :>> energy = 479520.0 [J];    // 22.2 V × 6 Ah × 3600
@@ -2821,6 +2953,7 @@ package DroneCandidates {
 
   part BAT16 : Battery {
    :>> name = "Upgrade Energy GREEN V2 4S2P 8Ah Amprius SA10";
+   :>> purchaseUrl = "https://www.upgrade-energy.com/";
    :>> cost_USD = 155.0;
    :>> mass = 409.0 [g];
    :>> energy = 414720.0 [J];    // 14.4 V × 8 Ah × 3600 (115 Wh confirmed)
@@ -2836,6 +2969,7 @@ package DroneCandidates {
 
   part BAT17 : Battery {
    :>> name = "Upgrade Energy Dark Lithium V2 4S 8400mAh Molicel P42A";
+   :>> purchaseUrl = "https://www.upgrade-energy.com/";
    :>> cost_USD = 148.99;
    :>> mass = 556.0 [g];
    :>> energy = 435456.0 [J];    // 14.4 V × 8.4 Ah × 3600
@@ -2851,6 +2985,7 @@ package DroneCandidates {
 
   part BAT18 : Battery {
    :>> name = "Lumenier NAV 8000mAh 4S 18650 Amprius";
+   :>> purchaseUrl = "https://www.racedayquads.com/products/lumenier-nav-8000mah-4s-18650-amprius-lithium-ion-battery-xt60";
    :>> cost_USD = 134.99;
    :>> mass = 415.0 [g];
    :>> energy = 426240.0 [J];    // 14.8 V × 8 Ah × 3600 (118 Wh)
@@ -2868,6 +3003,7 @@ package DroneCandidates {
 
   part BAT19 : Battery {
    :>> name = "Lumenier NAV 5000mAh 6S 21700";
+   :>> purchaseUrl = "https://www.racedayquads.com/products/lumenier-nav-5000mah-6s-21700-lithium-ion-battery-xt60";
    :>> cost_USD = 95.99;
    :>> mass = 499.0 [g];
    :>> energy = 399600.0 [J];    // 22.2 V × 5 Ah × 3600
@@ -2883,6 +3019,7 @@ package DroneCandidates {
 
   part BAT20 : Battery {
    :>> name = "Upgrade Energy RED V3 6S1P 5Ah Molicel P50B";
+   :>> purchaseUrl = "https://www.upgrade-energy.com/";
    :>> cost_USD = 119.0;
    :>> mass = 432.0 [g];
    :>> energy = 388800.0 [J];    // 21.6 V × 5 Ah × 3600 (108 Wh confirmed)
@@ -2898,6 +3035,7 @@ package DroneCandidates {
 
   part BAT21 : Battery {
    :>> name = "DOGCOM 6S1P 5000mAh Samsung 50S";
+   :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=DOGCOM+5000mAh+Samsung+50S";
    :>> cost_USD = 50.0;           // range 34-67 depending on sale
    :>> mass = 445.0 [g];
    :>> energy = 399600.0 [J];    // 22.2 V × 5 Ah × 3600 (111 Wh confirmed)
