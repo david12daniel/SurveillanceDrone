@@ -32,58 +32,97 @@ package DroneCandidates {
  // =========================================================================
  package AirframeCandidates {
 
-  part AF1 : Airframe {
-   :>> minCells_s = 6;  // 6S build (2806.5 1350KV @6S; GEPRC "6S")
-   :>> maxCells_s = 6;
-   :>> maxThrustPerMotor_g = 2700.0;  // GEPRC 2806.5 1350KV (SPEEDX2 family, ~2.7 kg @6S)
-   :>> name = "GEPRC MARK4 LR7";
-   :>> purchaseUrl = "https://geprc.com/product/mark4-drone-for-freestyle-fpv-4s-6s/";
+  // NOTE: GEPRC MARK4 LR7 (formerly AF1) REMOVED 2026-06-27 — discontinued.
+  // Replaced with the current GEPRC MOZ7 V2 family (Analog / WTFPV / O4 Pro),
+  // which share one platform: 336mm, 7.5in HQ props, SPEEDX2 2809 1280KV motors,
+  // TAKER H743 BT FC, TAKER H65 8S 65A ESC, GEP-M1025 GPS, 6S LiPo / 8S Li-ion.
+
+  part AF1a : Airframe {
+   :>> minCells_s = 6;  // 6S LiPo / 8S Li-ion capable (H65 8S ESC, 2809 1280KV)
+   :>> maxCells_s = 8;
+   :>> maxThrustPerMotor_g = 3000.0;  // EST: SPEEDX2 2809 1280KV on 7.5in @6S (GEPRC publishes no grams)
+   :>> name = "GEPRC MOZ7 V2 Analog";
+   :>> purchaseUrl = "https://geprc.com/product/geprc-moz7-v2-analog-long-range-fpv-drone/";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 285.00;            // range 240-330
-   :>> mass = 455.0 [g];
-   :>> propSize_in = 7.0;
-   :>> wheelbase = 295.0 [mm];
-   :>> flightController = "GEPRC TAKER F405 V2";
-   :>> esc = "SPAN 50A BLHeli_S 4-in-1";
-   :>> motors = "GEPRC E2806.5 1350KV";
-   :>> propModel = "Gemfan 7037-3";
-   :>> uartCount = 6;
-   :>> receiverProtocols = "SBUS, PPM, CRSF, DSMX, iBus";
+   :>> cost_USD = 459.99;            // 459.99-501.99 (PNP -> ELRS/TBS BNF)
+   :>> mass = 782.0 [g];            // confirmed: GEPRC "782g +/-10g without battery" (incl analog VTX + cam + GPS)
+   :>> propSize_in = 7.5;
+   :>> wheelbase = 336.0 [mm];
+   :>> flightController = "GEPRC TAKER H743 BT";
+   :>> esc = "TAKER H65 8S 32-bit 65A 4-in-1";
+   :>> motors = "GEPRC SPEEDX2 2809 1280KV";
+   :>> propModel = "HQ 7.5x3.7x3";
+   :>> uartCount = 7;
+   :>> receiverProtocols = "SBUS, CRSF, ELRS, DSMX, etc.";
    :>> receiverIncluded = false;
    :>> vtxIncluded = true;
-   :>> vtxModel = "GEPRC RAD 5.8G 1.6W";
+   :>> vtxModel = "MATEN 5.8G 2.5W (analog)";
    :>> fpvCameraIncluded = true;
-   :>> fpvCameraType = "Analog CMOS 1/3in 1200TVL";
-   :>> fpvCameraModel = "Caddx H1";
-   :>> gpsIncluded = false;
-   :>> gpsModel = "aftermarket (G3 Matek M10Q-5883 recommended)";
+   :>> fpvCameraType = "Analog CMOS";
+   :>> fpvCameraModel = "Caddx Ratel2";
+   :>> gpsIncluded = true;
+   :>> gpsModel = "GEP-M1025";
    :>> sourceConfidence = "High";
   }
 
-  part AF2a : Airframe {
-   :>> minCells_s = 6;  // 6S build (C287 1350KV @6S; Axisflying)
-   :>> maxCells_s = 6;
-   :>> maxThrustPerMotor_g = 2800.0;  // Axisflying C287 2807.5 1350KV (>2.8 kg @6S)
-   :>> name = "Axisflying KOLAS7";
-   :>> purchaseUrl = "https://axisflying.net/products/axisflying-kolas7-7inch-foldable-fpv-drone-for-lr-long-range-cinematic-shooting-frame-kit";
-   :>> purchaseType = "PNP";
-   :>> cost_USD = 175.00;            // est. range 150-200
-   :>> mass = 257.0 [g];
-   :>> propSize_in = 7.0;
-   :>> wheelbase = 298.0 [mm];
-   :>> flightController = "iStack F722 / Argus F722";
-   :>> esc = "iStack 50A / Argus 65A";
-   :>> motors = "Axisflying C287 1350KV";
-   :>> propModel = "HQ 7035 / GF 7042";
-   :>> uartCount = 6;
-   :>> receiverProtocols = "SBUS, PPM, CRSF, DSMX, iBus (F7)";
+  part AF1b : Airframe {
+   :>> minCells_s = 6;  // 6S LiPo / 8S Li-ion capable
+   :>> maxCells_s = 8;
+   :>> maxThrustPerMotor_g = 3000.0;  // EST: SPEEDX2 2809 1280KV on 7.5in @6S
+   :>> name = "GEPRC MOZ7 V2 WTFPV";
+   :>> purchaseUrl = "https://geprc.com/product/geprc-moz7-v2-wtfpv-long-range-fpv-drone/";
+   :>> purchaseType = "PNP (Walksnail-ready)";
+   :>> cost_USD = 394.99;            // 394.99-429.99
+   :>> mass = 764.0 [g];            // confirmed: GEPRC "764g +/-10g without battery"; no VTX/cam (user installs Walksnail)
+   :>> propSize_in = 7.5;
+   :>> wheelbase = 336.0 [mm];
+   :>> flightController = "GEPRC TAKER H743 BT";
+   :>> esc = "TAKER H65 8S 32-bit 65A 4-in-1";
+   :>> motors = "GEPRC SPEEDX2 2809 1280KV";
+   :>> propModel = "HQ 7.5x3.7x3";
+   :>> uartCount = 7;
+   :>> receiverProtocols = "SBUS, CRSF, ELRS, DSMX, etc.";
    :>> receiverIncluded = false;
-   :>> vtxIncluded = false;
+   :>> vtxIncluded = false;          // Walksnail air unit supplied/installed by user (digital)
    :>> fpvCameraIncluded = false;
-   :>> gpsIncluded = false;
-   :>> gpsModel = "aftermarket (G3 Matek M10Q-5883 recommended)";
-   :>> sourceConfidence = "Moderate";
+   :>> gpsIncluded = true;
+   :>> gpsModel = "GEP-M1025";
+   :>> sourceConfidence = "High";
   }
+
+  part AF1c : Airframe {
+   :>> minCells_s = 6;  // 6S LiPo / 8S Li-ion capable
+   :>> maxCells_s = 8;
+   :>> maxThrustPerMotor_g = 3000.0;  // EST: SPEEDX2 2809 1280KV on 7.5in @6S
+   :>> name = "GEPRC MOZ7 V2 O4 Pro";
+   :>> purchaseUrl = "https://geprc.com/product/geprc-moz7-v2-o4-pro-long-range-fpv/";
+   :>> purchaseType = "PNP";
+   :>> cost_USD = 674.99;            // 674.99-709.99
+   :>> mass = 750.0 [g];            // confirmed: GEPRC "HD 750g +/-10g" (incl DJI O4 Air Unit Pro + GPS)
+   :>> propSize_in = 7.5;
+   :>> wheelbase = 336.0 [mm];
+   :>> flightController = "GEPRC TAKER H743 BT";
+   :>> esc = "TAKER H65 8S 32-bit 65A 4-in-1";
+   :>> motors = "GEPRC SPEEDX2 2809 1280KV";
+   :>> propModel = "HQ 7.5x3.7x3";
+   :>> uartCount = 7;
+   :>> receiverProtocols = "SBUS, CRSF, ELRS, DSMX, etc.";
+   :>> receiverIncluded = false;
+   :>> vtxIncluded = true;
+   :>> vtxModel = "DJI O4 Air Unit Pro (digital HD)";
+   :>> fpvCameraIncluded = true;
+   :>> fpvCameraType = "Digital HD (integrated with O4 air unit)";
+   :>> fpvCameraModel = "DJI O4 Pro (1/1.3in)";
+   :>> gpsIncluded = true;
+   :>> gpsModel = "GEP-M1025";
+   :>> sourceConfidence = "High";
+  }
+
+  // NOTE: the KOLAS7 "PNP" (formerly AF2a, 257 g, $175) was REMOVED 2026-06-27 —
+  // that 257 g is the bare FRAME KIT (carbon + TPU, no motors/ESC/FC), and the
+  // product no longer ships as a PNP (only the frame kit and the BNF variants
+  // below exist). The C287 2807.5 motors are 47 g each (4 = 188 g), so the old
+  // 257 g "PNP" mass omitted the whole drivetrain — see MODEL_ISSUES.md §D.
 
   part AF2b : Airframe {
    :>> minCells_s = 6;  // 6S build (C287 1350KV @6S; Axisflying)
@@ -93,7 +132,7 @@ package DroneCandidates {
    :>> purchaseUrl = "https://www.coolgoos.com/products/axisflying-kolas7-analog-bnf-7inch-foldable-fpv-drone-for-lr-long-range-cinematic-drone-with-gps";
    :>> purchaseType = "BNF Analog";
    :>> cost_USD = 419.90;
-   :>> mass = 300.0 [g];            // est: 257g base + ~15g analog VTX + ~20g GPS + ~5.5g TBS Nano RX + ~2.5g cables
+   :>> mass = 540.0 [g];            // as-built est: 257g frame kit + 4x47g C287 motors (188g) + ~12g ESC + ~9g FC + ~20g props + ~15g VTX + ~20g GPS + ~5.5g RX + wiring (Axisflying publishes no as-built weight)
    :>> propSize_in = 7.0;
    :>> wheelbase = 298.0 [mm];
    :>> flightController = "iStack F722 / Argus F722";
@@ -119,8 +158,8 @@ package DroneCandidates {
    :>> name = "Axisflying KOLAS7";
    :>> purchaseUrl = "https://www.axisflying.com/products/kolas7";
    :>> purchaseType = "BNF HD";
-   :>> cost_USD = 713.00;            // range 649-777
-   :>> mass = 333.0 [g];            // est: 257g base + ~48g DJI O3 assembly (36.4g unit+cam + 3g ant + 8.3g cable) + ~20g GPS + ~5.5g TBS Nano RX
+   :>> cost_USD = 544;            // range 649-777
+   :>> mass = 565.0 [g];            // as-built est: 257g frame kit + 188g C287 motors + ~41g ESC/FC/props + ~44g DJI O3 (unit+cam+cable) + ~20g GPS + ~5.5g RX + wiring
    :>> propSize_in = 7.0;
    :>> wheelbase = 298.0 [mm];
    :>> flightController = "iStack F722 / Argus F722";
@@ -203,7 +242,7 @@ package DroneCandidates {
    :>> name = "DarwinFPV X9";
    :>> purchaseUrl = "https://darwinfpv.com/products/darwinfpv-x9-9-long-range-fpv-drone";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 279.99;            // range 280-400
+   :>> cost_USD = 440.99;            // range 280-400
    :>> mass = 747.0 [g];            // confirmed: darwinfpv.com "747g±5g without package"; includes VTX + FPV cam, no GPS
    :>> propSize_in = 9.0;
    :>> wheelbase = 363.0 [mm];
@@ -226,7 +265,7 @@ package DroneCandidates {
    :>> minCells_s = 6;  // 6S build (7" ECOII2807 class); skipped in sweep (no mass)
    :>> maxCells_s = 6;
    :>> name = "EMAX Hawk 7";
-   :>> purchaseUrl = "https://www.emax-usa.com/collections/hawk-series";
+   :>> purchaseUrl = "https://emaxmodel.com/products/emax-hawk-7-inch-5-8g-2-5w-elrs-bnf-version-drone";
    :>> purchaseType = "BNF";
    :>> cost_USD = 398.86;
    :>> propSize_in = 7.0;
@@ -332,7 +371,7 @@ package DroneCandidates {
    :>> name = "iFlight Chimera7 Pro V2";
    :>> purchaseUrl = "https://shop.iflight.com/Chimera7-Pro-V2-6S-Pro1947";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 499.99;
+   :>> cost_USD = 439.99;
    :>> mass = 705.0 [g];            // confirmed: shop.iflight.com "705g(Without Battery)" for analog 6S variant; 725g is the HD (DJI O3/O4) variant
    :>> propSize_in = 7.5;
    :>> wheelbase = 327.0 [mm];
@@ -359,7 +398,7 @@ package DroneCandidates {
    :>> name = "iFlight Chimera7 Pro V2";
    :>> purchaseUrl = "https://shop.iflight.com/Chimera7-Pro-V2-6S-Pro1947";
    :>> purchaseType = "BNF";
-   :>> cost_USD = 525.00;            // ~525
+   :>> cost_USD = 465.51;            // ~525
    :>> mass = 711.0 [g];            // 705g PNP + ~5.5g TBS Crossfire Nano RX
    :>> propSize_in = 7.5;
    :>> wheelbase = 327.0 [mm];
@@ -652,7 +691,7 @@ package DroneCandidates {
    :>> name = "Generic 640x512 CVBS Module";
    :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=640x512+thermal+camera+module+CVBS";
    :>> brand = "Generic OEM (Chinese)";
-   :>> cost_USD = 550.00;            // 400-700
+   :>> cost_USD = 550.00;            // Unclear product and cost
    :>> mass = 21.0 [g];
    :>> power = 0.75 [W];
    :>> resolutionH = 640;
@@ -676,9 +715,9 @@ package DroneCandidates {
 
   part T11 : CameraSubsystem {
    :>> name = "Axisflying 640 Thermal";
-   :>> purchaseUrl = "https://www.amazon.com/dp/B0GYQ67TTQ";
+   :>> purchaseUrl = "https://www.axisflying.com/products/axisflying-high-resolution-256192-384288-640512-thermal-imaging-camera-for-fpv-drone?VariantsId=10201";
    :>> brand = "Axisflying";
-   :>> cost_USD = 450.00;            // 350-550
+   :>> cost_USD = 650.00;            // 350-550
    :>> mass = 25.0 [g];
    :>> power = 1.0 [W];
    :>> resolutionH = 640;
@@ -704,7 +743,7 @@ package DroneCandidates {
    :>> name = "iVcan Mini-640-CVBS";
    :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=iVcan+Mini+640+CVBS+thermal";
    :>> brand = "iVcan";
-   :>> cost_USD = 520.00;            // 450-700
+   :>> cost_USD = 520.00;            // Unclear product and cost
    :>> mass = 21.0 [g];
    :>> power = 0.75 [W];
    :>> resolutionH = 640;
@@ -728,9 +767,9 @@ package DroneCandidates {
 
   part T13 : CameraSubsystem {
    :>> name = "PurpleRiver Mini 640";
-   :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=PurpleRiver+mini+640+thermal";
+   :>> purchaseUrl = "https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/";
    :>> brand = "PurpleRiver";
-   :>> cost_USD = 450.00;            // 350-550
+   :>> cost_USD = 590.00;            // 350-550
    :>> mass = 21.0 [g];
    :>> power = 0.8 [W];
    :>> resolutionH = 640;
@@ -740,9 +779,9 @@ package DroneCandidates {
    :>> spectralRange = "8-14 um (LWIR)";
    :>> frameRate_Hz = 25.0;
    :>> netd = 0.05 [K];
-   :>> hfov = 46.0;
-   :>> lensOptions = "9.1 / 13";
-   :>> outputInterface = "CVBS / USB";
+   :>> hfov = 33.0;                 // 640px x 12um = 7.68mm sensor + 13mm lens: 2*atan(7.68/(2*13)) ~= 32.9 deg
+   :>> lensOptions = "13";
+   :>> outputInterface = "USB";
    :>> radiometric = true;
    :>> dimensions = "~17x17x35";
    :>> inputVoltageMin = 5.0 [V];
@@ -754,9 +793,9 @@ package DroneCandidates {
 
   part T14 : CameraSubsystem {
    :>> name = "Arducam 640x512 USB Thermal";
-   :>> purchaseUrl = "https://www.arducam.com/product/arducam-thermal-camera-module-640x512-thermal-infrared-camera-module-with-usb-type-c-for-jetson-nano-raspberry-pi-and-windows/";
+   :>> purchaseUrl = "https://www.arducam.com/arducam-640x512-12mm-50hz-high-speed-usb-thermal-imaging-module-with-9-1mm-lens-precision-temperature-measurement.html";
    :>> brand = "Arducam";
-   :>> cost_USD = 650.00;            // 500-800
+   :>> cost_USD = 650.00;            // Unclear if product actually exists and price
    :>> mass = 40.0 [g];
    :>> power = 1.5 [W];
    :>> resolutionH = 640;
@@ -1301,6 +1340,18 @@ package DroneCandidates {
  // SBC (SINGLE-BOARD COMPUTER) CANDIDATES  (source: analysis/sbc_comparison.csv)
  // =========================================================================
  package SbcCandidates {
+  // ── NPU model-deployment notes (research 2026-06-27) ──────────────────
+  // npuTOPS is a PEAK spec, NOT a verified benchmark — confirm any detector/
+  // classifier by INT8-quantizing and measuring fps on the actual board
+  // (need >= ~25 fps for the T13 25 Hz feed). R4_SBC_VIDEO_PROC has no executable check.
+  // Toolchain maturity is the real deployment risk:
+  //  - SBC2 (RK3588S) / SBC3 (RK3576): mature RKNN (rknn-toolkit2 >= v2.0; current
+  //    v2.3.2). RK3576 support confirmed; repo moved to airockchip/rknn-toolkit2.
+  //  - SBC1 (Amlogic A311D): capable NPU (= Khadas VIM3) but less-mature Amlogic/
+  //    VeriSilicon toolchain -> higher porting risk; CPU fallback is slow.
+  // Recommendation: SBC3 NanoPi M5 — confirmed RKNN AND <=10W passive (meets
+  // R4_SBC_PWR + no-active-cooling, which SBC2 fails); ~1.6 min less hover than the
+  // lighter SBC1, but SBC1's Amlogic toolchain is the weak link. See MODEL_ISSUES B3.
 
   part SBC1 : SingleBoardComputerPayload {
    :>> name = "Radxa ZERO 2 Pro";

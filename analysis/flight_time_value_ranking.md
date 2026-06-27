@@ -10,507 +10,510 @@ Ranked by **endurance-per-dollar** = max hover flight time (min) ÷ total system
 - Manual control, Phase-1 / backup: **RadioMaster Pocket ELRS** ($65)
 - **GCS subtotal: $126**
 
+**Thermal camera:** fixed to **T13** on every instance (design choice — not swept).
+**SBC:** fixed to **SBC3** on every instance (design choice — not swept).
+
 Full per-config dataset: [`flight_time_results.csv`](flight_time_results.csv); endurance-ranked view: [`flight_time_results.md`](flight_time_results.md).
 
 ## Top 100 by endurance-per-dollar
 
-### 1. 78.19 min/$1k — 69.6 min hover · drone $764 / system $890 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 2. 78.11 min/$1k — 70.1 min hover · drone $772 / system $898 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 3. 78.08 min/$1k — 67.7 min hover · drone $741 / system $867 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 4. 77.98 min/$1k — 69.6 min hover · drone $767 / system $893 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 5. 77.96 min/$1k — 68.2 min hover · drone $749 / system $875 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 6. 77.86 min/$1k — 67.7 min hover · drone $744 / system $870 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 7. 77.5 min/$1k — 57.8 min hover · drone $620 / system $746 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 8. 77.43 min/$1k — 58.4 min hover · drone $628 / system $754 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 9. 77.41 min/$1k — 56.0 min hover · drone $597 / system $723 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 10. 77.38 min/$1k — 68.7 min hover · drone $762 / system $888 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 11. 77.29 min/$1k — 66.9 min hover · drone $739 / system $865 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 12. 77.29 min/$1k — 57.9 min hover · drone $623 / system $749 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 13. 77.29 min/$1k — 56.5 min hover · drone $605 / system $731 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 14. 77.18 min/$1k — 56.0 min hover · drone $600 / system $726 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 15. 76.64 min/$1k — 68.4 min hover · drone $767 / system $893 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 16. 76.55 min/$1k — 66.6 min hover · drone $744 / system $870 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 17. 76.53 min/$1k — 56.9 min hover · drone $618 / system $744 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 18. 76.47 min/$1k — 55.1 min hover · drone $595 / system $721 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 19. 76.03 min/$1k — 69.3 min hover · drone $785 / system $911 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: HGLRC Zeus 1.6W VTX PRO (`V7`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 20. 75.96 min/$1k — 73.2 min hover · drone $838 / system $964 · ✅ R4
+### 1. 45.94 min/$1k — 69.1 min hover · drone $1379 / system $1505 · ✅ R4
 - Airframe **DarwinFPV 129 7in** (`AF9a`) · Battery **Lumenier NAV 12000mAh 4S 21700 Amprius**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
 - VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 21. 75.89 min/$1k — 67.4 min hover · drone $762 / system $888 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: HGLRC Zeus 1.6W VTX PRO (`V7`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 2. 35.71 min/$1k — 57.1 min hover · drone $1472 / system $1598 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 22. 75.67 min/$1k — 71.2 min hover · drone $815 / system $941 · ✅ R4
-- Airframe **DarwinFPV 129 7in** (`AF9a`) · Battery **Lumenier NAV 12000mAh 4S 21700 Amprius**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
+### 3. 35.64 min/$1k — 58.6 min hover · drone $1519 / system $1645 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 4. 34.97 min/$1k — 56.8 min hover · drone $1499 / system $1625 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
+
+### 5. 34.91 min/$1k — 58.4 min hover · drone $1545 / system $1671 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
+
+### 6. 34.75 min/$1k — 49.4 min hover · drone $1295 / system $1421 · ✅ R4
+- Airframe **DarwinFPV 129 7in** (`AF9a`) · Battery **Lumenier NAV 8000mAh 4S 18650 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
 - VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 23. 75.66 min/$1k — 56.7 min hover · drone $623 / system $749 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 24. 75.6 min/$1k — 54.9 min hover · drone $600 / system $726 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 25. 75.49 min/$1k — 67.0 min hover · drone $762 / system $888 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: EMAX 2.5W VTX (`V4`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 26. 75.46 min/$1k — 65.3 min hover · drone $739 / system $865 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: EMAX 2.5W VTX (`V4`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 27. 74.99 min/$1k — 68.5 min hover · drone $787 / system $913 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 28. 74.97 min/$1k — 57.5 min hover · drone $641 / system $767 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: HGLRC Zeus 1.6W VTX PRO (`V7`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 29. 74.92 min/$1k — 69.0 min hover · drone $795 / system $921 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 30. 74.88 min/$1k — 67.6 min hover · drone $777 / system $903 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 31. 74.82 min/$1k — 55.7 min hover · drone $618 / system $744 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: HGLRC Zeus 1.6W VTX PRO (`V7`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 32. 74.79 min/$1k — 68.1 min hover · drone $785 / system $911 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 33. 74.79 min/$1k — 68.5 min hover · drone $790 / system $916 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 34. 74.78 min/$1k — 65.8 min hover · drone $754 / system $880 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 35. 74.67 min/$1k — 67.7 min hover · drone $780 / system $906 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 36. 74.67 min/$1k — 66.3 min hover · drone $762 / system $888 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 37. 74.59 min/$1k — 69.9 min hover · drone $811 / system $937 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Lepton 2.5 (`T1`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 38. 74.57 min/$1k — 65.8 min hover · drone $757 / system $883 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 39. 74.54 min/$1k — 70.4 min hover · drone $819 / system $945 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Lepton 2.5 (`T1`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 40. 74.4 min/$1k — 69.9 min hover · drone $814 / system $940 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Lepton 2.5 (`T1`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 41. 74.34 min/$1k — 70.5 min hover · drone $822 / system $948 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 42. 74.24 min/$1k — 67.0 min hover · drone $777 / system $903 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 2.5W (`V2`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 43. 74.21 min/$1k — 67.6 min hover · drone $785 / system $911 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 44. 74.2 min/$1k — 53.5 min hover · drone $595 / system $721 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: EMAX 2.5W VTX (`V4`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 45. 74.19 min/$1k — 55.2 min hover · drone $618 / system $744 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: EMAX 2.5W VTX (`V4`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 46. 74.17 min/$1k — 65.3 min hover · drone $754 / system $880 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 2.5W (`V2`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 47. 74.17 min/$1k — 72.0 min hover · drone $845 / system $971 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 48. 74.14 min/$1k — 70.9 min hover · drone $830 / system $956 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 49. 74.12 min/$1k — 66.8 min hover · drone $775 / system $901 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 50. 74.11 min/$1k — 70.5 min hover · drone $825 / system $951 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 51. 74.04 min/$1k — 65.0 min hover · drone $752 / system $878 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 52. 74.0 min/$1k — 72.4 min hover · drone $853 / system $979 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 53. 73.95 min/$1k — 72.0 min hover · drone $848 / system $974 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 54. 73.8 min/$1k — 69.0 min hover · drone $809 / system $935 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Lepton 2.5 (`T1`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 55. 73.79 min/$1k — 69.8 min hover · drone $820 / system $946 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 56. 73.77 min/$1k — 56.7 min hover · drone $643 / system $769 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 57. 73.71 min/$1k — 57.3 min hover · drone $651 / system $777 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 58. 73.66 min/$1k — 55.9 min hover · drone $633 / system $759 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 59. 73.61 min/$1k — 71.3 min hover · drone $843 / system $969 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 60. 73.58 min/$1k — 56.4 min hover · drone $641 / system $767 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 61. 73.58 min/$1k — 54.2 min hover · drone $610 / system $736 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 62. 73.57 min/$1k — 56.8 min hover · drone $646 / system $772 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 63. 73.52 min/$1k — 67.3 min hover · drone $790 / system $916 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 64. 73.46 min/$1k — 54.7 min hover · drone $618 / system $744 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 65. 73.45 min/$1k — 56.0 min hover · drone $636 / system $762 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 66. 73.42 min/$1k — 66.5 min hover · drone $780 / system $906 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 67. 73.36 min/$1k — 54.2 min hover · drone $613 / system $739 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 68. 73.34 min/$1k — 64.8 min hover · drone $757 / system $883 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 69. 73.3 min/$1k — 58.1 min hover · drone $667 / system $793 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Lepton 2.5 (`T1`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 70. 73.28 min/$1k — 58.7 min hover · drone $675 / system $801 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Lepton 2.5 (`T1`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 71. 73.18 min/$1k — 69.6 min hover · drone $825 / system $951 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 72. 73.12 min/$1k — 68.7 min hover · drone $814 / system $940 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Lepton 2.5 (`T1`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 73. 73.11 min/$1k — 58.2 min hover · drone $670 / system $796 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Lepton 2.5 (`T1`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 74. 73.0 min/$1k — 71.1 min hover · drone $848 / system $974 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 75. 72.97 min/$1k — 72.0 min hover · drone $861 / system $987 · ✅ R4
-- Airframe **DarwinFPV 129 7in** (`AF9a`) · Battery **Lumenier NAV 12000mAh 4S 21700 Amprius**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+### 7. 33.98 min/$1k — 48.5 min hover · drone $1300 / system $1426 · ✅ R4
+- Airframe **DarwinFPV 129 7in** (`AF9a`) · Battery **Upgrade Energy RED V3 4S2P 10Ah Molicel P50B**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
 - VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 76. 72.96 min/$1k — 68.1 min hover · drone $808 / system $934 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: HGLRC Zeus 1.6W VTX PRO (`V7`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 77. 72.85 min/$1k — 55.9 min hover · drone $641 / system $767 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 78. 72.84 min/$1k — 67.3 min hover · drone $798 / system $924 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: HGLRC Zeus 1.6W VTX PRO (`V7`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 79. 72.8 min/$1k — 71.1 min hover · drone $851 / system $977 · ✅ R4
-- Airframe **DarwinFPV 129 7in** (`AF9a`) · Battery **Lumenier NAV 12000mAh 4S 21700 Amprius**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
+### 8. 33.64 min/$1k — 47.6 min hover · drone $1290 / system $1416 · ✅ R4
+- Airframe **DarwinFPV 129 7in** (`AF9a`) · Battery **Upgrade Energy GREEN V1 4S2P 10Ah Samsung 50S**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
 - VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 80. 72.76 min/$1k — 72.4 min hover · drone $868 / system $994 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 81. 72.75 min/$1k — 55.1 min hover · drone $631 / system $757 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-
-### 82. 72.74 min/$1k — 73.5 min hover · drone $885 / system $1011 · ✅ R4
-- Airframe **DarwinFPV 129 7in** (`AF9a`) · Battery **Lumenier NAV 12000mAh 4S 21700 Amprius**
-- Thermal camera: Lepton 2.5 (`T1`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+### 9. 33.63 min/$1k — 48.5 min hover · drone $1315 / system $1441 · ✅ R4
+- Airframe **DarwinFPV 129 7in** (`AF9a`) · Battery **Upgrade Energy GREEN V2 4S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
 - VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 83. 72.72 min/$1k — 55.2 min hover · drone $633 / system $759 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 2.5W (`V2`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 10. 32.57 min/$1k — 49.4 min hover · drone $1391 / system $1517 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 84. 72.71 min/$1k — 65.5 min hover · drone $775 / system $901 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: HGLRC Zeus 1.6W VTX PRO (`V7`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 11. 32.25 min/$1k — 57.4 min hover · drone $1654 / system $1780 · ✅ R4
+- Airframe **DarwinFPV X9** (`AF4a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 85. 72.71 min/$1k — 53.4 min hover · drone $608 / system $734 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 12. 32.25 min/$1k — 55.9 min hover · drone $1608 / system $1734 · ✅ R4
+- Airframe **DarwinFPV X9** (`AF4a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 86. 72.69 min/$1k — 53.5 min hover · drone $610 / system $736 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: BLITZ Whoop 2.5W (`V2`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 13. 31.84 min/$1k — 49.2 min hover · drone $1418 / system $1544 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
 
-### 87. 72.67 min/$1k — 73.9 min hover · drone $891 / system $1017 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 14. 31.75 min/$1k — 46.8 min hover · drone $1347 / system $1473 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 10000mAh 6S 21700 Li-Ion**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 88. 72.66 min/$1k — 64.9 min hover · drone $767 / system $893 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: SoloGood TS582000 2W (`V11`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 15. 31.47 min/$1k — 49.6 min hover · drone $1449 / system $1575 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy RED V3 6S2P 10Ah Molicel P50B**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 89. 72.66 min/$1k — 63.2 min hover · drone $744 / system $870 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: SoloGood TS582000 2W (`V11`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 16. 31.4 min/$1k — 52.8 min hover · drone $1557 / system $1683 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: *included with airframe*
 
-### 90. 72.61 min/$1k — 69.6 min hover · drone $832 / system $958 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Lepton 2.5 (`T1`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: HGLRC Zeus 1.6W VTX PRO (`V7`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 17. 31.37 min/$1k — 54.3 min hover · drone $1603 / system $1729 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: *included with airframe*
 
-### 91. 72.59 min/$1k — 72.8 min hover · drone $876 / system $1002 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 18. 31.05 min/$1k — 46.6 min hover · drone $1374 / system $1500 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **Lumenier NAV 10000mAh 6S 21700 Li-Ion**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
 
-### 92. 72.57 min/$1k — 67.5 min hover · drone $804 / system $930 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank MAX SOLO 2.5W (`V6`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 19. 30.8 min/$1k — 49.3 min hover · drone $1476 / system $1602 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **Upgrade Energy RED V3 6S2P 10Ah Molicel P50B**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
 
-### 93. 72.54 min/$1k — 72.4 min hover · drone $871 / system $997 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 20. 30.31 min/$1k — 48.3 min hover · drone $1467 / system $1593 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 94. 72.53 min/$1k — 69.2 min hover · drone $828 / system $954 · ✅ R4
-- Airframe **DarwinFPV 129 7in** (`AF9a`) · Battery **Lumenier NAV 12000mAh 4S 21700 Amprius**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
+### 21. 29.68 min/$1k — 48.1 min hover · drone $1494 / system $1620 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
+
+### 22. 29.61 min/$1k — 47.4 min hover · drone $1476 / system $1602 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2b`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: *included with airframe*
+
+### 23. 29.18 min/$1k — 48.2 min hover · drone $1527 / system $1653 · ✅ R4
+- Airframe **DarwinFPV X9** (`AF4a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 24. 29.15 min/$1k — 41.8 min hover · drone $1309 / system $1435 · ✅ R4
+- Airframe **DarwinFPV 129 7in** (`AF9a`) · Battery **Upgrade Energy Dark Lithium V2 4S 8400mAh Molicel P42A**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
 - VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 95. 72.52 min/$1k — 74.4 min hover · drone $899 / system $1025 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 25. 28.89 min/$1k — 53.1 min hover · drone $1710 / system $1836 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2c`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: *included with airframe*
 
-### 96. 72.52 min/$1k — 68.6 min hover · drone $820 / system $946 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: EMAX 2.5W VTX (`V4`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 26. 28.87 min/$1k — 51.7 min hover · drone $1664 / system $1790 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2c`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: *included with airframe*
 
-### 97. 72.47 min/$1k — 70.2 min hover · drone $843 / system $969 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: HGLRC Zeus 1.6W VTX PRO (`V7`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 27. 28.84 min/$1k — 41.7 min hover · drone $1320 / system $1446 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **iFlight Fullsend 6S 8000mAh EVE INR21700-40PL**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 98. 72.46 min/$1k — 73.9 min hover · drone $894 / system $1020 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
-- Thermal camera: DroneThermal v4 (Lepton Carrier) (`T4`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 28. 28.77 min/$1k — 48.9 min hover · drone $1575 / system $1701 · ✅ R4
+- Airframe **iFlight Chimera7 Pro V2** (`AF8a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 99. 72.44 min/$1k — 65.7 min hover · drone $781 / system $907 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Generic 256x192 CVBS Module (`T8`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: RunCam Mini FPV DVR (RUNCAM-DVR-S) (`DVR1`)
-- VTX: RushFPV Tank MAX SOLO 2.5W (`V6`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 29. 28.75 min/$1k — 50.2 min hover · drone $1621 / system $1747 · ✅ R4
+- Airframe **iFlight Chimera7 Pro V2** (`AF8a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 
-### 100. 72.43 min/$1k — 66.0 min hover · drone $785 / system $911 · ✅ R4
-- Airframe **Axisflying KOLAS7** (`AF2a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: Waveshare LWIR 80x62 (`T6`) · SBC: Radxa ZERO 2 Pro (`SBC1`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
-- VTX: EMAX 2.5W VTX (`V4`) · FPV cam: Caddx Ant (`A7`) · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+### 30. 28.5 min/$1k — 45.9 min hover · drone $1483 / system $1609 · ✅ R4
+- Airframe **DarwinFPV X9** (`AF4a`) · Battery **Lumenier NAV 10000mAh 6S 21700 Li-Ion**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 31. 28.46 min/$1k — 48.7 min hover · drone $1586 / system $1712 · ✅ R4
+- Airframe **iFlight Chimera7 Pro V2** (`AF8b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: *included with airframe*
+
+### 32. 28.45 min/$1k — 50.0 min hover · drone $1632 / system $1758 · ✅ R4
+- Airframe **iFlight Chimera7 Pro V2** (`AF8b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: *included with airframe*
+
+### 33. 28.36 min/$1k — 48.5 min hover · drone $1585 / system $1711 · ✅ R4
+- Airframe **DarwinFPV X9** (`AF4a`) · Battery **Upgrade Energy RED V3 6S2P 10Ah Molicel P50B**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 34. 28.18 min/$1k — 41.5 min hover · drone $1347 / system $1473 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **iFlight Fullsend 6S 8000mAh EVE INR21700-40PL**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
+
+### 35. 27.79 min/$1k — 46.1 min hover · drone $1534 / system $1660 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2b`) · Battery **Upgrade Energy RED V3 6S2P 10Ah Molicel P50B**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: *included with airframe*
+
+### 36. 27.65 min/$1k — 43.1 min hover · drone $1432 / system $1558 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2b`) · Battery **Lumenier NAV 10000mAh 6S 21700 Li-Ion**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: *included with airframe*
+
+### 37. 27.49 min/$1k — 41.6 min hover · drone $1387 / system $1513 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 12000mAh 6S 21700 XT90**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 38. 27.42 min/$1k — 37.7 min hover · drone $1247 / system $1373 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 39. 27.36 min/$1k — 47.3 min hover · drone $1603 / system $1729 · ✅ R4
+- Airframe **DarwinFPV X9** (`AF4a`) · Battery **Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 40. 27.29 min/$1k — 46.4 min hover · drone $1574 / system $1700 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 41. 27.29 min/$1k — 38.4 min hover · drone $1282 / system $1408 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **iFlight Fullsend 6S2P 6000mAh Samsung 30Q**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 42. 27.28 min/$1k — 47.6 min hover · drone $1620 / system $1746 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 43. 27.27 min/$1k — 47.8 min hover · drone $1628 / system $1754 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 44. 27.27 min/$1k — 46.6 min hover · drone $1582 / system $1708 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 45. 27.24 min/$1k — 46.4 min hover · drone $1577 / system $1703 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 46. 27.23 min/$1k — 47.6 min hover · drone $1623 / system $1749 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 47. 27.14 min/$1k — 46.1 min hover · drone $1572 / system $1698 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 48. 27.13 min/$1k — 47.3 min hover · drone $1618 / system $1744 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 49. 27.12 min/$1k — 39.6 min hover · drone $1333 / system $1459 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **GNB 8000mAh 6S2P Samsung 21700 40T**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 50. 27.01 min/$1k — 46.2 min hover · drone $1583 / system $1709 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2c`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: *included with airframe*
+
+### 51. 27.0 min/$1k — 46.0 min hover · drone $1577 / system $1703 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 52. 26.99 min/$1k — 47.2 min hover · drone $1623 / system $1749 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 53. 26.91 min/$1k — 41.4 min hover · drone $1414 / system $1540 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **Lumenier NAV 12000mAh 6S 21700 XT90**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
+
+### 54. 26.89 min/$1k — 47.5 min hover · drone $1641 / system $1767 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: HGLRC Zeus 1.6W VTX PRO (`V7`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 55. 26.89 min/$1k — 46.3 min hover · drone $1595 / system $1721 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: HGLRC Zeus 1.6W VTX PRO (`V7`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 56. 26.82 min/$1k — 45.5 min hover · drone $1572 / system $1698 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: EMAX 2.5W VTX (`V4`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 57. 26.81 min/$1k — 46.8 min hover · drone $1618 / system $1744 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: EMAX 2.5W VTX (`V4`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 58. 26.73 min/$1k — 47.3 min hover · drone $1641 / system $1767 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 Analog** (`AF1a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 59. 26.73 min/$1k — 46.0 min hover · drone $1595 / system $1721 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 Analog** (`AF1a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 60. 26.73 min/$1k — 37.4 min hover · drone $1274 / system $1400 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
+
+### 61. 26.69 min/$1k — 44.8 min hover · drone $1552 / system $1678 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2b`) · Battery **Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: *included with airframe*
+
+### 62. 26.64 min/$1k — 38.2 min hover · drone $1308 / system $1434 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **iFlight Fullsend 6S2P 6000mAh Samsung 30Q**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
+
+### 63. 26.59 min/$1k — 45.5 min hover · drone $1587 / system $1713 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: BLITZ Whoop 2.5W (`V2`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 64. 26.58 min/$1k — 46.8 min hover · drone $1633 / system $1759 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: BLITZ Whoop 2.5W (`V2`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 65. 26.52 min/$1k — 39.4 min hover · drone $1360 / system $1486 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **GNB 8000mAh 6S2P Samsung 21700 40T**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
+
+### 66. 26.52 min/$1k — 54.8 min hover · drone $1940 / system $2066 · ✅ R4
+- Airframe **GEPRC Crocodile75 V3** (`AF7`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 67. 26.42 min/$1k — 53.4 min hover · drone $1894 / system $2020 · ✅ R4
+- Airframe **GEPRC Crocodile75 V3** (`AF7`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 68. 26.32 min/$1k — 42.6 min hover · drone $1494 / system $1620 · ✅ R4
+- Airframe **iFlight Chimera7 Pro V2** (`AF8a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 69. 26.3 min/$1k — 44.8 min hover · drone $1577 / system $1703 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: SoloGood TS582000 2W (`V11`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 70. 26.29 min/$1k — 46.0 min hover · drone $1623 / system $1749 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: SoloGood TS582000 2W (`V11`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 71. 26.28 min/$1k — 47.0 min hover · drone $1660 / system $1786 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: RushFPV Tank MAX SOLO 2.5W (`V6`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 72. 26.28 min/$1k — 45.7 min hover · drone $1614 / system $1740 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: RushFPV Tank MAX SOLO 2.5W (`V6`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 73. 26.12 min/$1k — 39.1 min hover · drone $1370 / system $1496 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Pyrodrone Hyperjuice 6S2P 6000mAh Sony VTC6**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 74. 26.01 min/$1k — 42.4 min hover · drone $1505 / system $1631 · ✅ R4
+- Airframe **iFlight Chimera7 Pro V2** (`AF8b`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: *included with airframe*
+
+### 75. 25.81 min/$1k — 40.8 min hover · drone $1456 / system $1582 · ✅ R4
+- Airframe **DarwinFPV X9** (`AF4a`) · Battery **iFlight Fullsend 6S 8000mAh EVE INR21700-40PL**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 76. 25.75 min/$1k — 37.1 min hover · drone $1316 / system $1442 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy RED V3 6S1P 5Ah Molicel P50B**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 77. 25.52 min/$1k — 38.9 min hover · drone $1397 / system $1523 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **Pyrodrone Hyperjuice 6S2P 6000mAh Sony VTC6**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
+
+### 78. 25.51 min/$1k — 45.1 min hover · drone $1641 / system $1767 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2c`) · Battery **Upgrade Energy RED V3 6S2P 10Ah Molicel P50B**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: *included with airframe*
+
+### 79. 25.49 min/$1k — 37.2 min hover · drone $1332 / system $1458 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2b`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: *included with airframe*
+
+### 80. 25.43 min/$1k — 38.9 min hover · drone $1405 / system $1531 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2b`) · Battery **iFlight Fullsend 6S 8000mAh EVE INR21700-40PL**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: *included with airframe*
+
+### 81. 25.42 min/$1k — 40.1 min hover · drone $1450 / system $1576 · ✅ R4
+- Airframe **iFlight Chimera7 Pro V2** (`AF8a`) · Battery **Lumenier NAV 10000mAh 6S 21700 Li-Ion**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 82. 25.35 min/$1k — 42.5 min hover · drone $1552 / system $1678 · ✅ R4
+- Airframe **iFlight Chimera7 Pro V2** (`AF8a`) · Battery **Upgrade Energy RED V3 6S2P 10Ah Molicel P50B**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 83. 25.32 min/$1k — 42.2 min hover · drone $1539 / system $1665 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2c`) · Battery **Lumenier NAV 10000mAh 6S 21700 Li-Ion**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: *included with airframe*
+
+### 84. 25.14 min/$1k — 39.9 min hover · drone $1460 / system $1586 · ✅ R4
+- Airframe **iFlight Chimera7 Pro V2** (`AF8b`) · Battery **Lumenier NAV 10000mAh 6S 21700 Li-Ion**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: *included with airframe*
+
+### 85. 25.13 min/$1k — 36.9 min hover · drone $1343 / system $1469 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **Upgrade Energy RED V3 6S1P 5Ah Molicel P50B**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
+
+### 86. 25.09 min/$1k — 35.6 min hover · drone $1293 / system $1419 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 5000mAh 6S 21700**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 87. 25.07 min/$1k — 42.3 min hover · drone $1563 / system $1689 · ✅ R4
+- Airframe **iFlight Chimera7 Pro V2** (`AF8b`) · Battery **Upgrade Energy RED V3 6S2P 10Ah Molicel P50B**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: *included with airframe*
+
+### 88. 24.81 min/$1k — 40.9 min hover · drone $1523 / system $1649 · ✅ R4
+- Airframe **DarwinFPV X9** (`AF4a`) · Battery **Lumenier NAV 12000mAh 6S 21700 XT90**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 89. 24.77 min/$1k — 37.5 min hover · drone $1386 / system $1512 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 6000mAh 6S 18650**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 90. 24.74 min/$1k — 40.3 min hover · drone $1501 / system $1627 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: AKK X2-Ultimate 1W (`V8`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 91. 24.74 min/$1k — 40.1 min hover · drone $1493 / system $1619 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: AKK A1918 1W (`V10`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 92. 24.74 min/$1k — 36.9 min hover · drone $1366 / system $1492 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2b`) · Battery **iFlight Fullsend 6S2P 6000mAh Samsung 30Q**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: *included with airframe*
+
+### 93. 24.7 min/$1k — 40.1 min hover · drone $1496 / system $1622 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: RushFPV Tank SOLO 1W (`V5`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 94. 24.57 min/$1k — 39.7 min hover · drone $1491 / system $1617 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: GEPRC RAD 1.6W (`V3`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 95. 24.53 min/$1k — 43.8 min hover · drone $1659 / system $1785 · ✅ R4
+- Airframe **Axisflying KOLAS7** (`AF2c`) · Battery **Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: *included with airframe*
+
+### 96. 24.49 min/$1k — 35.4 min hover · drone $1320 / system $1446 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3b`) · Battery **Lumenier NAV 5000mAh 6S 21700**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: *included with airframe*
+
+### 97. 24.44 min/$1k — 48.5 min hover · drone $1856 / system $1982 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 O4 Pro** (`AF1c`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 98. 24.43 min/$1k — 39.6 min hover · drone $1496 / system $1622 · ✅ R4
+- Airframe **GEPRC MOZ7 V2 WTFPV** (`AF1b`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: BLITZ Whoop 1.6W (`V1`) · FPV cam: Caddx Ant (`A7`) · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 99. 24.42 min/$1k — 41.4 min hover · drone $1570 / system $1696 · ✅ R4
+- Airframe **iFlight Chimera7 Pro V2** (`AF8a`) · Battery **Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+
+### 100. 24.4 min/$1k — 47.3 min hover · drone $1813 / system $1939 · ✅ R4
+- Airframe **GEPRC Crocodile75 V3** (`AF7`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: Monster UVC Recorder (standalone USB-UVC DVR) (`DVR9`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
 

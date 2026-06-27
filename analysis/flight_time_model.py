@@ -131,6 +131,10 @@ OUT_CHART = HERE / "cost_vs_flighttime.png"
 G = 9.80665             # gravitational acceleration [m/s²]
 RAIL_VOLTAGE_V = 5.0    # avionics rail voltage for deriving power from currentDraw
 SYSML_TOP_N = 100       # how many top configs to emit as SysML instances / MD rows
+FIXED_THERMAL_ID = "T13"  # lock the thermal camera (None = sweep all). David's choice:
+#                           T13 PurpleRiver Mini 640 (640x512, 12um, USB, 13mm lens).
+FIXED_SBC_ID = "SBC3"     # lock the SBC (None = sweep all). David's choice: SBC3
+#                           NanoPi M5 (RK3576, mature RKNN toolchain, <=10W passive).
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -632,6 +636,18 @@ def iter_configs(airframes, components, batteries, p: PhysicsParams,
     rep_pow = {cat: representative_power(components[cat]) for cat in ("vtx", "fpv", "gps", "rx")}
     thermals, sbcs, dvrs = components["thermal"], components["sbc"], components["dvr"]
 
+    # Lock the thermal camera to a chosen design (FIXED_THERMAL_ID) instead of
+    # sweeping all candidates — per David's selection of T13. Falls back to the
+    # full set if the id isn't found.
+    if FIXED_THERMAL_ID:
+        sel = [t for t in thermals if t.ident == FIXED_THERMAL_ID]
+        if sel:
+            thermals = sel
+    if FIXED_SBC_ID:
+        sel_sbc = [s for s in sbcs if s.ident == FIXED_SBC_ID]
+        if sel_sbc:
+            sbcs = sel_sbc
+
     # Lightest DVR whose input format can record this thermal's output, or None.
     def compatible_dvr(thermal: Component) -> Optional[Component]:
         cands = [d for d in dvrs if thermal.video_formats & d.video_formats]
@@ -791,11 +807,17 @@ def write_markdown(top, baseline, total, n_af, n_bat, n_comp, p, reps, rep_pow,
          "parasitic drag. \"Max flight time\" = still-air hover endurance "
          "(R6 ≥ 30 min / R8 ≥ 60 min metric).", "",
          "## Sweep scope", "",
-         f"- **{total:,} real configurations** = airframe × battery × SBC × "
-         "VTX × thermal camera, fully crossed (respecting airframe component "
-         "inclusion) and **filtered for interface compatibility**. The DVR is "
-         "compatibility-gated, not crossed, and excluded from flight time (it is "
-         "an earlier-stage part; the SBC records at the SBC stage).",
+         (f"- **{total:,} real configurations** = airframe × battery × VTX"
+          + ("" if FIXED_SBC_ID else " × SBC")
+          + ("" if FIXED_THERMAL_ID else " × thermal camera")
+          + ", fully crossed (respecting airframe component inclusion) and "
+          "**filtered for interface compatibility**"
+          + (f"; thermal fixed to **{FIXED_THERMAL_ID}**" if FIXED_THERMAL_ID else "")
+          + (((" and " if FIXED_THERMAL_ID else "; ") + f"SBC fixed to **{FIXED_SBC_ID}**")
+             if FIXED_SBC_ID else "")
+          + (" (design choices, not swept)" if (FIXED_THERMAL_ID or FIXED_SBC_ID) else "")
+          + ". The DVR is compatibility-gated, not crossed, and excluded from flight "
+          "time (it is an earlier-stage part; the SBC records at the SBC stage)."),
          f"- Flight-time drivers swept in full; sub-1 W peripherals held at lightest "
          f"representatives: FPV `{reps['fpv'].ident}`, GPS `{reps['gps'].ident}`, "
          f"RX `{reps['rx'].ident}`.",
@@ -886,6 +908,11 @@ def write_value_markdown(top_val, gcs_cost: float, gcs_parts: Optional[dict] = N
          f"- Live video receiver: **{vrx}** (${gcs_parts.get('vrx_cost', 0):.0f})",
          f"- Manual control, Phase-1 / backup: **{radio}** (${gcs_parts.get('radio_cost', 0):.0f})",
          f"- **GCS subtotal: ${gcs_cost:,.0f}**",
+         "",
+         (f"**Thermal camera:** fixed to **{FIXED_THERMAL_ID}** on every instance "
+          "(design choice — not swept)." if FIXED_THERMAL_ID else ""),
+         (f"**SBC:** fixed to **{FIXED_SBC_ID}** on every instance "
+          "(design choice — not swept)." if FIXED_SBC_ID else ""),
          "",
          "Full per-config dataset: [`flight_time_results.csv`](flight_time_results.csv); "
          "endurance-ranked view: [`flight_time_results.md`](flight_time_results.md).", "",
@@ -991,6 +1018,10 @@ def main() -> None:
         print(f"  {c:8s} candidates  : {len(components[c])}")
     print(f"Peripheral reps       : fpv={reps['fpv'].ident}, gps={reps['gps'].ident}, "
           f"rx={reps['rx'].ident}  (vtx swept when not bundled)")
+    if FIXED_THERMAL_ID:
+        print(f"Thermal (fixed)       : {FIXED_THERMAL_ID}  (locked design choice, not swept)")
+    if FIXED_SBC_ID:
+        print(f"SBC (fixed)           : {FIXED_SBC_ID}  (locked design choice, not swept)")
     print(f"Unfiltered pairings   : {unfiltered:,}")
     print(f"  pruned voltage (P1) : {stats['voltage_pruned']:,}  (battery cells vs airframe window)")
     print(f"  pruned video   (V2) : {stats['video_pruned']:,}  (thermal output vs CVBS DVR)")

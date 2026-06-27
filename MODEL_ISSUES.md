@@ -378,6 +378,27 @@ any tool previously.
 
 ## D. Candidate data gaps & uncertainties (from the source CSVs)
 
+- **FIXED (2026-06-27) — KOLAS7 masses were frame-kit weights, not as-built; PNP
+  removed.** David found the KOLAS7 "PNP" no longer exists (only the frame kit +
+  BNF variants ship), and that the modeled 257 g is the **bare frame kit** (carbon
+  + TPU, no motors/ESC/FC). The C287 2807.5 motors are **47 g each (4 = 188 g)**, so
+  every KOLAS7 mass (AF2a 257 g, AF2b 300 g, AF2c 333 g) omitted the entire
+  drivetrain — making KOLAS7 ~240 g too light and the artificial endurance
+  "winner." **Corrections:** AF2a (PNP) removed; AF2b (BNF analog) 300 → **540 g**,
+  AF2c (BNF HD) 333 → **565 g** (frame 257 + motors 188 + ESC/FC/props/wiring ~53 +
+  bundled VTX/GPS/RX[/cam]). This supersedes the "±20 g" claim in the 2026-06-25
+  note below. Effect: KOLAS7 drops from ~71 min (#1) to ~53–54 min (mid-pack); the
+  new endurance leader is **AF9a DarwinFPV 129** (~69 min). Other airframes were
+  spot-checked and use genuine as-built (with-motor) weights — this error was
+  KOLAS7-specific.
+- **FIXED (2026-06-27) — GEPRC MARK4 LR7 (AF1) discontinued; replaced by MOZ7 V2.**
+  AF1 removed; added **AF1a** (MOZ7 V2 Analog, 782 g, analog VTX+cam+GPS), **AF1b**
+  (WTFPV / Walksnail-ready, 764 g, no bundled VTX/cam), **AF1c** (O4 Pro, 750 g, DJI
+  O4 digital + GPS) — one platform: 336 mm, 7.5″ HQ props, SPEEDX2 2809 1280KV,
+  TAKER H743 BT FC, H65 8S 65A ESC, **6S LiPo / 8S Li-ion** (minCells 6, maxCells 8).
+  As-built weights from geprc.com. Heavy 7.5″ frames → ~47–49 min hover (near the
+  ROC7 group); thrust 3000 g/motor is EST (GEPRC publishes no grams). Baseline
+  unchanged: AF9a DarwinFPV 129, 69.1 min.
 - **MOSTLY RESOLVED (2026-06-26) — airframe masses filled (AF5 pending).** All
   airframe `mass` values are now populated except AF5 (see B4 — pending a
   7-inch-vs-10-inch decision). Wheelbase is still absent for a few BNF-only entries

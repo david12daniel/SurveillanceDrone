@@ -6,12 +6,12 @@ Momentum-theory (actuator-disk) propulsion model + forward-flight parasitic drag
 
 ## Sweep scope
 
-- **14,112 real configurations** = airframe × battery × SBC × VTX × thermal camera, fully crossed (respecting airframe component inclusion) and **filtered for interface compatibility**. The DVR is compatibility-gated, not crossed, and excluded from flight time (it is an earlier-stage part; the SBC records at the SBC stage).
+- **351 real configurations** = airframe × battery × VTX, fully crossed (respecting airframe component inclusion) and **filtered for interface compatibility**; thermal fixed to **T13** and SBC fixed to **SBC3** (design choices, not swept). The DVR is compatibility-gated, not crossed, and excluded from flight time (it is an earlier-stage part; the SBC records at the SBC stage).
 - Flight-time drivers swept in full; sub-1 W peripherals held at lightest representatives: FPV `A7`, GPS `G6`, RX `GEPRCNanoPA100`.
 - **Inclusion logic:** airframe-bundled VTX/FPV/GPS/RX contribute power only (their mass is already in the airframe's as-built weight); non-bundled peripherals contribute mass + power.
-- Candidates: 14 airframes (with mass data), 21 real battery candidates, 70 swept payload components.
+- Candidates: 15 airframes (with mass data), 21 real battery candidates, 70 swept payload components.
 - **Cost (R4 ≤ $2,500):** each config's drone cost + a fixed laptop-based GCS (ELRS USB dongle + analog VRX/capture + a Phase-1/backup handheld radio = $126; the laptop is the ground station); bundled VTX/FPV/GPS/RX add $0 (already in the airframe price); the DVR is included (earlier-stage part).
-- **Compatibility filtering** (declared in `DroneSystemModel::Architecture::Compatibility`): 23,184 raw pairings reduced to 14,112 real configs — pruned 7,056 on battery↔airframe cell-count (P1, e.g. a 4S pack on a 6S-only frame) and 2,016 on thermal↔DVR video format (V2, a thermal whose output no DVR can record — CVBS via DVR1-6 or digital HDMI/USB via DVR7-9).
+- **Compatibility filtering** (declared in `DroneSystemModel::Architecture::Compatibility`): 504 raw pairings reduced to 351 real configs — pruned 153 on battery↔airframe cell-count (P1, e.g. a 4S pack on a 6S-only frame) and 0 on thermal↔DVR video format (V2, a thermal whose output no DVR can record — CVBS via DVR1-6 or digital HDMI/USB via DVR7-9).
 
 ## Model assumptions
 
@@ -23,109 +23,109 @@ Momentum-theory (actuator-disk) propulsion model + forward-flight parasitic drag
 
 ## Recommended baseline
 
-**Axisflying KOLAS7** (AF2a) + **Lumenier NAV 12000mAh 6S 21700 Amprius**, SBC SBC1, VTX V8, thermal T1 → **74.6 min** hover (1250.4 g AUW, 11.2% throttle; drone $946 / system $1072 ≤ $2,500 R4).
+**DarwinFPV 129 7in** (AF9a) + **Lumenier NAV 12000mAh 4S 21700 Amprius**, SBC SBC3, VTX included, thermal T13 → **69.1 min** hover (968.7 g AUW, 16.3% throttle; drone $1379 / system $1505 ≤ $2,500 R4).
 
 ## Top 100 configurations (ranked by max flight time)
 
 | Cfg | Airframe | Battery | SBC | VTX | Therm | AUW g | Pld W | Max FT | Cruise | Wind | Thr% | Drone $ | Sys $ | R4 | R6 | R8 | Fly |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| C003578 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T1 | 1250.4 | 14.7 | 74.6 | 76.3 | 88.8 | 11.2 | 946.48 | 1072.48 | ✅ | ✅ | ✅ | ✅ |
-| C003608 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T2 | 1250.4 | 14.7 | 74.6 | 76.3 | 88.8 | 11.2 | 987.48 | 1113.48 | ✅ | ✅ | ✅ | ✅ |
-| C003638 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T3 | 1250.4 | 14.7 | 74.6 | 76.3 | 88.8 | 11.2 | 1001.48 | 1127.48 | ✅ | ✅ | ✅ | ✅ |
-| C003668 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T4 | 1251.8 | 15.0 | 74.4 | 76.0 | 88.5 | 11.2 | 899.47 | 1025.47 | ✅ | ✅ | ✅ | ✅ |
-| C003575 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T1 | 1255.6 | 14.7 | 74.2 | 75.8 | 88.3 | 11.2 | 941.48 | 1067.48 | ✅ | ✅ | ✅ | ✅ |
-| C003579 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T1 | 1253.2 | 15.2 | 74.2 | 75.8 | 88.2 | 11.2 | 938.48 | 1064.48 | ✅ | ✅ | ✅ | ✅ |
-| C003605 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T2 | 1255.6 | 14.7 | 74.2 | 75.8 | 88.3 | 11.2 | 982.48 | 1108.48 | ✅ | ✅ | ✅ | ✅ |
-| C003609 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T2 | 1253.2 | 15.2 | 74.2 | 75.8 | 88.2 | 11.2 | 979.48 | 1105.48 | ✅ | ✅ | ✅ | ✅ |
-| C003635 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T3 | 1255.6 | 14.7 | 74.2 | 75.8 | 88.3 | 11.2 | 996.48 | 1122.48 | ✅ | ✅ | ✅ | ✅ |
-| C003639 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T3 | 1253.2 | 15.2 | 74.2 | 75.8 | 88.2 | 11.2 | 993.48 | 1119.48 | ✅ | ✅ | ✅ | ✅ |
-| C003577 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T1 | 1256.6 | 15.2 | 73.9 | 75.5 | 87.9 | 11.2 | 959.48 | 1085.48 | ✅ | ✅ | ✅ | ✅ |
-| C003607 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T2 | 1256.6 | 15.2 | 73.9 | 75.5 | 87.9 | 11.2 | 1000.48 | 1126.48 | ✅ | ✅ | ✅ | ✅ |
-| C003637 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T3 | 1256.6 | 15.2 | 73.9 | 75.5 | 87.9 | 11.2 | 1014.48 | 1140.48 | ✅ | ✅ | ✅ | ✅ |
-| C003665 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T4 | 1257.0 | 15.0 | 73.9 | 75.6 | 88.0 | 11.2 | 894.47 | 1020.47 | ✅ | ✅ | ✅ | ✅ |
-| C003669 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T4 | 1254.6 | 15.5 | 73.9 | 75.6 | 87.9 | 11.2 | 891.47 | 1017.47 | ✅ | ✅ | ✅ | ✅ |
-| C003667 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T4 | 1258.0 | 15.5 | 73.7 | 75.3 | 87.6 | 11.2 | 912.47 | 1038.47 | ✅ | ✅ | ✅ | ✅ |
-| C003573 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T1 | 1259.6 | 15.7 | 73.5 | 75.1 | 87.3 | 11.2 | 936.48 | 1062.48 | ✅ | ✅ | ✅ | ✅ |
-| C003603 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T2 | 1259.6 | 15.7 | 73.5 | 75.1 | 87.3 | 11.2 | 977.48 | 1103.48 | ✅ | ✅ | ✅ | ✅ |
-| C003633 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T3 | 1259.6 | 15.7 | 73.5 | 75.1 | 87.3 | 11.2 | 991.48 | 1117.48 | ✅ | ✅ | ✅ | ✅ |
-| C013231 | DarwinFPV 129 7in (AF9a) | Lumenier NAV 12000mAh 4S 21700 Amprius | SBC1 | included | T1 | 927.6 | 16.2 | 73.5 | 75.6 | 90.7 | 15.6 | 884.97 | 1010.97 | ✅ | ✅ | ✅ | ✅ |
-| C013234 | DarwinFPV 129 7in (AF9a) | Lumenier NAV 12000mAh 4S 21700 Amprius | SBC1 | included | T2 | 927.6 | 16.2 | 73.5 | 75.6 | 90.7 | 15.6 | 925.97 | 1051.97 | ✅ | ✅ | ✅ | ✅ |
-| C013237 | DarwinFPV 129 7in (AF9a) | Lumenier NAV 12000mAh 4S 21700 Amprius | SBC1 | included | T3 | 927.6 | 16.2 | 73.5 | 75.6 | 90.7 | 15.6 | 939.97 | 1065.97 | ✅ | ✅ | ✅ | ✅ |
-| C003728 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T6 | 1264.5 | 14.85 | 73.4 | 75.0 | 87.3 | 11.3 | 922.48 | 1048.48 | ✅ | ✅ | ✅ | ✅ |
-| C003571 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V1 | T1 | 1262.5 | 15.7 | 73.2 | 74.8 | 87.0 | 11.3 | 941.48 | 1067.48 | ✅ | ✅ | ✅ | ✅ |
-| C003601 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V1 | T2 | 1262.5 | 15.7 | 73.2 | 74.8 | 87.0 | 11.3 | 982.48 | 1108.48 | ✅ | ✅ | ✅ | ✅ |
-| C003631 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V1 | T3 | 1262.5 | 15.7 | 73.2 | 74.8 | 87.0 | 11.3 | 996.48 | 1122.48 | ✅ | ✅ | ✅ | ✅ |
-| C003663 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T4 | 1261.0 | 16.0 | 73.2 | 74.8 | 87.0 | 11.3 | 889.47 | 1015.47 | ✅ | ✅ | ✅ | ✅ |
-| C003698 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T5 | 1264.5 | 15.35 | 73.2 | 74.8 | 87.0 | 11.3 | 976.47 | 1102.47 | ✅ | ✅ | ✅ | ✅ |
-| C013240 | DarwinFPV 129 7in (AF9a) | Lumenier NAV 12000mAh 4S 21700 Amprius | SBC1 | included | T4 | 929.0 | 16.5 | 73.2 | 75.3 | 90.2 | 15.6 | 837.96 | 963.96 | ✅ | ✅ | ✅ | ✅ |
-| C003661 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V1 | T4 | 1263.9 | 16.0 | 73.0 | 74.6 | 86.7 | 11.3 | 894.47 | 1020.47 | ✅ | ✅ | ✅ | ✅ |
-| C003725 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T6 | 1269.7 | 14.85 | 73.0 | 74.6 | 86.7 | 11.3 | 917.48 | 1043.48 | ✅ | ✅ | ✅ | ✅ |
-| C003729 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T6 | 1267.3 | 15.35 | 73.0 | 74.6 | 86.7 | 11.3 | 914.48 | 1040.48 | ✅ | ✅ | ✅ | ✅ |
-| C003598 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V8 | T1 | 1271.4 | 14.7 | 72.9 | 74.5 | 86.6 | 11.4 | 959.48 | 1085.48 | ✅ | ✅ | ✅ | ✅ |
-| C003628 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V8 | T2 | 1271.4 | 14.7 | 72.9 | 74.5 | 86.6 | 11.4 | 1000.48 | 1126.48 | ✅ | ✅ | ✅ | ✅ |
-| C003658 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V8 | T3 | 1271.4 | 14.7 | 72.9 | 74.5 | 86.6 | 11.4 | 1014.48 | 1140.48 | ✅ | ✅ | ✅ | ✅ |
-| C003695 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T5 | 1269.7 | 15.35 | 72.8 | 74.4 | 86.4 | 11.3 | 971.47 | 1097.47 | ✅ | ✅ | ✅ | ✅ |
-| C003699 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T5 | 1267.3 | 15.85 | 72.8 | 74.4 | 86.4 | 11.3 | 968.47 | 1094.47 | ✅ | ✅ | ✅ | ✅ |
-| C003758 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T8 | 1270.5 | 15.25 | 72.8 | 74.4 | 86.4 | 11.3 | 876.47 | 1002.47 | ✅ | ✅ | ✅ | ✅ |
-| C003788 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T9 | 1270.5 | 15.25 | 72.8 | 74.4 | 86.4 | 11.3 | 1046.47 | 1172.47 | ✅ | ✅ | ✅ | ✅ |
-| C003688 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V8 | T4 | 1272.8 | 15.0 | 72.7 | 74.3 | 86.3 | 11.4 | 912.47 | 1038.47 | ✅ | ✅ | ✅ | ✅ |
-| C003727 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T6 | 1270.7 | 15.35 | 72.7 | 74.3 | 86.3 | 11.3 | 935.48 | 1061.48 | ✅ | ✅ | ✅ | ✅ |
-| C003818 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T10 | 1270.5 | 15.3 | 72.7 | 74.3 | 86.4 | 11.3 | 1276.47 | 1402.47 | ✅ | ✅ | ✅ | ✅ |
-| C003878 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T12 | 1270.5 | 15.3 | 72.7 | 74.3 | 86.4 | 11.3 | 1246.47 | 1372.47 | ✅ | ✅ | ✅ | ✅ |
-| C003908 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T13 | 1270.5 | 15.35 | 72.7 | 74.3 | 86.4 | 11.3 | 1176.47 | 1302.47 | ✅ | ✅ | ✅ | ✅ |
-| C003998 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V8 | T1 | 1249.4 | 14.7 | 72.7 | 74.3 | 86.5 | 11.2 | 899.99 | 1025.99 | ✅ | ✅ | ✅ | ✅ |
-| C004028 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V8 | T2 | 1249.4 | 14.7 | 72.7 | 74.3 | 86.5 | 11.2 | 940.99 | 1066.99 | ✅ | ✅ | ✅ | ✅ |
-| C004058 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V8 | T3 | 1249.4 | 14.7 | 72.7 | 74.3 | 86.5 | 11.2 | 954.99 | 1080.99 | ✅ | ✅ | ✅ | ✅ |
-| C003576 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V6 | T1 | 1258.6 | 18.2 | 72.6 | 74.1 | 86.0 | 11.2 | 978.48 | 1104.48 | ✅ | ✅ | ✅ | ✅ |
-| C003606 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V6 | T2 | 1258.6 | 18.2 | 72.6 | 74.1 | 86.0 | 11.2 | 1019.48 | 1145.48 | ✅ | ✅ | ✅ | ✅ |
-| C003636 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V6 | T3 | 1258.6 | 18.2 | 72.6 | 74.1 | 86.0 | 11.2 | 1033.48 | 1159.48 | ✅ | ✅ | ✅ | ✅ |
-| C003595 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V5 | T1 | 1276.6 | 14.7 | 72.5 | 74.1 | 86.1 | 11.4 | 954.48 | 1080.48 | ✅ | ✅ | ✅ | ✅ |
-| C003599 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V10 | T1 | 1274.2 | 15.2 | 72.5 | 74.1 | 86.1 | 11.4 | 951.48 | 1077.48 | ✅ | ✅ | ✅ | ✅ |
-| C003625 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V5 | T2 | 1276.6 | 14.7 | 72.5 | 74.1 | 86.1 | 11.4 | 995.48 | 1121.48 | ✅ | ✅ | ✅ | ✅ |
-| C003629 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V10 | T2 | 1274.2 | 15.2 | 72.5 | 74.1 | 86.1 | 11.4 | 992.48 | 1118.48 | ✅ | ✅ | ✅ | ✅ |
-| C003655 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V5 | T3 | 1276.6 | 14.7 | 72.5 | 74.1 | 86.1 | 11.4 | 1009.48 | 1135.48 | ✅ | ✅ | ✅ | ✅ |
-| C003659 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V10 | T3 | 1274.2 | 15.2 | 72.5 | 74.1 | 86.1 | 11.4 | 1006.48 | 1132.48 | ✅ | ✅ | ✅ | ✅ |
-| C003697 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T5 | 1270.7 | 15.85 | 72.5 | 74.1 | 86.1 | 11.3 | 989.47 | 1115.47 | ✅ | ✅ | ✅ | ✅ |
-| C003755 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T8 | 1275.7 | 15.25 | 72.4 | 73.9 | 85.9 | 11.4 | 871.47 | 997.47 | ✅ | ✅ | ✅ | ✅ |
-| C003759 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T8 | 1273.3 | 15.75 | 72.4 | 73.9 | 85.9 | 11.4 | 868.47 | 994.47 | ✅ | ✅ | ✅ | ✅ |
-| C003785 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T9 | 1275.7 | 15.25 | 72.4 | 73.9 | 85.9 | 11.4 | 1041.47 | 1167.47 | ✅ | ✅ | ✅ | ✅ |
-| C003789 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T9 | 1273.3 | 15.75 | 72.4 | 73.9 | 85.9 | 11.4 | 1038.47 | 1164.47 | ✅ | ✅ | ✅ | ✅ |
-| C004088 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V8 | T4 | 1250.8 | 15.0 | 72.4 | 74.0 | 86.2 | 11.2 | 852.98 | 978.98 | ✅ | ✅ | ✅ | ✅ |
-| C003588 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC2 | V8 | T1 | 1269.4 | 16.7 | 72.3 | 73.9 | 85.7 | 11.3 | 983.48 | 1109.48 | ✅ | ✅ | ✅ | ✅ |
-| C003618 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC2 | V8 | T2 | 1269.4 | 16.7 | 72.3 | 73.9 | 85.7 | 11.3 | 1024.48 | 1150.48 | ✅ | ✅ | ✅ | ✅ |
-| C003648 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC2 | V8 | T3 | 1269.4 | 16.7 | 72.3 | 73.9 | 85.7 | 11.3 | 1038.48 | 1164.48 | ✅ | ✅ | ✅ | ✅ |
-| C003666 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V6 | T4 | 1260.0 | 18.5 | 72.3 | 73.9 | 85.7 | 11.2 | 931.47 | 1057.47 | ✅ | ✅ | ✅ | ✅ |
-| C003685 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V5 | T4 | 1278.0 | 15.0 | 72.3 | 73.8 | 85.8 | 11.4 | 907.47 | 1033.47 | ✅ | ✅ | ✅ | ✅ |
-| C003689 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V10 | T4 | 1275.6 | 15.5 | 72.3 | 73.8 | 85.8 | 11.4 | 904.47 | 1030.47 | ✅ | ✅ | ✅ | ✅ |
-| C003723 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T6 | 1273.7 | 15.85 | 72.3 | 73.9 | 85.8 | 11.4 | 912.48 | 1038.48 | ✅ | ✅ | ✅ | ✅ |
-| C003815 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T10 | 1275.7 | 15.3 | 72.3 | 73.9 | 85.9 | 11.4 | 1271.47 | 1397.47 | ✅ | ✅ | ✅ | ✅ |
-| C003819 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T10 | 1273.3 | 15.8 | 72.3 | 73.9 | 85.8 | 11.4 | 1268.47 | 1394.47 | ✅ | ✅ | ✅ | ✅ |
-| C003848 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T11 | 1274.5 | 15.55 | 72.3 | 73.9 | 85.9 | 11.4 | 1176.47 | 1302.47 | ✅ | ✅ | ✅ | ✅ |
-| C003875 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T12 | 1275.7 | 15.3 | 72.3 | 73.9 | 85.9 | 11.4 | 1241.47 | 1367.47 | ✅ | ✅ | ✅ | ✅ |
-| C003879 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T12 | 1273.3 | 15.8 | 72.3 | 73.9 | 85.8 | 11.4 | 1238.47 | 1364.47 | ✅ | ✅ | ✅ | ✅ |
-| C003905 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V5 | T13 | 1275.7 | 15.35 | 72.3 | 73.9 | 85.8 | 11.4 | 1171.47 | 1297.47 | ✅ | ✅ | ✅ | ✅ |
-| C003909 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V10 | T13 | 1273.3 | 15.85 | 72.3 | 73.9 | 85.8 | 11.4 | 1168.47 | 1294.47 | ✅ | ✅ | ✅ | ✅ |
-| C003968 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V8 | T15 | 1274.5 | 15.55 | 72.3 | 73.9 | 85.9 | 11.4 | 1237.48 | 1363.48 | ✅ | ✅ | ✅ | ✅ |
-| C003995 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V5 | T1 | 1254.6 | 14.7 | 72.3 | 73.9 | 86.0 | 11.2 | 894.99 | 1020.99 | ✅ | ✅ | ✅ | ✅ |
-| C003999 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V10 | T1 | 1252.2 | 15.2 | 72.3 | 73.8 | 86.0 | 11.2 | 891.99 | 1017.99 | ✅ | ✅ | ✅ | ✅ |
-| C004025 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V5 | T2 | 1254.6 | 14.7 | 72.3 | 73.9 | 86.0 | 11.2 | 935.99 | 1061.99 | ✅ | ✅ | ✅ | ✅ |
-| C004029 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V10 | T2 | 1252.2 | 15.2 | 72.3 | 73.8 | 86.0 | 11.2 | 932.99 | 1058.99 | ✅ | ✅ | ✅ | ✅ |
-| C004055 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V5 | T3 | 1254.6 | 14.7 | 72.3 | 73.9 | 86.0 | 11.2 | 949.99 | 1075.99 | ✅ | ✅ | ✅ | ✅ |
-| C004059 | Axisflying KOLAS7 (AF2a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC1 | V10 | T3 | 1252.2 | 15.2 | 72.3 | 73.8 | 86.0 | 11.2 | 946.99 | 1072.99 | ✅ | ✅ | ✅ | ✅ |
-| C003572 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V2 | T1 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | 951.48 | 1077.48 | ✅ | ✅ | ✅ | ✅ |
-| C003574 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V4 | T1 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | 936.48 | 1062.48 | ✅ | ✅ | ✅ | ✅ |
-| C003597 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V7 | T1 | 1277.6 | 15.2 | 72.2 | 73.8 | 85.7 | 11.4 | 972.48 | 1098.48 | ✅ | ✅ | ✅ | ✅ |
-| C003602 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V2 | T2 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | 992.48 | 1118.48 | ✅ | ✅ | ✅ | ✅ |
-| C003604 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V4 | T2 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | 977.48 | 1103.48 | ✅ | ✅ | ✅ | ✅ |
-| C003627 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V7 | T2 | 1277.6 | 15.2 | 72.2 | 73.8 | 85.7 | 11.4 | 1013.48 | 1139.48 | ✅ | ✅ | ✅ | ✅ |
-| C003632 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V2 | T3 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | 1006.48 | 1132.48 | ✅ | ✅ | ✅ | ✅ |
-| C003634 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V4 | T3 | 1263.6 | 18.2 | 72.2 | 73.7 | 85.5 | 11.3 | 991.48 | 1117.48 | ✅ | ✅ | ✅ | ✅ |
-| C003657 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V7 | T3 | 1277.6 | 15.2 | 72.2 | 73.8 | 85.7 | 11.4 | 1027.48 | 1153.48 | ✅ | ✅ | ✅ | ✅ |
-| C003678 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC2 | V8 | T4 | 1270.8 | 17.0 | 72.1 | 73.6 | 85.4 | 11.3 | 936.47 | 1062.47 | ✅ | ✅ | ✅ | ✅ |
-| C003693 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V3 | T5 | 1273.7 | 16.35 | 72.1 | 73.7 | 85.5 | 11.4 | 966.47 | 1092.47 | ✅ | ✅ | ✅ | ✅ |
-| C003721 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V1 | T6 | 1276.6 | 15.85 | 72.1 | 73.6 | 85.5 | 11.4 | 917.48 | 1043.48 | ✅ | ✅ | ✅ | ✅ |
-| C003757 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T8 | 1276.7 | 15.75 | 72.1 | 73.7 | 85.5 | 11.4 | 889.47 | 1015.47 | ✅ | ✅ | ✅ | ✅ |
-| C003787 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T9 | 1276.7 | 15.75 | 72.1 | 73.7 | 85.5 | 11.4 | 1059.47 | 1185.47 | ✅ | ✅ | ✅ | ✅ |
-| C003817 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T10 | 1276.7 | 15.8 | 72.1 | 73.6 | 85.5 | 11.4 | 1289.47 | 1415.47 | ✅ | ✅ | ✅ | ✅ |
-| C003877 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T12 | 1276.7 | 15.8 | 72.1 | 73.6 | 85.5 | 11.4 | 1259.47 | 1385.47 | ✅ | ✅ | ✅ | ✅ |
-| C003907 | Axisflying KOLAS7 (AF2a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC1 | V7 | T13 | 1276.7 | 15.85 | 72.1 | 73.6 | 85.5 | 11.4 | 1189.47 | 1315.47 | ✅ | ✅ | ✅ | ✅ |
+| C000331 | DarwinFPV 129 7in (AF9a) | Lumenier NAV 12000mAh 4S 21700 Amprius | SBC3 | included | T13 | 968.7 | 16.85 | 69.1 | 71.0 | 84.7 | 16.3 | 1378.97 | 1504.97 | ✅ | ✅ | ✅ | ✅ |
+| C000218 | iFlight Chimera9 ECO (AF3a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1746.7 | 16.8 | 58.6 | 60.2 | 72.1 | 14.9 | 1518.83 | 1644.83 | ✅ | ✅ | — | ✅ |
+| C000233 | iFlight Chimera9 ECO (AF3b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1752.0 | 16.87 | 58.4 | 59.9 | 71.8 | 14.9 | 1545.48 | 1671.48 | ✅ | ✅ | — | ✅ |
+| C000248 | DarwinFPV X9 (AF4a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1772.7 | 16.8 | 57.4 | 58.9 | 70.7 | 13.7 | 1654.47 | 1780.47 | ✅ | ✅ | — | ✅ |
+| C000219 | iFlight Chimera9 ECO (AF3a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1745.7 | 16.8 | 57.1 | 58.6 | 70.3 | 14.9 | 1472.34 | 1598.34 | ✅ | ✅ | — | ✅ |
+| C000234 | iFlight Chimera9 ECO (AF3b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1751.0 | 16.87 | 56.8 | 58.3 | 69.9 | 14.9 | 1498.99 | 1624.99 | ✅ | ✅ | — | ✅ |
+| C000249 | DarwinFPV X9 (AF4a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1771.7 | 16.8 | 55.9 | 57.4 | 68.9 | 13.6 | 1607.98 | 1733.98 | ✅ | ✅ | — | ✅ |
+| C000293 | GEPRC Crocodile75 V3 (AF7) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1623.2 | 16.8 | 54.8 | 55.9 | 64.3 | 15.0 | 1940.47 | 2066.47 | ✅ | ✅ | — | ✅ |
+| C000188 | Axisflying KOLAS7 (AF2b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1563.0 | 16.47 | 54.3 | 55.2 | 62.8 | 14.0 | 1603.39 | 1729.39 | ✅ | ✅ | — | ✅ |
+| C000294 | GEPRC Crocodile75 V3 (AF7) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1622.2 | 16.8 | 53.4 | 54.4 | 62.6 | 15.0 | 1893.98 | 2019.98 | ✅ | ✅ | — | ✅ |
+| C000203 | Axisflying KOLAS7 (AF2c) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1586.0 | 16.92 | 53.1 | 54.0 | 61.3 | 14.2 | 1710.49 | 1836.49 | ✅ | ✅ | — | ✅ |
+| C000189 | Axisflying KOLAS7 (AF2b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1562.0 | 16.47 | 52.8 | 53.8 | 61.2 | 13.9 | 1556.9 | 1682.9 | ✅ | ✅ | — | ✅ |
+| C000204 | Axisflying KOLAS7 (AF2c) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1585.0 | 16.92 | 51.7 | 52.6 | 59.7 | 14.2 | 1664.0 | 1790.0 | ✅ | ✅ | — | ✅ |
+| C000308 | iFlight Chimera7 Pro V2 (AF8a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1726.7 | 16.85 | 50.2 | 51.2 | 58.6 | 21.6 | 1621.47 | 1747.47 | ✅ | ✅ | — | ✅ |
+| C000323 | iFlight Chimera7 Pro V2 (AF8b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1732.0 | 16.92 | 50.0 | 51.0 | 58.3 | 21.6 | 1632.0 | 1758.0 | ✅ | ✅ | — | ✅ |
+| C000213 | iFlight Chimera9 ECO (AF3a) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1694.7 | 16.8 | 49.6 | 50.9 | 61.3 | 14.4 | 1449.34 | 1575.34 | ✅ | ✅ | — | ✅ |
+| C000216 | iFlight Chimera9 ECO (AF3a) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1443.7 | 16.8 | 49.4 | 51.0 | 62.5 | 12.3 | 1391.34 | 1517.34 | ✅ | ✅ | — | ✅ |
+| C000336 | DarwinFPV 129 7in (AF9a) | Lumenier NAV 8000mAh 4S 18650 Amprius | SBC3 | included | T13 | 918.7 | 16.85 | 49.4 | 50.8 | 60.9 | 15.4 | 1294.97 | 1420.97 | ✅ | ✅ | — | ✅ |
+| C000228 | iFlight Chimera9 ECO (AF3b) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1700.0 | 16.87 | 49.3 | 50.7 | 61.0 | 14.5 | 1475.99 | 1601.99 | ✅ | ✅ | — | ✅ |
+| C000231 | iFlight Chimera9 ECO (AF3b) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1449.0 | 16.87 | 49.2 | 50.7 | 62.1 | 12.4 | 1417.99 | 1543.99 | ✅ | ✅ | — | ✅ |
+| C000309 | iFlight Chimera7 Pro V2 (AF8a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1725.7 | 16.85 | 48.9 | 49.9 | 57.0 | 21.6 | 1574.98 | 1700.98 | ✅ | ✅ | — | ✅ |
+| C000324 | iFlight Chimera7 Pro V2 (AF8b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1731.0 | 16.92 | 48.7 | 49.6 | 56.7 | 21.6 | 1585.51 | 1711.51 | ✅ | ✅ | — | ✅ |
+| C000263 | DeepSpace ROC7 O4 PRO (AF6a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1688.7 | 16.85 | 48.6 | 49.4 | 55.9 | 21.1 | 2007.47 | 2133.47 | ✅ | ✅ | — | ✅ |
+| C000173 | GEPRC MOZ7 V2 O4 Pro (AF1c) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1771.7 | 16.85 | 48.5 | 49.4 | 56.3 | 14.8 | 1856.47 | 1982.47 | ✅ | ✅ | — | ✅ |
+| C000243 | DarwinFPV X9 (AF4a) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1720.7 | 16.8 | 48.5 | 49.8 | 60.0 | 13.3 | 1584.98 | 1710.98 | ✅ | ✅ | — | ✅ |
+| C000333 | DarwinFPV 129 7in (AF9a) | Upgrade Energy RED V3 4S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1081.7 | 16.85 | 48.5 | 49.7 | 58.7 | 18.2 | 1299.97 | 1425.97 | ✅ | ✅ | — | ✅ |
+| C000334 | DarwinFPV 129 7in (AF9a) | Upgrade Energy GREEN V2 4S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 912.7 | 16.85 | 48.5 | 49.8 | 59.8 | 15.3 | 1314.98 | 1440.98 | ✅ | ✅ | — | ✅ |
+| C000278 | DeepSpace ROC7 O4 PRO (AF6b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1693.0 | 16.92 | 48.4 | 49.2 | 55.7 | 21.2 | 2018.48 | 2144.48 | ✅ | ✅ | — | ✅ |
+| C000344 | NewBeeDrone ROC7 O4PRO (AF10) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1693.0 | 16.92 | 48.4 | 49.2 | 55.7 | 21.2 | 1966.48 | 2092.48 | ✅ | ✅ | — | ✅ |
+| C000212 | iFlight Chimera9 ECO (AF3a) | Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S | SBC3 | included | T13 | 1726.7 | 16.8 | 48.3 | 49.6 | 59.5 | 14.7 | 1467.33 | 1593.33 | ✅ | ✅ | — | ✅ |
+| C000246 | DarwinFPV X9 (AF4a) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1469.7 | 16.8 | 48.2 | 49.7 | 61.1 | 11.3 | 1526.98 | 1652.98 | ✅ | ✅ | — | ✅ |
+| C000227 | iFlight Chimera9 ECO (AF3b) | Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S | SBC3 | included | T13 | 1732.0 | 16.87 | 48.1 | 49.4 | 59.2 | 14.8 | 1493.98 | 1619.98 | ✅ | ✅ | — | ✅ |
+| C000093 | GEPRC MOZ7 V2 WTFPV (AF1b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V8 | T13 | 1794.5 | 15.4 | 47.8 | 48.7 | 55.5 | 15.0 | 1628.47 | 1754.47 | ✅ | ✅ | — | ✅ |
+| C000090 | GEPRC MOZ7 V2 WTFPV (AF1b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V5 | T13 | 1799.7 | 15.4 | 47.6 | 48.5 | 55.3 | 15.0 | 1623.47 | 1749.47 | ✅ | ✅ | — | ✅ |
+| C000094 | GEPRC MOZ7 V2 WTFPV (AF1b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V10 | T13 | 1797.3 | 15.9 | 47.6 | 48.5 | 55.3 | 15.0 | 1620.47 | 1746.47 | ✅ | ✅ | — | ✅ |
+| C000332 | DarwinFPV 129 7in (AF9a) | Upgrade Energy GREEN V1 4S2P 10Ah Samsung 50S | SBC3 | included | T13 | 1095.7 | 16.85 | 47.6 | 48.8 | 57.6 | 18.4 | 1289.97 | 1415.97 | ✅ | ✅ | — | ✅ |
+| C000092 | GEPRC MOZ7 V2 WTFPV (AF1b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V7 | T13 | 1800.7 | 15.9 | 47.5 | 48.4 | 55.1 | 15.0 | 1641.47 | 1767.47 | ✅ | ✅ | — | ✅ |
+| C000186 | Axisflying KOLAS7 (AF2b) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1260.0 | 16.47 | 47.4 | 48.5 | 56.3 | 11.2 | 1475.9 | 1601.9 | ✅ | ✅ | — | ✅ |
+| C000008 | GEPRC MOZ7 V2 Analog (AF1a) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | included | T13 | 1803.7 | 16.85 | 47.3 | 48.1 | 54.8 | 15.0 | 1641.47 | 1767.47 | ✅ | ✅ | — | ✅ |
+| C000088 | GEPRC MOZ7 V2 WTFPV (AF1b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V3 | T13 | 1803.7 | 16.4 | 47.3 | 48.2 | 54.9 | 15.0 | 1618.47 | 1744.47 | ✅ | ✅ | — | ✅ |
+| C000242 | DarwinFPV X9 (AF4a) | Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S | SBC3 | included | T13 | 1752.7 | 16.8 | 47.3 | 48.6 | 58.4 | 13.5 | 1602.97 | 1728.97 | ✅ | ✅ | — | ✅ |
+| C000264 | DeepSpace ROC7 O4 PRO (AF6a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1687.7 | 16.85 | 47.3 | 48.1 | 54.5 | 21.1 | 1960.98 | 2086.98 | ✅ | ✅ | — | ✅ |
+| C000291 | GEPRC Crocodile75 V3 (AF7) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1320.2 | 16.8 | 47.3 | 48.4 | 56.9 | 12.2 | 1812.98 | 1938.98 | ✅ | ✅ | — | ✅ |
+| C000086 | GEPRC MOZ7 V2 WTFPV (AF1b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V1 | T13 | 1806.6 | 16.4 | 47.2 | 48.1 | 54.7 | 15.1 | 1623.47 | 1749.47 | ✅ | ✅ | — | ✅ |
+| C000174 | GEPRC MOZ7 V2 O4 Pro (AF1c) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1770.7 | 16.85 | 47.2 | 48.1 | 54.8 | 14.8 | 1809.98 | 1935.98 | ✅ | ✅ | — | ✅ |
+| C000279 | DeepSpace ROC7 O4 PRO (AF6b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1692.0 | 16.92 | 47.1 | 47.9 | 54.2 | 21.1 | 1971.99 | 2097.99 | ✅ | ✅ | — | ✅ |
+| C000345 | NewBeeDrone ROC7 O4PRO (AF10) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1692.0 | 16.92 | 47.1 | 47.9 | 54.2 | 21.1 | 1919.99 | 2045.99 | ✅ | ✅ | — | ✅ |
+| C000091 | GEPRC MOZ7 V2 WTFPV (AF1b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V6 | T13 | 1802.7 | 18.9 | 47.0 | 47.8 | 54.4 | 15.0 | 1660.47 | 1786.47 | ✅ | ✅ | — | ✅ |
+| C000087 | GEPRC MOZ7 V2 WTFPV (AF1b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V2 | T13 | 1807.7 | 18.9 | 46.8 | 47.6 | 54.1 | 15.1 | 1633.47 | 1759.47 | ✅ | ✅ | — | ✅ |
+| C000089 | GEPRC MOZ7 V2 WTFPV (AF1b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V4 | T13 | 1807.7 | 18.9 | 46.8 | 47.6 | 54.1 | 15.1 | 1618.47 | 1744.47 | ✅ | ✅ | — | ✅ |
+| C000211 | iFlight Chimera9 ECO (AF3a) | Lumenier NAV 10000mAh 6S 21700 Li-Ion | SBC3 | included | T13 | 1801.7 | 16.8 | 46.8 | 48.0 | 57.3 | 15.4 | 1347.33 | 1473.33 | ✅ | ✅ | — | ✅ |
+| C000103 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | V8 | T13 | 1793.5 | 15.4 | 46.6 | 47.4 | 54.1 | 14.9 | 1581.98 | 1707.98 | ✅ | ✅ | — | ✅ |
+| C000226 | iFlight Chimera9 ECO (AF3b) | Lumenier NAV 10000mAh 6S 21700 Li-Ion | SBC3 | included | T13 | 1807.0 | 16.87 | 46.6 | 47.8 | 57.0 | 15.4 | 1373.98 | 1499.98 | ✅ | ✅ | — | ✅ |
+| C000288 | GEPRC Crocodile75 V3 (AF7) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1571.2 | 16.8 | 46.5 | 47.5 | 54.8 | 14.5 | 1870.98 | 1996.98 | ✅ | ✅ | — | ✅ |
+| C000100 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | V5 | T13 | 1798.7 | 15.4 | 46.4 | 47.2 | 53.8 | 15.0 | 1576.98 | 1702.98 | ✅ | ✅ | — | ✅ |
+| C000104 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | V10 | T13 | 1796.3 | 15.9 | 46.4 | 47.2 | 53.8 | 15.0 | 1573.98 | 1699.98 | ✅ | ✅ | — | ✅ |
+| C000102 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | V7 | T13 | 1799.7 | 15.9 | 46.3 | 47.1 | 53.7 | 15.0 | 1594.98 | 1720.98 | ✅ | ✅ | — | ✅ |
+| C000201 | Axisflying KOLAS7 (AF2c) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1283.0 | 16.92 | 46.2 | 47.2 | 54.7 | 11.5 | 1583.0 | 1709.0 | ✅ | ✅ | — | ✅ |
+| C000098 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | V3 | T13 | 1802.7 | 16.4 | 46.1 | 46.9 | 53.4 | 15.0 | 1571.98 | 1697.98 | ✅ | ✅ | — | ✅ |
+| C000183 | Axisflying KOLAS7 (AF2b) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1511.0 | 16.47 | 46.1 | 47.0 | 53.6 | 13.5 | 1533.9 | 1659.9 | ✅ | ✅ | — | ✅ |
+| C000009 | GEPRC MOZ7 V2 Analog (AF1a) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | included | T13 | 1802.7 | 16.85 | 46.0 | 46.8 | 53.3 | 15.0 | 1594.98 | 1720.98 | ✅ | ✅ | — | ✅ |
+| C000095 | GEPRC MOZ7 V2 WTFPV (AF1b) | Lumenier NAV 12000mAh 6S 21700 Amprius | SBC3 | V11 | T13 | 1817.7 | 21.5 | 46.0 | 46.8 | 53.1 | 15.1 | 1623.47 | 1749.47 | ✅ | ✅ | — | ✅ |
+| C000096 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | V1 | T13 | 1805.6 | 16.4 | 46.0 | 46.8 | 53.3 | 15.0 | 1576.98 | 1702.98 | ✅ | ✅ | — | ✅ |
+| C000241 | DarwinFPV X9 (AF4a) | Lumenier NAV 10000mAh 6S 21700 Li-Ion | SBC3 | included | T13 | 1827.7 | 16.8 | 45.9 | 47.0 | 56.2 | 14.1 | 1482.97 | 1608.97 | ✅ | ✅ | — | ✅ |
+| C000101 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | V6 | T13 | 1801.7 | 18.9 | 45.7 | 46.5 | 52.9 | 15.0 | 1613.98 | 1739.98 | ✅ | ✅ | — | ✅ |
+| C000097 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | V2 | T13 | 1806.7 | 18.9 | 45.5 | 46.4 | 52.7 | 15.1 | 1586.98 | 1712.98 | ✅ | ✅ | — | ✅ |
+| C000099 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | V4 | T13 | 1806.7 | 18.9 | 45.5 | 46.4 | 52.7 | 15.1 | 1571.98 | 1697.98 | ✅ | ✅ | — | ✅ |
+| C000287 | GEPRC Crocodile75 V3 (AF7) | Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S | SBC3 | included | T13 | 1603.2 | 16.8 | 45.2 | 46.1 | 53.1 | 14.8 | 1888.97 | 2014.97 | ✅ | ✅ | — | ✅ |
+| C000198 | Axisflying KOLAS7 (AF2c) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1534.0 | 16.92 | 45.1 | 45.9 | 52.3 | 13.7 | 1641.0 | 1767.0 | ✅ | ✅ | — | ✅ |
+| C000105 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10 | SBC3 | V11 | T13 | 1816.7 | 21.5 | 44.8 | 45.6 | 51.7 | 15.1 | 1576.98 | 1702.98 | ✅ | ✅ | — | ✅ |
+| C000182 | Axisflying KOLAS7 (AF2b) | Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S | SBC3 | included | T13 | 1543.0 | 16.47 | 44.8 | 45.6 | 51.9 | 13.8 | 1551.89 | 1677.89 | ✅ | ✅ | — | ✅ |
+| C000197 | Axisflying KOLAS7 (AF2c) | Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S | SBC3 | included | T13 | 1566.0 | 16.92 | 43.8 | 44.6 | 50.7 | 14.0 | 1658.99 | 1784.99 | ✅ | ✅ | — | ✅ |
+| C000286 | GEPRC Crocodile75 V3 (AF7) | Lumenier NAV 10000mAh 6S 21700 Li-Ion | SBC3 | included | T13 | 1678.2 | 16.8 | 43.6 | 44.4 | 50.9 | 15.5 | 1768.97 | 1894.97 | ✅ | ✅ | — | ✅ |
+| C000181 | Axisflying KOLAS7 (AF2b) | Lumenier NAV 10000mAh 6S 21700 Li-Ion | SBC3 | included | T13 | 1618.0 | 16.47 | 43.1 | 43.8 | 49.7 | 14.4 | 1431.89 | 1557.89 | ✅ | ✅ | — | ✅ |
+| C000306 | iFlight Chimera7 Pro V2 (AF8a) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1423.7 | 16.85 | 42.6 | 43.6 | 50.9 | 17.8 | 1493.98 | 1619.98 | ✅ | ✅ | — | ✅ |
+| C000303 | iFlight Chimera7 Pro V2 (AF8a) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1674.7 | 16.85 | 42.5 | 43.4 | 49.7 | 20.9 | 1551.98 | 1677.98 | ✅ | ✅ | — | ✅ |
+| C000321 | iFlight Chimera7 Pro V2 (AF8b) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1429.0 | 16.92 | 42.4 | 43.4 | 50.6 | 17.9 | 1504.51 | 1630.51 | ✅ | ✅ | — | ✅ |
+| C000318 | iFlight Chimera7 Pro V2 (AF8b) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1680.0 | 16.92 | 42.3 | 43.1 | 49.5 | 21.0 | 1562.51 | 1688.51 | ✅ | ✅ | — | ✅ |
+| C000196 | Axisflying KOLAS7 (AF2c) | Lumenier NAV 10000mAh 6S 21700 Li-Ion | SBC3 | included | T13 | 1641.0 | 16.92 | 42.2 | 42.9 | 48.5 | 14.7 | 1538.99 | 1664.99 | ✅ | ✅ | — | ✅ |
+| C000335 | DarwinFPV 129 7in (AF9a) | Upgrade Energy Dark Lithium V2 4S 8400mAh Molicel P42A | SBC3 | included | T13 | 1059.7 | 16.85 | 41.8 | 42.9 | 50.8 | 17.8 | 1308.97 | 1434.97 | ✅ | ✅ | — | ✅ |
+| C000215 | iFlight Chimera9 ECO (AF3a) | iFlight Fullsend 6S 8000mAh EVE INR21700-40PL | SBC3 | included | T13 | 1666.7 | 16.8 | 41.7 | 42.9 | 51.7 | 14.2 | 1320.33 | 1446.33 | ✅ | ✅ | — | ✅ |
+| C000217 | iFlight Chimera9 ECO (AF3a) | Lumenier NAV 12000mAh 6S 21700 XT90 | SBC3 | included | T13 | 2228.7 | 16.8 | 41.6 | 42.5 | 49.5 | 19.0 | 1387.33 | 1513.33 | ✅ | ✅ | — | ✅ |
+| C000230 | iFlight Chimera9 ECO (AF3b) | iFlight Fullsend 6S 8000mAh EVE INR21700-40PL | SBC3 | included | T13 | 1672.0 | 16.87 | 41.5 | 42.7 | 51.4 | 14.3 | 1346.98 | 1472.98 | ✅ | ✅ | — | ✅ |
+| C000261 | DeepSpace ROC7 O4 PRO (AF6a) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1385.7 | 16.85 | 41.5 | 42.4 | 48.9 | 17.3 | 1879.98 | 2005.98 | ✅ | ✅ | — | ✅ |
+| C000232 | iFlight Chimera9 ECO (AF3b) | Lumenier NAV 12000mAh 6S 21700 XT90 | SBC3 | included | T13 | 2234.0 | 16.87 | 41.4 | 42.3 | 49.3 | 19.0 | 1413.98 | 1539.98 | ✅ | ✅ | — | ✅ |
+| C000276 | DeepSpace ROC7 O4 PRO (AF6b) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1390.0 | 16.92 | 41.4 | 42.2 | 48.7 | 17.4 | 1890.99 | 2016.99 | ✅ | ✅ | — | ✅ |
+| C000302 | iFlight Chimera7 Pro V2 (AF8a) | Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S | SBC3 | included | T13 | 1706.7 | 16.85 | 41.4 | 42.2 | 48.3 | 21.3 | 1569.97 | 1695.97 | ✅ | ✅ | — | ✅ |
+| C000342 | NewBeeDrone ROC7 O4PRO (AF10) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1390.0 | 16.92 | 41.4 | 42.2 | 48.7 | 17.4 | 1838.99 | 1964.99 | ✅ | ✅ | — | ✅ |
+| C000258 | DeepSpace ROC7 O4 PRO (AF6a) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1636.7 | 16.85 | 41.2 | 41.9 | 47.5 | 20.5 | 1937.98 | 2063.98 | ✅ | ✅ | — | ✅ |
+| C000317 | iFlight Chimera7 Pro V2 (AF8b) | Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S | SBC3 | included | T13 | 1712.0 | 16.92 | 41.2 | 42.0 | 48.1 | 21.4 | 1580.5 | 1706.5 | ✅ | ✅ | — | ✅ |
+| C000168 | GEPRC MOZ7 V2 O4 Pro (AF1c) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1719.7 | 16.85 | 41.0 | 41.7 | 47.8 | 14.3 | 1786.98 | 1912.98 | ✅ | ✅ | — | ✅ |
+| C000273 | DeepSpace ROC7 O4 PRO (AF6b) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1641.0 | 16.92 | 41.0 | 41.7 | 47.3 | 20.5 | 1948.99 | 2074.99 | ✅ | ✅ | — | ✅ |
+| C000339 | NewBeeDrone ROC7 O4PRO (AF10) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | included | T13 | 1641.0 | 16.92 | 41.0 | 41.7 | 47.3 | 20.5 | 1896.99 | 2022.99 | ✅ | ✅ | — | ✅ |
+| C000247 | DarwinFPV X9 (AF4a) | Lumenier NAV 12000mAh 6S 21700 XT90 | SBC3 | included | T13 | 2254.7 | 16.8 | 40.9 | 41.8 | 48.7 | 17.4 | 1522.97 | 1648.97 | ✅ | ✅ | — | ✅ |
+| C000171 | GEPRC MOZ7 V2 O4 Pro (AF1c) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | included | T13 | 1468.7 | 16.85 | 40.8 | 41.7 | 48.5 | 12.2 | 1728.98 | 1854.98 | ✅ | ✅ | — | ✅ |
+| C000245 | DarwinFPV X9 (AF4a) | iFlight Fullsend 6S 8000mAh EVE INR21700-40PL | SBC3 | included | T13 | 1692.7 | 16.8 | 40.8 | 41.9 | 50.6 | 13.0 | 1455.97 | 1581.97 | ✅ | ✅ | — | ✅ |
+| C000043 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | V8 | T13 | 1742.5 | 15.4 | 40.4 | 41.2 | 47.1 | 14.5 | 1558.98 | 1684.98 | ✅ | ✅ | — | ✅ |
+| C000040 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | V5 | T13 | 1747.7 | 15.4 | 40.3 | 41.0 | 46.9 | 14.6 | 1553.98 | 1679.98 | ✅ | ✅ | — | ✅ |
+| C000044 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy RED V3 6S2P 10Ah Molicel P50B | SBC3 | V10 | T13 | 1745.3 | 15.9 | 40.3 | 41.0 | 46.9 | 14.5 | 1550.98 | 1676.98 | ✅ | ✅ | — | ✅ |
+| C000073 | GEPRC MOZ7 V2 WTFPV (AF1b) | Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10 | SBC3 | V8 | T13 | 1491.5 | 15.4 | 40.3 | 41.1 | 47.8 | 12.4 | 1500.98 | 1626.98 | ✅ | ✅ | — | ✅ |
