@@ -503,6 +503,188 @@ package DroneCandidates {
    :>> manufacturerFlightTime = "14 min";
    :>> manufacturerFlightTimeBattery = "6S 3300mAh LiPo";
   }
+
+  // ── NEW CANDIDATES (added 2026-06-28) ─────────────────────────────────
+
+  part AF11a : Airframe {
+   :>> minCells_s = 6;  // 6S build (SPECTER 2806.5 1350KV)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2700.0;  // EST: SPECTER 2806.5 1350KV on 7in @6S (comparable to GEPRC SPEEDX2 2806.5)
+   :>> name = "HGLRC Rekon7 PRO";
+   :>> purchaseUrl = "https://www.hglrc.com/products/rekon7-pro-long-range-fpv-analog-digital-version-racing-drone";
+   :>> purchaseType = "Analog PNP (no RX)";
+   :>> cost_USD = 399.99;            // analog PNP ~$400 on HGLRC
+   :>> mass = 464.3 [g];            // confirmed: multiple resellers (rcdrone.top, dronegearup.com, rotorxpress.com); w/o RX, analog VTX + Caddx Ratel 2
+   :>> propSize_in = 7.0;
+   :>> wheelbase = 324.0 [mm];
+   :>> flightController = "SPECTER F405 V2 (STM32F405, MPU6000)";
+   :>> esc = "SPECTER 60A BL_S 4-in-1";
+   :>> motors = "SPECTER 2806.5 1350KV";
+   :>> propModel = "HQProp DP7X4X3";
+   :>> uartCount = 6;                // STM32F405 typical
+   :>> receiverProtocols = "SBUS, PPM, CRSF, DSMX, iBus";
+   :>> receiverIncluded = false;     // PNP: receiver optional
+   :>> vtxIncluded = true;
+   :>> vtxModel = "ZEUS 1.6W VTX (analog)";
+   :>> fpvCameraIncluded = true;
+   :>> fpvCameraType = "Analog CMOS (Starlight)";
+   :>> fpvCameraModel = "Caddx Ratel 2";
+   :>> gpsIncluded = true;
+   :>> gpsModel = "M80 PRO GPS (pre-installed)";
+   :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "20-25 min (Alibaba listing, no official claim)";
+   :>> manufacturerFlightTimeBattery = "LiPo 6S 3000mAh / VTC6 2P 4000mAh Li-ion";
+  }
+
+  part AF11b : Airframe {
+   :>> minCells_s = 6;  // 6S build (SPECTER 2806.5 1350KV)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2700.0;  // EST: SPECTER 2806.5 1350KV on 7in @6S
+   :>> name = "HGLRC Rekon7 PRO";
+   :>> purchaseUrl = "https://www.hglrc.com/products/rekon7-pro-long-range-fpv-analog-digital-version-racing-drone";
+   :>> purchaseType = "O3 PNP (no RX)";
+   :>> cost_USD = 549.99;            // O3 PNP ~$550 on HGLRC
+   :>> mass = 576.0 [g];            // confirmed: HGLRC official site (DJI O3 version, w/o receiver)
+   :>> propSize_in = 7.0;
+   :>> wheelbase = 324.0 [mm];
+   :>> flightController = "SPECTER F405 V2 (STM32F405, MPU6000)";
+   :>> esc = "SPECTER 60A BL_S 4-in-1";
+   :>> motors = "SPECTER 2806.5 1350KV";
+   :>> propModel = "HQProp DP7X4X3";
+   :>> uartCount = 6;
+   :>> receiverProtocols = "SBUS, PPM, CRSF, DSMX, iBus";
+   :>> receiverIncluded = false;
+   :>> vtxIncluded = true;
+   :>> vtxModel = "DJI O3 Air Unit (digital HD)";
+   :>> fpvCameraIncluded = true;
+   :>> fpvCameraType = "Digital HD (integrated with O3)";
+   :>> fpvCameraModel = "DJI O3 (1/1.7in, 4K/120fps)";
+   :>> gpsIncluded = true;
+   :>> gpsModel = "M80 PRO GPS (pre-installed)";
+   :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "20-25 min (Alibaba listing, no official claim)";
+   :>> manufacturerFlightTimeBattery = "LiPo 6S 3000mAh / VTC6 2P 4000mAh Li-ion";
+  }
+
+  part AF12 : Airframe {
+   :>> minCells_s = 6;  // 6S build (XING2 2809 1250KV, 7.5" LR)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2000.0;  // iFlight XING2 2809 1250KV ~2.0 kg @6S 7.5" (same as Chimera7 Pro V2 motors)
+   :>> name = "iFlight SH CineLR 7 O4";
+   :>> purchaseUrl = "https://pyrodrone.com/products/iflight-sh-cinelr-7-o4-6s-hd-long-range-bnf-w-dji-o4-air-unit-pro-choose-receiver";
+   :>> purchaseType = "BNF (O4 Pro)";
+   :>> cost_USD = 1019.99;           // 1019.99-1082.99 (BNF w/ DJI O4 Pro)
+   :>> mass = 770.0 [g];            // confirmed: PyroDrone "770±5g (Without Battery)"
+   :>> propSize_in = 7.5;
+   :>> wheelbase = 334.0 [mm];
+   :>> flightController = "BLITZ F722 Flight Controller";
+   :>> esc = "BLITZ E55 4-IN-1 2-6S 55A ESC";
+   :>> motors = "XING2 2809 1250KV";
+   :>> propModel = "HQ 7.5x3.7x3";
+   :>> uartCount = 6;
+   :>> receiverProtocols = "TBS Crossfire / ELRS (varies by SKU)";
+   :>> receiverIncluded = true;
+   :>> vtxIncluded = true;
+   :>> vtxModel = "DJI O4 Air Unit Pro (digital HD, integrated)";
+   :>> fpvCameraIncluded = true;
+   :>> fpvCameraType = "Digital HD (integrated with O4 Pro)";
+   :>> fpvCameraModel = "DJI O4 Pro (1/1.3in, 4K/120fps)";
+   :>> gpsIncluded = true;
+   :>> gpsModel = "iFlight GPS module (pre-installed, TPU cover)";
+   :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "Up to 25 min";
+   :>> manufacturerFlightTimeBattery = "6S Li-ion 4000mAh+ (slow cruise) / 6S 3300mAh LiPo";
+  }
+
+  part AF13 : Airframe {
+   :>> minCells_s = 5;  // 5-6S build (XING-E 2809 1250KV; recommended 5-6S)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2000.0;  // EST: XING-E 2809 1250KV comparable to XING2 2809 on 7.5"
+   :>> name = "iFlight Chimera7 Eco";
+   :>> purchaseUrl = "https://pyrodrone.com/products/iflight-chimera7-eco-analog-5-8g-1-6w-vtx-6s-long-range-bnf-elrs-2-4ghz-rx";
+   :>> purchaseType = "BNF Analog";
+   :>> cost_USD = 453.99;            // PyroDrone: $453.99
+   :>> mass = 660.0 [g];            // confirmed: PyroDrone "660g (Without Battery)"
+   :>> propSize_in = 7.5;
+   :>> wheelbase = 327.0 [mm];
+   :>> flightController = "BLITZ ATF435 Flight Controller";
+   :>> esc = "BLITZ E55S 4-IN-1 2-6S 55A ESC";
+   :>> motors = "XING-E 2809 1250KV";
+   :>> propModel = "7.5x3.7x3";
+   :>> uartCount = 6;
+   :>> receiverProtocols = "ELRS 2.4GHz (pre-installed BNF)";
+   :>> receiverIncluded = true;
+   :>> receiverProtocol = "ELRS (CRSF)";
+   :>> vtxIncluded = true;
+   :>> vtxModel = "BLITZ Whoop 5.8G 1.6W VTX (analog)";
+   :>> fpvCameraIncluded = true;
+   :>> fpvCameraType = "Analog CMOS (unnamed)";
+   :>> gpsIncluded = true;
+   :>> gpsModel = "iFlight BLITZ M10 GPS V2 (pre-installed)";
+   :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "~30 min (max hover)";
+   :>> manufacturerFlightTimeBattery = "21700 6S2P 8000mAh Li-ion";
+  }
+
+  part AF14 : Airframe {
+   :>> minCells_s = 3;  // 3-6S motor (SpeedyBee 2807 1050KV)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2700.0;  // EST: SpeedyBee 2807 1050KV 8" — 1350W max / ~56A @6S = ~2.7 kg (est.)
+   :>> name = "SpeedyBee Mario Fold 8 DC";
+   :>> purchaseUrl = "https://www.speedybee.com/speedybee-mario-fold-8-dc-long-range-drone/";
+   :>> purchaseType = "O3 Kit";
+   :>> cost_USD = 559.00;            // SpeedyBee: $559 (O3 Kit), $339 (Power Kit)
+   :>> mass = 695.0 [g];            // confirmed: SpeedyBee "MARIO Fold 8 DC O3 Kit 695g"
+   :>> propSize_in = 8.0;           // compatible 7-8 inch
+   :>> wheelbase = 360.0 [mm];      // DC FLOD: 360mm (foldable)
+   :>> flightController = "SpeedyBee F405 V4 AIO (BL_S)";
+   :>> esc = "Integrated in AIO (45A continuous)";
+   :>> motors = "SpeedyBee 2807 1050KV";
+   :>> propModel = "7-8 inch compatible";
+   :>> uartCount = 5;               // SpeedyBee F405 AIO typical
+   :>> receiverProtocols = "SBUS, PPM, CRSF, DSMX, iBus";
+   :>> receiverIncluded = false;
+   :>> vtxIncluded = true;
+   :>> vtxModel = "DJI O3 Air Unit (O3 Kit) or user-supplied";
+   :>> fpvCameraIncluded = true;
+   :>> fpvCameraType = "Digital HD (integrated with O3)";
+   :>> fpvCameraModel = "DJI O3 (1/1.7in, 4K/120fps)";
+   :>> gpsIncluded = true;
+   :>> gpsModel = "SpeedyBee GPS (pre-installed, BZ251 mount)";
+   :>> sourceConfidence = "Moderate";
+   :>> manufacturerFlightTime = "Not stated (est. ~25 min with 6S 8000mAh)";
+   :>> manufacturerFlightTimeBattery = "N/A (no official claim)";
+  }
+
+  part AF15 : Airframe {
+   :>> minCells_s = 6;  // 6S build (XING2 3314 900KV, 10" LR)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 3500.0;  // EST: XING2 3314 900KV on 10in @6S (~3.5+ kg; large stator)
+   :>> name = "iFlight Nazgul XL10 V6";
+   :>> purchaseUrl = "https://pyrodrone.com/products/iflight-nazgul-xl10-v6-6s-analog-10-inch-long-range-drone-2-5w-vtx-tbs-crossfire-nano-rx";
+   :>> purchaseType = "BNF Analog";
+   :>> cost_USD = 759.99;            // PyroDrone: $759.99 (BNF Analog)
+   :>> mass = 860.0 [g];            // confirmed: PyroDrone "860g (Without Battery)"
+   :>> propSize_in = 10.0;
+   :>> wheelbase = 420.0 [mm];
+   :>> flightController = "BLITZ F722 Flight Controller";
+   :>> esc = "BLITZ E55 4-IN-1 2-6S 55A ESC";
+   :>> motors = "XING2 3314 900KV";
+   :>> propModel = "HQ 10x4.5x3";
+   :>> uartCount = 6;
+   :>> receiverProtocols = "TBS Crossfire Nano (pre-installed)";
+   :>> receiverIncluded = true;
+   :>> receiverProtocol = "TBS Crossfire (CRSF)";
+   :>> vtxIncluded = true;
+   :>> vtxModel = "BLITZ Whoop 5.8G 1.6W VTX (analog)";
+   :>> fpvCameraIncluded = true;
+   :>> fpvCameraType = "Analog CMOS (unnamed)";
+   :>> gpsIncluded = true;
+   :>> gpsModel = "iFlight GPS module (pre-installed, BF/INAV rescue)";
+   :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "~40 min (max hover)";
+   :>> manufacturerFlightTimeBattery = "21700 6S2P 8000mAh Li-ion";
+  }
  }
 
  // =========================================================================
