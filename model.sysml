@@ -392,6 +392,8 @@ package DroneSystemModel {
  attribute gpsIncluded : Boolean;
  attribute gpsModel : String;
  attribute sourceConfidence : String;         // research confidence: High / Moderate / Low
+ attribute manufacturerFlightTime : String;   // max flight time claim from manufacturer or third-party review [min]; source noted in sourceConfidence
+ attribute manufacturerFlightTimeBattery : String;  // battery configuration used to achieve the claimed flight time
 
  port power_battery : Compatibility::PowerSinkPort;
  port power_sbc;

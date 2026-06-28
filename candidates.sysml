@@ -63,6 +63,8 @@ package DroneCandidates {
    :>> gpsIncluded = true;
    :>> gpsModel = "GEP-M1025";
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "25 min (slow cruise)";
+   :>> manufacturerFlightTimeBattery = "LiPo 6S 3300mAh / Lilon 6S 8000mAh Li-ion";
   }
 
   part AF1b : Airframe {
@@ -88,6 +90,8 @@ package DroneCandidates {
    :>> gpsIncluded = true;
    :>> gpsModel = "GEP-M1025";
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "25 min (slow cruise)";
+   :>> manufacturerFlightTimeBattery = "LiPo 6S 3300mAh / Lilon 6S 8000mAh Li-ion";
   }
 
   part AF1c : Airframe {
@@ -116,6 +120,8 @@ package DroneCandidates {
    :>> gpsIncluded = true;
    :>> gpsModel = "GEP-M1025";
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "25 min (slow cruise)";
+   :>> manufacturerFlightTimeBattery = "LiPo 6S 3300mAh / Lilon 6S 8000mAh Li-ion";
   }
 
   // NOTE: the KOLAS7 "PNP" (formerly AF2a, 257 g, $175) was REMOVED 2026-06-27 —
@@ -149,6 +155,8 @@ package DroneCandidates {
    :>> gpsIncluded = true;
    :>> gpsModel = "Axisflying unbranded (likely M8N-class)";
    :>> sourceConfidence = "Low-Moderate";
+   :>> manufacturerFlightTime = "20 min";
+   :>> manufacturerFlightTimeBattery = "6S 4000mAh LiPo";
   }
 
   part AF2c : Airframe {
@@ -178,6 +186,8 @@ package DroneCandidates {
    :>> gpsIncluded = true;
    :>> gpsModel = "Axisflying unbranded";
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "20 min";
+   :>> manufacturerFlightTimeBattery = "6S 4000mAh LiPo";
   }
 
   part AF3a : Airframe {
@@ -205,6 +215,8 @@ package DroneCandidates {
    :>> gpsIncluded = false;          // optional +$39
    :>> gpsModel = "iFlight BLITZ M10 GPS V2 (G4, +$39 option)";
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "~20 min (max hover)";
+   :>> manufacturerFlightTimeBattery = "21700 6S2P 8000mAh Li-ion";
   }
 
   part AF3b : Airframe {
@@ -233,6 +245,8 @@ package DroneCandidates {
    :>> gpsIncluded = false;          // optional +$39
    :>> gpsModel = "iFlight BLITZ M10 GPS V2 (G4, +$39 option)";
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "~20 min (max hover)";
+   :>> manufacturerFlightTimeBattery = "21700 6S2P 8000mAh Li-ion";
   }
 
   part AF4a : Airframe {
@@ -259,6 +273,8 @@ package DroneCandidates {
    :>> fpvCameraType = "Analog CMOS (Darwin cement waterproof)";
    :>> gpsIncluded = false;          // confirmed: "GPS: Non" on product page
    :>> sourceConfidence = "Moderate";
+   :>> manufacturerFlightTime = "33 min";
+   :>> manufacturerFlightTimeBattery = "6S 8500mAh LiPo";
   }
 
   part AF5 : Airframe {
@@ -283,6 +299,8 @@ package DroneCandidates {
    :>> fpvCameraModel = "Caddx or generic analog";
    :>> gpsIncluded = false;
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "10-20 min";
+   :>> manufacturerFlightTimeBattery = "6S 5000mAh LiPo";
   }
 
   part AF6a : Airframe {
@@ -309,6 +327,8 @@ package DroneCandidates {
    :>> gpsIncluded = true;
    :>> gpsModel = "DeepSpace unbranded (~M8N/M10 class)";
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "14 min";
+   :>> manufacturerFlightTimeBattery = "6S 3300mAh LiPo";
   }
 
   part AF6b : Airframe {
@@ -336,6 +356,8 @@ package DroneCandidates {
    :>> gpsIncluded = true;
    :>> gpsModel = "DeepSpace unbranded";
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "14 min";
+   :>> manufacturerFlightTimeBattery = "6S 3300mAh LiPo";
   }
 
   part AF7 : Airframe {
@@ -362,6 +384,8 @@ package DroneCandidates {
    :>> fpvCameraType = "Analog CMOS";
    :>> gpsIncluded = false;
    :>> sourceConfidence = "Moderate";
+   :>> manufacturerFlightTime = "30 min";
+   :>> manufacturerFlightTimeBattery = "Lion 6S 6000mAh";
   }
 
   part AF8a : Airframe {
@@ -389,6 +413,8 @@ package DroneCandidates {
    :>> gpsIncluded = true;
    :>> gpsModel = "iFlight BLITZ M10 GPS V2 Mini (G4, pre-installed)";
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "~30 min (max hover)";
+   :>> manufacturerFlightTimeBattery = "21700 6S 8000mAh Li-ion";
   }
 
   part AF8b : Airframe {
@@ -417,6 +443,8 @@ package DroneCandidates {
    :>> gpsIncluded = true;
    :>> gpsModel = "iFlight BLITZ M10 GPS V2 Mini (G4)";
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "~30 min (max hover)";
+   :>> manufacturerFlightTimeBattery = "21700 6S 8000mAh Li-ion";
   }
 
   part AF9a : Airframe {
@@ -444,6 +472,8 @@ package DroneCandidates {
    :>> gpsIncluded = true;
    :>> gpsModel = "Darwin unbranded (M80 GPS, confirmed in product listing)";
    :>> sourceConfidence = "High";
+   :>> manufacturerFlightTime = "Not stated on any source";
+   :>> manufacturerFlightTimeBattery = "N/A";
   }
 
   part AF10 : Airframe {
@@ -470,6 +500,8 @@ package DroneCandidates {
    :>> gpsIncluded = true;
    :>> gpsModel = "DeepSpace unbranded (same unit)";
    :>> sourceConfidence = "Moderate";
+   :>> manufacturerFlightTime = "14 min";
+   :>> manufacturerFlightTimeBattery = "6S 3300mAh LiPo";
   }
  }
 

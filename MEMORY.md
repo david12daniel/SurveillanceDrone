@@ -40,3 +40,10 @@ The Surveillance Drone SysML V2 model (`model.sysml`) is a critical engineering 
 - [[airframe-research]]
 
 **Source:** External CSV upload 2026-05-16
+
+## GitHub Credential Cache
+
+- **Location:** `.git/git-creds` inside the repo (stored via `git config credential.helper 'store --file .git/git-creds'`)
+- **Token type:** Classic PAT with `repo` scope
+- **Reference:** See `TOOLS.md` for re-issuance instructions
+- **Important:** DO NOT commit `.git/git-creds` to the repo. It's in `.gitignore` implicitly via `.git/`.

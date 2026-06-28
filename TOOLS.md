@@ -37,6 +37,19 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ---
 
+### Git: Surveillance Drone Repo
+
+- **Remote:** `https://github.com/david12daniel/SurveillanceDrone`
+- **Local (Linux):** `/home/david12daniel/.openclaw/agents/thermal-surveillance-drone`
+- **Local (Windows):** `c:\Users\Josiah Laperriere\Documents\Coding\SurveillanceDrone\SurveillanceDrone`
+- **Credential helper:** `store --file .git/git-creds` (GitHub PAT stored in `.git/git-creds`, chmod 600)
+  - To re-issue: create a classic token with `repo` scope, then:
+    `echo "https://david12daniel:TOKEN@github.com" > .git/git-creds && chmod 600 .git/git-creds`
+- **Pointer only on Linux:** Windows checkout has its own credentials
+- **Push:** `cd /path/to/SurveillanceDrone && git push origin master`
+
+---
+
 Add whatever helps you do your job. This is your cheat sheet.
 
 ## Related
