@@ -65,6 +65,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "25 min (slow cruise)";
    :>> manufacturerFlightTimeBattery = "LiPo 6S 3300mAh / Lilon 6S 8000mAh Li-ion";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 90.0;   // EST 0.27*wheelbase (WB 336mm)
+   :>> payloadDeckWidth_mm = 55.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 5220.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF1b : Airframe {
@@ -92,6 +97,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "25 min (slow cruise)";
    :>> manufacturerFlightTimeBattery = "LiPo 6S 3300mAh / Lilon 6S 8000mAh Li-ion";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 90.0;   // EST 0.27*wheelbase (WB 336mm)
+   :>> payloadDeckWidth_mm = 55.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 5235.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF1c : Airframe {
@@ -122,6 +132,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "25 min (slow cruise)";
    :>> manufacturerFlightTimeBattery = "LiPo 6S 3300mAh / Lilon 6S 8000mAh Li-ion";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 90.0;   // EST 0.27*wheelbase (WB 336mm)
+   :>> payloadDeckWidth_mm = 55.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 5250.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   // NOTE: the KOLAS7 "PNP" (formerly AF2a, 257 g, $175) was REMOVED 2026-06-27 —
@@ -157,6 +172,11 @@ package DroneCandidates {
    :>> sourceConfidence = "Low-Moderate";
    :>> manufacturerFlightTime = "20 min";
    :>> manufacturerFlightTimeBattery = "6S 4000mAh LiPo";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 80.0;   // EST 0.27*wheelbase (WB 298mm)
+   :>> payloadDeckWidth_mm = 50.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 5060.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF2c : Airframe {
@@ -188,6 +208,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "20 min";
    :>> manufacturerFlightTimeBattery = "6S 4000mAh LiPo";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 80.0;   // EST 0.27*wheelbase (WB 298mm)
+   :>> payloadDeckWidth_mm = 50.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 5035.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF3a : Airframe {
@@ -197,12 +222,16 @@ package DroneCandidates {
    :>> name = "iFlight Chimera9 ECO";
    :>> purchaseUrl = "https://shop.iflight.com/Chimera9-ECO-6S-Pro2068";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 305.35;
-   :>> mass = 721.0 [g];
+   :>> cost_USD = 385.99;            // 2026-07-01: $474.99 total - $72 ship - $17 props = $385.99 (drone + GPS bundled)
+   :>> mass = 729.0 [g];            // 721g PNP + 8g iFlight BLITZ M10 GPS V2 Mini (G4, pre-installed)
+   :>> batteryConnector = "XT60";   // XT60 lead — matches the XT60 packs + anti-spark (R4_BAT_IF)
    :>> propSize_in = 9.0;
    :>> wheelbase = 405.0 [mm];
    :>> flightController = "BLITZ F7 (updated Jun 2026)";
    :>> esc = "BLITZ E55 4-in-1 55A";
+   :>> fcFirmware = "TBD — ArduPilot Copter or PX4 (open action item; see MODEL_ISSUES.md)";
+   :>> escFirmware = "BLHeli_32";
+   :>> fcProtocols = "CRSF-in | UBX-in | DSHOT600-out | MAVLink2-out";
    :>> motors = "XING-E 2809 800KV";
    :>> propModel = "HQ 9X4X3";
    :>> uartCount = 6;
@@ -212,11 +241,16 @@ package DroneCandidates {
    :>> vtxModel = "BLITZ Whoop 5.8G 1.6W or 2.5W";
    :>> fpvCameraIncluded = true;
    :>> fpvCameraType = "Analog CMOS (model not named)";
-   :>> gpsIncluded = false;          // optional +$39
-   :>> gpsModel = "iFlight BLITZ M10 GPS V2 (G4, +$39 option)";
+   :>> gpsIncluded = true;           // pre-installed (+$39 option selected 2026-07-01)
+   :>> gpsModel = "iFlight BLITZ M10 GPS V2 Mini (G4, pre-installed)";
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "~20 min (max hover)";
    :>> manufacturerFlightTimeBattery = "21700 6S2P 8000mAh Li-ion";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 110.0;   // EST 0.27*wheelbase (WB 405mm)
+   :>> payloadDeckWidth_mm = 70.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 5145.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF3b : Airframe {
@@ -247,6 +281,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "~20 min (max hover)";
    :>> manufacturerFlightTimeBattery = "21700 6S2P 8000mAh Li-ion";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 110.0;   // EST 0.27*wheelbase (WB 405mm)
+   :>> payloadDeckWidth_mm = 70.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 5140.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF4a : Airframe {
@@ -256,7 +295,7 @@ package DroneCandidates {
    :>> name = "DarwinFPV X9";
    :>> purchaseUrl = "https://darwinfpv.com/products/darwinfpv-x9-9-long-range-fpv-drone";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 440.99;            // range 280-400
+   :>> cost_USD = 311.99;            // 2026-07-01: $355.99 total - $44 ship = $311.99; props included by default
    :>> mass = 747.0 [g];            // confirmed: darwinfpv.com "747g±5g without package"; includes VTX + FPV cam, no GPS
    :>> propSize_in = 9.0;
    :>> wheelbase = 363.0 [mm];
@@ -275,6 +314,11 @@ package DroneCandidates {
    :>> sourceConfidence = "Moderate";
    :>> manufacturerFlightTime = "33 min";
    :>> manufacturerFlightTimeBattery = "6S 8500mAh LiPo";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 100.0;   // EST 0.27*wheelbase (WB 363mm)
+   :>> payloadDeckWidth_mm = 60.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 5745.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF5 : Airframe {
@@ -301,6 +345,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "10-20 min";
    :>> manufacturerFlightTimeBattery = "6S 5000mAh LiPo";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 80.0;   // EST 0.27*wheelbase (no WB published, 7"-class default)
+   :>> payloadDeckWidth_mm = 50.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 0.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF6a : Airframe {
@@ -329,6 +378,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "14 min";
    :>> manufacturerFlightTimeBattery = "6S 3300mAh LiPo";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 80.0;   // EST 0.27*wheelbase (no WB published, 7"-class default)
+   :>> payloadDeckWidth_mm = 50.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 3335.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF6b : Airframe {
@@ -358,6 +412,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "14 min";
    :>> manufacturerFlightTimeBattery = "6S 3300mAh LiPo";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 80.0;   // EST 0.27*wheelbase (no WB published, 7"-class default)
+   :>> payloadDeckWidth_mm = 50.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 3330.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF7 : Airframe {
@@ -386,6 +445,11 @@ package DroneCandidates {
    :>> sourceConfidence = "Moderate";
    :>> manufacturerFlightTime = "30 min";
    :>> manufacturerFlightTimeBattery = "Lion 6S 6000mAh";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 90.0;   // EST 0.27*wheelbase (WB 342mm)
+   :>> payloadDeckWidth_mm = 60.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 4800.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF8a : Airframe {
@@ -415,6 +479,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "~30 min (max hover)";
    :>> manufacturerFlightTimeBattery = "21700 6S 8000mAh Li-ion";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 90.0;   // EST 0.27*wheelbase (WB 327mm)
+   :>> payloadDeckWidth_mm = 55.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 3295.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF8b : Airframe {
@@ -445,6 +514,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "~30 min (max hover)";
    :>> manufacturerFlightTimeBattery = "21700 6S 8000mAh Li-ion";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 90.0;   // EST 0.27*wheelbase (WB 327mm)
+   :>> payloadDeckWidth_mm = 55.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 3290.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF9a : Airframe {
@@ -474,6 +548,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "Not stated on any source";
    :>> manufacturerFlightTimeBattery = "N/A";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 75.0;   // EST 0.27*wheelbase (WB 280mm)
+   :>> payloadDeckWidth_mm = 50.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 2575.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "bottom";   // confirmed (racing pod, battery underslung)
   }
 
   part AF10 : Airframe {
@@ -502,6 +581,11 @@ package DroneCandidates {
    :>> sourceConfidence = "Moderate";
    :>> manufacturerFlightTime = "14 min";
    :>> manufacturerFlightTimeBattery = "6S 3300mAh LiPo";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 80.0;   // EST 0.27*wheelbase (no WB published, 7"-class default)
+   :>> payloadDeckWidth_mm = 50.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 3330.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   // ── NEW CANDIDATES (added 2026-06-28) ─────────────────────────────────
@@ -514,7 +598,7 @@ package DroneCandidates {
    :>> purchaseUrl = "https://www.hglrc.com/products/rekon7-pro-long-range-fpv-analog-digital-version-racing-drone";
    :>> purchaseType = "Analog PNP (no RX)";
    :>> cost_USD = 399.99;            // analog PNP ~$400 on HGLRC
-   :>> mass = 464.3 [g];            // confirmed: multiple resellers (rcdrone.top, dronegearup.com, rotorxpress.com); w/o RX, analog VTX + Caddx Ratel 2
+   :>> mass = 576 [g];            // confirmed: multiple resellers (rcdrone.top, dronegearup.com, rotorxpress.com); w/o RX, analog VTX + Caddx Ratel 2
    :>> propSize_in = 7.0;
    :>> wheelbase = 324.0 [mm];
    :>> flightController = "SPECTER F405 V2 (STM32F405, MPU6000)";
@@ -534,37 +618,48 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "20-25 min (Alibaba listing, no official claim)";
    :>> manufacturerFlightTimeBattery = "LiPo 6S 3000mAh / VTC6 2P 4000mAh Li-ion";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 85.0;   // EST 0.27*wheelbase (WB 324mm)
+   :>> payloadDeckWidth_mm = 55.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 4825.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF11b : Airframe {
    :>> minCells_s = 6;  // 6S build (SPECTER 2806.5 1350KV)
    :>> maxCells_s = 6;
-   :>> maxThrustPerMotor_g = 2700.0;  // EST: SPECTER 2806.5 1350KV on 7in @6S
+   :>> maxThrustPerMotor_g = 2700.0;  // EST: SPECTER 2806.5 1350KV on 7in @6S (comparable to GEPRC SPEEDX2 2806.5)
    :>> name = "HGLRC Rekon7 PRO";
    :>> purchaseUrl = "https://www.hglrc.com/products/rekon7-pro-long-range-fpv-analog-digital-version-racing-drone";
-   :>> purchaseType = "O3 PNP (no RX)";
-   :>> cost_USD = 549.99;            // O3 PNP ~$550 on HGLRC
-   :>> mass = 576.0 [g];            // confirmed: HGLRC official site (DJI O3 version, w/o receiver)
+   :>> purchaseType = "ELRS 2.4GHz BNF";
+   :>> cost_USD = 409.99;            // analog PNP ~$400 on HGLRC
+   :>> mass = 576.66 [g];            // confirmed: multiple resellers (rcdrone.top, dronegearup.com, rotorxpress.com); w/o RX, analog VTX + Caddx Ratel 2
    :>> propSize_in = 7.0;
    :>> wheelbase = 324.0 [mm];
    :>> flightController = "SPECTER F405 V2 (STM32F405, MPU6000)";
    :>> esc = "SPECTER 60A BL_S 4-in-1";
    :>> motors = "SPECTER 2806.5 1350KV";
    :>> propModel = "HQProp DP7X4X3";
-   :>> uartCount = 6;
-   :>> receiverProtocols = "SBUS, PPM, CRSF, DSMX, iBus";
-   :>> receiverIncluded = false;
+   :>> uartCount = 6;                // STM32F405 typical
+   :>> receiverProtocols = "SBUS, CRSF";
+   :>> receiverIncluded = true;     // BNF
    :>> vtxIncluded = true;
-   :>> vtxModel = "DJI O3 Air Unit (digital HD)";
+   :>> vtxModel = "ZEUS 1.6W VTX (analog)";
    :>> fpvCameraIncluded = true;
-   :>> fpvCameraType = "Digital HD (integrated with O3)";
-   :>> fpvCameraModel = "DJI O3 (1/1.7in, 4K/120fps)";
+   :>> fpvCameraType = "Analog CMOS (Starlight)";
+   :>> fpvCameraModel = "Caddx Ratel 2";
    :>> gpsIncluded = true;
    :>> gpsModel = "M80 PRO GPS (pre-installed)";
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "20-25 min (Alibaba listing, no official claim)";
    :>> manufacturerFlightTimeBattery = "LiPo 6S 3000mAh / VTC6 2P 4000mAh Li-ion";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 85.0;   // EST 0.27*wheelbase (WB 324mm)
+   :>> payloadDeckWidth_mm = 55.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 4825.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
+
 
   part AF12 : Airframe {
    :>> minCells_s = 6;  // 6S build (XING2 2809 1250KV, 7.5" LR)
@@ -594,6 +689,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "Up to 25 min";
    :>> manufacturerFlightTimeBattery = "6S Li-ion 4000mAh+ (slow cruise) / 6S 3300mAh LiPo";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 90.0;   // EST 0.27*wheelbase (WB 334mm)
+   :>> payloadDeckWidth_mm = 55.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 3230.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
   part AF13 : Airframe {
@@ -617,16 +717,21 @@ package DroneCandidates {
    :>> receiverProtocol = "ELRS (CRSF)";
    :>> vtxIncluded = true;
    :>> vtxModel = "BLITZ Whoop 5.8G 1.6W VTX (analog)";
-   :>> fpvCameraIncluded = true;
-   :>> fpvCameraType = "Analog CMOS (unnamed)";
-   :>> gpsIncluded = true;
-   :>> gpsModel = "iFlight BLITZ M10 GPS V2 (pre-installed)";
+   :>> fpvCameraIncluded = false;     // confirmed: camera NOT included (iFlight ECO omits camera; add separately)
+   :>> fpvCameraType = "N/A (not included)";
+   :>> gpsIncluded = false;           // confirmed: GPS NOT included by default; optional add-on +$39 from iFlight
+   :>> gpsModel = "N/A (not included; iFlight M10 GPS optional +$39)";
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "~30 min (max hover)";
    :>> manufacturerFlightTimeBattery = "21700 6S2P 8000mAh Li-ion";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 90.0;   // EST 0.27*wheelbase (WB 327mm)
+   :>> payloadDeckWidth_mm = 55.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 3340.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
 
-  part AF14 : Airframe {
+  part AF14a : Airframe {
    :>> minCells_s = 3;  // 3-6S motor (SpeedyBee 2807 1050KV)
    :>> maxCells_s = 6;
    :>> maxThrustPerMotor_g = 2700.0;  // EST: SpeedyBee 2807 1050KV 8" — 1350W max / ~56A @6S = ~2.7 kg (est.)
@@ -637,8 +742,8 @@ package DroneCandidates {
    :>> mass = 695.0 [g];            // confirmed: SpeedyBee "MARIO Fold 8 DC O3 Kit 695g"
    :>> propSize_in = 8.0;           // compatible 7-8 inch
    :>> wheelbase = 360.0 [mm];      // DC FLOD: 360mm (foldable)
-   :>> flightController = "SpeedyBee F405 V4 AIO (BL_S)";
-   :>> esc = "Integrated in AIO (45A continuous)";
+   :>> flightController = "SpeedyBee F722 V3";  // confirmed: F722 V3, not F405 AIO
+   :>> esc = "SpeedyBee 50A 4-in-1 ESC";        // confirmed: separate 50A 4-in-1, not AIO-integrated
    :>> motors = "SpeedyBee 2807 1050KV";
    :>> propModel = "7-8 inch compatible";
    :>> uartCount = 5;               // SpeedyBee F405 AIO typical
@@ -650,10 +755,50 @@ package DroneCandidates {
    :>> fpvCameraType = "Digital HD (integrated with O3)";
    :>> fpvCameraModel = "DJI O3 (1/1.7in, 4K/120fps)";
    :>> gpsIncluded = true;
-   :>> gpsModel = "SpeedyBee GPS (pre-installed, BZ251 mount)";
+   :>> gpsModel = "SpeedyBee BZ251 GPS (pre-installed)";
    :>> sourceConfidence = "Moderate";
    :>> manufacturerFlightTime = "Not stated (est. ~25 min with 6S 8000mAh)";
    :>> manufacturerFlightTimeBattery = "N/A (no official claim)";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 95.0;   // EST 0.27*wheelbase (WB 360mm)
+   :>> payloadDeckWidth_mm = 60.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 4705.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "both";   // EST
+  }
+
+  part AF14b : Airframe {
+   :>> minCells_s = 3;  // 3-6S motor (SpeedyBee 2807 1050KV)
+   :>> maxCells_s = 6;
+   :>> maxThrustPerMotor_g = 2700.0;  // EST: SpeedyBee 2807 1050KV 8" — 1350W max / ~56A @6S = ~2.7 kg (est.)
+   :>> name = "SpeedyBee Mario Fold 8 DC";
+   :>> purchaseUrl = "https://www.speedybee.com/speedybee-mario-fold-8-dc-long-range-drone/";
+   :>> purchaseType = "Power Kit (no VTX/cam)";
+   :>> cost_USD = 339.99;            // SpeedyBee Power Kit $339 (vs O3 Kit $559); no DJI O3 air unit
+   :>> mass = 656.0 [g];            // Power Kit (no O3 air unit); ~656 g est (O3 Kit 695 g − DJI O3 ~36 g) — confirm
+   :>> propSize_in = 8.0;           // compatible 7-8 inch
+   :>> wheelbase = 360.0 [mm];      // DC FLOD: 360mm (foldable)
+   :>> flightController = "SpeedyBee F722 V3";  // confirmed: F722 V3, not F405 AIO
+   :>> esc = "SpeedyBee 50A 4-in-1 ESC";        // confirmed: separate 50A 4-in-1, not AIO-integrated
+   :>> motors = "SpeedyBee 2807 1050KV";
+   :>> propModel = "7-8 inch compatible";
+   :>> uartCount = 5;               // SpeedyBee F405 AIO typical
+   :>> receiverProtocols = "SBUS, PPM, CRSF, DSMX, iBus";
+   :>> receiverIncluded = false;
+   :>> vtxIncluded = false;
+   :>> vtxModel = "";
+   :>> fpvCameraIncluded = false;
+   :>> fpvCameraType = "";
+   :>> fpvCameraModel = "";
+   :>> gpsIncluded = true;
+   :>> gpsModel = "SpeedyBee BZ251 GPS (pre-installed)";
+   :>> sourceConfidence = "Moderate";
+   :>> manufacturerFlightTime = "Not stated (est. ~25 min with 6S 8000mAh)";
+   :>> manufacturerFlightTimeBattery = "N/A (no official claim)";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 95.0;   // EST 0.27*wheelbase (WB 360mm)
+   :>> payloadDeckWidth_mm = 60.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 4745.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "both";   // EST
   }
 
   part AF15 : Airframe {
@@ -676,7 +821,7 @@ package DroneCandidates {
    :>> receiverIncluded = true;
    :>> receiverProtocol = "TBS Crossfire (CRSF)";
    :>> vtxIncluded = true;
-   :>> vtxModel = "BLITZ Whoop 5.8G 1.6W VTX (analog)";
+   :>> vtxModel = "BLITZ Whoop 5.8G 2.5W VTX (analog)";  // confirmed: PyroDrone link is 2.5W version
    :>> fpvCameraIncluded = true;
    :>> fpvCameraType = "Analog CMOS (unnamed)";
    :>> gpsIncluded = true;
@@ -684,6 +829,11 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "~40 min (max hover)";
    :>> manufacturerFlightTimeBattery = "21700 6S2P 8000mAh Li-ion";
+   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   :>> payloadDeckLength_mm = 115.0;   // EST 0.27*wheelbase (WB 420mm)
+   :>> payloadDeckWidth_mm = 70.0;    // EST 0.17*wheelbase
+   :>> payloadCapacity_g = 6140.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
+   :>> batteryMount = "top";   // EST
   }
  }
 
@@ -996,6 +1146,7 @@ package DroneCandidates {
    :>> hfov = 33.0;                 // 640px x 12um = 7.68mm sensor + 13mm lens: 2*atan(7.68/(2*13)) ~= 32.9 deg
    :>> lensOptions = "13";
    :>> outputInterface = "USB";
+   :>> outputProtocol = "USB UVC 1.1";
    :>> radiometric = true;
    :>> dimensions = "~17x17x35";
    :>> inputVoltageMin = 5.0 [V];
@@ -1503,6 +1654,8 @@ package DroneCandidates {
    :>> connector = "JST-SH (UART+I2C)";
    :>> mounting = "20x21mm";
    :>> dimensions = "20x21x8mm";
+   :>> firmware = "u-blox M10 (factory, HPG series)";
+   :>> outputProtocol = "UBX binary (primary) / NMEA 0183";
   }
 
   part G5 : GpsModule {
@@ -1649,6 +1802,14 @@ package DroneCandidates {
    :>> coolingType = "Passive (fan header available)";
    :>> dimensions = "90 x 62 mm";
    :>> osSupport = "Ubuntu / Debian / Armbian / Android";
+   :>> osVersion = "Ubuntu 22.04 LTS (FriendlyElec image)";
+   :>> mlRuntime = "RKNN Runtime 2.x + RKNN Toolkit2";
+   :>> detectionModel = "YOLOv8n-thermal → .rknn (to be trained — see MODEL_ISSUES.md)";
+   :>> mavlinkLibrary = "pymavlink 2.4.x or MAVSDK-Python";
+   :>> videoProtocolIn = "USB UVC 1.1 (← T13 thermal cam)";
+   :>> mavlinkProtocol = "MAVLink 2 UART ↔ FC (BLITZ F7)";
+   :>> videoProtocolOut = "RTSP H.264 → GCS (optional Phase 3)";
+   :>> recordingFormat = "MP4/H.264 → NVMe or microSD";
   }
  }
 
@@ -1773,6 +1934,7 @@ package DroneCandidates {
    :>> mass = 3.3 [g];
    :>> maxRange = 5.0 [km];
    :>> protocol = "ELRS";
+   :>> elrsFirmware = "ExpressLRS 3.5+ (must match TX12 MkII version)";
    :>> interfaceType = "CRSF";
    :>> band = "2.4 GHz";
    :>> size = "24.5x18.6 mm";
@@ -2013,7 +2175,7 @@ package DroneCandidates {
    :>> brand = "RadioMaster";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Compact box";
-   :>> cost_USD = 130.0;
+   :>> cost_USD = 117.93;
    :>> mass = 363.0 [g];
    :>> maxRange = 6.0 [km];
    :>> internalTxPower = 0.25 [W];
@@ -2067,7 +2229,7 @@ package DroneCandidates {
    :>> brand = "RadioMaster";
    :>> txType = "Integrated Controller";
    :>> formFactor = "Ultra-compact gamepad";
-   :>> cost_USD = 65.0;
+   :>> cost_USD = 85.0;
    :>> mass = 288.0 [g];
    :>> maxRange = 3.0 [km];        // 2-4
    :>> internalTxPower = 0.1 [W];
@@ -2548,9 +2710,9 @@ package DroneCandidates {
   // The hard 2.8 km video link is gated by the GROUND side; these add margin.
   part VRX6 : VideoReceiver {
    :>> name = "Skydroid 150CH 5.8GHz True-Diversity UVC Receiver";
-   :>> purchaseUrl = "https://www.amazon.com/s?k=Skydroid+150CH+UVC+receiver";
+   :>> purchaseUrl = "https://www.alibaba.com/product-detail/SKYDROID-5-8GHz-FPV-Receiver-UVC_1601393061166.html"; // select dual-antenna variant; USB 5V 190mA powered (no separate supply)
    :>> vrxType = "True-diversity UVC receiver (laptop-direct)";
-   :>> cost_USD = 45.0;            // 37-48
+   :>> cost_USD = 44.45;           // 2026-07-02 Alibaba dual-antenna
    :>> mass = 29.0 [g];
    :>> power = 1.0 [W];            // USB 5V ~190 mA
    :>> inputFrequency = "5.8 GHz";
@@ -2576,6 +2738,182 @@ package DroneCandidates {
    :>> diversity = "True (dual antenna)";
    :>> macOsCompatible = true;     // via the UVC capture dongle (analog AV)
    :>> includedWithAirframe = false;
+  }
+
+  // ── Digital ground receivers (market research 2026-06-28) ───────────────
+  // Required for airframes that bundle a DIGITAL air unit (DJI O3/O4, Walksnail):
+  // an analog 5.8 GHz VRX cannot decode these. The flight-time sweep matches the
+  // ground receiver to each airframe's VTX video format (CVBS → analog VRX;
+  // DJI → VRX8; Walksnail → VRX9). NB: digital systems use goggles as the ground
+  // receiver (HDMI/USB out to laptop), NOT a laptop UVC dongle.
+  part VRX8 : VideoReceiver {
+   :>> name = "DJI Goggles N3 (digital receiver)";
+   :>> purchaseUrl = "https://store.dji.com/product/dji-goggles-n3";
+   :>> vrxType = "DJI digital FPV goggles (O3/O4 Air Unit ground receiver)";
+   :>> cost_USD = 230.0;           // cheapest DJI goggles; O4 Air Unit native (O3 per 3rd-party). Goggles 3 = $499
+   :>> mass = 380.0 [g];           // ground-side (goggles); not flown — informational only
+   :>> power = 5.0 [W];            // ground-side; not on the drone
+   :>> inputFrequency = "DJI O4/O3 digital (2.4/5.8 GHz)";
+   :>> outputToLaptop = "Goggles HDMI/USB-C out -> capture (no native laptop dongle for DJI)";
+   :>> antenna = "Built-in (omni + optional patch)";
+   :>> range = 10.0 [km];          // O4 Air Unit ~15 km, O3 ~10 km — far exceeds the 2.8 km hard req
+   :>> diversity = "True (built-in)";
+   :>> macOsCompatible = false;    // requires goggles + HDMI/USB capture, not a direct UVC dongle
+   :>> includedWithAirframe = false;
+  }
+
+  part VRX9 : VideoReceiver {
+   :>> name = "Walksnail Avatar HD Goggles L (digital receiver)";
+   :>> purchaseUrl = "https://www.caddxfpv.com/products/walksnail-avatar-hd-goggles-l";
+   :>> vrxType = "Walksnail digital FPV goggles (Avatar HD ground receiver)";
+   :>> cost_USD = 199.0;           // cheapest Walksnail goggles; standalone Avatar VRX module = $285
+   :>> mass = 350.0 [g];           // ground-side (goggles); not flown — informational only
+   :>> power = 5.0 [W];            // ground-side; not on the drone
+   :>> inputFrequency = "Walksnail Avatar digital (5.8 GHz)";
+   :>> outputToLaptop = "Goggles HDMI out -> capture (no native laptop dongle for Walksnail)";
+   :>> antenna = "Built-in (omni + optional patch)";
+   :>> range = 4.0 [km];           // Walksnail Avatar HD typical; meets the 2.8 km hard req
+   :>> diversity = "True (built-in)";
+   :>> macOsCompatible = false;    // requires goggles + HDMI capture, not a direct UVC dongle
+   :>> includedWithAirframe = false;
+  }
+ }
+
+ // =========================================================================
+ // GROUND ANTENNA CANDIDATES  (ground-station directional antenna for the VRX)
+ // The high-gain patch is what closes the 2.8 km video downlink with margin.
+ // =========================================================================
+ package AntennaCandidates {
+
+  part PATCH1 : Antenna {
+   :>> name = "TrueRC X-AIR 5.8 MK II (RHCP patch)";
+   :>> purchaseUrl = "https://truerc.com/63425-x-air-58-mk-ii-rp-sma";
+   :>> cost_USD = 36.85;           // 2026-07-02 confirmed price
+   :>> mass = 20.0 [g];           // ground-side; not flown
+   :>> gain_dBi = 10.0;           // confirmed: 9.5-10.5 dBic
+   :>> frequencyBand = "5.8 GHz";
+   :>> antennaType = "Patch (directional)";
+   :>> polarization = "RHCP";     // matches typical FPV VTX antenna polarization
+   :>> beamwidth_deg = 120.0;     // confirmed: 120 deg -3 dB beam (wide -> easy to keep drone in view)
+   :>> connector = "RP-SMA";
+   :>> includedWithAirframe = false;
+  }
+
+  // OpenHD ground-station directional panels (×2 for spatial diversity on AWUS036ACH dual RP-SMA ports)
+  // See analysis/openhd-ground-antenna-trade-study.md — SELECTED: ANT_GND1 / ANT_GND2 (updated 2026-07-02)
+  // Switched from Lumenier AXII Quadro (40°, 14.7 dBic) → Foxeer Echo 2 Max (60°, 13 dBi) for wider beam.
+  part ANT_GND1 : Antenna {
+   :>> name = "Foxeer Echo 2 Max 5.8 GHz (Linear patch) #1";
+   :>> purchaseUrl = "https://www.foxeer.com/foxeer-echo-2-max-high-gain-antenna-g-434";
+   :>> cost_USD = 30.00;
+   :>> mass = 60.0 [g];           // EST: 113×89×92 mm horn-type body; no confirmed published mass
+   :>> gain_dBi = 13.0;           // confirmed: 13 dBi (Foxeer spec)
+   :>> frequencyBand = "5.8 GHz";
+   :>> antennaType = "Patch/horn (directional)";
+   :>> polarization = "Linear";
+   :>> beamwidth_deg = 60.0;      // confirmed: 60° H × 60° V — no tracking needed; ±30° slack from aim point
+   :>> connector = "RP-SMA";      // RP-SMA male; mates directly to AWUS036ACH RP-SMA female (no pigtail)
+   :>> includedWithAirframe = false;
+  }
+
+  part ANT_GND2 : Antenna {
+   :>> name = "Foxeer Echo 2 Max 5.8 GHz (Linear patch) #2";
+   :>> purchaseUrl = "https://www.foxeer.com/foxeer-echo-2-max-high-gain-antenna-g-434";
+   :>> cost_USD = 30.00;
+   :>> mass = 60.0 [g];           // EST: same as ANT_GND1
+   :>> gain_dBi = 13.0;
+   :>> frequencyBand = "5.8 GHz";
+   :>> antennaType = "Patch/horn (directional)";
+   :>> polarization = "Linear";
+   :>> beamwidth_deg = 60.0;
+   :>> connector = "RP-SMA";      // RP-SMA male; mates to AWUS036ACH second RP-SMA female port
+   :>> includedWithAirframe = false;
+  }
+ }
+
+ // =========================================================================
+ // ANTI-SPARK / POWER ACCESSORY CANDIDATES
+ // Inline anti-spark filter between the battery and the airframe power lead.
+ // =========================================================================
+ package AntiSparkCandidates {
+
+  part ASF1 : AntiSparkFilter {
+   :>> name = "iFlight Anti Spark Filter (XT60, 150A)";
+   :>> purchaseUrl = "https://shop.iflight.com/index.php?route=product/product&product_id=3474";
+   :>> cost_USD = 14.99;
+   :>> mass = 4.5 [g];            // 30x16mm 150A version (smaller 30A versions: 2.4-2.6g)
+   :>> connector = "XT60";        // XT60E-M — matches the Chimera9 input + the XT60 packs
+   :>> currentRating_A = 150.0;   // 150A version (sized well above the ~8-50A flight draw)
+   :>> maxCells_s = 6;            // up to 6S (26 V input max)
+   :>> dimensions = "30x16mm";
+   :>> includedWithAirframe = false;
+  }
+ }
+
+ // =========================================================================
+ // BATTERY CHARGER CANDIDATES  (bench / ground-support — reusable, not flown)
+ // 6S Li-ion + LiPo balance chargers, XT60. Must match the pack chemistry/cells/connector.
+ // =========================================================================
+ package ChargerCandidates {
+
+  part CHG1 : Charger {
+   :>> name = "HOTA D6 Pro";
+   :>> purchaseUrl = "https://www.hotarc.com/";
+   :>> cost_USD = 111.55;          // 2026-07-02 confirmed price
+   :>> mass = 405.0 [g];
+   :>> acPower_W = 200.0;
+   :>> dcPower_W = 650.0;
+   :>> channels = 2;
+   :>> maxCells_s = 6;
+   :>> maxCurrent_A = 15.0;
+   :>> chemistrySupport = "LiPo / Li-ion / LiFe / LiHV / NiMH / Pb";
+   :>> connector = "XT60";
+   :>> acIntegrated = true;
+  }
+
+  part CHG2 : Charger {
+   :>> name = "ISDT 608AC";
+   :>> purchaseUrl = "https://www.isdt.co/";
+   :>> cost_USD = 75.0;
+   :>> mass = 300.0 [g];
+   :>> acPower_W = 200.0;
+   :>> dcPower_W = 200.0;
+   :>> channels = 1;
+   :>> maxCells_s = 6;
+   :>> maxCurrent_A = 8.0;
+   :>> chemistrySupport = "LiPo / Li-ion / LiHV / LiFe / NiMH / Pb";
+   :>> connector = "XT60";       // XT60 built-in
+   :>> acIntegrated = true;
+  }
+
+  part CHG3 : Charger {
+   :>> name = "ToolkitRC M6DAC";
+   :>> purchaseUrl = "https://www.toolkitrc.com/";
+   :>> cost_USD = 120.0;
+   :>> mass = 470.0 [g];
+   :>> acPower_W = 200.0;
+   :>> dcPower_W = 700.0;
+   :>> channels = 2;
+   :>> maxCells_s = 6;
+   :>> maxCurrent_A = 15.0;
+   :>> chemistrySupport = "LiPo / Li-ion / LiFe / LiHV / NiMH / Pb";
+   :>> connector = "XT60";
+   :>> acIntegrated = true;
+  }
+
+  part CHG4 : Charger {
+   :>> name = "HOTA S6";
+   :>> purchaseUrl = "https://www.hotarc.com/";
+   :>> cost_USD = 140.0;
+   :>> mass = 660.0 [g];
+   :>> acPower_W = 400.0;
+   :>> dcPower_W = 650.0;
+   :>> channels = 2;
+   :>> maxCells_s = 6;
+   :>> maxCurrent_A = 15.0;
+   :>> chemistrySupport = "LiPo / Li-ion / LiFe / LiHV / NiMH / Pb";
+   :>> connector = "XT60";
+   :>> acIntegrated = true;
   }
  }
 
@@ -2883,6 +3221,7 @@ package DroneCandidates {
    :>> frameRate_fps = 30.0;
    :>> audioRecording = true;
    :>> startStopControl = "On-unit button";
+   :>> firmware = "factory (Monster UVC Recorder)";
   }
  }
 
@@ -2977,6 +3316,10 @@ package DroneCandidates {
    :>> cellModel = "Samsung/generic 21700 graphite NCM";
    :>> maxContinuousDischarge_A = 35.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 125.0;   // EST upright 6x2 cell grid (21mm dia, 70mm)
+   :>> width_mm = 40.0;
+   :>> height_mm = 70.0;
   }
 
   part BAT02 : Battery {
@@ -2993,6 +3336,10 @@ package DroneCandidates {
    :>> cellModel = "Samsung INR21700-50S";
    :>> maxContinuousDischarge_A = 40.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 125.0;   // EST upright 6x2 cell grid (21mm dia, 70mm)
+   :>> width_mm = 40.0;
+   :>> height_mm = 70.0;
   }
 
   part BAT03 : Battery {
@@ -3009,6 +3356,10 @@ package DroneCandidates {
    :>> cellModel = "Molicel INR21700-P50B";
    :>> maxContinuousDischarge_A = 50.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 125.0;   // EST upright 6x2 cell grid (21mm dia, 70mm)
+   :>> width_mm = 40.0;
+   :>> height_mm = 70.0;
   }
 
   // ── Category: Li-ion 4S 12000mAh ─────────────────────────────────────
@@ -3028,6 +3379,10 @@ package DroneCandidates {
    :>> cellModel = "Amprius SA17 silicon-anode 21700";
    :>> maxContinuousDischarge_A = 36.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 80.0;   // confirmed: GetFPV/RaceDayQuads product page
+   :>> width_mm = 45.0;
+   :>> height_mm = 70.0;
   }
 
   // ── Category: Li-ion 6S 8000mAh ──────────────────────────────────────
@@ -3046,6 +3401,10 @@ package DroneCandidates {
    :>> cellModel = "Samsung INR21700-40T";
    :>> maxContinuousDischarge_A = 80.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 125.0;   // EST upright 6x2 cell grid (21mm dia, 70mm)
+   :>> width_mm = 40.0;
+   :>> height_mm = 70.0;
   }
 
   part BAT06 : Battery {
@@ -3062,6 +3421,10 @@ package DroneCandidates {
    :>> cellModel = "EVE INR21700-40PL";
    :>> maxContinuousDischarge_A = 35.0;  // practical long-range draw; 140 A peak thermal-limited
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 125.0;   // EST upright 6x2 cell grid (21mm dia, 70mm)
+   :>> width_mm = 40.0;
+   :>> height_mm = 70.0;
   }
 
   part BAT07 : Battery {
@@ -3078,6 +3441,10 @@ package DroneCandidates {
    :>> cellModel = "Amprius SA10 silicon-anode 18650";
    :>> maxContinuousDischarge_A = 12.0;  // silicon-anode current-limited; 187 W / 16 V avg
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 110.0;   // EST upright 6x1 cell grid (18mm dia, 65mm)
+   :>> width_mm = 20.0;
+   :>> height_mm = 65.0;
   }
 
   // ── Category: Li-ion 6S 12000mAh ─────────────────────────────────────
@@ -3096,6 +3463,10 @@ package DroneCandidates {
    :>> cellModel = "21700 graphite NCM (standard)";
    :>> maxContinuousDischarge_A = 50.0;
    :>> connector = "XT90";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 125.0;   // EST upright 6x3 cell grid (21mm dia, 70mm)
+   :>> width_mm = 65.0;
+   :>> height_mm = 70.0;
   }
 
   part BAT09 : Battery {
@@ -3112,11 +3483,15 @@ package DroneCandidates {
    :>> cellModel = "Amprius SA17 silicon-anode 21700";
    :>> maxContinuousDischarge_A = 36.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 125.0;   // EST upright 6x2 cell grid (21mm dia, 70mm)
+   :>> width_mm = 40.0;
+   :>> height_mm = 70.0;
   }
 
   part BAT10 : Battery {
    :>> name = "Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10";
-   :>> purchaseUrl = "https://www.upgrade-energy.com/";
+   :>> purchaseUrl = "https://www.upgradeenergytech.com/products/green-v2-6s3p-12ah-ampruis-sa10";
    :>> cost_USD = 275.0;
    :>> mass = 919.0 [g];
    :>> energy = 932160.0 [J];    // 21.6 V × 12 Ah × 3600 (259 Wh confirmed)
@@ -3128,6 +3503,10 @@ package DroneCandidates {
    :>> cellModel = "Amprius SA10 silicon-anode 18650";
    :>> maxContinuousDischarge_A = 38.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 110.0;   // EST upright 6x2 cell grid (18mm dia, 65mm)
+   :>> width_mm = 35.0;
+   :>> height_mm = 65.0;
   }
 
   // ── Category: Li-ion 4S 10000mAh ─────────────────────────────────────
@@ -3146,6 +3525,10 @@ package DroneCandidates {
    :>> cellModel = "Samsung INR21700-50S";
    :>> maxContinuousDischarge_A = 40.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 85.0;   // EST upright 4x2 cell grid (21mm dia, 70mm)
+   :>> width_mm = 40.0;
+   :>> height_mm = 70.0;
   }
 
   part BAT12 : Battery {
@@ -3162,6 +3545,10 @@ package DroneCandidates {
    :>> cellModel = "Molicel INR21700-P50B";
    :>> maxContinuousDischarge_A = 55.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 85.0;   // EST upright 4x2 cell grid (21mm dia, 70mm)
+   :>> width_mm = 40.0;
+   :>> height_mm = 70.0;
   }
 
   // ── Category: Li-ion 6S 6000mAh ──────────────────────────────────────
@@ -3180,6 +3567,10 @@ package DroneCandidates {
    :>> cellModel = "Sony INR18650-VTC6";
    :>> maxContinuousDischarge_A = 30.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 110.0;   // EST upright 6x2 cell grid (18mm dia, 65mm)
+   :>> width_mm = 35.0;
+   :>> height_mm = 65.0;
   }
 
   part BAT14 : Battery {
@@ -3196,6 +3587,10 @@ package DroneCandidates {
    :>> cellModel = "Samsung INR18650-30Q";
    :>> maxContinuousDischarge_A = 35.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 110.0;   // EST upright 6x2 cell grid (18mm dia, 65mm)
+   :>> width_mm = 35.0;
+   :>> height_mm = 65.0;
   }
 
   part BAT15 : Battery {
@@ -3212,6 +3607,10 @@ package DroneCandidates {
    :>> cellModel = "18650 NCM (high-performance)";
    :>> maxContinuousDischarge_A = 30.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 110.0;   // EST upright 6x2 cell grid (18mm dia, 65mm)
+   :>> width_mm = 35.0;
+   :>> height_mm = 65.0;
   }
 
   // ── Category: Li-ion 4S 8000mAh ──────────────────────────────────────
@@ -3230,6 +3629,10 @@ package DroneCandidates {
    :>> cellModel = "Amprius SA10 silicon-anode 18650";
    :>> maxContinuousDischarge_A = 16.0;  // 156 W / 16 V avg; silicon-anode limited
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 70.0;   // EST upright 4x1 cell grid (18mm dia, 65mm)
+   :>> width_mm = 20.0;
+   :>> height_mm = 65.0;
   }
 
   part BAT17 : Battery {
@@ -3246,6 +3649,10 @@ package DroneCandidates {
    :>> cellModel = "Molicel INR21700-P42A";
    :>> maxContinuousDischarge_A = 60.0;  // 2P × 30 A/cell
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 85.0;   // EST upright 4x2 cell grid (21mm dia, 70mm)
+   :>> width_mm = 40.0;
+   :>> height_mm = 70.0;
   }
 
   part BAT18 : Battery {
@@ -3262,6 +3669,10 @@ package DroneCandidates {
    :>> cellModel = "Amprius SA10 silicon-anode 18650";
    :>> maxContinuousDischarge_A = 16.0;  // 2C constant per Lumenier spec
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 70.0;   // EST upright 4x1 cell grid (18mm dia, 65mm)
+   :>> width_mm = 20.0;
+   :>> height_mm = 65.0;
   }
 
   // ── Category: Li-ion 6S 5000mAh ──────────────────────────────────────
@@ -3280,6 +3691,10 @@ package DroneCandidates {
    :>> cellModel = "21700 graphite NCM (standard)";
    :>> maxContinuousDischarge_A = 35.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 125.0;   // EST upright 6x1 cell grid (21mm dia, 70mm)
+   :>> width_mm = 20.0;
+   :>> height_mm = 70.0;
   }
 
   part BAT20 : Battery {
@@ -3296,6 +3711,10 @@ package DroneCandidates {
    :>> cellModel = "Molicel INR21700-P50B";
    :>> maxContinuousDischarge_A = 50.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 125.0;   // EST upright 6x1 cell grid (21mm dia, 70mm)
+   :>> width_mm = 20.0;
+   :>> height_mm = 70.0;
   }
 
   part BAT21 : Battery {
@@ -3312,6 +3731,143 @@ package DroneCandidates {
    :>> cellModel = "Samsung INR21700-50S";
    :>> maxContinuousDischarge_A = 20.0;
    :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 125.0;   // EST upright 6x1 cell grid (21mm dia, 70mm)
+   :>> width_mm = 20.0;
+   :>> height_mm = 70.0;
+  }
+
+  // ── Category: 6S 12000mAh — standard-cell + LiPo alternatives (2026-06-30) ──
+  // Added to compare against the Amprius packs (BAT09/BAT10). Same 12 Ah / 22.2 V /
+  // 0.85 DoD → identical usable energy; MASS is the differentiator (standard 21700
+  // and LiPo are far heavier than Amprius silicon → big endurance penalty).
+
+  part BAT22 : Battery {
+   :>> name = "GNB (Gaoneng) 6S3P 12Ah 21700 Li-ion";
+   :>> purchaseUrl = "https://www.gaoneng.shop/products/gaoneng-gnb-6s-22.2v-12000mah-10c-xt60-li-ion-battery-made-with-li-ion-lithium-ion-21700";
+   :>> cost_USD = 110.0;          // confirmed: gaoneng.shop
+   :>> mass = 1250.0 [g];         // confirmed: 1250g ±20 (standard 21700 vs ~920g Amprius)
+   :>> energy = 959040.0 [J];     // 22.2 V × 12 Ah × 3600
+   :>> chemistry = "Li-ion";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 12000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;
+   :>> cellModel = "Lishen / Samsung 21700 (graphite NCM)";
+   :>> maxContinuousDischarge_A = 120.0;  // 10C
+   :>> connector = "XT60";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 130.0;   // confirmed: 65×81×130 mm (H×W×L)
+   :>> width_mm = 81.0;
+   :>> height_mm = 65.0;
+  }
+
+  part BAT23 : Battery {
+   :>> name = "Tattu G-Tech 6S 12Ah LiPo 30C";
+   :>> purchaseUrl = "https://www.genstattu.com/tattu-30c-22.2v-12000-6s1p-ec5.html";
+   :>> cost_USD = 149.99;         // est (US/Amazon ~140-160)
+   :>> mass = 1532.0 [g];         // confirmed: Tattu G-Tech 30C 12Ah = 1532g
+   :>> energy = 959040.0 [J];     // 22.2 V × 12 Ah × 3600
+   :>> chemistry = "LiPo";
+   :>> cells_s = 6;
+   :>> capacity_mAh = 12000.0;
+   :>> nominalVoltage = 22.2 [V];
+   :>> usableDoD = 0.85;          // parity w/ Li-ion to isolate the mass penalty
+   :>> cellModel = "LiPo pouch (Gens Tattu G-Tech)";
+   :>> maxContinuousDischarge_A = 360.0;  // 30C (high discharge, irrelevant at hover)
+   :>> connector = "EC5";
+   // --- physical envelope (MODEL_ISSUES.md C16) ---
+   :>> length_mm = 190.0;   // confirmed: 190×71×54 mm (L×W×H)
+   :>> width_mm = 71.0;
+   :>> height_mm = 54.0;
+  }
+
+ }
+
+ // =========================================================================
+ // OPENHD AIR-SIDE WIFI ADAPTER CANDIDATES  (Phase 2+)
+ // USB WiFi adapter mounted on the NanoPi M5 SBC, transmits the WFB-ng
+ // digital thermal video stream at 5825 MHz (channel 165) to the ground station.
+ // Trade study: analysis/openhd-air-wifi-adapter-trade-study.md
+ // SELECTED: WLAN_AIR1 (LB-LINK BL-M8812EU2) — 2026-07-02
+ // =========================================================================
+ package OpenHDAirAdapterCandidates {
+
+  // SELECTED — lightest (~18 g), highest TX power (>29 dBm), WFB-ng author's own test hardware
+  part WLAN_AIR1 : OpenHDWifiAdapter {
+   :>> name = "LB-LINK BL-M8812EU2 (RTL8812EU bare module, air side)";
+   :>> purchaseUrl = "https://www.aliexpress.com/item/1005007098141054.html";
+   :>> cost_USD = 12.0;            // ~$10-15 on AliExpress (plus ~$5-8 for USB stub + u.fl pigtails)
+   :>> mass = 18.0 [g];            // confirmed: 32×32×3.4 mm PCB bare
+   :>> chipset = "RTL8812EU";
+   :>> txPower_dBm = 29.0;         // >29 dBm (800 mW+); set driver_txpower_override 40-50 to avoid PA clipping
+   :>> usbStandard = "USB 2.0";    // USB 2.0 — adequate for WFB-ng bandwidth; connects to NanoPi M5 USB-A 3.0
+   :>> antennaConnector = "IPEX/u.fl × 2";  // requires u.fl→RP-SMA pigtails for external antennas
+   :>> antennaPortCount = 2;
+   :>> dimensions = "32 × 32 × 3.4 mm";
+   :>> driverName = "OpenHD/rtl88x2eu (DKMS, ARM64 Ubuntu 22.04)";
+   :>> power = 5.0 [W];            // EST: 5V × ~1A max TX draw (USB-powered from SBC)
+  }
+
+  // Alternative — proven RTL8812AU, heavier consumer adapter
+  part WLAN_AIR2 : OpenHDWifiAdapter {
+   :>> name = "Alfa AWUS036ACH (RTL8812AU, USB-C, air side)";
+   :>> purchaseUrl = "https://store.rokland.com/products/alfa-awus036ach-usb-c-802-11ac-ac1200-dual-band-high-power-wifi-usb-adapter";
+   :>> cost_USD = 65.0;
+   :>> mass = 95.0 [g];            // EST: body + antennas ~90-100 g
+   :>> chipset = "RTL8812AU";
+   :>> txPower_dBm = 27.0;         // 500 mW confirmed
+   :>> usbStandard = "USB 3.0";
+   :>> antennaConnector = "RP-SMA × 2";
+   :>> antennaPortCount = 2;
+   :>> dimensions = "120 × 38 × 18 mm (body)";
+   :>> driverName = "OpenHD/rtl8812au (DKMS, ARM64 Ubuntu 22.04)";
+   :>> power = 5.0 [W];            // EST: 5V × ~1A at max TX
+  }
+
+ }
+
+ // =========================================================================
+ // OPENHD GROUND-SIDE WIFI ADAPTER CANDIDATES  (Phase 2+)
+ // USB WiFi adapter plugged into MacBook Air, passed through to ARM64 Ubuntu 22.04
+ // VM (VMware Fusion, xHCI mode) to receive the WFB-ng digital video stream.
+ // Trade study: analysis/openhd-ground-wifi-adapter-trade-study.md
+ // SELECTED: WLAN_GND1 (Alfa AWUS036ACH) — 2026-07-02
+ // =========================================================================
+ package OpenHDGroundAdapterCandidates {
+
+  // SELECTED — dual standard RP-SMA ports for diversity panels; canonical WFB-ng GS hardware
+  part WLAN_GND1 : OpenHDGroundReceiver {
+   :>> name = "Alfa AWUS036ACH (RTL8812AU, USB-C, ground side)";
+   :>> purchaseUrl = "https://store.rokland.com/products/alfa-awus036ach-usb-c-802-11ac-ac1200-dual-band-high-power-wifi-usb-adapter";
+   :>> cost_USD = 65.0;
+   :>> mass = 95.0 [g];            // ground-side; not a flight constraint
+   :>> chipset = "RTL8812AU";
+   :>> rxSensitivity_dBm = -85.0;  // MCS1 at 5.8 GHz (WFB-ng default modulation)
+   :>> usbStandard = "USB 3.0";
+   :>> antennaPortCount = 2;
+   :>> antennaConnector = "RP-SMA female × 2";  // Foxeer Echo 2 Max RP-SMA male mates directly (no pigtail)
+   :>> dimensions = "120 × 38 × 18 mm (body)";
+   :>> driverName = "OpenHD/rtl8812au (DKMS, ARM64 Ubuntu 22.04 in VMware Fusion)";
+   :>> vmCompatibility = "VMware Fusion xHCI / Parallels Desktop 20.3+ (Apple Silicon M-series)";
+   :>> power = 2.0 [W];            // EST: ground RX draw (lower than TX)
+  }
+
+  // Alternative — cheaper bare module; needs RP-SMA pigtails
+  part WLAN_GND2 : OpenHDGroundReceiver {
+   :>> name = "LB-LINK BL-M8812EU2 (RTL8812EU bare module, ground side)";
+   :>> purchaseUrl = "https://www.aliexpress.com/item/1005007098141054.html";
+   :>> cost_USD = 12.0;
+   :>> mass = 18.0 [g];
+   :>> chipset = "RTL8812EU";
+   :>> rxSensitivity_dBm = -85.0;  // EST same MCS1 sensitivity as RTL8812AU
+   :>> usbStandard = "USB 2.0";
+   :>> antennaPortCount = 2;
+   :>> antennaConnector = "IPEX/u.fl × 2 (pigtails needed)";
+   :>> dimensions = "32 × 32 × 3.4 mm";
+   :>> driverName = "OpenHD/rtl88x2eu (DKMS, ARM64 Ubuntu 22.04 in VMware Fusion)";
+   :>> vmCompatibility = "VMware Fusion xHCI / Parallels Desktop 20.3+ (Apple Silicon M-series)";
+   :>> power = 2.0 [W];
   }
 
  }

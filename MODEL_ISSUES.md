@@ -133,6 +133,14 @@ any tool previously.
    per-frame MTOM is still unbound — thrust-to-weight (via `maxThrustPerMotor_g`) is
    used instead.
 
+7. **OPEN (2026-07-01) — FC firmware choice: ArduPilot Copter vs PX4.**
+   The BLITZ F7 on the Chimera9 ECO (AF3a) supports both ArduPilot Copter and PX4.
+   Both satisfy the waypoint + MAVLink requirements; the choice affects GCS setup
+   (Mission Planner / QGroundControl tuning profiles) and the Phase 3 SBC MAVLink
+   integration. `AF3a.fcFirmware` is set to `"TBD"` in `candidates.sysml` until this
+   is decided. **Action needed:** pick ArduPilot or PX4 before Phase 1 first flight
+   (it is a configuration choice, not a procurement item).
+
 6. **RESOLVED (2026-06-25) — real `Battery` candidates now in model.**
    `Architecture::Battery` was extended with `name`, `chemistry`, `cells_s`,
    `capacity_mAh`, `nominalVoltage` (`ISQElectromagnetism::ElectricPotentialDifferenceValue`),
@@ -373,6 +381,103 @@ any tool previously.
     `systemVerification`. View-def names (e.g. `VerificationView`) are fine since
     they don't collide. Optional future enhancement: add `viewpoint def`s
     (stakeholder concerns + `frame`/`require`) and `rendering`/`filter` clauses.
+
+15. **DECISION (2026-06-28) — ground VRX matched per-airframe to the VTX video
+    format.** Previously the sweep added a single fixed analog VRX (Skydroid $45)
+    to every config's GCS cost, which silently mis-costed the airframes that
+    bundle a **digital** air unit (DJI O3/O4, Walksnail) — an analog 5.8 GHz VRX
+    cannot decode those. The flight-time model now derives each airframe's VTX
+    video standard (`Airframe.vtx_format`, from `vtxModel`/`fpvCameraType`/
+    `purchaseType`; a swept VTX uses its own format) and **matches the cheapest
+    compatible ground receiver per format** (`vrx_by_format`, range ≥ 4 km):
+    **CVBS → Skydroid 150CH ($45), DJI → DJI Goggles N3 ($230), Walksnail →
+    Walksnail Avatar HD Goggles L ($199)**. Added `candidates.sysml` VRX8 (DJI
+    Goggles N3) + VRX9 (Walksnail Goggles L); new CSV columns `video_format`,
+    `gcs_vrx_name`, `gcs_vrx_cost`; `gcs_cost_usd` is now per-config. GCS = base
+    **$81** (backup radio + ELRS control dongle) + matched VRX. **Effect:** analog
+    frames unchanged ($126 GCS, baseline AF9a still $1,505); the 7 DJI-air-unit
+    frames (AF1c, AF2c, AF6a, AF6b, AF10, AF12, AF14) each +$185 system ($311
+    GCS). Endurance ranking unaffected (the VRX is ground-side). **AF12 (CineLR 7
+    O4) now tops out at ~$2,497 — essentially at the R4 $2,500 cap.** NB: digital
+    frames realistically use **goggles** as the ground receiver (HDMI/USB out to a
+    laptop), not a laptop UVC dongle — so a DJI/Walksnail choice partly walks back
+    the pure "laptop-is-the-GCS" model (still laptop for control via ELRS). All 447
+    configs re-audited: **0 compatibility violations**.
+
+16. **DECISION (2026-06-29) — physical-integration layer ("does it fit?").** The
+    trade study now checks whether the **SBC physically fits** on each airframe,
+    not just whether the config is electrically compatible and flyable. New
+    attributes were added to the protected `model.sysml` defs (with David's
+    approval): `Airframe.payloadDeckLength_mm` / `payloadDeckWidth_mm` /
+    `payloadCapacity_g` / `batteryMount`, and `Battery.length_mm` / `width_mm` /
+    `height_mm`; values are bound per-unit in `candidates.sysml`. **Most deck dims
+    are ESTIMATES** (`deckLen ≈ 0.27·wheelbase`, `deckWid ≈ 0.17·wheelbase`,
+    calibrated so a 9" Chimera9 → ~110×70 and a 7" DarwinFPV129 → ~75×50); battery
+    envelopes are an upright-21700/18650 cell-grid estimate validated against the
+    one confirmed pack (BAT04 4S 12Ah Amprius = 80×45×70 mm). `flight_time_model.py`
+    parses these + the SBC/thermal `dimensions` strings and emits a **3-tier
+    verdict** (`sbc_fit_status` = fits / marginal / no_fit; tolerant of ±12 mm
+    estimate error) plus `deck_margin_mm`, `payload_weight_g`, `physical_fit_note`,
+    and new CSV columns. The thermal cam (17×17×35 mm, nose-mounted) is never the
+    constraint — the **90×62 mm NanoPi M5 footprint** is. **Result (T13+SBC3,
+    657 configs): 45 fit / 606 marginal / 6 no-fit.** Only the **9–10" frames
+    (AF3a/b Chimera9, AF15 Nazgul XL10) fit cleanly**; the 7.5–9" and larger 7"
+    frames are **marginal** (need a snug/custom 3D-printed deck); **AF9a DarwinFPV
+    129 — the endurance/value winner — is NO-FIT** (90×62 SBC vs ~75×50 deck;
+    needs a larger frame or belly pod). The check is **informational, not a filter**
+    (configs are flagged, not dropped) so the fit tension stays visible in the
+    ranking. Still 0 compatibility violations.
+
+17. **DECISION (2026-06-29) — airframe LOCKED = iFlight Chimera9 ECO (9").** David
+    selected the Chimera9 ECO (`AF3a` PNP / `AF3b` BNF) — best endurance-per-dollar
+    of the SBC-capable frames **and** it fits the 90×62 mm SBC cleanly (its ~110×70
+    deck, 8 mm spare; §C16). Enforced by `FIXED_AIRFRAME_IDS = ["AF3a","AF3b"]` in
+    `flight_time_model.py` (sweep now = 30 Chimera9 configs, the open variable being
+    the battery + PNP/BNF). PNP-vs-BNF sub-choice still open (PNP = best value; BNF
+    bundles a TBS Crossfire Nano RX). **Created [`SELECTED_COMPONENTS.md`](SELECTED_COMPONENTS.md)
+    as the single authoritative record of locked vs open selections** (the prior
+    state — locks buried in `FIXED_*` constants + git-ignored agent memory — was not
+    visible to outside collaborators). `CLAUDE.md` now points to it first.
+
+18. **DECISION (2026-06-30) — Phase-1 video on the laptop + ground antenna + RF link
+    budget.** Pulled the video downlink forward into Phase 1 (the Chimera9 PNP already
+    bundles the air-side analog VTX + FPV cam, so only the **Skydroid 150CH UVC VRX**
+    (`VRX6`, laptop-direct UVC) is procured). Added a new **`part def Antenna`** to
+    `model.sysml` (gain/band/polarization/beamwidth) composed into `GroundControlStation`
+    as `groundAntenna` (`satisfy R4_GCS_RANGE`), and a single candidate **`PATCH1` =
+    TrueRC X-AIR 5.8 MK II patch (~10 dBic, 120°, RHCP, RP-SMA, $45)** in
+    `candidates.sysml`. `flight_time_model.py` now folds the cheapest antenna into the
+    GCS base cost (GCS base $81 → **$126** = radio + dongle + patch; baseline system
+    $1,645 → **$1,690**; still ≪ R4). New **`analysis/rf_link_budget.py` → `rf_link_budget.md`**
+    verifies all RF links vs the 2.8 km hard requirement (FSPL + 10 dB fade margin):
+    **control (ELRS 1 W) +29 dB / ~25 km, telemetry +19 dB / ~7.9 km, video (2.5 W +
+    patch) +17 dB / ~6.5 km — all PASS.** The video link is the binding one: on the
+    VRX's **stock omni** it is only +9.3 dB / ~2.6 km — **below** the requirement, which
+    is exactly why the patch antenna is required. Sweep re-audited: 0 violations.
+
+19. **DECISION (2026-06-30 / 07-01) — power interface, support equipment, battery
+    selection, and phase restructure.**
+    - **Battery power interface + anti-spark:** refined `BatteryPowerInterface` with a
+      `ConnectorCompatible` constraint + `connector` on the power ports +
+      `Airframe.batteryConnector`. The whole power chain is **XT60**
+      (battery → anti-spark → airframe) for all real contenders (BAT09/BAT10/BAT22).
+      Added `part def AntiSparkFilter` (composed inline in `SurveillanceDrone`) +
+      candidate `ASF1` (iFlight Anti Spark, XT60, $15).
+    - **Charger:** added `part def Charger` composed into `AerialThermalObservationSystem`
+      as ground-support (excluded from the per-drone R4 cost, like the laptop) +
+      `ChargerCandidates` (CHG1–CHG4); **selected `CHG1` HOTA D6 Pro**.
+    - **Battery selected:** **`BAT10`** (Upgrade Energy 6S 12 Ah Amprius) is the flight
+      default — `BAT09` (the top-endurance pick) is **out of stock**; **2× `BAT22`**
+      (GNB) procured as development / shakedown packs.
+    - **Phase restructure (4 → 3):** merged old Phase 1 (basic flight) + Phase 2
+      (FPV/waypoints) into a single **Phase 1**, and **pulled GPS + the ELRS laptop
+      dongle into Phase 1**. Old Phase 3 (thermal + DVR) → **Phase 2**; old Phase 4
+      (SBC) → **Phase 3**. The DVR is now a Phase 1–2 part; the SBC records at Phase 3.
+      Updated the SE plan, SELECTED_COMPONENTS, REQUIREMENTS_EXPORT §3.1, README,
+      CLAUDE.md, and the model.sysml doc comments.
+    - **New artifact — [`BOM.md`](BOM.md):** phased bill of materials (product / part # /
+      link / cost, per-phase subtotals). Grand total ~$2,125 all-in (~$1,805 R4
+      flight-system, both ≤ the $2,500 R4 cap).
 
 ---
 

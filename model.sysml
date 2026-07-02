@@ -247,10 +247,12 @@ package DroneSystemModel {
  // advertises the cell-count window it accepts.
  port def PowerSourcePort {
  attribute cells_s : ScalarValues::Integer;
+ attribute connector : String;                  // battery discharge connector (XT60 / XT90 / EC5)
  }
  port def PowerSinkPort {
  attribute minCells_s : ScalarValues::Integer;
  attribute maxCells_s : ScalarValues::Integer;
+ attribute connector : String;                  // airframe battery-lead connector
  }
 
  // Compatibility predicate (boolean body — no trailing ';').
@@ -261,6 +263,15 @@ package DroneSystemModel {
  (batteryCells >= afMinCells) and (batteryCells <= afMaxCells)
  }
 
+ // The battery's discharge connector must match the airframe's battery-lead
+ // connector (R4_BAT_IF). Different families (XT60 vs XT90 vs EC5) require an
+ // adapter or re-pigtailing — flagged so the build is connector-consistent.
+ constraint def ConnectorCompatible {
+ in srcConn : String;
+ in snkConn : String;
+ srcConn == snkConn
+ }
+
  // Interface binds a source port to a sink port and asserts the rule.
  interface def BatteryPowerInterface {
  end source : PowerSourcePort;
@@ -269,6 +280,10 @@ package DroneSystemModel {
  in batteryCells = source.cells_s;
  in afMinCells = sink.minCells_s;
  in afMaxCells = sink.maxCells_s;
+ }
+ constraint connectorOk : ConnectorCompatible {
+ in srcConn = source.connector;
+ in snkConn = sink.connector;
  }
  }
 
@@ -347,6 +362,11 @@ package DroneSystemModel {
  attribute maxContinuousDischarge_A : Real;
  attribute connector : String;
 
+ // Physical envelope (for the airframe battery-bay / strap fit check) [mm]
+ attribute length_mm : ScalarValues::Real;
+ attribute width_mm : ScalarValues::Real;
+ attribute height_mm : ScalarValues::Real;
+
  // Derived specific energy
  attribute specificEnergy : ISQThermodynamics::SpecificEnergyValue =
  energy / mass;
@@ -362,6 +382,47 @@ package DroneSystemModel {
  satisfy R4_BAT_IF;
  }
 
+ part def AntiSparkFilter {
+ attribute name : String;
+ attribute purchaseUrl : String;
+ attribute cost_USD : ScalarValues::Real;
+ attribute mass : ISQBase::MassValue;
+ attribute connector : String;                  // inline connector family (XT60 / XT90)
+ attribute currentRating_A : ScalarValues::Real;
+ attribute maxCells_s : ScalarValues::Integer;
+ attribute dimensions : String;
+ attribute includedWithAirframe : Boolean;
+
+ satisfy R4_BAT_IF;
+
+ doc /* Inline anti-spark filter / soft-start fitted between the battery and the
+ airframe power lead. It limits the inrush-current spike when the pack is plugged in,
+ preventing connector arcing and extending ESC/PDB capacitor life — relevant for the
+ high-capacity 6S Li-ion packs. Shares the battery connector family (XT60); composed
+ into SurveillanceDrone in the power path. */
+ }
+
+ part def Charger {
+ attribute name : String;
+ attribute purchaseUrl : String;
+ attribute cost_USD : ScalarValues::Real;
+ attribute mass : ISQBase::MassValue;
+ attribute acPower_W : ScalarValues::Real;         // AC-input charge power
+ attribute dcPower_W : ScalarValues::Real;         // DC-input charge power
+ attribute channels : ScalarValues::Integer;       // simultaneous charge channels
+ attribute maxCells_s : ScalarValues::Integer;     // max series cells (must be >= battery cells_s)
+ attribute maxCurrent_A : ScalarValues::Real;      // per-channel charge current [A]
+ attribute chemistrySupport : String;              // LiPo / Li-ion / LiFe / LiHV / NiMH ...
+ attribute connector : String;                     // charge-lead connector (XT60)
+ attribute acIntegrated : Boolean;                 // built-in AC PSU (no external supply needed)
+
+ doc /* Bench battery charger — ground-support (enabling) equipment. Must support the
+ pack's chemistry (Li-ion AND LiPo), cell count (6S), and connector (XT60), with enough
+ power for the 12 Ah packs. Reusable and not flown; composed into the top-level
+ AerialThermalObservationSystem as support equipment (excluded from the per-drone R4
+ cost, like the existing laptop). Candidates: candidates.sysml `ChargerCandidates`. */
+ }
+
  part def Airframe {
  attribute name : String;
  attribute purchaseUrl : String;
@@ -375,8 +436,12 @@ package DroneSystemModel {
  attribute wheelbase : ISQBase::LengthValue;
  attribute flightController : String;
  attribute esc : String;
+ attribute fcFirmware : String;       // e.g. "ArduPilot Copter 4.5" / "PX4 v1.14" — TBD (see MODEL_ISSUES.md)
+ attribute escFirmware : String;      // e.g. "BLHeli_32 32.9" / "AM32"
+ attribute fcProtocols : String;      // e.g. "CRSF-in | UBX-in | DSHOT600-out | MAVLink2-out"
  attribute minCells_s : ScalarValues::Integer;  // min battery series cells the ESC/motors are rated for
  attribute maxCells_s : ScalarValues::Integer;  // max battery series cells the ESC/motors are rated for
+ attribute batteryConnector : String;           // airframe battery-lead connector (XT60 / XT90) — must match the pack (R4_BAT_IF)
  attribute maxThrustPerMotor_g : ScalarValues::Real;  // published max static thrust per motor at the build's cell count [g] (B5)
  attribute motors : String;
  attribute propModel : String;
@@ -394,6 +459,15 @@ package DroneSystemModel {
  attribute sourceConfidence : String;         // research confidence: High / Moderate / Low
  attribute manufacturerFlightTime : String;   // max flight time claim from manufacturer or third-party review [min]; source noted in sourceConfidence
  attribute manufacturerFlightTimeBattery : String;  // battery configuration used to achieve the claimed flight time
+
+ // Physical-integration layer (does the SBC + payload actually fit?) — see
+ // MODEL_ISSUES.md §C16. The usable flat top-deck area available for a mounted
+ // payload (e.g. the SBC board), the max payload the frame can lift, and where
+ // the main battery mounts (which decides whether it competes with the deck).
+ attribute payloadDeckLength_mm : ScalarValues::Real;  // usable top-deck length [mm]
+ attribute payloadDeckWidth_mm : ScalarValues::Real;   // usable top-deck width [mm]
+ attribute payloadCapacity_g : ScalarValues::Real;     // max payload (battery + gear) the frame can lift [g]
+ attribute batteryMount : String;                      // "top" / "bottom" / "both"
 
  port power_battery : Compatibility::PowerSinkPort;
  port power_sbc;
@@ -429,6 +503,7 @@ package DroneSystemModel {
  attribute frameRate_Hz : ScalarValues::Real;
  attribute lensOptions : String;                  // available focal lengths [mm]
  attribute outputInterface : String;              // CVBS / USB / SPI / CSI / UART
+ attribute outputProtocol : String;               // e.g. "USB UVC 1.1" / "CVBS analog"
  attribute radiometric : Boolean;
  attribute dimensions : String;                   // L x W x H [mm]
  attribute inputVoltageMin : ISQElectromagnetism::ElectricPotentialDifferenceValue;
@@ -475,10 +550,19 @@ package DroneSystemModel {
  attribute coolingType : String;
  attribute dimensions : String;                       // [mm]
  attribute osSupport : String;
+ attribute osVersion : String;                        // e.g. "Ubuntu 22.04 LTS (FriendlyElec image)"
+ attribute mlRuntime : String;                        // e.g. "RKNN Runtime 2.x + RKNN Toolkit2"
+ attribute detectionModel : String;                   // e.g. "YOLOv8n-thermal → .rknn"
+ attribute mavlinkLibrary : String;                   // e.g. "pymavlink 2.4.x" / "MAVSDK-Python"
+ attribute videoProtocolIn : String;                  // "USB UVC 1.1 (← thermal cam)"
+ attribute mavlinkProtocol : String;                  // "MAVLink 2 UART ↔ FC"
+ attribute videoProtocolOut : String;                 // "RTSP H.264 → GCS (optional)"
+ attribute recordingFormat : String;                  // "MP4/H.264 → NVMe or SD"
 
  port video_in : Compatibility::VideoSinkPort;
  port data_af;
  port power_in;
+ port usb_out;    // to OpenHD air-side WiFi adapter (USB 3.0 host)
 
  satisfy R4_SBC_PWR;
  satisfy R4_SBC_WT;
@@ -537,12 +621,14 @@ package DroneSystemModel {
  attribute connector : String;
  attribute mounting : String;
  attribute dimensions : String;                       // [mm]
+ attribute firmware : String;                         // e.g. "u-blox M10 HPG 1.32 (factory)"
+ attribute outputProtocol : String;                   // "UBX binary" / "NMEA 0183"
 
  port data_out;  // to flight controller (UART)
  port power_in;
  port rf_in;     // GPS antenna
 
- doc /* GPS module providing position, velocity, and time data to the flight controller. Critical for return-to-home and autonomous waypoint navigation (Phase 2+). May be pre-installed with some airframe packages. */
+ doc /* GPS module providing position, velocity, and time data to the flight controller. Critical for return-to-home and autonomous waypoint navigation (Phase 1+). May be pre-installed with some airframe packages. */
  }
 
  part def RadioReceiver {
@@ -554,6 +640,7 @@ package DroneSystemModel {
  attribute power : ISQMechanics::PowerValue;
  attribute maxRange : ISQBase::LengthValue;          // LOS range [km]
  attribute protocol : String;                        // CRSF, etc.
+ attribute elrsFirmware : String;                    // e.g. "ExpressLRS 3.5.2" — must match TX12 version
  attribute interfaceType : String;                   // CRSF / CRSF+UART
  attribute band : String;                            // 2.4 GHz / 900 MHz
  attribute size : String;                            // [mm]
@@ -664,12 +751,13 @@ package DroneSystemModel {
  attribute storageType : String;                   // microSD / TF
  attribute audioRecording : Boolean;
  attribute startStopControl : String;
+ attribute firmware : String;                      // e.g. "factory (standalone DVR firmware)"
 
  port video_in : Compatibility::VideoSinkPort;   // from CameraSubsystem
  port video_out : Compatibility::VideoSourcePort;  // pass-through to VideoTransmitter
  port power_in;
 
- doc /* Inline DVR that records analog CVBS video to microSD card while passing video through to the VTX. Enables onboard storage of thermal footage without requiring the SBC (Phase 4). Survives RF signal loss — footage is on the card regardless of downlink quality. */
+ doc /* Inline DVR that records analog CVBS video to microSD card while passing video through to the VTX. Enables onboard storage of thermal footage without requiring the SBC (Phase 3). Survives RF signal loss — footage is on the card regardless of downlink quality. */
  }
 
  part def VideoReceiver {
@@ -732,11 +820,87 @@ package DroneSystemModel {
  port usb_out;     // control + telemetry serial to the GCS laptop (USB)
 
  doc /* Ground-side ELRS USB dongle: plugs into the GCS laptop and provides the
- PRIMARY bidirectional control + telemetry link for Phase 2+ autonomous operation,
+ PRIMARY bidirectional control + telemetry link for Phase 1+ autonomous operation,
  in place of a handheld radio. (The RadioControlTransmitter is retained as a
  Phase-1 / backup manual-control path.) The candidates in analysis/ capture the
  standalone-dongle vs radio-passthrough vs DIY options. Composed into
  GroundControlStation as `laptopLink`. */
+ }
+
+ part def OpenHDWifiAdapter {
+ attribute name : String;
+ attribute purchaseUrl : String;
+ attribute cost_USD : ScalarValues::Real;
+ attribute mass : ISQBase::MassValue;
+ attribute chipset : String;
+ attribute txPower_dBm : ScalarValues::Real;      // max transmit power [dBm]
+ attribute usbStandard : String;                  // "USB 2.0" / "USB 3.0"
+ attribute antennaConnector : String;             // connector on the adapter (IPEX/u.fl, RP-SMA)
+ attribute antennaPortCount : ScalarValues::Integer;
+ attribute dimensions : String;                   // [mm]
+ attribute driverName : String;                   // DKMS driver package name
+ attribute power : ISQMechanics::PowerValue;      // estimated power draw at max TX [W]
+
+ port usb_in;                                     // USB from SBC host port
+ port rf_out : Compatibility::RfSourcePort;       // 5.8 GHz WFB-ng TX
+
+ satisfy R4_GCS_VIDEO_DISP;
+ satisfy R4_GCS_RANGE;
+
+ doc /* Air-side WiFi adapter for OpenHD/WFB-ng digital video downlink (Phase 2+).
+ Connects to the SBC via USB and operates in raw monitor-mode TX (packet injection)
+ at 5825 MHz channel 165, transmitting the SBC-encoded H.264 thermal video stream
+ to the ground station. Requires an ARM64 Linux DKMS driver. See
+ analysis/openhd-air-wifi-adapter-trade-study.md. */
+ }
+
+ part def OpenHDGroundReceiver {
+ attribute name : String;
+ attribute purchaseUrl : String;
+ attribute cost_USD : ScalarValues::Real;
+ attribute mass : ISQBase::MassValue;
+ attribute chipset : String;
+ attribute rxSensitivity_dBm : ScalarValues::Real; // MCS1 receive sensitivity [dBm]
+ attribute usbStandard : String;
+ attribute antennaPortCount : ScalarValues::Integer;
+ attribute antennaConnector : String;              // e.g. "RP-SMA female"
+ attribute dimensions : String;
+ attribute driverName : String;
+ attribute vmCompatibility : String;               // "VMware Fusion xHCI / Parallels Desktop 20.3+"
+ attribute power : ISQMechanics::PowerValue;
+
+ port rf_in : Compatibility::RfSinkPort;           // 5.8 GHz WFB-ng RX
+ port usb_out;                                     // to GCS laptop VM (USB-C passthrough)
+
+ satisfy R4_GCS_VIDEO_DISP;
+ satisfy R4_GCS_RANGE;
+
+ doc /* Ground-side WiFi adapter for OpenHD/WFB-ng digital thermal video reception.
+ Plugs into the MacBook Air (USB-C) and is passed through to an ARM64 Ubuntu 22.04
+ Linux VM (VMware Fusion, xHCI mode). WFB-ng runs inside the VM, decodes the stream,
+ and forwards it to the host macOS as RTSP over loopback. Requires ARM64 DKMS driver
+ inside the VM. See analysis/openhd-ground-wifi-adapter-trade-study.md. */
+ }
+
+ part def Antenna {
+ attribute name : String;
+ attribute purchaseUrl : String;
+ attribute cost_USD : ScalarValues::Real;
+ attribute mass : ISQBase::MassValue;
+ attribute gain_dBi : ScalarValues::Real;          // antenna gain [dBi / dBic]
+ attribute frequencyBand : String;                 // e.g. "5.8 GHz"
+ attribute antennaType : String;                   // patch / panel / omni / dipole
+ attribute polarization : String;                  // RHCP / LHCP / linear
+ attribute beamwidth_deg : ScalarValues::Real;     // -3 dB beamwidth [deg] (0 = omni)
+ attribute connector : String;                     // RP-SMA / SMA / MMCX
+ attribute includedWithAirframe : Boolean;
+
+ satisfy R4_GCS_RANGE;
+
+ doc /* A directional ground-station antenna (e.g. a 5.8 GHz patch) fitted to the
+ VideoReceiver to raise the video-link gain so the downlink closes the 2.8 km range
+ requirement (R4_GCS_RANGE) with margin. Gain feeds the RF link budget — see
+ analysis/rf_link_budget.md. */
  }
 
  part def GroundControlStation {
@@ -750,19 +914,25 @@ package DroneSystemModel {
  port user_interface;
  port status_and_control;
 
- // PRIMARY (Phase 2+): ELRS USB dongle to the laptop carries control + telemetry.
+ // PRIMARY (Phase 1+): ELRS USB dongle to the laptop carries control + telemetry.
  part laptopLink : TelemetryGroundLink;  // PRIMARY control + telemetry via laptop USB
  // BACKUP / Phase 1: handheld ELRS radio for manual control if the laptop fails.
  part rcTx : RadioControlTransmitter;    // BACKUP / Phase-1 manual control
- part videoRx : VideoReceiver;           // Analog 5.8 GHz VRX (live video to laptop)
+ part videoRx : VideoReceiver;           // Analog 5.8 GHz VRX (live FPV piloting video to laptop)
  part capture : UsbVideoCapture;         // Bridges analog VRX to laptop USB
+ part groundAntenna : Antenna;           // 5.8 GHz RHCP patch on the analog VRX (range margin)
+ // Phase 2+: OpenHD digital thermal video downlink ground node
+ part openHDRx : OpenHDGroundReceiver;   // Alfa AWUS036ACH — WFB-ng RX via Linux VM on MacBook
+ part openHDAntennaA : Antenna;          // Lumenier AXII Quadro #1 — diversity RX panel
+ part openHDAntennaB : Antenna;          // Lumenier AXII Quadro #2 — diversity RX panel
 
  // Internal GCS wiring: VRX analog output → USB capture dongle
  connect videoRx.video_out to capture.video_in;
 
- // Derived total GCS component cost (laptop dongle + backup radio + VRX + capture)
+ // Derived total GCS component cost (all ground-side hardware; laptop itself excluded as existing equipment)
  attribute subTotalCost : ScalarValues::Real =
- laptopLink.cost_USD + rcTx.cost_USD + videoRx.cost_USD + capture.cost_USD;
+ laptopLink.cost_USD + rcTx.cost_USD + videoRx.cost_USD + capture.cost_USD + groundAntenna.cost_USD
+ + openHDRx.cost_USD + openHDAntennaA.cost_USD + openHDAntennaB.cost_USD;
 
  satisfy R4_GCS_RANGE;
  satisfy R4_GCS_VIDEO_DISP;
@@ -774,7 +944,7 @@ package DroneSystemModel {
  satisfy R4_GCS_IF;
 
  doc /* Ground control station = the operator's laptop plus a minimal RF front-end.
- PRIMARY link (Phase 2+): an ELRS USB dongle (laptopLink) for bidirectional control
+ PRIMARY link (Phase 1+): an ELRS USB dongle (laptopLink) for bidirectional control
  + telemetry, plus an analog 5.8 GHz VRX + USB capture for live video — all through
  the laptop. A handheld ELRS radio (rcTx) is retained for Phase-1 manual flight and
  as a backup if the laptop link fails. The laptop itself (ViewingComputer) is
@@ -785,6 +955,7 @@ package DroneSystemModel {
 
  part platform : Airframe;
  part battery : Battery;
+ part antiSpark : AntiSparkFilter;  // inline between battery and platform power lead (shared XT60)
  part camera : CameraSubsystem;
  part fpvCam : FpvCamera;
  part gps : GpsModule;
@@ -792,6 +963,7 @@ package DroneSystemModel {
  part sbc : SingleBoardComputerPayload;
  part rx : RadioReceiver;  // ELRS — handles both RC control and telemetry
  part vtx : VideoTransmitter;
+ part wifiTx : OpenHDWifiAdapter;  // Phase 2+: OpenHD digital thermal video downlink
 
  interface batteryPwr : Compatibility::BatteryPowerInterface connect battery.power_out to platform.power_battery;
  interface connect platform.power_tp to camera.power_in;
@@ -804,20 +976,26 @@ package DroneSystemModel {
  interface fpvToVtx : Compatibility::VideoLink connect fpvCam.video_out to vtx.video_in;  // FPV camera feeds pilot VTX
  interface camToRec : Compatibility::VideoLink connect camera.video_out to recorder.video_in; // thermal camera feeds recorder
  interface recToVtx : Compatibility::VideoLink connect recorder.video_out to vtx.video_in; // recorder also passes through to VTX (optional)
- interface camToSbc : Compatibility::VideoLink connect camera.video_out to sbc.video_in;   // thermal camera also feeds SBC for inference (Phase 4)
+ interface camToSbc : Compatibility::VideoLink connect camera.video_out to sbc.video_in;   // thermal camera also feeds SBC for inference (Phase 3)
  interface connect gps.data_out to platform.data_sbc;   // GPS data to flight controller
  interface connect sbc.data_af to platform.data_sbc;
+ interface connect sbc.usb_out to wifiTx.usb_in;        // SBC encodes H.264 → WiFi adapter transmits WFB-ng
  interface connect rx.control_signal_out to platform.control_input;
  interface connect rx.telemetry_data_in to platform.telemetry_data_out; // telemetry via same ELRS RX
 
- // Derived total electrical load
+ // Derived total electrical load (Phase 3 build: SBC present, DVR removed from flight)
  attribute totalPower : ISQMechanics::PowerValue =
- platform.power + camera.power + fpvCam.power + gps.power + recorder.power + sbc.power + rx.power + vtx.power;
+ platform.power + camera.power + fpvCam.power + gps.power + recorder.power + sbc.power + rx.power + vtx.power + wifiTx.power;
  }
 
  part def ViewingComputer {
  // Existing equipment — MacBook Air, not procured
  attribute usb_port_count : ScalarValues::Integer;
+ attribute os : String;                              // "macOS (Sequoia / latest)"
+ attribute gcsSoftware : String;                     // "QGroundControl 4.x"
+ attribute videoApp : String;                        // "QuickTime Player / OBS Studio"
+ attribute radioConfigSoftware : String;             // "EdgeTX Companion + ExpressLRS Configurator"
+ attribute protocolsReceived : String;               // "MAVLink 2 USB COM (← TX12 EdgeTX passthrough) | USB UVC (← VRX6)"
 
  port video_in;
  port user_interface;
@@ -828,11 +1006,12 @@ package DroneSystemModel {
  part drone : SurveillanceDrone;
  part gcs : GroundControlStation;
  part displayComputer : ViewingComputer;
+ part charger : Charger;              // ground-support (bench) battery charger — reusable, not flown
 
  // Video downlink: drone analog VTX → GCS 5.8 GHz VRX
  connection connect drone.vtx.rf_out to gcs.videoRx.rf_in;
 
- // PRIMARY control + telemetry (Phase 2+): ELRS USB dongle <-> drone RX, to the laptop
+ // PRIMARY control + telemetry (Phase 1+): ELRS USB dongle <-> drone RX, to the laptop
  connection connect gcs.laptopLink.rf_out to drone.rx.rf_in;
  connection connect gcs.laptopLink.usb_out to displayComputer.user_interface;
 
@@ -840,11 +1019,16 @@ package DroneSystemModel {
  connection connect drone.rx.rf_in to gcs.rcTx.rf_out;
  connection connect gcs.rcTx.telemetry_data_out to displayComputer.user_interface;
 
- // Live video to laptop: VRX → USB capture dongle → laptop (USB-C)
+ // Live FPV piloting video to laptop: analog VRX → USB capture dongle → laptop (USB-C)
  connection connect gcs.capture.usb_out to displayComputer.video_in;
 
- // Derived total acquisition cost
- // Note: displayComputer excluded — existing equipment, not procured
+ // Phase 2+: OpenHD digital thermal video downlink: drone WiFi TX → GCS WiFi RX → laptop VM → host RTSP
+ connection connect drone.wifiTx.rf_out to gcs.openHDRx.rf_in;
+ connection connect gcs.openHDRx.usb_out to displayComputer.video_in;
+
+ // Derived total acquisition cost (per-drone flight system).
+ // Excluded as support/enabling equipment: displayComputer (existing laptop) and
+ // charger (reusable bench gear) — tracked in SELECTED_COMPONENTS, not the R4 per-drone cost.
  attribute totalCost : ScalarValues::Real =
  drone.platform.cost_USD
  + drone.battery.cost_USD
@@ -855,6 +1039,7 @@ package DroneSystemModel {
  + drone.sbc.cost_USD
  + drone.rx.cost_USD
  + drone.vtx.cost_USD
+ + drone.wifiTx.cost_USD
  + gcs.subTotalCost;
  }
  }
