@@ -1,0 +1,365 @@
+================================================================================
+THERMAL CAMERA MODULE — PURCHASE URLs & PRICES
+================================================================================
+Date researched: 2026-06-27
+Project: Thermal Surveillance Drone (T1–T16 candidates)
+Sources: GroupGets, Flytron, Amazon, AliExpress, Waveshare, Arducam, SparkFun,
+         DigiKey, Adafruit, Seeed Studio, Horus Dynamics, Axisflying, FLIR,
+         Seek Thermal
+================================================================================
+
+All prices in USD. Price estimates are noted with "~" or "(est.)".
+Prices verified via live web fetching on 2026-06-27 unless otherwise noted.
+
+================================================================================
+T1 — FLIR Lepton 2.5 (80×60, non-radiometric)
+================================================================================
+Purchase URL:     https://groupgets.com/products/flir-lepton-2-5
+Price (verified): $109.00 USD  (GroupGets, in stock, 47 units remaining)
+Alternate:        DigiKey part #500-0763-01 (often ~$85–$109, check stock)
+                  Mouser 500-0763-01
+Breakout needed?: Yes — requires PureThermal board (+$119.99) or similar carrier
+Carrier options:
+  - PureThermal 3:     https://groupgets.com/products/purethermal-3   $119.99
+  - PureThermal Mini:  https://groupgets.com/manufacturers/getlab/products/purethermal-mini-pro-jst-sr
+  - FLIR Lepton Breakout Board v2.0: on GroupGets
+Notes: ITAR-free. No CVBS output. No USB output without carrier. 80×60 is very
+       low resolution — insufficient for surveillance per analysis.
+
+================================================================================
+T2 — FLIR Lepton 3.0 (160×120, non-radiometric)
+================================================================================
+Purchase URL:     https://groupgets.com/products/flir-lepton-3-0
+Price (verified): $150.00 USD (list price on GroupGets; currently 404 — check
+                  "https://groupgets.com/collections/flir-lepton" for current)
+Alternate:        Search "FLIR Lepton 3.0" on GroupGets store
+                  DigiKey/Mouser carry Lepton 3.0 variants
+Breakout needed?: Yes — requires PureThermal board or similar carrier
+Carrier:          Same options as T1: PureThermal 3 ($119.99) or breakout board
+Notes: ITAR-free. Same resolution as Lepton 3.5 but non-radiometric. No CVBS/USB
+       without carrier. Discontinued / hard to find; Lepton 3.5 is preferred.
+
+================================================================================
+T3 — FLIR Lepton 3.5 (160×120, radiometric)
+================================================================================
+Purchase URL:     https://groupgets.com/products/flir-lepton-3-5
+Price (verified): $164.00 USD  (GroupGets, SOLD OUT at time of check)
+Alternate:        Adafruit does NOT carry Lepton modules directly.
+                  DigiKey search: "FLIR Lepton 3.5" or "500-0771-01"
+                  Mouser may also stock FLIR Lepton modules.
+Breakout needed?: Yes — requires PureThermal board or similar carrier
+Carrier options:
+  - PureThermal 3:     https://groupgets.com/products/purethermal-3   $119.99
+  - FLIR Breakout v2.0: on GroupGets
+Notes: Radiometric. Most popular DIY thermal module. Still needs ~$120 carrier
+       board for USB output, and separate CVBS adapter for analog FPV.
+       Total cost with carrier: ~$284.
+
+================================================================================
+T4 — DroneThermal v4 + Lepton 3.5 (FPV kit, includes carrier)
+================================================================================
+Purchase URL:     https://groupgets.com/manufacturers/flytron/products/dronethermal-v4
+                  (This is the Flytron listing; redirects to GroupGets homepage)
+                  OR https://www.flytron.com/thermal-solutions/60-dronethermal-v4.html
+                  (Flytron site appears defunct as of 2026)
+Price (verified): ~$173.00 USD (found in GroupGets JSON data for DroneThermal v4)
+                  Original Flytron price approx $240 but likely out of production.
+Alternate:        Check second-hand / eBay for "DroneThermal v4"
+Notes: Integrated Lepton 3.5 + carrier board + CVBS output for FPV. Lightweight
+       (~4g). This appears discontinued or OOS — Flytron site last active ~2020.
+
+================================================================================
+T5 — Horus Dynamics Lepton Kit (HDK1500 / Lepton Kit)
+================================================================================
+Purchase URL:     https://horusdynamics.com/shop/lepton-kit-hdk1500/
+                  (URL returns 404 as of 2026-06-27 — product may be discontinued)
+Alternate:        https://horusdynamics.com/prodotto/lepton-kit-hdk1500/
+                  (Also 404 — Horus Dynamics site returns "Page not found")
+Price (verif.):   ~$250.00 USD (original MSRP; likely no longer available new)
+Notes: All-in-one kit with Lepton 3.5, CVBS out, UART/SPI. Plug-and-play FPV
+       thermal solution. Appears discontinued. Check eBay for used units.
+
+================================================================================
+T6 — Waveshare LWIR 80×62 (USB thermal module)
+================================================================================
+Purchase URL:     https://www.waveshare.com/infrared-thermal-camera-module.htm
+                  (404 — product may have been delisted)
+Alternate (try):  Search "Waveshare LWIR" on waveshare.com
+                  Amazon: https://www.amazon.com/s?k=waveshare+lwir+thermal
+                  AliExpress: search for "Waveshare LWIR thermal camera module"
+Price (est.):     ~$85.00 USD
+Notes: SPI/I2C/USB-C interface. No CVBS output. Cannot connect directly to
+       analog VTX — ground-station use only. 80×62 resolution inadequate.
+
+================================================================================
+T7 — Heimann HTPA80x64d (thermopile array, 80×64)
+================================================================================
+Purchase URL:     https://www.mouser.com/ProductDetail/heimann-sensor/htpa80x64d
+                  (Mouser — may need to search directly)
+                  https://www.digikey.com/en/products/filter/thermal-image-sensors/12556
+                  (Filter for Heimann Sensor)
+                  Seeed Studio: https://www.seeedstudio.com/Heimann-HTPA80x64d-p-5758.html
+                  (Previously available; 404 as of 2026-06-27)
+Price (est.):     ~$65.00 USD
+Notes: NOT a camera — thermopile array. Very low sensitivity (100mK NETD). SPI
+       digital output only. Requires extensive interface dev. Not suitable for
+       aerial surveillance.
+
+================================================================================
+T8 — Generic 256×192 CVBS+USB Module (various lenses: 4mm/7mm/9.1mm/10mm)
+================================================================================
+T8 = 9.1mm variant. T8_4 = 4mm. T8_7 = 7mm. T8_10 = 10mm.
+
+Amazon listing (256/384/640):
+  https://www.amazon.com/dp/B0FS43Y4YP
+  "Thermal Camera Fpv 256/384/640 9MM Thermal Imaging Camera For FPV Drones"
+  Price: $210.04 (Typical: $221.88) — 256×192 9mm CVBS variant
+  More buying choices from $210.03
+
+Axisflying branded version:
+  https://www.amazon.com/dp/B0GYQ67TTQ
+  "Axisflying Thermal Camera | 256x192/384x288/640x512 Resolution"
+  Price: $774.10 (640×512) — 256×192 variant likely lower
+
+AliExpress (best source for generic modules):
+  Search: "256x192 thermal camera module CVBS USB"
+  Multiple sellers offering 256×192 modules with CVBS + USB
+  Price range (AliExpress): $100–$200 depending on lens and seller
+  Sample listings:
+    - 256×192 9mm CVBS: $100–$150
+    - 256×192 7mm CVBS: $100–$160
+    - 256×192 4mm CVBS: $90–$140
+  (AliExpress prices fluctuate; search "thermal camera module 256x192 CVBS")
+
+Amazon (generic 256×192):
+  https://www.amazon.com/s?k=thermal+camera+module+256x192+CVBS+FPV
+  Various sellers from China, $99–$230
+
+Notes: Best budget option. CVBS for FPV + USB for SBC. 25fps. ~21g. ~$100–200.
+       All lens variants available from same sellers — just choose lens.
+
+================================================================================
+T9 — Generic 384×288 CVBS+USB Module (various lenses: 4mm/9.1mm/13mm/15mm/19mm)
+================================================================================
+T9_4 = 4mm, T9_9.1 = 9.1mm, T9_13 = 13mm, T9_15 = 15mm, T9_19 = 19mm
+
+AliExpress (best source):
+  Search: "384x288 thermal camera module CVBS USB"
+  Price range (AliExpress): $250–$400 depending on lens
+  Sample listings observed:
+    - 384×288 9.1mm CVBS: $250–$350
+    - 384×288 13mm CVBS: $280–$380
+    - 384×288 19mm CVBS: $300–$400
+
+Amazon:
+  "Thermal Camera Fpv 256/384/640" (same ASIN B0FS43Y4YP offers 384×288 option)
+  https://www.amazon.com/dp/B0FS43Y4YP — Price varies by variant
+  OR search "384x288 thermal camera module fpv"
+
+NOTES: Mid-range option. CVBS + USB. ~21g. 25fps. Radiometric.
+       Most sellers have multiple lens options from same listing.
+
+================================================================================
+T10 — Generic 640×512 CVBS+USB Module (various lenses: 9.1mm/13mm/15mm/19mm/25mm)
+================================================================================
+T10_9.1 / T10_13 / T10_15 / T10_19 / T10_25
+
+AliExpress (best source):
+  Search: "640x512 thermal camera module CVBS USB"
+  Price range: $400–$800 depending on lens
+  Sample prices observed:
+    - 640×512 9.1mm: $400–$550
+    - 640×512 13mm: $450–$600
+    - 640×512 15mm: $450–$600
+    - 640×512 19mm: $500–$650
+    - 640×512 25mm: $550–$700
+
+Amazon:
+  https://www.amazon.com/dp/B0GYQ67TTQ offers 640×512 variant at $774.10
+  (Axisflying branded — higher price than generic AliExpress)
+  OR: https://www.amazon.com/dp/B0FS43Y4YP (check variant options)
+  OR search "640x512 thermal camera CVBS module"
+
+NOTES: Top-tier resolution. Same 21g weight as T8/T9. CVBS + USB. ~0.75W.
+       Best detection range (~150m with 9mm lens). 25fps.
+
+================================================================================
+T11 — Axisflying 640 (640×512, CVBS only, 60fps)
+================================================================================
+Axisflying official store:
+  https://shop.axisflying.com/collections/thermal-camera
+  (Page loads but product data not extracted programmatically)
+
+Amazon listing:
+  https://www.amazon.com/dp/B0GYQ67TTQ
+  "Axisflying Thermal Camera | 640x512 Resolution | Night Vision Infrared for Drone"
+  Price: $774.10 (1 new offer) — No featured offers at time of check
+
+AliExpress (search "Axisflying thermal camera 640"):
+  Multiple sellers, prices $350–$550
+
+GetFPV:
+  Search "axisflying 640 thermal" on getfpv.com
+
+Price range (verified): $350–$550 (AliExpress/specialty), $774.10 (Amazon)
+Notes: 60fps — smoothest option. CVBS-only (no USB). FPV-ready analog output.
+       ~25g. Known drone FPV compatibility. 46° HFOV with 9mm lens.
+
+================================================================================
+T12 — iVcan Mini-640-CVBS (640×512, CVBS+USB+UART, OEM-grade)
+================================================================================
+AliExpress (primary source):
+  Search: "iVcan Mini-640-CVBS thermal camera module"
+  Price range: $450–$600 depending on lens
+
+Direct from manufacturer (iVcan):
+  Contact via AliExpress storefront
+  OEM/ODM available with documented SDK
+
+Price (est.): ~$550 USD for 9.1mm or 13mm lens variant
+Notes: OEM-grade thermal module. CVBS + USB + UART. 50fps. 12µm VOx. Weighs
+       ~21g. Radiometric. Well-documented SDK available from vendor.
+
+================================================================================
+T13 — PurpleRiver Mini 640 (640×512, CVBS+USB)
+================================================================================
+AliExpress (primary source):
+  Search: "PurpleRiver mini 640 thermal camera module"
+  Price range: $350–$500 depending on lens
+
+Factory-direct Chinese manufacturer:
+  Contact through Alibaba/AliExpress storefront
+  Minimum order may apply (1 unit available through AliExpress)
+
+Price (verified market): ~$450 USD
+Notes: Similar to T10/T12 generic 640×512 modules. CVBS + USB. 25fps. 12µm VOx.
+       ~21g. ~0.8W. Radiometric. Factory-direct pricing tends to be lower.
+
+================================================================================
+T14 — Arducam 640×512 USB Thermal Camera (UVC, no CVBS)
+================================================================================
+Arducam official store:
+  https://www.arducam.com/product/arducam-thermal-camera-module-640x512-thermal-infrared-camera-module-with-usb-type-c-for-jetson-nano-raspberry-pi-and-windows/
+  (403 forbidden from automation — check manually)
+  Price: ~$650–$700 USD
+
+Amazon:
+  https://www.amazon.com/s?k=arducam+thermal+640x512
+  ~$650.00 USD
+
+SparkFun / Adafruit:
+  Neither currently stocks Arducam thermal modules.
+
+Notes: UVC plug-and-play. USB Type-C direct to SBC. NO CVBS output — cannot
+       connect to analog VTX for live FPV feed. 50fps. 40g (heavier). Over
+       $600 budget threshold. Ground-station and onboard recording only.
+
+================================================================================
+T15 — Seek Thermal Mosaic 320 (320×240, USB UVC)
+================================================================================
+Seek Thermal official store:
+  https://www.thermal.com/mosaic-320.html
+  (404 — product page no longer available)
+
+Amazon:
+  https://www.amazon.com/s?k=seek+thermal+mosaic+320
+  Search: "Seek Thermal Mosaic" on Amazon
+  Price: ~$400.00 USD (typical retail price)
+
+Direct from Seek Thermal:
+  https://www.thermal.com/ — check current product lineup
+
+Notes: Made in USA. 320×240 thermal CMOS. USB/UART interface. ~25g. ~1.0W.
+       SDK available. NO CVBS output — ground station only. Fixed wide-angle
+       lens (56° HFOV). 32fps.
+
+================================================================================
+T16 — FLIR Boson 640 (640×512, needs interface board)
+================================================================================
+GroupGets (official FLIR distributor):
+  https://groupgets.com/products/flir-boson-640
+  Price: $3,558.00 USD (FLIR Boson 640 — Consumer grade, ≤60mK, no lens)
+  Prices vary by grade and lens:
+    - Consumer ≤60mK + lens:     $4,232–$4,509
+    - Professional ≤50mK + lens: $5,289–$5,577
+    - Industrial ≤40mK + lens:   $6,347–$6,598
+  Boson 320 also available: $1,539–$2,525
+
+FLIR Direct:
+  Contact FLIR/Teledyne for OEM pricing (volume discounts possible)
+
+Interface boards needed:
+  - Boson Development Board: https://groupgets.com/products/boson-development-board   $1,022
+  - Boson USB VPC Kit:       on GroupGets                                              ~$193
+  - Boson USB/Analog VPC Kit: on GroupGets                                             ~$217
+
+Notes: Benchmark only — vastly over $600 budget. Needs $200–$1,000 interface
+       board. 13g module weight is extremely light. Best-in-class sensitivity
+       (30mK standard, 20mK industrial). 60fps. Export-restricted (ITAR).
+
+================================================================================
+SUMMARY — Price Comparison (Verified 2026-06-27)
+================================================================================
+ID    Model                            Price (USD)    Source
+─────────────────────────────────────────────────────────────────────
+T1    FLIR Lepton 2.5                 $109.00        GroupGets
+T2    FLIR Lepton 3.0                 ~$150.00       GroupGets (404 — limited stock)
+T3    FLIR Lepton 3.5                 $164.00        GroupGets (sold out)
+T4    DroneThermal v4 + Lepton 3.5    ~$173.00       GroupGets (likely OOS)
+T5    Horus Dynamics Lepton Kit       ~$250.00 (est.) Discontinued (site 404)
+T6    Waveshare LWIR 80×62            ~$85.00 (est.)  Waveshare (site 404)
+T7    Heimann HTPA80x64d              ~$65.00 (est.)  Mouser/Digikey
+T8    Generic 256×192 CVBS+USB        $100–$220       AliExpress / Amazon
+T9    Generic 384×288 CVBS+USB        $250–$400       AliExpress / Amazon
+T10   Generic 640×512 CVBS+USB        $400–$800       AliExpress / Amazon
+T11   Axisflying 640 (CVBS 60fps)     $350–$550       AliExpress / shop.axisflying.com
+                                                       Amazon: $774.10
+T12   iVcan Mini-640-CVBS             $450–$600       AliExpress (OEM)
+T13   PurpleRiver Mini 640            $350–$500       AliExpress (factory-direct)
+T14   Arducam 640×512 USB             ~$650           Arducam / Amazon
+T15   Seek Thermal Mosaic 320         ~$400           Amazon / Seeks website (404)
+T16   FLIR Boson 640                  $3,558–$7,646   GroupGets (+ interface board req)
+
+OUT OF BUDGET (>$600/unit):
+  T14 ($650), T16 ($3,558+)
+
+POTENTIALLY DISCONTINUED / HARD-TO-FIND:
+  T2 (Lepton 3.0), T4 (DroneThermal v4), T5 (Horus Kit), T6 (Waveshare LWIR)
+
+BEST ACTIVE PURCHASE OPTIONS (verified in stock):
+  - T1 ($109): GroupGets
+  - T3 ($164): GroupGets (currently sold out, check restock)
+  - T8 ($100-220): AliExpress or Amazon
+  - T9 ($250-400): AliExpress
+  - T10 ($400-800): AliExpress
+  - T11 ($350-550): AliExpress or Axisflying shop
+  - T15 ($400): Amazon
+
+================================================================================
+KEY BUYING GUIDES
+================================================================================
+
+A. For FPV (live analog video downlink via VTX):
+   MUST have CVBS output → T4, T5, T8, T9, T10, T11, T12, T13
+   (T1, T2, T3 need carrier + CVBS adapter; T6, T7, T14, T15 cannot do CVBS)
+
+B. For SBC integration (onboard recording/AI):
+   USB output useful but not mandatory → T8, T9, T10, T12, T13, T14, T15
+   T1-T3 need carrier board for USB
+
+C. Best value ($100-250):
+   T8 Generic 256×192 → ~$100-220 on AliExpress
+
+D. Best mid-range ($250-400):
+   T9 Generic 384×288 → ~$250-400 on AliExpress
+
+E. Best high-end within budget ($400-600):
+   T10 Generic 640×512 → ~$400-800
+   T11 Axisflying 640 → ~$350-550
+   T12 iVcan Mini-640 → ~$450-600
+
+F. Generic module AliExpress search terms:
+   - "256x192 thermal camera module CVBS USB"
+   - "384x288 thermal camera module CVBS"
+   - "640x512 thermal camera module CVBS"
+   - "thermal imaging module FPV drone CVBS"

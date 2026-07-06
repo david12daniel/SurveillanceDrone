@@ -1133,7 +1133,7 @@ package DroneCandidates {
    :>> name = "PurpleRiver Mini 640";
    :>> purchaseUrl = "https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/";
    :>> brand = "PurpleRiver";
-   :>> cost_USD = 590.00;            // 350-550
+   :>> cost_USD = 650.00;            // $590 base + $60 shipping (confirmed 2026-07-05)
    :>> mass = 21.0 [g];
    :>> power = 0.8 [W];
    :>> resolutionH = 640;

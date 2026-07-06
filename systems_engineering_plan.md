@@ -42,40 +42,42 @@ pre-programmed waypoint missions.
 
 ---
 
-## Phase 2 — EO/IR Thermal Camera + Onboard Recording
-**Goal** — Mount the thermal camera, record onboard to microSD, and downlink live thermal video.
+## Phase 2 — EO/IR Thermal Camera + SBC Onboard Recording + OpenHD Digital Downlink
+**Goal** — Mount the thermal camera and SBC, record onboard via SBC, and downlink live thermal video via OpenHD.
 
 **New Components (vs Phase 1)**
 - Thermal Camera Subsystem — **PurpleRiver Mini 640** (`T13`, 640×512, 12 µm, 13 mm lens, USB)
-- ThermalVideoRecorder — **Monster UVC Recorder** (`DVR9`, standalone USB-UVC DVR to microSD)
+- Single-Board Computer — **NanoPi M5, 4 GB** (`SBC3`, Rockchip RK3576, RKNN NPU) — handles onboard recording + future AI inference
+- SBC mount + cooling (3D-printed deck + fan — see [`reference/cad-resources.md`](reference/cad-resources.md))
+- WiFi adapter (air) — LB-LINK BL-M8812EU2 (`WLAN_AIR1`) for OpenHD digital downlink
+- WiFi adapter (ground) — Alfa AWUS036ACH (`WLAN_GND1`) for OpenHD reception
+- Ground diversity antennas — Foxeer Echo 2 Max × 2 (`ANT_GND1` + `ANT_GND2`)
 
-**Components Required (full list)** — all of Phase 1, plus the thermal camera and DVR.
+**Components Required (full list)** — all of Phase 1, plus the thermal camera, SBC (with mount/cooling), and OpenHD digital downlink hardware.
 
 **Phase Steps**
 1. Mount the thermal camera on the airframe (clear FOV, nose/chin) and power from the airframe rail.
-2. Route the thermal video → DVR (records to microSD) and to the laptop (live view).
-3. Configure the DVR to auto-start recording on power-up (per-flight files).
-4. Fly and recover thermal footage from microSD post-flight (footage survives RF loss).
-5. Confirm live thermal downlink on the laptop and Johnson detect/recognize performance at 90–120 m.
+2. Mount the SBC on a 3D-printed deck; connect to the airframe rail and the flight controller (UART/MAVLink).
+3. Route the thermal camera video → SBC (USB-UVC for recording + future inference).
+4. Configure the SBC to record thermal footage to onboard storage (microSD/eMMC) on power-up.
+5. Configure OpenHD digital downlink: SBC encodes H.264 → WiFi air module transmits WFB-ng protocol → ground WiFi adapter + Foxeer antennas receive on laptop VM.
+6. Fly and recover thermal footage from SBC post-flight (footage survives RF loss).
+7. Confirm live thermal downlink on the laptop and Johnson detect/recognize performance at 90–120 m.
 
-**Result** — Thermal video recorded onboard (survives signal loss) with live downlink; meets the R3 detection/recognition requirements.
+**Result** — Thermal video recorded onboard via SBC (survives signal loss) with OpenHD digital downlink; meets the R3 detection/recognition requirements. No separate DVR required.
 
 ---
 
-## Phase 3 — On-Board Detection + Autonomous Route Modification
-**Goal** — Add on-board AI thermal detection/classification and dynamic mission adaptation.
+## Phase 3 — AI Detection + Autonomous Route Modification (Software)
+**Goal** — Deploy on-board AI thermal detection/classification and dynamic mission adaptation using the SBC already on-board.
 
-**New Components (vs Phase 2)**
-- Single-Board Computer — **NanoPi M5, 4 GB** (`SBC3`, Rockchip RK3576, RKNN NPU)
-- SBC mount + cooling (3D-printed deck + fan — see [`reference/cad-resources.md`](reference/cad-resources.md))
+**New Components (vs Phase 2)** — None (all hardware on-board since Phase 2).
 
-**Components Required (full list)** — all of Phase 2, plus the SBC (the SBC records at this stage, so the DVR is no longer required).
+**Components Required (full list)** — same as Phase 2 (hardware).
 
 **Phase Steps**
-1. Mount the SBC on a 3D-printed deck; connect to the airframe rail and the flight controller (UART/MAVLink).
-2. Route the thermal camera video → SBC (USB-UVC).
-3. Deploy the INT8-quantized detection/classification model via the RKNN toolchain (RKNPU2); verify ≥ ~25 fps.
-4. Map detections to MAVLink commands (loiter/adjust on a target); modify the mission in-flight.
-5. Validate fallback: if the SBC fails, the drone completes the current waypoint and RTLs.
+1. Deploy the INT8-quantized detection/classification model via the RKNN toolchain (RKNPU2); verify ≥ ~25 fps.
+2. Map detections to MAVLink commands (loiter/adjust on a target); modify the mission in-flight.
+3. Validate fallback: if the SBC fails, the drone completes the current waypoint and RTLs.
 
 **Result** — Autonomous drone that detects and reacts to thermal targets, meeting all SBC and camera requirements.

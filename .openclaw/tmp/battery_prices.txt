@@ -1,0 +1,154 @@
+# Battery Purchase URLs and Current Prices
+# Survey Date: 2026-06-27
+# Sources: RaceDayQuads (rdq), Pyrodrone (pyro), GetFPV (blocked by Cloudflare), iFlight RC, lumenier.com, upgrade-energy.com
+# Prices are listed USD. Verified prices are sourced from current product pages.
+# ⚠ = direct web scrape blocked; price from model.sysml / candidates.sysml (verified manually if possible)
+# 🔴 = could not find live product page; price from model.sysml (assumed manufacturer direct or wholesale)
+
+======================================================================
+
+BAT01: Lumenier NAV 10000mAh 6S 21700 Li-Ion
+  Model Price: $149.99
+  Verified Price: $149.99 ✅
+  Purchase URL: https://www.racedayquads.com/products/lumenier-nav-10000mah-6s-21700-lithium-ion-battery-xt60
+  Also at: GetFPV (blocked by Cloudflare, search: "Lumenier NAV 10000mAh")
+
+BAT02: Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S
+  Model Price: $269.99
+  Verified: Could not find on RDQ, GetFPV (blocked), or Pyrodrone 🔴
+  Purchase URL: https://www.upgrade-energy.com/ (corporate site, no direct e-commerce; likely direct order)
+
+BAT03: Upgrade Energy RED V3 6S2P 10Ah Molicel P50B
+  Model Price: $252.00
+  Verified: Could not find on RDQ, GetFPV (blocked), or Pyrodrone 🔴
+  Purchase URL: https://www.upgrade-energy.com/ (corporate site, no direct e-commerce; likely direct order)
+
+BAT04: Lumenier NAV 12000mAh 4S 21700 Amprius
+  Model Price: $218.99
+  Verified Price: $218.99 ✅
+  Purchase URL: https://www.racedayquads.com/products/lumenier-nav-12000mah-4s-21700-amprius-lithium-ion-battery-xt60
+  Note: Marked as "sold out as of 2026-06" in model comments
+
+BAT05: GNB 8000mAh 6S2P Samsung 21700 40T
+  Model Price: $135.99
+  Verified Price: $135.99 ✅
+  Purchase URL: https://pyrodrone.com/products/gaoneng-gnb-8000mah-22-2v-6s-10c-6s2p-made-with-samsung-21700-40t-long-range-cinelifter-lipo-battery-xt60
+  Also at: search "GNB 8000mAh 6S2P" on racedayquads.com
+
+BAT06: iFlight Fullsend 6S 8000mAh EVE INR21700-40PL
+  Model Price: $73.91
+  Verified Price: $122.99 (Pyrodrone) ⚠
+    Note: Model price ($73.91) vs Pyrodrone ($122.99) differ significantly.
+    Pyrodrone has TWO Fullsend 8000 listings at $122.99 each:
+    1. FULLSEND LR 6S 8000mAh 6S2P (Li-ion) — https://pyrodrone.com/products/iflight-fullsend-6s-8000mah-22-2v-6s2p-li-ion-battery-xt60
+    2. FULLSEND E 6S 8000mAh 6S1P (listed as LiPO) — https://pyrodrone.com/products/iflight-fullsend-e-6s-8000mah-22-2v-6s1p-lipo-battery-xt60
+    Model cell spec (EVE INR21700-40PL, 6S1P, 840g) matches the "E" variant.
+    Model cost seems outdated; current street price ~$122.99.
+  Purchase URL: https://pyrodrone.com/products/iflight-fullsend-e-6s-8000mah-22-2v-6s1p-lipo-battery-xt60
+  Also at: https://shop.iflight-rc.com/ (search "Fullsend 8000")
+
+BAT07: Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10
+  Model Price: $194.00
+  Verified: Could not find on any major retailer 🔴
+  Purchase URL: https://www.upgrade-energy.com/ (direct order)
+
+BAT08: Lumenier NAV 12000mAh 6S 21700 XT90
+  Model Price: $189.99
+  Verified Price: $189.99 ✅
+  Purchase URL: https://www.racedayquads.com/products/lumenier-nav-12000mah-6s-21700-lithium-ion-battery-xt90
+  Connector: XT90
+
+BAT09: Lumenier NAV 12000mAh 6S 21700 Amprius
+  Model Price: $321.49
+  Verified Price: $321.49 ✅
+  Purchase URL: https://www.racedayquads.com/products/lumenier-nav-12000mah-6s-21700-amprius-lithium-ion-battery-xt60
+
+BAT10: Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10
+  Model Price: $275.00
+  Verified: Could not find on any major retailer 🔴
+  Purchase URL: https://www.upgrade-energy.com/ (direct order)
+
+BAT11: Upgrade Energy GREEN V1 4S2P 10Ah Samsung 50S
+  Model Price: $129.99
+  Verified: Could not find on any major retailer 🔴
+  Purchase URL: https://www.upgrade-energy.com/ (direct order)
+
+BAT12: Upgrade Energy RED V3 4S2P 10Ah Molicel P50B
+  Model Price: $139.99
+  Verified: Could not find on any major retailer 🔴
+  Purchase URL: https://www.upgrade-energy.com/ (direct order)
+
+BAT13: Pyrodrone Hyperjuice 6S2P 6000mAh Sony VTC6
+  Model Price: $172.99
+  Verified Price: $172.99 ✅
+  Purchase URL: https://pyrodrone.com/products/pyrodrone-hyperjuice-6000mah-6s2p-li-ion-long-range-battery-xt60
+
+BAT14: iFlight Fullsend 6S2P 6000mAh Samsung 30Q
+  Model Price: $84.47
+  Verified: Not found on RDQ or Pyrodrone under exact name 🔴
+    Pyrodrone search for "iflight fullsend 6000" returned no battery products.
+    iFlight direct shop (shop.iflight-rc.com) unreachable.
+  Purchase URL: Likely https://shop.iflight-rc.com/ (search "Fullsend 6000") or AliExpress
+
+BAT15: Lumenier NAV 6000mAh 6S 18650
+  Model Price: $188.99
+  Verified Price: $188.99 ✅
+  Purchase URL: https://www.racedayquads.com/products/lumenier-nav-22-2v-6s-18650-6000mah-10c-li-ion-battery-xt60
+  Also at: GetFPV (blocked, search "Lumenier NAV 6000mAh 6S")
+
+BAT16: Upgrade Energy GREEN V2 4S2P 8Ah Amprius SA10
+  Model Price: $155.00
+  Verified: Could not find on any major retailer 🔴
+  Purchase URL: https://www.upgrade-energy.com/ (direct order)
+
+BAT17: Upgrade Energy Dark Lithium V2 4S 8400mAh Molicel P42A
+  Model Price: $148.99
+  Verified: Could not find on any major retailer 🔴
+  Purchase URL: https://www.upgrade-energy.com/ (direct order)
+
+BAT18: Lumenier NAV 8000mAh 4S 18650 Amprius
+  Model Price: $134.99
+  Verified Price: $134.99 ✅
+  Purchase URL: https://www.racedayquads.com/products/lumenier-nav-8000mah-4s-18650-amprius-lithium-ion-battery-xt60
+
+BAT19: Lumenier NAV 5000mAh 6S 21700
+  Model Price: $95.99
+  Verified Price: $95.99 ✅
+  Purchase URL: https://www.racedayquads.com/products/lumenier-nav-5000mah-6s-21700-lithium-ion-battery-xt60
+  Also at: GetFPV (blocked, search "Lumenier NAV 5000mAh 6S")
+
+BAT20: Upgrade Energy RED V3 6S1P 5Ah Molicel P50B
+  Model Price: $119.00
+  Verified: Could not find on any major retailer 🔴
+  Purchase URL: https://www.upgrade-energy.com/ (direct order)
+
+BAT21: DOGCOM 6S1P 5000mAh Samsung 50S
+  Model Price: $50.00 (range $34-$67 depending on sale)
+  Verified: Not found on Pyrodrone, RDQ, or dogcomfpv.com 🔴
+    Dogcomfpv.com has LiPo racing packs but not Li-ion long-range packs.
+    Likely available on AliExpress or direct from manufacturer.
+  Purchase URL: Search "DOGCOM 6S1P 5000mAh Samsung 50S" on AliExpress or Amazon
+
+======================================================================
+
+SUMMARY
+
+Verified prices (9/21 batteries confirmed at listed price):
+  BAT01 $149.99 ✅  |  BAT04 $218.99 ✅  |  BAT05 $135.99 ✅
+  BAT08 $189.99 ✅  |  BAT09 $321.49 ✅  |  BAT13 $172.99 ✅
+  BAT15 $188.99 ✅  |  BAT18 $134.99 ✅  |  BAT19 $95.99 ✅
+
+Price discrepancy found:
+  BAT06 model says $73.91 but street price appears ~$122.99 on Pyrodrone
+
+Could not verify (Unreachable retailers / direct-order only):
+  BAT02, BAT03, BAT07, BAT10, BAT11, BAT12, BAT16, BAT17, BAT20
+  → All Upgrade Energy products. Their website (upgrade-energy.com) is a
+    corporate/engineering site with no direct e-commerce; likely direct-order
+    or dealer network only. Prices from model.sysml assumed correct.
+
+  BAT14 (iFlight Fullsend 6S2P 6000 Samsung 30Q) — not found on major retailers
+  BAT21 (DOGCOM 6S1P 5000 Samsung 50S) — not found on major retailers
+
+Blocked retailers (Cloudflare):
+  GetFPV (getfpv.com) — Cloudflare JS challenge; unable to scrape

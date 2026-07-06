@@ -729,37 +729,6 @@ package DroneSystemModel {
  doc /* 5.8 GHz video transmitter for FPV piloting downlink. May be included with the airframe purchase (BNF/PNP) or purchased separately. */
  }
 
- part def ThermalVideoRecorder {
- attribute name : String;
- attribute purchaseUrl : String;
- attribute cost_USD : ScalarValues::Real;
- attribute mass : ISQBase::MassValue;
- attribute power : ISQMechanics::PowerValue;       // max power draw
- attribute storageCapacity : ScalarValues::Real;   // max card capacity [GB]
- attribute recordingFormat : String;               // e.g., "AVI", "MJPEG"
- attribute dimensions : String;                    // [mm]
- attribute mountPattern : String;
- attribute inputVoltageMin : ISQElectromagnetism::ElectricPotentialDifferenceValue;
- attribute inputVoltageMax : ISQElectromagnetism::ElectricPotentialDifferenceValue;
- attribute currentMax : ISQBase::ElectricCurrentValue;  // [mA]
- attribute videoInput : String;                    // CVBS analog
- attribute inputPortType : String;
- attribute videoPassThrough : Boolean;
- attribute passThroughMethod : String;
- attribute maxResolution : String;                 // e.g. 1280x480
- attribute frameRate_fps : ScalarValues::Real;
- attribute storageType : String;                   // microSD / TF
- attribute audioRecording : Boolean;
- attribute startStopControl : String;
- attribute firmware : String;                      // e.g. "factory (standalone DVR firmware)"
-
- port video_in : Compatibility::VideoSinkPort;   // from CameraSubsystem
- port video_out : Compatibility::VideoSourcePort;  // pass-through to VideoTransmitter
- port power_in;
-
- doc /* Inline DVR that records analog CVBS video to microSD card while passing video through to the VTX. Enables onboard storage of thermal footage without requiring the SBC (Phase 3). Survives RF signal loss — footage is on the card regardless of downlink quality. */
- }
-
  part def VideoReceiver {
  attribute name : String;
  attribute purchaseUrl : String;
@@ -959,7 +928,6 @@ package DroneSystemModel {
  part camera : CameraSubsystem;
  part fpvCam : FpvCamera;
  part gps : GpsModule;
- part recorder : ThermalVideoRecorder;
  part sbc : SingleBoardComputerPayload;
  part rx : RadioReceiver;  // ELRS — handles both RC control and telemetry
  part vtx : VideoTransmitter;
@@ -969,23 +937,20 @@ package DroneSystemModel {
  interface connect platform.power_tp to camera.power_in;
  interface connect platform.power_sbc to fpvCam.power_in;
  interface connect platform.power_sbc to gps.power_in;
- interface connect platform.power_sbc to recorder.power_in;
  interface connect platform.power_sbc to sbc.power_in;
  interface connect platform.power_sbc to rx.power_in;
  interface connect platform.power_sbc to vtx.power_in;
  interface fpvToVtx : Compatibility::VideoLink connect fpvCam.video_out to vtx.video_in;  // FPV camera feeds pilot VTX
- interface camToRec : Compatibility::VideoLink connect camera.video_out to recorder.video_in; // thermal camera feeds recorder
- interface recToVtx : Compatibility::VideoLink connect recorder.video_out to vtx.video_in; // recorder also passes through to VTX (optional)
- interface camToSbc : Compatibility::VideoLink connect camera.video_out to sbc.video_in;   // thermal camera also feeds SBC for inference (Phase 3)
+ interface camToSbc : Compatibility::VideoLink connect camera.video_out to sbc.video_in;   // thermal camera feeds SBC for recording + inference
  interface connect gps.data_out to platform.data_sbc;   // GPS data to flight controller
  interface connect sbc.data_af to platform.data_sbc;
  interface connect sbc.usb_out to wifiTx.usb_in;        // SBC encodes H.264 → WiFi adapter transmits WFB-ng
  interface connect rx.control_signal_out to platform.control_input;
  interface connect rx.telemetry_data_in to platform.telemetry_data_out; // telemetry via same ELRS RX
 
- // Derived total electrical load (Phase 3 build: SBC present, DVR removed from flight)
+ // Derived total electrical load (SBC handles onboard recording, no separate DVR)
  attribute totalPower : ISQMechanics::PowerValue =
- platform.power + camera.power + fpvCam.power + gps.power + recorder.power + sbc.power + rx.power + vtx.power + wifiTx.power;
+ platform.power + camera.power + fpvCam.power + gps.power + sbc.power + rx.power + vtx.power + wifiTx.power;
  }
 
  part def ViewingComputer {
@@ -1035,7 +1000,6 @@ package DroneSystemModel {
  + drone.camera.cost_USD
  + drone.fpvCam.cost_USD
  + drone.gps.cost_USD
- + drone.recorder.cost_USD
  + drone.sbc.cost_USD
  + drone.rx.cost_USD
  + drone.vtx.cost_USD

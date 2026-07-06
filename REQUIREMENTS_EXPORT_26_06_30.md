@@ -48,8 +48,8 @@ This document records system and subsystem requirements (§3), their verificatio
 ### 3.1 Required states and modes
 The system is fielded in three incremental capability phases (operational modes), each a superset of the prior (see `systems_engineering_plan.md`):
 1. **Phase 1 — Flight + FPV + waypoints:** airframe + ELRS control link + battery + FPV/analog video downlink to the laptop + GPS pre-programmed waypoint routes.
-2. **Phase 2 — Thermal + recording:** adds the thermal camera + onboard DVR (footage survives RF loss).
-3. **Phase 3 — Onboard autonomy:** adds the SBC for live detection/classification + autonomous route modification (MAVLink). *The DVR is a Phase 1–2 part; at Phase 3 the SBC records.*
+2. **Phase 2 — Thermal + SBC + OpenHD downlink:** adds the thermal camera + SBC (recording + future inference) + OpenHD digital video downlink (footage survives RF loss; SBC records locally).
+3. **Phase 3 — Onboard autonomy (software):** deploys the detection/classification model on the already-installed SBC + integrates MAVLink autonomous route modification. *No hardware procurement in Phase 3.*
 
 Flight states within any phase: **disarmed/idle, armed, takeoff, cruise (2.23 m/s surveillance), loiter, return-to-launch (failsafe), land.**
 
@@ -99,7 +99,7 @@ External interfaces (drone ↔ GCS RF links; GCS ↔ operator laptop) are specif
 - (Range over these external RF links: **R4_GCS_RANGE**, both control and video links hard at 2.8 km.)
 
 ### 3.4 System internal interface requirements
-Internal interfaces (battery↔airframe power, payload power rails, the camera→DVR/SBC/VTX
+Internal interfaces (battery↔airframe power, payload power rails, the camera→SBC/VTX
 video chain, GPS/SBC↔flight-controller data) are specified in the **[IRS](INTERFACE_REQUIREMENTS_EXPORT_26_06_30.md) §3.2 (IF-PWR-\*, IF-VID-\*, IF-DAT-\*)**. Governing requirements:
 - **R4_BAT_VOLT** — The battery nominal voltage shall be within the operating input voltage range of the airframe's flight controller, ESC, and payload voltage regulators.
 - **R4_BAT_IF** — The battery connector and form factor shall be physically compatible with the airframe's power input leads and battery mounting bay.
@@ -137,7 +137,7 @@ packet rate. No site-specific data tables beyond operator-defined routes.
 - The SBC shall host the detection/classification inference workload (NPU-accelerated) — selected baseline: NanoPi M5 (RK3576, 6 TOPS), passively cooled (consistent with R4_SBC_TEMP).
 
 ### 3.11 System quality factors
-- **Reliability:** control and video links reliable to ≥ 2.8 km LOS (**R4_GCS_RANGE**); footage retained on-card independent of RF link quality (Phase 3 DVR).
+- **Reliability:** control and video links reliable to ≥ 2.8 km LOS (**R4_GCS_RANGE**); footage retained on-card independent of RF link quality (Phase 2+ SBC onboard recording).
 - **Maintainability / usability:** COTS modules, field-portable hand-held GCS (**R4_GCS_WT**), single-operator setup.
 
 ### 3.12 Design and construction constraints
@@ -218,6 +218,6 @@ Built from commercially-available (COTS) modules to minimize custom fabrication 
 
 ## 6. Notes
 
-- **Acronyms:** AGL (above ground level), LWIR (long-wave infrared), NETD (noise-equivalent temperature difference), SBC (single-board computer), GCS (ground control station), VTX/VRX (video transmitter/receiver), DVR (digital video recorder), ELRS (ExpressLRS), CRSF (Crossfire serial protocol), CVBS (composite analog video), LOS (line of sight), COTS (commercial off-the-shelf), MTOM (max takeoff mass).
+- **Acronyms:** AGL (above ground level), LWIR (long-wave infrared), NETD (noise-equivalent temperature difference), SBC (single-board computer), GCS (ground control station), VTX/VRX (video transmitter/receiver), ELRS (ExpressLRS), CRSF (Crossfire serial protocol), CVBS (composite analog video), LOS (line of sight), COTS (commercial off-the-shelf), MTOM (max takeoff mass).
 - Requirement text is reproduced verbatim from `model.sysml`; IDs use `_1`/`_2` (not `.1`/`.2`) because dots are invalid SysML identifiers.
 - This export is a content-aligned rendering of DI-IPSC-81431; it is not a contractual CDRL deliverable.

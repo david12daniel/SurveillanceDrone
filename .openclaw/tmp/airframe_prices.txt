@@ -1,0 +1,22 @@
+# Airframe Purchase URLs & Current Prices
+# Retrieved: 2026-06-27
+# Sources: pyrodrone.com, shop.iflight.com, darwinfpv.com, newbeedrone.com
+# Prices in USD | (verified) = confirmed current listed price | (estimated) = derived from variant/bundle pricing
+
+AF1  | GEPRC MARK4 LR7 PNP                                  | NOT FOUND - Discontinued product. GEPRC no longer lists MARK4 LR7. Replaced by Tern-LR40, MOZ7, Crocodile75 series.
+AF2a | Axisflying KOLAS7 PNP                                | NOT FOUND - No US retailer carries this. Axisflying currently lists KOLAS 6 (6in frame kit) on racedayquads.com. KOLAS7 may be discontinued or limited availability.
+AF2b | Axisflying KOLAS7 BNF Analog                         | NOT FOUND - Same condition as AF2a.
+AF2c | Axisflying KOLAS7 BNF HD                             | NOT FOUND - Same condition as AF2a.
+AF3a | iFlight Chimera9 ECO PNP                             | https://shop.iflight.com/Chimera9-ECO-6S-Pro2068        | $305.35 (verified, 5.8G 1.6W VTX, Without RX/PNP)
+AF3b | iFlight Chimera9 ECO BNF                             | https://shop.iflight.com/Chimera9-ECO-6S-Pro2068        | $346.99 (verified, BNF with receiver option)
+AF4a | DarwinFPV X9 PNP                                     | https://darwinfpv.com/products/darwinfpv-x9-9-long-range-fpv-drone | $279.99 (verified, 5.8G PNP without receiver, no battery/props)
+AF5  | EMAX Hawk 7 BNF                                      | NOT FOUND - Discontinued product. EMAX has moved to TinyHawk/nano series. Hawk 5 and Hawk Pro were phased out.
+AF6a | DeepSpace ROC7 O4 PRO PNP+GPS                        | https://pyrodrone.com/products/deepspacefpv-roc7-o4-pro-long-range-fpv-7inch-digital-pnp-with-gps-freestyle-fpv-drone-choose-receiver | $825.99 (verified, PNP+GPS variant on Pyrodrone)
+AF6b | DeepSpace ROC7 O4 PRO BNF                            | https://pyrodrone.com/products/deepspacefpv-roc7-o4-pro-long-range-fpv-7inch-digital-pnp-with-gps-freestyle-fpv-drone-choose-receiver | $851.99 (verified, ELRS 2.4GHz+GPS) / $864.99 (TBS Crossfire+GPS)
+AF7  | GEPRC Crocodile75 V3 PNP                             | https://pyrodrone.com/products/geprc-crocodile75-v3-hd-wasp-long-range-fpv-choose-receiver-type | $726.99 (verified, PNP/Add Your Own RX on Pyrodrone)
+AF8a | iFlight Chimera7 Pro V2 PNP                          | https://pyrodrone.com/products/iflight-chimera-7-pro-v2-o4-6s-hd-long-range-bnf-w-dji-o4-air-unit-pro-choose-receiver | $942.99 (verified, O4 HD PNP variant on Pyrodrone)
+AF8b | iFlight Chimera7 Pro V2 BNF                          | https://pyrodrone.com/products/iflight-chimera-7-pro-v2-o4-6s-hd-long-range-bnf-w-dji-o4-air-unit-pro-choose-receiver | $963.99 (verified, ELRS 2.4GHz) / $979.99 (TBS Crossfire)
+     | iFlight Chimera7 Pro V2 Analog PNP                    | https://pyrodrone.com/products/iflight-chimera7-pro-v2-analog-5-8g-1-6w-vtx-6s-long-range-bnf-choose-receiver | $598.99 (alt analog PNP, if non-O4 variant needed)
+AF9a | DarwinFPV 129 7in PNP                                | https://pyrodrone.com/products/darwinfpv-darwin129-7-long-range-bnf | $299.99 (verified, listed as "DarwinFPV Darwin129 7\" Long Range PNP/BF" on Pyrodrone)
+AF10 | NewBeeDrone ROC7 O4PRO BNF only                      | https://newbeedrone.com/products/deepspace-roc7-o4pro-long-range-fpv-7inch-f722-60a-racing-drone-quadcopter-freestyle | $799.99 (verified, DJI O4 Pro + ELRS 2.4G + GPS BNF on NewBeeDrone)
+     |                                                        |                                                                     | $819.99 (TBS + GPS variant)

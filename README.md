@@ -25,7 +25,7 @@ verification layer, and **extensive component trade studies** are complete. Comp
 are now being **locked in**:
 
 - ✅ **Airframe — iFlight Chimera9 ECO (9")** · ✅ **Thermal — PurpleRiver Mini 640 (640×512, USB)** · ✅ **SBC — NanoPi M5 (RK3576)**
-- 🔶 Open: PNP-vs-BNF variant, battery (6S 12 Ah Amprius — Lumenier vs Upgrade Energy), GPS, RX, DVR, and ground-station specifics.
+- 🔶 Open: battery (6S 12 Ah Amprius — Lumenier vs Upgrade Energy), and ground-station specifics.
 - **Reference build:** Chimera9 ECO + Lumenier 6S 12 Ah Amprius + Mini 640 + NanoPi M5 → **~58.6 min hover, ~$1,645 system** (well under the $2,500 cap).
 
 > **The authoritative, current list of selected vs open components is [`SELECTED_COMPONENTS.md`](SELECTED_COMPONENTS.md).** Read it first.
@@ -61,10 +61,10 @@ System- and subsystem-level requirements with `subsets` traceability:
 
 ### Architecture
 `part def`s with attributes, ports, and formal `satisfy` traceability:
-- **SurveillanceDrone** — composes the airborne parts (Airframe, Battery, CameraSubsystem [thermal], FpvCamera, GpsModule, ThermalVideoRecorder, SingleBoardComputerPayload, RadioReceiver, VideoTransmitter) wired with typed power/video interfaces; derives `totalPower`.
+- **SurveillanceDrone** — composes the airborne parts (Airframe, Battery, CameraSubsystem [thermal], FpvCamera, GpsModule, SingleBoardComputerPayload, RadioReceiver, VideoTransmitter) wired with typed power/video interfaces; derives `totalPower`.
 - **AerialThermalObservationSystem** — composes SurveillanceDrone + GroundControlStation + ViewingComputer; connects the wireless RF links; derives `totalCost` (the MacBook Air `ViewingComputer` is an external actor, excluded from cost).
 - **GroundControlStation** — two-tier, laptop-based: `laptopLink` (ELRS USB dongle — primary control + telemetry) + `rcTx` (handheld radio — Phase-1/backup) + `VideoReceiver` + `UsbVideoCapture` + `groundAntenna` (5.8 GHz directional patch for video-link range margin).
-- Component defs — **Airframe** (incl. `minCells_s`/`maxCells_s`, `maxThrustPerMotor_g`, and a **physical-integration layer**: `payloadDeckLength_mm`/`payloadDeckWidth_mm`/`payloadCapacity_g`/`batteryMount`), **Battery** (energy, chemistry, cells, `length/width/height_mm`), **CameraSubsystem** (thermal), **FpvCamera**, **GpsModule**, **SingleBoardComputerPayload**, **ThermalVideoRecorder** (CVBS + digital DVR variants), **RadioReceiver**, **VideoTransmitter**, **VideoReceiver**, **UsbVideoCapture**, **Antenna** (`gain_dBi`, band, polarization — feeds the RF link budget), **AntiSparkFilter** (inline XT60, in the drone power path), **Charger** (6S Li-ion/LiPo bench charger — ground-support equipment).
+- Component defs — **Airframe** (incl. `minCells_s`/`maxCells_s`, `maxThrustPerMotor_g`, and a **physical-integration layer**: `payloadDeckLength_mm`/`payloadDeckWidth_mm`/`payloadCapacity_g`/`batteryMount`), **Battery** (energy, chemistry, cells, `length/width/height_mm`), **CameraSubsystem** (thermal), **FpvCamera**, **GpsModule**, **SingleBoardComputerPayload**, **RadioReceiver**, **VideoTransmitter**, **VideoReceiver**, **UsbVideoCapture**, **Antenna** (`gain_dBi`, band, polarization — feeds the RF link budget), **AntiSparkFilter** (inline XT60, in the drone power path), **Charger** (6S Li-ion/LiPo bench charger — ground-support equipment).
 - **Compatibility** (sub-package) — typed `port def`s, `enum def`s (`VideoFormat`, `RfBand`), `constraint def`s, and `interface def`s declaring which pairings are real (battery↔airframe cell-count **and connector**, video-format chain, RF band). The structure is validated by Syside; the **rules are executed by the flight-time sweep**.
 
 ### Analysis
@@ -82,7 +82,7 @@ A parametric verification layer (structure validated by Syside; numeric executio
 The market data — ~110 real options as typed usages with `:>>` value bindings, importing
 the defs from `model.sysml`: **23 airframes** (22 with confirmed mass), **21 Li-ion battery
 packs** (BAT01–BAT21), **16 thermal cameras**, **3 SBCs**, plus VTX, FPV cameras, GPS,
-receivers, DVRs, and ground video receivers. To add an option, add a typed usage here
+receivers, and ground video receivers. To add an option, add a typed usage here
 (not a new def).
 
 ## Flight-time & trade-study analysis (`analysis/flight_time_model.py`)
@@ -91,7 +91,7 @@ A high-fidelity multirotor **endurance model integrated with the SysML model** �
 `candidates.sysml`, runs a holistic configuration sweep, and *writes back* ranked results.
 
 - **Physics:** momentum / actuator-disk theory + a forward-flight parasitic-drag term (same family as eCalc; FoM 0.65, η 0.80, ρ 1.225, Cd 1.0). Reports hover, cruise, and headwind endurance + a per-motor thrust feasibility check.
-- **Compatibility filtering (executes the model's rules):** **P1** battery↔airframe cell-count, **V2** thermal↔DVR video format. The DVR is excluded from max-flight-time (it's a Phase 1–2 part; the SBC records at Phase 3) but kept for earlier-stage compatibility + cost.
+- **Compatibility filtering (executes the model's rules):** **P1** battery↔airframe cell-count. DVR compatibility filter removed (DVR dropped from architecture 2026-07-05 — SBC handles recording).
 - **Cost + ground station:** per-component + drone + total-system cost, with bundled BNF/PNP peripherals at $0. The **ground video receiver is matched per-airframe to the VTX video format** (analog VRX for analog VTX; DJI/Walksnail goggles for digital air units).
 - **Physical-integration check:** whether the **SBC physically fits** the airframe's usable top deck — a 3-tier verdict (fits / marginal / no-fit) from the deck/SBC dimensions.
 - **Design locks:** the sweep fixes the thermal (`T13`), SBC (`SBC3`), and airframe (`AF3a`/`AF3b`, Chimera9 ECO) to the locked selections via `FIXED_*` constants (set to `None` to re-open a dimension).
@@ -107,7 +107,7 @@ and `cost_vs_flighttime.png`. The narrative `analysis/*_market_analysis.md` /
 
 Three incremental phases: **(1)** basic LOS manual flight + FPV/analog video downlink to the
 laptop + GPS waypoint routes (airframe + ELRS + battery + VRX/antenna + GPS + dongle) →
-**(2)** thermal camera + onboard DVR recording → **(3)** onboard SBC detection/classification
+**(2)** thermal camera + SBC onboard recording + OpenHD digital downlink → **(3)** AI detection/autonomous route modification (software-only, no new hardware).
 + autonomous route modification via MAVLink.
 
 ## Tooling

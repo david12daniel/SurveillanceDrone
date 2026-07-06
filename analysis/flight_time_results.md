@@ -6,12 +6,12 @@ Momentum-theory (actuator-disk) propulsion model + forward-flight parasitic drag
 
 ## Sweep scope
 
-- **34 real configurations** = airframe × battery × VTX, fully crossed (respecting airframe component inclusion) and **filtered for interface compatibility**; thermal fixed to **T13** and SBC fixed to **SBC3** (design choices, not swept). The DVR is compatibility-gated, not crossed, and excluded from flight time (it is an earlier-stage part; the SBC records at the SBC stage).
+- **34 real configurations** = airframe × battery × VTX, fully crossed (respecting airframe component inclusion) and **filtered for interface compatibility**; thermal fixed to **T13** and SBC fixed to **SBC3** (design choices, not swept).
 - Flight-time drivers swept in full; sub-1 W peripherals held at lightest representatives: FPV `A7`, GPS `G6`, RX `GEPRCNanoPA100`.
 - **Inclusion logic:** airframe-bundled VTX/FPV/GPS/RX contribute power only (their mass is already in the airframe's as-built weight); non-bundled peripherals contribute mass + power.
 - Candidates: 22 airframes (with mass data), 23 real battery candidates, 70 swept payload components.
-- **Cost (R4 ≤ $2,500):** each config's drone cost + a laptop-based GCS = control base **$126** (Phase-1/backup handheld radio + ELRS USB control dongle) **plus a ground video receiver matched to the airframe's VTX format** (CVBS Skydroid 150CH 5.8GHz True-Diversity UVC Receiver $45; DJI DJI Goggles N3 $230; WALKSNAIL Walksnail Avatar HD Goggles L $199). Analog frames use the cheap analog VRX; frames with a digital air unit (DJI/Walksnail) carry the matching goggles. Bundled VTX/FPV/GPS/RX add $0 (already in the airframe price); the DVR is included (earlier-stage part).
-- **Compatibility filtering** (declared in `DroneSystemModel::Architecture::Compatibility`): 46 raw pairings reduced to 34 real configs — pruned 12 on battery↔airframe cell-count (P1, e.g. a 4S pack on a 6S-only frame) and 0 on thermal↔DVR video format (V2, a thermal whose output no DVR can record — CVBS via DVR1-6 or digital HDMI/USB via DVR7-9).
+- **Cost (R4 ≤ $2,500):** each config's drone cost + a laptop-based GCS = control base **$126** (Phase-1/backup handheld radio + ELRS USB control dongle) **plus a ground video receiver matched to the airframe's VTX format** (CVBS Skydroid 150CH 5.8GHz True-Diversity UVC Receiver $45; DJI DJI Goggles N3 $230; WALKSNAIL Walksnail Avatar HD Goggles L $199). Analog frames use the cheap analog VRX; frames with a digital air unit (DJI/Walksnail) carry the matching goggles. Bundled VTX/FPV/GPS/RX add $0 (already in the airframe price).
+- **Compatibility filtering** (declared in `DroneSystemModel::Architecture::Compatibility`): 46 raw pairings reduced to 34 real configs — pruned 12 on battery↔airframe cell-count (P1, e.g. a 4S pack on a 6S-only frame).
 
 ## Model assumptions
 

@@ -19,7 +19,7 @@ injection at 5825 MHz / channel 165, ~7 Mbit/s at MCS1).
 | USB standard | USB 2.0 minimum (WFB-ng bandwidth ≪ USB 2.0 ceiling) |
 | TX power | ≥ 27 dBm (500 mW) at 5.8 GHz for 3–5 km link |
 | Mass | Minimize — every gram on the drone costs flight time |
-| Cost | Minimize — already using budget on T13 ($590) and SBC3 ($126) |
+| Cost | Minimize — already using budget on T13 ($650) and SBC3 ($126) |
 
 ---
 

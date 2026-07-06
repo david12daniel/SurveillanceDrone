@@ -1,0 +1,449 @@
+================================================================================
+  SURVEILLANCE DRONE — ELECTRONICS COMPONENT PRICES & PURCHASE URLS
+  Researched: 2026-06-27
+================================================================================
+
+Prices sourced from: manufacturer direct stores, Amazon product pages (live),
+FriendlyElec.com, radxa.com, thermal-image.com, flyingtech.co.uk, and prior
+market analysis documents (see analysis/market_analyses_and_research/).
+
+================================================================================
+1. THERMAL CAMERAS (640×512 LWIR)
+================================================================================
+
+A1 — PurpleRiver Mini 640 (Bare Module)
+  Est. Price:      $399 (bare module), ~$479 with 13mm lens
+  URL:             https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/
+  Alibaba:         https://purpleriver.en.alibaba.com/ (search "Mini 640")
+  Notes:           Best overall pick. <20g, <0.5W, CVBS+USB+MIPI output.
+
+A2 — Vcan2170 Mini-640-CVBS
+  Est. Price:      $400–$500 (requires inquiry)
+  URL:             https://ivcan.com/p/uncooled-640x512-12um-lwir-thermal-camera-module/
+  Notes:           17.3mm thin module, CVBS+USB, 50 fps.
+
+A3 — Arducam 640×512 CVBS Thermal Module
+  Est. Price:      $500–$650
+  URL:             https://www.arducam.com/arducam-640x512-12mm-60hz-analog-cvbs-thermal-imaging-module-ultra-low-latency-infrared-camera-with-9-1mm-lens-for-fpv-security-industrial-monitoring.html
+  Notes:           60 Hz, low-latency for FPV. Arducam is well-known.
+
+A4 — Guide COIN612R (Wuhan Guide Infrared)
+  Est. Price:      $450–$700 on Amazon/eBay
+  URL (Amazon):    Search "Guide COIN612R" on Amazon.com
+  URL (Alibaba):   https://guideinfrared.en.made-in-china.com/
+  Notes:           27–40g with lens, IP67 front, radiometric option.
+
+A5 — Generic 640×512 FPV Modules (eBay / AliExpress)
+  Est. Price:      $400–$580
+  URL (eBay):      Search "640x512 thermal module CVBS" on eBay
+  Notes:           Varies widely; use reputable seller.
+
+A6 — Axisflying GE-3F 640
+  Est. Price:      $680–$854
+  URL:             https://skyfpv.shop/ (search GE-3F) or banggood.com
+  Notes:           60 fps, 40 mK NETD. Over $600 budget but best specs.
+
+A7 — InfiRay Micro III S 640 (M3S6)
+  Est. Price:      $600–$1,500 (retail)
+  URL (AliExpress): Search "InfiRay Micro III S 640" on AliExpress
+  Notes:           Excellent image quality but well over $600 budget.
+
+A8 — FLIR Boson 640 (Reference only)
+  Price:           $4,232–$6,450 (not viable for budget)
+  URL:             www.flir.com or distributors (DigiKey, Mouser)
+  Notes:           Gold standard benchmark, 7-10× over budget.
+
+================================================================================
+2. GPS MODULES
+================================================================================
+
+G1 — Beitian BN-220
+  Est. Price:      $15–$20
+  URLs:            Amazon (search "Beitian BN-220"), AliExpress
+  Notes:           5g, M10050 (M8N-class), GPS+BDS+GAL+SBAS+QZSS. No compass.
+
+G2 — Beitian BN-880
+  Est. Price:      $10–$14
+  URLs:            Amazon (search "BN-880 GPS module"), AliExpress
+  Notes:           8g, classic budget with compass.
+
+G3 — Matek M10Q-5883
+  Verified Price:  $64.70–$67.99 (Amazon)
+  URL (Amazon):    Search "Matek M10Q-5883 GPS" on Amazon.com
+  Notes:           5g, best value. Real u-blox M10, 4 constellations, fast lock.
+
+G4 — iFlight BLITZ M10 GPS V2 Mini
+  Verified Price:  $41.99
+  URL:             https://shop.iflight.com/ (search "BLITZ M10 GPS V2 Mini")
+  Notes:           8g, iFlight native, built-in farad cap, TPU mounts included.
+
+G5 — iFlight BLITZ M10 GPS V2 Std
+  Verified Price:  $41.99
+  URL:             https://shop.iflight.com/ (search "BLITZ M10 GPS V2")
+  Notes:           16g, bigger antenna (25mm), for larger frames.
+
+G6 — TBS M10 GPS
+  Est. Price:      $30–$35
+  URL:             https://www.team-blacksheep.com/ or getfpv.com
+  Notes:           4g, premium, fastest lock (12-18s), 18Hz. No compass.
+
+================================================================================
+3. SINGLE-BOARD COMPUTERS (SBCs)
+================================================================================
+
+SBC1 — Radxa Zero 2 Pro (4 GB)
+  Verified Price:  ~$75 (board only)
+  URL:             https://radxa.com/products/zero/zero2pro
+  Amazon:          Search "Radxa Zero 2 Pro 4GB" on Amazon (~$70–$90)
+  Total System:    ~$113 (board + microSD + cables + capture dongle)
+  Mass:            30g (board), ~59g (full system)
+  NPU:             5 TOPS INT8 (Amlogic A311D)
+
+SBC2 — Orange Pi 5 (8 GB)
+  Verified Price:  $100–$120 (board, Amazon OKdo/other sellers)
+  URL:             https://www.orangepi.org/ or Amazon (search "Orange Pi 5 8GB")
+  Total System:    ~$140 (board + microSD + dongle + heatsink)
+  Mass:            ~50g (board), ~78g (full system)
+  NPU:             6 TOPS INT8 (Rockchip RK3588S)
+
+SBC3 — NanoPi M5 (4 GB)
+  Verified Price:  $87 (4GB board) — friendlyelec.com
+  URL:             https://www.friendlyelec.com/index.php?route=product/product&path=69&product_id=309
+  Total System:    ~$125 (board + microSD + dongle + WiFi module)
+  Mass:            58g (board), ~74-80g (full system)
+  NPU:             6 TOPS INT8 (Rockchip RK3576, 8nm — most efficient)
+  Notes:           Add WiFi module +$8.90.
+
+================================================================================
+4. RADIO RECEIVERS (On-board ELRS)
+================================================================================
+
+RP3V2 — RadioMaster RP3 V2
+  Verified Price:  $22.00 (Amazon)
+  URL (Amazon):    https://www.amazon.com/RadioMaster-ExpressLRS-2-4ghz-Nano-Receiver/dp/B0CGCM2GQ5
+  URL (RDQ):       Search "RadioMaster RP3 V2" on racedayquads.com
+  URL (GetFPV):    Search on getfpv.com
+  Notes:           4.6g, 100mW telemetry PA/LNA, antenna diversity, 3.5+ km.
+
+RP4TD — RadioMaster RP4TD
+  Verified Price:  $26.69 (Amazon)
+  URL (Amazon):    https://www.amazon.com/dp/B0CT3H5493
+  Notes:           3g, dual independent RX, 2×100mW PA, true diversity, 5+ km.
+
+RP4TD-M — RadioMaster RP4TD (with Mount)
+  Est. Price:      ~$30–$35
+  Notes:           Same as RP4TD but includes TPU mount/antenna set.
+
+EP1 — Happymodel EP1 TCXO
+  Est. Price:      $11.99–$14.39
+  URL:             Amazon (search "Happymodel EP1 TCXO"), Banggood
+  Notes:           0.41g (no antenna), ultralight, ~2-3 km range.
+
+SuperD — BetaFPV SuperD
+  Est. Price:      $24.99
+  URL:             https://betafpv.com/ or Amazon (search "BetaFPV SuperD")
+  Notes:           1.1g, 100mW telemetry, true diversity, 4+ km.
+
+iFlightTD — iFlight True Diversity 2.4G
+  Est. Price:      $29.99
+  URL:             https://shop.iflight.com/ (search "True Diversity Receiver")
+  Notes:           3.3g, 250mW telemetry (highest), 5+ km.
+
+TBSNano — TBS Crossfire Nano RX
+  Est. Price:      $25–$30
+  URL:             https://www.team-blacksheep.com/ or getfpv.com
+  Notes:           915 MHz, not ELRS. Legacy protocol, longer range.
+
+TBSCrossfireNano — TBS Crossfire Nano (V2/V3)
+  Est. Price:      $25–$33
+  URL:             https://www.team-blacksheep.com/ or racedayquads.com
+  Notes:           Crossfire ecosystem, 900 MHz.
+
+GEPRC2G4Dual — GEPRC ELRS 2.4G Dual
+  Est. Price:      ~$15–$20
+  URL:             https://geprc.com/ or Amazon
+  Notes:           Budget dual-antenna ELRS receiver.
+
+GEPRCNanoPA100 — GEPRC NanoPA100
+  Est. Price:      ~$18–$22
+  URL:             https://geprc.com/ or Amazon
+  Notes:           Nano size with 100mW PA.
+
+MatekR24D — Matek R24-D
+  Est. Price:      ~$18–$22
+  URL:             https://www.mateksys.com/ or Amazon
+  Notes:           ELRS 2.4G dual antenna with PA/LNA.
+
+================================================================================
+5. RADIO CONTROL TRANSMITTERS (EdgeTX + ELRS)
+================================================================================
+
+TX1 — RadioMaster Boxer (1W ELRS)
+  Est. Price:      $172
+  URL:             https://www.radiomasterrc.com/ or Amazon (search "RadioMaster Boxer")
+  Notes:           1W internal ELRS, fan-cooled, full-size gimbals.
+
+TX2 — RadioMaster TX16S MK3 (1W ELRS)
+  Est. Price:      $350
+  URL:             https://www.radiomasterrc.com/ or getfpv.com
+  Notes:           Premium, dual-band, large color touchscreen.
+
+TX3 — RadioMaster TX12 MKII
+  Est. Price:      $130
+  URL:             https://www.radiomasterrc.com/ or Amazon
+  Notes:           250mW internal ELRS. +Ranger module = $200 for 1W.
+
+TX4 — RadioMaster TX15 (1W Dual-Band)
+  Est. Price:      $260
+  URL:             https://www.radiomasterrc.com/
+  Notes:           Dual-band (2.4+900 MHz), premium link.
+
+TX5 — RadioMaster TX12 MKII + Ranger Module
+  Total Price:     ~$200
+  Notes:           Upgrade path from 250mW→1W.
+
+TX6 — RadioMaster Zorro (ELRS)
+  Est. Price:      $150
+  URL:             Amazon or radiomasterrc.com
+  Notes:           Gamepad-style, 250mW–1W options.
+
+TX7 — RadioMaster Pocket (ELRS)
+  Est. Price:      $70
+  URL:             Amazon or radiomasterrc.com
+  Notes:           Budget, 100mW. Still OK for 2.8km.
+
+TX8 — Jumper T20 V2 (1W ELRS)
+  Est. Price:      $150
+  URL:             Amazon (search "Jumper T20 V2 ELRS")
+  Notes:           1W, dual 21700 batteries, full-size gimbals.
+
+TX9 — Jumper T-Pro V2 (1W ELRS)
+  Est. Price:      $110
+  URL:             Amazon or jumper-rc.com
+  Notes:           Budget king. 1W internal ELRS, compact.
+
+TX10 — RadioMaster Ranger Module (for existing radios)
+  Est. Price:      $70
+  URL:             Amazon or radiomasterrc.com
+  Notes:           1W external module for JR-bay radios.
+
+--- Standalone TX Modules ---
+
+TXM1 — RadioMaster Ranger (1W)
+  Est. Price:      $70
+  Notes:           External JR-bay ELRS module, 1W, Moxon antenna.
+
+TXM2 — RadioMaster Ranger Micro (1W)
+  Est. Price:      $50
+  Notes:           Compact version, no fan.
+
+TXM3 — Happymodel ES24TX Pro (1W)
+  Est. Price:      $45
+  Notes:           Budget module, no screen.
+
+TXM4 — iFlight Commando 8 (Internal)
+  Est. Price:      ~$99–$120
+  Notes:           Built-in 1W ELRS, gamepad form.
+
+TXM5 — BetaFPV LiteRadio 3 Pro
+  Est. Price:      ~$60
+  Notes:           Budget gamepad, 100mW.
+
+================================================================================
+6. VIDEO TRANSMITTERS (5.8 GHz Analog VTX)
+================================================================================
+
+V1 — TBS Unify Pro32 HV (RushFPV Tank II)
+  Est. Price:      $30–$45
+  URL:             getfpv.com, racedayquads.com, Amazon
+  Notes:           SmartAudio 2.1, 25mW-1.5W adjustable, MMCX antenna connector.
+
+V2 — RushFPV Tank II
+  Est. Price:      $35–$45
+  URL:             racedayquads.com, Amazon
+  Notes:           1.6W max, dual-board design, heatsink integrated.
+
+V3 — RushFPV Tank Solo
+  Est. Price:      $29–$35
+  URL:             racedayquads.com, Amazon
+  Notes:           Single board version of Tank, 1.6W, lower weight.
+
+V4 — SpeedyBee TX800
+  Est. Price:      $25–$35
+  URL:             Amazon, getfpv.com
+  Notes:           800mW, SmartAudio, UART control, compact.
+
+V5 — Eachine TX805
+  Est. Price:      $20–$25
+  URL:             Amazon, banggood.com
+  Notes:           25/200/600mW, budget, good for close range.
+
+V6 — Eachine TX1200
+  Est. Price:      $25–$30
+  URL:             banggood.com, Amazon
+  Notes:           1200mW, budget long-range, IRC Tramp protocol.
+
+V7 — Foxeer Reaper Infinity
+  Est. Price:      $35–$50
+  URL:             racedayquads.com, Amazon
+  Notes:           Up to 1W, fan included, very reliable.
+
+V8 — Foxeer Reaper 4K
+  Est. Price:      $40–$55
+  URL:             racedayquads.com
+  Notes:           1W, extra filtering, best for noisy builds.
+
+V9 — AKK FX2-1W
+  Est. Price:      $20–$28
+  URL:             Amazon, banggood.com
+  Notes:           Budget 1W, race range, no SmartAudio.
+
+V10 — Matek VTX-M12D
+  Est. Price:      $28–$35
+  URL:             getfpv.com, Amazon
+  Notes:           1.2W, Matek ecosystem, MMCX.
+
+V11 — Matek VTX-M12D Pro
+  Est. Price:      $35–$42
+  URL:             getfpv.com
+  Notes:           1.2W, fan-cooled, metal case.
+
+================================================================================
+7. VIDEO RECEIVERS (5.8 GHz Ground-side)
+================================================================================
+
+VRX1 — TBS Fusion
+  Est. Price:      $80–$90
+  URL:             getfpv.com, racedayquads.com, Amazon
+  Notes:           Best in class. Dual-module, RapidFire module, OLED, diversity.
+
+VRX3 — Eachine ROTG01 (USB OTG RX)
+  Est. Price:      $25–$35
+  URL:             banggood.com, Amazon
+  Notes:           USB OTG receiver, plugs into phone/tablet. No separate screen.
+
+VRX4 — Eachine ROTG02
+  Est. Price:      $30–$40
+  URL:             banggood.com, Amazon
+  Notes:           Updated ROTG01, dual antenna, better receiver chip.
+
+VRX5 — Flysight FSV-200
+  Est. Price:      $35–$50
+  URL:             Amazon
+  Notes:           Dual diversity, 5.8 GHz, AV output.
+
+VRX6 — Foxeer Wildfire
+  Est. Price:      $60–$70
+  URL:             racedayquads.com, Amazon
+  Notes:           Dual module diversity.
+
+VRX7 — AKK Diversity Receiver
+  Est. Price:      $25–$35
+  URL:             Amazon, banggood.com
+  Notes:           Budget diversity receiver.
+
+================================================================================
+8. USB VIDEO CAPTURES (CVBS-to-USB Dongles for GCS)
+================================================================================
+
+VC1 — Flying Tech USB-C Analog FPV Capture
+  Verified Price:  £17.50 Inc. VAT (~$22 USD)
+  URL:             https://www.flyingtech.co.uk/product/usb-c-analog-fpv-video-capture-adapter
+  Notes:           Purpose-built for FPV ground stations. Driverless on macOS.
+
+VC2 — Generic CVBS/AV to USB Module (AliExpress)
+  Est. Price:      $7–$15
+  URL:             AliExpress (search "CVBS to USB module UVC")
+  Notes:           Bare PCB, 1080p MJPEG, needs minor soldering.
+
+VC3 — ATCCPYDM / Kqcibz AV-to-USB Capture Card
+  Est. Price:      $10–$16
+  URL:             Amazon (search "AV to USB capture card")
+  Notes:           Plug-and-play, RCA jacks, driverless (UVC), macOS compatible.
+
+VC4 — EasyCAP USB 2.0
+  Est. Price:      $11–$15
+  Notes:           ⚠️ SKIP — driver issues on recent macOS.
+
+VC5 — Magewell USB Capture (HDMI)
+  Est. Price:      $150–$300
+  Notes:           Pro-grade, overkill for analog FPV.
+
+================================================================================
+9. THERMAL VIDEO RECORDERS (Onboard Analog DVRs)
+================================================================================
+
+DVR1 — RunCam Mini FPV DVR (RUNCAM-DVR-S)
+  Est. Price:      $17.99 (direct) / $29.99 (Amazon)
+  URL:             https://shop.runcam.com/ (search "DVR Mini")
+  Amazon:          Search "RunCam DVR Mini" on Amazon
+  Notes:           3.5g, 25×25mm with 20×20mm mount, GPIO-controlled.
+  Verdict:         ✅ Best for build — lightest, mounts to stack.
+
+DVR2 — Eachine EV100 Micro AV Recorder
+  Est. Price:      ~$16.14
+  URL:             banggood.com (search "Eachine EV100"), Amazon
+  Notes:           9g, 1280×480 HD recording, push-button.
+
+DVR3 — Eachine ProDVR
+  Est. Price:      ~$16.46
+  URL:             banggood.com, Amazon
+  Notes:           9.9g, 1280×480 HD, lowest power draw.
+
+DVR4 — Generic Mini FPV DVR (eBay/AliExpress)
+  Est. Price:      $8.99–$14.99
+  URL:             eBay, AliExpress (search "Mini FPV DVR")
+  Notes:           Variable quality, some include 32GB card. Use as backup.
+
+DVR5 — SpeedyBee DVR
+  Est. Price:      ~$20–$25
+  Notes:           Betaflight compatible, auto-record on ARM.
+
+DVR6 — Eachine HMDVR
+  Est. Price:      ~$14–$18
+  Notes:           HD recording, includes key switch cable.
+
+DVR7 — Foxeer DVR
+  Est. Price:      ~$25–$35
+  Notes:           HD, integrated into some VTX modules.
+
+DVR8 — AKK DVR
+  Est. Price:      ~$12–$18
+  Notes:           Budget, basic recording.
+
+DVR9 — Flywoo DVR
+  Est. Price:      ~$18–$22
+  Notes:           Integrated microSD slot, auto-record.
+
+================================================================================
+10. TELEMETRY GROUND LINKS (USB Telemetry Dongles)
+================================================================================
+
+TLM1 — Radio/EdgeTX USB Passthrough
+  Price:           $0 (uses existing radio controller)
+  Notes:           🥇 Recommended — plug radio into laptop, USB serial mode.
+  Range:           Determined by radio's ELRS module (10+ km with 1W).
+  macOS:           ✅ Driverless VCP serial.
+
+TLM2 — HGLRC ELRS SIM USB Dongle (reflashable)
+  Est. Price:      $14–$18
+  URL:             AliExpress (search "HGLRC ELRS USB dongle"), Amazon
+  Notes:           ESP32+SX1280, can be reflashed for telemetry.
+  Range:           Same as any ELRS RX (10+ km).
+
+TLM3 — CubeFPV USB ELRS Dongle
+  Est. Price:      $15–$20
+  URL:             cubefpv.com or Amazon
+  Notes:           Built-in ELRS receiver, designed for sims, reflashable.
+
+TLM4 — DIY ESP32 + ELRS RX Module
+  Est. Price:      $10–$15 (ESP32 $5 + RX $5–$10)
+  Notes:           ⚠️ Requires soldering and firmware flashing.
+
+TLM5 — RadioMaster Ranger Module (AirPort Mode)
+  Est. Price:      $70 (+ $25 extra RX on drone)
+  Notes:           ⚠️ Overkill — requires separate link. Not recommended.
+
+================================================================================
+END OF REPORT
+================================================================================

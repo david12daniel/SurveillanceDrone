@@ -49,10 +49,9 @@ rule, the model binding, and traceability). §4 gives qualification; §5 traceab
 |---|---|---|---|---|---|
 | **IF-PWR-01** | Battery → Airframe DC power | `battery.power_out` → `platform.power_battery` | `batteryPwr : BatteryPowerInterface` | Electrical power | P1 cell-count |
 | **IF-PWR-02** | Airframe → payload regulated power | `platform.power_tp/power_sbc` → payload `power_in` | `interface connect` (×7) | Electrical power | — |
-| **IF-VID-01** | Thermal camera → DVR (record) | `camera.video_out` → `recorder.video_in` | `camToRec : VideoLink` | Video | V format |
+| **IF-VID-01** | Thermal camera → SBC (recording + inference) | `camera.video_out` → `sbc.video_in` | `camToSbc : VideoLink` | Video | V format |
 | **IF-VID-02** | Thermal camera → SBC (inference) | `camera.video_out` → `sbc.video_in` | `camToSbc : VideoLink` | Video | V format |
 | **IF-VID-03** | FPV camera → VTX (pilot) | `fpvCam.video_out` → `vtx.video_in` | `fpvToVtx : VideoLink` | Video | V format |
-| **IF-VID-04** | DVR → VTX (pass-through) | `recorder.video_out` → `vtx.video_in` | `recToVtx : VideoLink` | Video | V format |
 | **IF-RF-01** | Drone VTX → GCS VRX (video downlink) | `drone.vtx.rf_out` → `gcs.videoRx.rf_in` | `connection connect` | Wireless RF | R band |
 | **IF-RF-02** | GCS ELRS ↔ Drone RX (control + telemetry) | `gcs.laptopLink.rf_out` ↔ `drone.rx.rf_in` (backup `gcs.rcTx.rf_out`) | `connection connect` | Wireless RF (bidir) | R band |
 | **IF-DAT-01** | GPS → Flight controller | `gps.data_out` → `platform.data_sbc` | `interface connect` | Serial data | — |
@@ -64,10 +63,10 @@ rule, the model binding, and traceability). §4 gives qualification; §5 traceab
 ```
                          AIRBORNE (SurveillanceDrone)                     GROUND
   Battery --IF-PWR-01(P1)--> Airframe/FC/ESC
-     |                          |  --IF-PWR-02--> camera, SBC, GPS, RX, VTX, DVR, FPVcam
-  Thermal cam --IF-VID-01--> DVR --IF-VID-04--> VTX --IF-RF-01(5.8GHz)--> VRX --IF-GND-01(USB)--> Laptop
-     \--IF-VID-02--> SBC                          ^                                                  (GCS)
-  FPV cam --IF-VID-03------------------------------|
+     |                          |  --IF-PWR-02--> camera, SBC, GPS, RX, VTX, FPVcam
+  Thermal cam --IF-VID-01--> SBC --(encodes H.264)--> WiFi --IF-RF-01(5.8GHz)--> Ground WiFi --IF-GND-01(USB)--> Laptop
+     |                                                                                                          (GCS)
+  FPV cam --IF-VID-02--> VTX ----IF-RF-01(5.8GHz analog)--> VRX --IF-GND-01(USB)--> Laptop
   GPS --IF-DAT-01--> FC                          ELRS RX <--IF-RF-02(2.4GHz)--> ELRS dongle --IF-GND-02(USB)--> Laptop
   SBC <--IF-DAT-02--> FC                              ^------(backup)------ handheld radio
   ELRS RX <--IF-DAT-03--> FC
@@ -95,38 +94,25 @@ compatibility rule · traceability**.
 - **Data elements/assemblies:** None; parameters = rail voltages (5 V BEC; 9/12 V as required), per-rail current budget.
 - **Communication method:** Airframe power-distribution board (PDB) → component `power_in` leads.
 - **Protocol:** None.
-- **Physical & other:** Regulated rails to camera, SBC, GPS, RX, VTX, DVR; unfiltered battery voltage to ESCs. Pre-soldered/plug-in preferred (**R5/R4_AF_ASSY**).
+- **Physical & other:** Regulated rails to camera, SBC, GPS, RX, VTX, FPV cam; unfiltered battery voltage to ESCs. Pre-soldered/plug-in preferred (**R5/R4_AF_ASSY**).
 - **Traceability:** R4_AF_PWR_DIST (and payload power budgets R3_CAM_PWR, R4_SBC_PWR).
 
 #### 3.2.2 Video interfaces (rule V: `VideoFormatCompatible`, `VideoFormat ∈ {CVBS, USB_UVC, MIPI_CSI, HDMI, DJI_DIGITAL, HDZERO, WALKSNAIL}`)
 
-**IF-VID-01 — Thermal camera → DVR (record)**
-- **Priority:** High (Phase 3). **Type:** Real-time video stream.
+**IF-VID-01 — Thermal camera → SBC (recording + inference)**
+- **Priority:** High (Phase 2). **Type:** Real-time video stream.
 - **Data elements:** Thermal video frames (LWIR 640×512 @ 25 Hz for the selected Mini 640).
-- **Data assemblies:** Continuous composite/serial video signal.
-- **Communication method:** Wired video out → DVR video in. **Protocol:** CVBS (analog) or USB-UVC (digital), per camera output.
-- **Physical & other:** Coax/RCA (CVBS) or USB; recorded to microSD. **Compatibility rule:** source.format == sink.format.
-- **Traceability:** R3_CAM_IF.
+- **Data assemblies:** UVC frame stream.
+- **Communication method:** Wired camera out → SBC video in. **Protocol:** USB-UVC (selected Mini 640 = USB).
+- **Physical & other:** USB cable; recorded to SBC storage (microSD/eMMC); ≥ ~25 fps to satisfy the live-processing chain. **Compatibility rule:** source.format == sink.format.
+- **Traceability:** R3_CAM_IF, R4_SBC_VIDEO_IN, R4_SBC_VIDEO_PROC.
 
-**IF-VID-02 — Thermal camera → SBC (inference)**
-- **Priority:** High (Phase 4). **Type:** Real-time video stream.
-- **Data elements:** Thermal frames (640×512 @ 25 Hz). **Data assemblies:** UVC/CSI frame stream.
-- **Communication method:** Wired camera out → SBC video in. **Protocol:** USB-UVC (selected Mini 640 = USB) or MIPI-CSI.
-- **Physical & other:** USB-C / CSI ribbon; ≥ ~25 fps to satisfy the live-processing chain. **Rule:** format match.
-- **Traceability:** R4_SBC_VIDEO_IN, R4_SBC_VIDEO_PROC, R3_CAM_IF.
-
-**IF-VID-03 — FPV camera → VTX (pilot)**
+**IF-VID-02 — FPV camera → VTX (pilot)**
 - **Priority:** High (Phase 2). **Type:** Real-time video stream.
 - **Data elements:** Pilot FPV video frames. **Data assemblies:** Composite analog video.
 - **Communication method:** Wired cam → VTX. **Protocol:** CVBS analog (or integrated digital cam+VTX).
 - **Physical & other:** Coax pigtail; format must match the VTX input. **Rule:** format match.
 - **Traceability:** R3_CAM_IF (piloting path).
-
-**IF-VID-04 — DVR → VTX (pass-through)**
-- **Priority:** Medium (Phase 3). **Type:** Real-time video stream (pass-through).
-- **Data elements/assemblies:** Thermal video (post-DVR) to the downlink. **Protocol:** CVBS pass-through.
-- **Communication method:** DVR video-out → VTX video-in. **Rule:** format match.
-- **Traceability:** R3_CAM_IF.
 
 #### 3.2.3 Wireless RF link interfaces (rule R: `RfBandCompatible`, `RfBand ∈ {GHZ_5_8, GHZ_2_4, MHZ_900}`)
 
@@ -157,10 +143,10 @@ compatibility rule · traceability**.
 - **Traceability:** R1, R2 (navigation); model: `gps.data_out → platform.data_sbc`.
 
 **IF-DAT-02 — SBC ↔ Flight controller**
-- **Priority:** High (Phase 4). **Type:** Bidirectional serial data.
+- **Priority:** High (Phase 3). **Type:** Bidirectional serial data.
 - **Data elements:** Detection/classification results; route/mission commands; vehicle state/status.
 - **Data assemblies:** MAVLink messages. **Protocol:** UART TTL (MAVLink), typ. 115200–921600 baud (FC TELEM port).
-- **Physical & other:** 3.3 V UART; autonomous route modification at Phase 4.
+- **Physical & other:** 3.3 V UART; autonomous route modification at Phase 3.
 - **Traceability:** R4_SBC_DATA_AF.
 
 **IF-DAT-03 — RX ↔ Flight controller (control + telemetry)**
@@ -192,7 +178,7 @@ compatibility rule · traceability**.
 
 | Method | Interfaces | How |
 |---|---|---|
-| **Analysis (A)** | IF-PWR-01, IF-VID-01/02/03/04, IF-RF-01/02 | The model's P1/V/R compatibility rules, executed across all candidates by [`flight_time_model.py`](analysis/flight_time_model.py) (incompatible pairings pruned); RF range margin checked vs the 2.8 km requirement. |
+| **Analysis (A)** | IF-PWR-01, IF-VID-01/02, IF-RF-01/02 | The model's P1/V/R compatibility rules, executed across all candidates by [`flight_time_model.py`](analysis/flight_time_model.py) (incompatible pairings pruned); RF range margin checked vs the 2.8 km requirement. |
 | **Inspection (I)** | IF-PWR-01/02, IF-DAT-01/02/03, IF-GND-01/02 | Connector/voltage/pinout and protocol/baud inspection of selected components vs this IRS; physical fit (battery bay, connectors). |
 | **Test (T)** | IF-PWR-01/02, IF-DAT-02, IF-GND-01/02 | Bench bring-up: power rails under load, MAVLink SBC↔FC link, end-to-end video and telemetry to the laptop. |
 | **Demonstration (D)** | IF-RF-01, IF-RF-02 | Field range walk-test of video and control+telemetry links to ≥ 2.8 km LOS. |
@@ -205,10 +191,8 @@ compatibility rule · traceability**.
 |---|---|
 | IF-PWR-01 | R4_BAT_VOLT, R4_BAT_IF, R4_AF_PWR_DIST |
 | IF-PWR-02 | R4_AF_PWR_DIST, R3_CAM_PWR, R4_SBC_PWR |
-| IF-VID-01 | R3_CAM_IF |
-| IF-VID-02 | R4_SBC_VIDEO_IN, R4_SBC_VIDEO_PROC, R3_CAM_IF |
-| IF-VID-03 | R3_CAM_IF |
-| IF-VID-04 | R3_CAM_IF |
+| IF-VID-01 | R4_SBC_VIDEO_IN, R4_SBC_VIDEO_PROC, R3_CAM_IF |
+| IF-VID-02 | R3_CAM_IF (piloting path) |
 | IF-RF-01 | R4_GCS_VIDEO_DISP, R4_GCS_IF, R4_GCS_RANGE (⊆R7) |
 | IF-RF-02 | R4_GCS_CTRL, R4_GCS_TELEM, R4_GCS_RANGE (⊆R7), R4_GCS_IF |
 | IF-DAT-01 | R1, R2 (navigation) |

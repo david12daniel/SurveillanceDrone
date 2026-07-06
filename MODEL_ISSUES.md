@@ -548,6 +548,45 @@ any tool previously.
 
 ---
 
+## F. Architectural changes
+
+13. **DECISION (2026-07-05) — DVR removed; SBC moved to Phase 2.**
+
+    - **Context:** David requested the standalone Monster UVC Recorder (`DVR9`) be
+      removed from the architecture entirely. Instead of a separate DVR, the SBC
+      (`SBC3`, NanoPi M5) handles onboard recording via USB-UVC from the T13
+      thermal camera — eliminating a $129 part and ~430 g of mass.
+    - **Phase restructure:**
+      - **Phase 2** (was: thermal + DVR + OpenHD) → becomes **thermal + SBC +
+        OpenHD**. The SBC and its mount/cooling are procured in Phase 2 alongside
+        the T13 and OpenHD hardware. Phase 2 subtotal: ~$936 (+$12 net from
+        dropping DVR $129 and adding SBC $141).
+      - **Phase 3** (was: SBC procurement → becomes: **AI software deployment**,
+        no new hardware procurement). All hardware is on-board since Phase 2.
+    - **Files changed (2026-07-05):**
+      - `model.sysml` — removed `part def ThermalVideoRecorder` and the
+        `recorder : ThermalVideoRecorder` part from `SurveillanceDrone`;
+        removed `camToRec` and `recToVtx` video interfaces; removed
+        `recorder` from `totalPower` rollup.
+      - `BOM.md` — DVR9 row removed; SBC3 + mount moved to Phase 2; Phase 3
+        marked as $0 software; totals recalculated.
+      - `systems_engineering_plan.md` — Phase 2 steps now include SBC mounting
+        + OpenHD config; Phase 3 is software-only.
+      - `SELECTED_COMPONENTS.md` — DVR open item replaced with SBC-recording
+        note.
+      - `REQUIREMENTS_EXPORT_26_06_30.md` — phase descriptions updated.
+      - `CLAUDE.md`, `README.md` — architecture description updated.
+      - `analysis/flight_time_results.md`,
+        `analysis/flight_time_value_ranking.md` — prose updated to reflect
+        DVR removal.
+      - `candidates.sysml` — `part DVR9` retained as unused historical
+        candidate (no active references in the architecture).
+    - **Budget impact:** R4 system cost dropped from ~$2,088 to ~$1,960 (savings
+      of ~$128 from DVR removal, partially offset by SBC moving to Phase 2
+      costing). Grand total ~$2,290.75 vs ~$2,419.75 previously.
+
+---
+
 ## E. Cross-reference note
 
 **RESOLVED (2026-06-26).** Markdown prose now references the correct model element

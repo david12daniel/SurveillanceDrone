@@ -62,7 +62,7 @@ The battery↔drone power interface is now modeled: `model.sysml` `BatteryPowerI
 
 | Role | Status | ID(s) | Notes |
 |---|---|---|---|
-| **On-board DVR** | open (**Phase 2**) | `DVR9` (rep.) | **Phase 1–2 only** — at the SBC stage (**Phase 3**) the SBC records; the DVR is costed/compatibility-checked but not in the SBC-stage flight-time. |
+| **On-board recording** | **SBC does it** — NanoPi M5 (`SBC3`) records thermal footage via USB-UVC from the T13. No separate DVR needed. | `—` | 2026-07-05 | DVR9 removed; SBC moved to Phase 2 procurement | SBC handles recording + inference in a single device; eliminates DVR cost ($129) and mass. | **2** |
 
 ---
 
