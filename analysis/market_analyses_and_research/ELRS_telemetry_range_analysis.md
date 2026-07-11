@@ -56,7 +56,7 @@ Source: [ExpressLRS Official Long Range Competition Leaderboard](https://www.exp
 The **TelemetryTransmitter** and **RadioReceiver** can be merged into a single component. When using ELRS:
 
 - **Onboard:** ELRS receiver handles both RC control input and telemetry return
-- **Ground:** RadioControlTransmitter (e.g., Radiomaster TX16S with ELRS module) receives telemetry and pipes it to the GCS via USB
+- **Ground:** RcTx (e.g., Radiomaster TX16S with ELRS module) receives telemetry and pipes it to the GCS via USB
 - **Cost:** No separate telemetry radio — saves $30-60, ~10g weight, and a UART port
 - **UART impact:** ELRS receiver uses one UART on the flight controller for bidirectional CRSF protocol
 

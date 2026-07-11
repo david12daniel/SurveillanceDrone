@@ -4,7 +4,7 @@
 
 **Project:** Thermal Surveillance Drone  
 **Date:** 2026-06-06  
-**Purpose:** Identify every commercially available 640×512 thermal camera module under $1,000 USD that could satisfy CameraSubsystem requirements (R3_CAM_WT ≤200g, R3_CAM_PWR ≤4.5W, R3_CAM_FOV ≥30° HFOV, R3_CAM_NETD ≤50mK, R3_CAM_RES, R3_CAM_COST ≤$600, R3_CAM_IF).
+**Purpose:** Identify every commercially available 640×512 thermal camera module under $1,000 USD that could satisfy IRCamera requirements (R3_CAM_WT ≤200g, R3_CAM_PWR ≤4.5W, R3_CAM_FOV ≥30° HFOV, R3_CAM_NETD ≤50mK, R3_CAM_RES, R3_CAM_COST ≤$600, R3_CAM_IF).
 
 ---
 

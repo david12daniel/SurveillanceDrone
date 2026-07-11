@@ -1,7 +1,7 @@
 # Interface Requirements Specification (IRS) — Thermal Surveillance Drone
 
 *Content structured in alignment with **DI-IPSC-81434** (Interface Requirements Specification).*
-*Generated export — 2026-06-30. Source of truth: [`model.sysml`](model.sysml) `DroneSystemModel::Architecture` (`Compatibility` sub-package + the `SurveillanceDrone` / `AerialThermalObservationSystem` connections).*
+*Generated export — 2026-06-30. Source of truth: [`model.sysml`](model.sysml) `DroneSystemModel::Architecture` (`Compatibility` sub-package + the `Drone` / `AerialObservationSystem` connections).*
 
 ---
 
@@ -16,7 +16,7 @@ between the drone, the ground control station (GCS), and the operator's laptop.
 See the companion **[SSS](REQUIREMENTS_EXPORT_26_06_30.md)** §1.2. The system's interfaces
 are formalized in the model's `Compatibility` package as typed `port def`s, `enum def`s,
 `constraint def`s, and `interface def`s, and instantiated as `interface`/`connection connect`
-bindings in `SurveillanceDrone` and `AerialThermalObservationSystem`. Three compatibility
+bindings in `Drone` and `AerialObservationSystem`. Three compatibility
 rules are machine-checked by the trade-study sweep:
 - **BatteryVoltageCompatible (P1)** — `batteryCells ∈ [afMinCells, afMaxCells]`
 - **VideoFormatCompatible (V)** — `source.format == sink.format`
@@ -61,7 +61,7 @@ rule, the model binding, and traceability). §4 gives qualification; §5 traceab
 | **IF-GND-02** | GCS ELRS dongle → Laptop (control + telemetry) | `gcs.laptopLink.usb_out` → `displayComputer.user_interface` | `connection connect` | USB serial | — |
 
 ```
-                         AIRBORNE (SurveillanceDrone)                     GROUND
+                         AIRBORNE (Drone)                     GROUND
   Battery --IF-PWR-01(P1)--> Airframe/FC/ESC
      |                          |  --IF-PWR-02--> camera, SBC, GPS, RX, VTX, FPVcam
   Thermal cam --IF-VID-01--> SBC --(encodes H.264)--> WiFi --IF-RF-01(5.8GHz)--> Ground WiFi --IF-GND-01(USB)--> Laptop

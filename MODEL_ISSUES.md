@@ -29,15 +29,15 @@ any tool previously.
    references to "R3.1/R3.2" inside `doc` text were left as-is.)
 
 3. **FIXED — missing closing braces mis-nested the whole model.** The
-   `CameraSubsystem` requirements package and the `Requirements` package were
+   `IRCamera` requirements package and the `Requirements` package were
    each missing a `}`, so `Architecture` and `Analysis` were being parsed as
-   children of `Requirements::CameraSubsystem`. Added the two missing braces.
+   children of `Requirements::IRCamera`. Added the two missing braces.
 
 4. **FIXED — `power` name collision (attribute vs port).** Seven part defs
-   (`CameraSubsystem`, `SingleBoardComputerPayload`, `FpvCamera`, `GpsModule`,
-   `RadioReceiver`, `VideoTransmitter`, `ThermalVideoRecorder`) declared both
+   (`IRCamera`, `SBCPayload`, `FpvCamera`, `GpsModule`,
+   `RadioReceiver`, `Vtx`, `ThermalVideoRecorder`) declared both
    `attribute power` and `port power`. Renamed the **port** to `power_in` and
-   updated the seven `interface connect … to X.power;` lines in `SurveillanceDrone`
+   updated the seven `interface connect … to X.power;` lines in `Drone`
    accordingly. (The `attribute power` rollup in `totalPower` is unchanged.)
 
 5. **FIXED — constraint expression had a trailing `;`.** `flight_time_meets_req`
@@ -54,11 +54,11 @@ any tool previously.
    `private import Requirements::**;` to `Architecture` so the `satisfy`
    statements resolve the requirement names.
 
-8. **FIXED — name collision `CameraSubsystem` (requirements package vs part
+8. **FIXED — name collision `IRCamera` (requirements package vs part
    def).** The requirements sub-package and the architecture part def shared the
    exact name, making the type unresolvable from `candidates.sysml`. Renamed the
    **requirements package** to `CameraRequirements`. The part def keeps the name
-   `CameraSubsystem`. (Note: `README.md` prose still says "CameraSubsystem:
+   `IRCamera`. (Note: `README.md` prose still says "IRCamera:
    7 requirements" — that now refers to package `CameraRequirements`.)
 
 ---
@@ -222,10 +222,10 @@ any tool previously.
 6. **DECISION (updated 2026-06-26) — integrated digital cam+VTX: single part, no
    separate VTX, range-checked.** DJI O4/O3 and Walksnail units are camera+VTX
    combos modeled as `FpvCamera` candidates (D1–D3) and intentionally NOT duplicated
-   as `VideoTransmitter` candidates (`VideoTransmitterCandidates` holds the analog
+   as `Vtx` candidates (`VideoTransmitterCandidates` holds the analog
    VTX only). **No-double-VTX rule:** a configuration selecting an integrated
    cam+VTX (`vtxTypeRequired` = "Integrated…") must NOT also include a separate
-   `VideoTransmitter` — its VTX mass and cost are already in the integrated unit. In
+   `Vtx` — its VTX mass and cost are already in the integrated unit. In
    the flight-time sweep this never occurs (FPV is held at a lightest representative
    and the VTX is swept separately), but the rule is documented for any future build
    that selects D1–D3. **Range vs R7 (2.8 km):** a new `FpvCamera.maxRange`
@@ -236,8 +236,8 @@ any tool previously.
 
 7. **DECISION — new `part def TelemetryGroundLink`.** `telemetry_rx_candidates.csv`
    had no home in the architecture (telemetry is routed through the
-   `RadioControlTransmitter` in the baseline). Added a definition to hold these
-   options; it is **not** composed into `AerialThermalObservationSystem`.
+   `RcTx` in the baseline). Added a definition to hold these
+   options; it is **not** composed into `AerialObservationSystem`.
 
 8. **DECISION (2026-06-25, updated 2026-06-25) — high-fidelity flight-time model as
    a model-integrated script.** `analysis/flight_time_model.py` implements a
@@ -316,9 +316,9 @@ any tool previously.
       defs are now typed to the Compatibility port defs (`PowerSourcePort`/
       `PowerSinkPort`, `VideoSourcePort`/`VideoSinkPort`, `RfSourcePort`/
       `RfSinkPort`), and the battery-power + four video connects in
-      `SurveillanceDrone` are typed to their interface defs (`BatteryPowerInterface`,
+      `Drone` are typed to their interface defs (`BatteryPowerInterface`,
       `VideoLink`). Data (UART/MAVLink) ports and the GNSS antenna port stay untyped
-      (no compat rule); the wireless RF connects in `AerialThermalObservationSystem`
+      (no compat rule); the wireless RF connects in `AerialObservationSystem`
       keep `connection connect` (their ports are typed).
 
 13. **DECISION (2026-06-26) — cost in the sweep + laptop-based GCS.** The flight
@@ -337,9 +337,9 @@ any tool previously.
       laptop. **BACKUP / Phase 1:** a cheap handheld ELRS radio for manual control
       if the laptop link fails. **Model updated** (`model.sysml`): `TelemetryGroundLink`
       gained an `rf_out : RfSourcePort` (combined ELRS control+telemetry) and is now
-      composed into `GroundControlStation` as `laptopLink` (primary); `rcTx`
-      (RadioControlTransmitter) is documented as backup; `subTotalCost` now =
-      laptopLink + rcTx + videoRx + capture; `AerialThermalObservationSystem` wires
+      composed into `GCS` as `laptopLink` (primary); `rcTx`
+      (RcTx) is documented as backup; `subTotalCost` now =
+      laptopLink + rcTx + videoRx + capture; `AerialObservationSystem` wires
       the dongle as primary control/telemetry (drone RX ↔ laptopLink → laptop) with
       the radio path retained as backup. The sweep's GCS cost basis = cheapest
       integrated handheld radio (backup) + cheapest standalone ELRS dongle
@@ -371,7 +371,7 @@ any tool previously.
 14. **DECISION (2026-06-27) — model views added (`DroneSystemModel::Views`).** A
     fourth sub-package holds four SysML v2 `view def` + `view` presentations that
     `expose` model slices by stakeholder concern: `operationalMission`
-    (Requirements + `AerialThermalObservationSystem`), `logicalArchitecture`
+    (Requirements + `AerialObservationSystem`), `logicalArchitecture`
     (system/drone/GCS decomposition), `interfaceBehavior` (the `Compatibility`
     layer + airborne connections), and `systemVerification` (the `Analysis` layer).
     Syside validates the structure; diagram/table rendering needs a SysML v2 viewer
@@ -443,7 +443,7 @@ any tool previously.
     budget.** Pulled the video downlink forward into Phase 1 (the Chimera9 PNP already
     bundles the air-side analog VTX + FPV cam, so only the **Skydroid 150CH UVC VRX**
     (`VRX6`, laptop-direct UVC) is procured). Added a new **`part def Antenna`** to
-    `model.sysml` (gain/band/polarization/beamwidth) composed into `GroundControlStation`
+    `model.sysml` (gain/band/polarization/beamwidth) composed into `GCS`
     as `groundAntenna` (`satisfy R4_GCS_RANGE`), and a single candidate **`PATCH1` =
     TrueRC X-AIR 5.8 MK II patch (~10 dBic, 120°, RHCP, RP-SMA, $45)** in
     `candidates.sysml`. `flight_time_model.py` now folds the cheapest antenna into the
@@ -461,9 +461,9 @@ any tool previously.
       `ConnectorCompatible` constraint + `connector` on the power ports +
       `Airframe.batteryConnector`. The whole power chain is **XT60**
       (battery → anti-spark → airframe) for all real contenders (BAT09/BAT10/BAT22).
-      Added `part def AntiSparkFilter` (composed inline in `SurveillanceDrone`) +
+      Added `part def AntiSparkFilter` (composed inline in `Drone`) +
       candidate `ASF1` (iFlight Anti Spark, XT60, $15).
-    - **Charger:** added `part def Charger` composed into `AerialThermalObservationSystem`
+    - **Charger:** added `part def Charger` composed into `AerialObservationSystem`
       as ground-support (excluded from the per-drone R4 cost, like the laptop) +
       `ChargerCandidates` (CHG1–CHG4); **selected `CHG1` HOTA D6 Pro**.
     - **Battery selected:** **`BAT10`** (Upgrade Energy 6S 12 Ah Amprius) is the flight
@@ -478,6 +478,320 @@ any tool previously.
     - **New artifact — [`BOM.md`](BOM.md):** phased bill of materials (product / part # /
       link / cost, per-phase subtotals). Grand total ~$2,125 all-in (~$1,805 R4
       flight-system, both ≤ the $2,500 R4 cap).
+
+20. **DECISION (2026-07-09) — build-phase tags on all requirements (`Phasing::PhaseTag`).**
+    All 47 requirements in `model.sysml` now carry an `@PhaseTag` metadata annotation
+    (edit to the protected model requested by David) marking the phase — per
+    `systems_engineering_plan.md` — in which the requirement is expected to be **fully**
+    implemented: satisfied in the as-fielded configuration of that phase and remaining
+    satisfied in every later phase. New top-level **`package Phasing`** (`enum def Phase`
+    Phase1–Phase4 + `metadata def PhaseTag`), privately imported into `Requirements`;
+    validates clean in Syside. Tagging rule: requirements over **total-system
+    quantities** (endurance R6/R7/R8; payload/TOM; all cost sums incl. R4) bind at
+    **Phase 2**, the last hardware phase — Phase 3 is software-only, so the final
+    mass/power/BOM configuration exists at end of Phase 2. **SBC workload requirements**
+    (R4_SBC_PWR / R4_SBC_TEMP / R4_SBC_DATA_AF) bind at **Phase 3** (sustained NPU
+    inference is the binding load; MAVLink integration is a Phase 3 build step). Pure
+    Phase-1 hardware/interface requirements (flight regime R1/R2, ELRS/analog-video GCS
+    links, battery voltage/connector) bind at **Phase 1**. **David's ruling on the R3
+    family (2026-07-09):** R3 / R3_1 / R3_2 = **Phase 3** — in the committed build the
+    detect/classify mission is fulfilled by onboard inference + telemetry alerts, not by
+    an operator viewing live thermal video; R4_SBC_VIDEO_PROC and R4_GCS_VIDEO_DISP =
+    **Phase 4** (both are explicitly about the live-video-to-GCS chain, deferred with
+    OpenHD). **Follow-up (open):** reword R3_1/R3_2 ("operator viewing the live video
+    feed") and R4_SBC_VIDEO_PROC ("for live transmission to the ground control
+    station") to match the onboard-inference CONOPS — pending David's approval; until
+    then the tags encode intent and the wording lags. Distribution: Phase 1 ×12,
+    Phase 2 ×27, Phase 3 ×6, Phase 4 ×2.
+
+21. **DECISION (2026-07-10) — behavioral layer scaffolded in new sibling file
+    [`behavior.sysml`](behavior.sysml) (`package DroneSystemBehavior`); model-fork
+    namespace collision found.** First two layers of the functional architecture
+    from the use-case brainstorm, kept OUT of the protected `model.sysml` (same
+    sibling-file pattern as `candidates.sysml`; imports
+    `DroneSystemModel::Architecture::*`). **(1) Functions as `action def`s:**
+    `ConductSortie` (UC-0 thread prepare → plan → launch → surveil → recover, with
+    the UC-6 monitor and both failsafe handlers as concurrent members);
+    `ExecuteSurveillance` (UC-4: concurrent flyRoute / streamThermal / detectLoop);
+    `DetectInvestigateClassify` (UC-5: merge-loop sweep at 120 m → decide on
+    detectionConfidence ≥ 0.90 (R3_1) → POI + telemetry alert → reroute/descend to
+    90 m → classify loop ≥ 0.80 (R3_2) → resume route; thresholds as attributes);
+    accept-triggered `HandleLinkLoss` / `HandleLowBattery` (UC-9/UC-10 — both still
+    lack formal requirements, SSS §3.7; low-battery reserve threshold TBD).
+    **(2) Allocation:** `part missionContext : AerialObservationSystem` performs the
+    sortie and `allocate`s each function to its component (a new `operator :
+    Operator` usage — first use of that def — plus laptop/QGC, FC/platform, camera,
+    SBC). All action + allocation constructs (guarded decides, accepts, 3-deep
+    allocate feature chains) validated clean in Syside on first pass. **FINDING —
+    model fork:** three files declare `package DroneSystemModel` (`model.sysml`,
+    `model_community_balanced.sysml`, `model_community_balanced_CATIA_backup.sysml`);
+    Syside binds cross-file qualified names to a variant that predates `Phasing`,
+    so the `@PhaseTag` annotations in `behavior.sysml` are **parked as
+    `// phase: PhaseN` comments** (restore = resolve fork, uncomment the import,
+    swap comments back). **RESOLVED (David, 2026-07-10): `model.sysml` stays the
+    authoritative model.** Agreed sequence: (a) port the community file's newer
+    interface work (typed `vrxToCapture`/`capToLaptop` VideoLinks, `UsbCap`/`Laptop`
+    nested vid ports) into `model.sysml` as a reviewed, approved change; (b)
+    de-conflict the variants once David's CATIA session allows (rename their
+    top-level package or park the files as `.sysml.bak` so Syside stops indexing
+    them); (c) restore the parked `@PhaseTag`s in `behavior.sysml`.
+
+22. **DECISION (2026-07-10) — Layer 4 flight-mode state machine added; UC-9/UC-10
+    handler action defs retired.** Added `state def FlightMode` to `behavior.sysml`
+    (verbose) and `test.sysml` (minified), formalizing the SSS §3.1 flight states
+    as a real state machine: top-level `disarmed → armed → flying → returnToLaunch
+    → land → disarmed`, with `flying` a **superstate** over `takeoff/cruise/loiter`
+    (each carrying a `do action`) and internal transitions `takeoff → cruise`,
+    `cruise ⇄ loiter` (on `TargetDetected` / `InvestigationComplete`). Four new
+    trigger `attribute def`s added (`ArmCommand`, `LaunchCommand`, `TargetDetected`,
+    `InvestigationComplete`) alongside the existing `LinkLossDetected` /
+    `LowBatteryReached`. Bound to the physical architecture via
+    `exhibit state flightMode : FlightMode` on `missionContext`. **This retires the
+    Layer-1 `HandleLinkLoss` / `HandleLowBattery` action defs** (and their
+    `linkLossHandler`/`lowBatteryHandler` usages + allocations): link-loss and
+    low-battery are now `accept`-triggered transitions out of the `flying`
+    superstate, declared once and giving **real preemptive semantics** (exiting
+    `flying` terminates the running `cruise`/`loiter` do-activity) — the fix for the
+    disconnected-concurrent-actions problem David flagged. Both files validate clean
+    in Syside (the minified `transition <src> then <tgt>` / `transition first <src>
+    accept <sig> then <tgt>` forms parse). **KNOWN SEAM (documented in-file, future
+    work):** `DetectInvestigateClassify` (UC-5) is one action spanning both `cruise`
+    (sweep) and `loiter` (investigate/classify) and does not split 1:1 onto the
+    `do` actions, so those are independent stand-ins cross-referenced by doc, not
+    formally typed against it; `TargetDetected`/`InvestigationComplete` are likewise
+    conceptual triggers with no modeled sender (same fidelity as the failsafe
+    signals). Reconciling the action-flow and state-machine representations is
+    deferred. Layer 3 (use-case veneer) remains the only unbuilt behavioral layer.
+
+23. **DECISION (2026-07-10) — Layer 3 use-case veneer added; behavioral model
+    complete.** Added a `package UseCases` to `behavior.sysml` (verbose) and
+    `test.sysml` (minified) giving the 2026-07-09 brainstorm use cases a formal
+    SysML v2 home. Ten `use case def`s: umbrella `ConductSortieUC` (UC-0) with
+    `subject : AerialObservationSystem`, `actor operator : Operator`, an
+    `objective` doc tracing to R1/R2/R3/R6/R7, and `include use case` for the six
+    always-performed sub-use-cases (UC-1 Prepare, UC-2 Plan, UC-3 Launch, UC-4
+    ExecuteSurveillance — itself including UC-5 DetectInvestigateClassify, UC-6
+    Monitor, UC-7 ReturnAndRecover); plus a top-level `use case conductSortie :
+    ConductSortieUC` instance. Each leaf carries its subject, an operator actor
+    where the operator actively participates, and an objective doc citing the
+    requirement IDs + the Layer-1/Layer-4 element that realizes it. **This is the
+    layer that gives `part def Operator` an explicit operational role** (beyond the
+    Layer-2 allocation target). **Design choice — failsafes as exceptional flows:**
+    UC-9 (HandleLinkLossUC) and UC-10 (HandleLowBatteryUC) are UML-«extend»-style
+    exceptional flows, but SysML v2 use cases offer only `include` (always-
+    performed) — so they are modeled as standalone `use case def`s (realized by the
+    FlightMode failsafe transitions) and deliberately **not** `include`d by the
+    umbrella. Secondary actors (observed wildlife/humans; GNSS constellation) are
+    named in doc only — the thin veneer adds no part def for them. NOT modeled (no
+    backing behavior): UC-8 turnaround, UC-11 operator override, UC-12 GNSS
+    degradation, UC-13 Phase-4 downlink. Both files validate clean in Syside
+    (`use case def`/`use case`, `subject`, `actor`, `objective { doc }`,
+    `include use case` all parse). **All four behavioral layers (1 functions,
+    2 allocation, 3 use-case veneer, 4 state machine) are now in place**; the
+    open behavioral items are the KNOWN SEAM from §C22 (action-flow ⇄ state-machine
+    reconciliation) and the parked `@PhaseTag`s pending the §C21 model-fork cleanup.
+
+24. **DECISION (2026-07-10) — CATIA export (`test.sysml`) curated to fit the ~500-
+    element cap; Analysis + Views packages omitted from the export only.** Adding
+    the behavioral layers pushed the merged `test.sysml` past the CATIA
+    Community/No-Magic ~500-element limit (David hit it before Layer 4 was even
+    added). An element census (scratch script over `test.sysml`) put the merged
+    file at ~459 by a conservative per-line proxy — CATIA's own counter runs higher
+    (it also counts successions, connector ends, control nodes `start`/`done`/`merge`/
+    `decide`, and doc elements), consistent with David's >500 reading. Distribution:
+    **Architecture ~212 (46%)**, Behavior ~90, **Analysis ~88 (19%)**, Requirements
+    ~53, Views ~9. **Chosen fix (David, 2026-07-10): omit the `Analysis` and `Views`
+    packages from `test.sysml` only** — they remain complete in `model.sysml`
+    (authoritative) and are unaffected in `behavior.sysml`. Rationale: the Analysis
+    layer is the lowest-value-per-element in a CATIA *diagramming* context — Syside
+    can't execute its `calc def`s (A10/B3) and the real endurance/Johnson/budget
+    numbers are produced by `analysis/flight_time_model.py`; the `Views` package is
+    redundant scaffolding where CATIA manages its own diagrams. Removing both dropped
+    a clean 143 lines with **no dangling references** (the only cross-ref was
+    `systemVerification` exposing `Analysis::**`, and that view lives inside the
+    removed `Views` package); `test.sysml` re-validates clean in Syside at **~362**
+    (my proxy), ≈ −97, clearing the cap with margin while keeping ALL structure,
+    requirements, and the full four-layer behavior model. The `test.sysml` header
+    now documents the omission. **Levers still in reserve if the cap is threatened
+    again** (not applied): drop the 26 spec-only Architecture attributes used only by
+    `candidates.sysml` + Python (`connector`, `maxRange`, `netd`, `resolutionH/V`,
+    `pixelPitch`, …); or hold the Layer-3 use-case veneer as Syside-only; or split the
+    CATIA import into two projects (structure vs behavior). NB: `test.sysml` is a
+    generated export — no generator script exists in-repo yet, so this curation is a
+    manual maintenance rule to reapply on any future regeneration.
+
+25. **DECISION (2026-07-10) — §C22 seam CLOSED: UC-5 split into state-aligned
+    halves with formal signal emission.** In `behavior.sysml` (verbose) and
+    `test.sysml` (minified): `DetectInvestigateClassify` was refactored into
+    **`SweepAndDetect`** (cruise half: 120 m infer loop → detect ≥0.90 → markPoi →
+    alertOperator → **`send targetDetectedEvt to missionContext`**) and
+    **`InvestigateAndClassify`** (loiter half: rerouteToTarget/descend →
+    classify ≥0.80 w/ retry loop → reportClassification → resumeRoute →
+    **`send investigationCompleteEvt to missionContext`**), with
+    `DetectInvestigateClassify` retained as the umbrella that cycles the two
+    (so `ExecuteSurveillance.detectLoop` and the SBC allocation are unchanged).
+    `FlightMode.cruise`'s do action is now **typed `: SweepAndDetect`** and
+    `loiter`'s **`: InvestigateAndClassify`** — the same defs the action flow
+    composes: **one definition, two views**, which is the SysML v2 reconciliation
+    of the action-flow ⇄ state-machine seam. The `cruise⇄loiter` transitions now
+    have **modeled senders**; sends target `missionContext` because it is the part
+    that `exhibit`s FlightMode. The send in each half is deliberately the LAST
+    step (exiting a state terminates its do-activity, so the trigger must not
+    fire before resumeRoute completes). **Syside syntax rules learned** (added to
+    `reference/sysml-v2-syntax.md`): a send action requires **payload AND
+    receiver** ("at least 2 owned input parameters" — bare `send X();` fails),
+    and the payload **cannot be a datatype invocation** (`TargetDetected()` →
+    "Invocation expression must invoke a Behavior") — idiom: declare a named
+    `attribute <evt> : <SignalType>;` and `send <evt> to <receiver>;`.
+    Element cost in the CATIA export: +4 (≈366 proxy, ~450 CATIA-equivalent —
+    still under the 500 cap). Still stand-ins by intent: takeoff/RTL/land do
+    actions (ArduPilot behavior, not custom software) and the
+    LinkLossDetected/LowBatteryReached triggers (FC/environment-originated).
+    Software significance (David's stated end goal): the two halves + their
+    sends are the design spec of the custom SBC application — the signals map
+    to MAVLink AUTO→GUIDED→AUTO mode switches.
+
+26. **DECISION (2026-07-10) — autonomy-loop control contract DE-RISKED with an
+    executable SITL/mock harness ([`analysis/autonomy_sim/`](analysis/autonomy_sim/)).**
+    Built the onboard mission-app skeleton + a mock MAVLink FC + passing contract
+    tests that exercise the UC-5 loop **without ArduPilot installed** and **without
+    the CV model** (the detector is injected — `ScriptedDetector` now, RKNN later).
+    `mission_app.py` `MissionApp` is the executable form of `SweepAndDetect` /
+    `InvestigateAndClassify` / `FlightMode`: SWEEP polls the detector in AUTO →
+    on ≥0.90 it geotags + `STATUSTEXT`-alerts + switches **GUIDED** (=send
+    TargetDetected) + commands `SET_POSITION_TARGET_GLOBAL_INT` descent to 90 m →
+    INVESTIGATE classifies with retries → on ≥0.80 reports + switches **AUTO**
+    (=send InvestigationComplete). FC-commanded RTL/LAND drives the app to PASSIVE
+    (the external LinkLossDetected/LowBatteryReached path — app does not self-
+    trigger). `fake_fc.py` streams HEARTBEAT/GLOBAL_POSITION_INT and records what
+    it receives so `test_autonomy_loop.py` asserts the contract **on the wire**:
+    `mode_cmds == [GUIDED, AUTO]`, a 90 m descent target, DETECT/CLASSIFY alerts,
+    and failsafe stand-down. **Both tests pass (~7.5 s); `run_demo.py` narrates one
+    cycle.** Dev deps: `pymavlink`, `pytest` (installed this session). Bug found +
+    fixed: `threading.Thread` has an internal `_stop()` method — a `self._stop`
+    Event shadowed it and broke `join()`; renamed to `_stop_evt`. **Significance:**
+    the mission-defining autonomy loop is now proven correct at the control level
+    before any flight or CV effort; the same `MissionApp` runs unchanged against
+    real ArduPilot SITL by swapping the connection string (README documents it).
+    Remaining validation (needs SITL/real FC): mode-ACK handling, GUIDED nav,
+    arming/EKF gates, real `FS_*`/`BATT_*` failsafe params; then swap in the RKNN
+    detector. NB: `analysis/autonomy_sim/` is the repo's first test suite — the
+    project is otherwise MBSE docs, not code (CLAUDE.md).
+
+27. **ARTIFACT (2026-07-10) — per-component software register:
+    [`analysis/software_by_component.md`](analysis/software_by_component.md).**
+    For each programmable component (laptop GCS / flight controller / SBC): the
+    full function list needed to execute the mission, the existing software per
+    function, and a **D-register** of capabilities that do not exist and must be
+    developed. Result: **laptop = 0 to develop** (QGroundControl covers all of it;
+    macOS/MacBook-Air constraint rules out Mission Planner), **FC = 0 to develop**
+    (all ArduPilot; the link-loss + battery failsafe *parameter values* are the
+    two open §3.7 requirements — config-as-requirement), **SBC = the entire
+    development scope**: **D-1** thermal wildlife detection/classification model
+    (R3_1/R3_2 burden; largely self-collected LWIR deer/turkey data — the long
+    pole) and **D-2** the onboard mission app (control contract already tested per
+    §C26; capture/inference integration + retry/timeout policy + hardening
+    remain). **D-3 (optional)**: QGC map-POI display beyond STATUSTEXT — decide
+    after Phase-3 field trials. Recording is explicitly out of scope (DVR removed
+    2026-07-05). Cross-linked with `software_gap_analysis.md` (function-oriented
+    adopt/build + interface contract).
+
+28. **DECISION (2026-07-10) — software recorded IN THE MODEL (`Architecture::
+    Software` register); FC firmware TBD resolved = ArduPilot; fork now
+    demonstrably breaking `candidates.sysml` validation.** Per David's request
+    (explicit approval for the protected-file edit): added `package Software`
+    (`enum def SwStatus { EXISTS; TO_DEVELOP; }` + `part def SoftwareItem`
+    {productName, version, license, status}) to **`model.sysml`**,
+    **`model_community_balanced.sysml`** (full fidelity), and **`test.sysml`**
+    (lean: name+status; export now ~379 proxy / ~466 CATIA-equivalent — under the
+    500 cap). Product usages composed into the executing components:
+    `Laptop.gcsApp` = QGroundControl 4.4+ (EXISTS); `Airframe.fcSoftware` =
+    ArduPilot ArduCopter ≥4.5 (EXISTS); `SBCPayload.rknnRuntime` +
+    `.mavlinkRouter` (EXISTS) + **`.missionApp` (D-2, TO_DEVELOP)** +
+    **`.thermalModel` (D-1, TO_DEVELOP, `satisfy R3_1; satisfy R3_2;`)**. The
+    register complements (does not replace) the per-candidate software spec
+    strings on the defs. **Name collision fixed:** `Airframe` already had
+    `attribute fcFirmware : String` (candidate data) — the register part is named
+    `fcSoftware`. **FC-firmware TBD RESOLVED:** `candidates.sysml`
+    `AF3a.fcFirmware` updated from "TBD — ArduPilot or PX4" to **ArduPilot
+    ArduCopter ≥4.5, SELECTED** (the §C26 autonomy contract is built on
+    ArduCopter AUTO/GUIDED); `SELECTED_COMPONENTS.md` gained FC-firmware +
+    GCS-application rows. Function-level D-1/D-2 development breakdown
+    (D1.1–D1.8, D2.1–D2.13 with build status) added to
+    `software_by_component.md`. **FINDING — fork escalation:** the first-ever
+    edit of `candidates.sysml` this session surfaced **187 pre-existing
+    reference errors** (lines 3142–3643: BAT04–BAT23 + WLAN_AIR/GND blocks —
+    "No Feature named 'usableDoD'/'name'/'chipset'…"). Those features DO exist
+    in `model.sysml`'s rich defs (e.g. `Battery.usableDoD`) but not in the lean
+    variant defs — i.e. Syside resolves those candidates' types against a fork
+    variant (FOUR files now declare `package DroneSystemModel`: model.sysml,
+    community_balanced, CATIA backup, test.sysml). NOT caused by today's
+    content changes. **The §C21 de-conflict is now urgent** — the fork is
+    silently invalidating validation of the single source of truth for
+    component data. Quickest safe first step: park the CATIA backup as
+    `.sysml.bak`; full fix per §C21 (a)–(c).
+
+29. **ARTIFACT (2026-07-11) — software trade studies for the adopt/EXISTS items:
+    [`analysis/software_trade_studies.md`](analysis/software_trade_studies.md).**
+    Per David's request, surveyed free + paid alternatives for each `status =
+    EXISTS` register item and traded them against the project's constraints
+    (web-researched 2026-07-11). **Six trade studies (TS-1..TS-6): GCS app, FC
+    firmware, NPU runtime, MAVLink library, MAVLink router, video capture.**
+    **Result: all six selections CONFIRMED — no changes.** Two winners are
+    *forced* by prior locks (RKNN by the RK3576 NPU — every alternative misses
+    the NPU and busts R4_SBC power/thermal; QGroundControl by the macOS/MacBook-
+    Air constraint among full GCSs — Mission Planner is Windows-only). Notable
+    findings: **ArduDeck** (native Apple-Silicon ArduPilot GCS) is a real QGC
+    backup worth trialing; **mavp2p** is a dependency-free router alternative to
+    mavlink-router; **dronekit-python is maintainer-orphaned (2025)** → stay on
+    pymavlink (already in `autonomy_sim`); the sole open sub-decision is the
+    capture method (OpenCV now, GStreamer if Phase-4 downlink). Currency: current
+    ArduPilot stable = **Copter 4.6.3** (Nov 2025) — model's `">= 4.5"` stays
+    valid. Cost impact $0 (all free/OSS; only paid option surveyed, UgCS, adds
+    nothing). No model edits (selections unchanged); cross-linked into the
+    software doc set (gap analysis + per-component register).
+
+30. **DECISION (2026-07-11) — behavior MERGED into `model.sysml` (single-root,
+    standard four-pillar model); §C21/§C28 fork RESOLVED; `behavior.sysml` +
+    `test.sysml` retired.** Per David ("implement all 5 parts"; explicit approval
+    for the protected-model edit). The behavioral layer no longer lives in a
+    separate `DroneSystemBehavior` root — it is now **`DroneSystemModel::Behavior`**,
+    a peer of Requirements / Architecture / Analysis, so the model reads as the
+    canonical pillars **Requirements · Architecture · Behavior · Analysis** (+ Views,
+    Phasing). All validated clean in Syside.
+    - **(1) Merge:** `behavior.sysml`'s content moved into `model.sysml` as
+      `package Behavior` (verbose docs retained). The parked `@PhaseTag`s are
+      **restored** (15 tags: Phasing now resolves from inside the same root) — the
+      §C21 payoff. `missionContext : AerialObservationSystem` was KEPT (not replaced
+      by raw perform/exhibit on AOS): it is the standard behavioral-context block
+      and, critically, the **receiver for the UC-5 seam-closure `send`s** (§C25) —
+      pure AOS-ownership would have forced re-wiring those as ports/flows.
+      `AerialObservationSystem` therefore needed **no edits**.
+    - **(2) Fork de-conflict:** four files declared `package DroneSystemModel`.
+      Now **only `model.sysml` does**. The CATIA backup (`…_CATIA_backup.sysml`)
+      was already gone; **`model_community_balanced.sysml`'s root renamed to
+      `DroneSystemModel_Community`**; `behavior.sysml` and `test.sysml` deleted
+      (their content lives in model.sysml + balanced). **`candidates.sysml`'s 187
+      pre-existing reference errors (§C28) are GONE** — it now resolves against
+      model.sysml's rich defs. *CATIA note: re-importing balanced will show the
+      root as `DroneSystemModel_Community`; if that disrupts the CATIA project,
+      the alternative is de-indexing the export from Syside instead of renaming.*
+    - **(3) Balanced = the single CATIA export**, now WITH behavior. To stay under
+      the element/char caps, applied the §C24-consistent cuts: **Analysis + Views
+      removed** (already the approved CATIA cut) and, since balanced was becoming
+      the capped import (~460 proxy ≈ at the 500 cap), the **use-case veneer
+      (`UseCases`) trimmed from the export** (kept in full in model.sysml) plus
+      behavior inline-comments stripped. **Net: balanced 463→431 elements and
+      22 227→21 993 chars — SMALLER on BOTH axes than before, so under whatever
+      limits it previously satisfied**, while now carrying the behavior. (If David
+      prefers use-case *diagrams* in CATIA, the alternative is to keep `UseCases`
+      and instead minify balanced's Architecture attributes — the §C24 reserve
+      lever — to recover the elements.)
+    - **File roles now:** `model.sysml` = authoritative full model (all pillars);
+      `candidates.sysml` = data (`DroneCandidates`, resolves to model.sysml);
+      `model_community_balanced.sysml` = lean CATIA export (`DroneSystemModel_Community`,
+      no Analysis/Views/UseCases). `behavior.sysml`, `test.sysml`, and the CATIA
+      backup are gone.
 
 ---
 
@@ -565,7 +879,7 @@ any tool previously.
         no new hardware procurement). All hardware is on-board since Phase 2.
     - **Files changed (2026-07-05):**
       - `model.sysml` — removed `part def ThermalVideoRecorder` and the
-        `recorder : ThermalVideoRecorder` part from `SurveillanceDrone`;
+        `recorder : ThermalVideoRecorder` part from `Drone`;
         removed `camToRec` and `recToVtx` video interfaces; removed
         `recorder` from `totalPower` rollup.
       - `BOM.md` — DVR9 row removed; SBC3 + mount moved to Phase 2; Phase 3
@@ -585,6 +899,44 @@ any tool previously.
       of ~$128 from DVR removal, partially offset by SBC moving to Phase 2
       costing). Grand total ~$2,290.75 vs ~$2,419.75 previously.
 
+14. **DECISION (2026-07-07) — Thermal = USB (live inference, not recorded); OpenHD downlink deferred to a new Phase 4.**
+
+    - **Context:** David finalized the thermal architecture. The thermal feed is **not
+      recorded** — it streams live from the T13 (USB-UVC) directly to the SBC (`SBC3`),
+      which runs **real-time inference** that drives autonomous actions (Phase 3). The
+      OpenHD digital video downlink to the ground is **no longer part of the committed
+      build**; it becomes a deferred **Phase 4** future capability.
+    - **Thermal interface — USB chosen; MIPI and CVBS rejected:**
+      - **USB (UVC)** — selected. Plug-and-play (`/dev/video0`), full-fidelity for the NPU
+        (640×512 @ 25 Hz uncompressed YUV ≈ 16 MB/s fits USB 2.0), zero driver work.
+      - **MIPI** — rejected. Its only advantages (bandwidth, ~30 ms lower latency) are
+        immaterial for a feed whose cadence is set by the 25 Hz frame interval (40 ms) and
+        flight dynamics (hundreds of ms), not transport. PurpleRiver's MIPI enablement targets
+        Jetson, not Rockchip; a non-vendor MIPI camera on the RK3576 is a kernel driver-porting
+        project (vendor 6.1 kernel + device tree; only FriendlyElec's CAM415 supported out of
+        box). High integration risk for no usable benefit.
+      - **CVBS (+ USB analog dongle)** — rejected. Only had value for an analog/HD downlink,
+        which is gone; analog conversion degrades the image and adds a part vs USB.
+    - **Phase restructure (Phase 4 added):**
+      - **Phase 2** (was: thermal + SBC + OpenHD) → **thermal (USB) + SBC only.** No recording,
+        no downlink hardware. Subtotal ~$967.97 → **~$808.98** (OpenHD −$158.99 out).
+      - **Phase 3** — unchanged scope (AI + MAVLink), now explicitly **real-time inference on
+        the live USB thermal feed.**
+      - **Phase 4 (NEW, deferred future)** — OpenHD downlink: `WLAN_AIR1`, air cloverleaf
+        antennas ×2, `WLAN_GND1`, Foxeer Echo 2 Max ×2, VMware VM. Subtotal **~$158.99** (the
+        air module's 5 V power reuses the spare 2nd unit of the Phase 2 UBEC 2-pack, $0).
+    - **Budget impact:** committed **R4 (Phases 1–3) ≈ $1,832** (was ~$1,991 with OpenHD in
+      Phase 2); with Phase 4 built it returns to ~$1,991. Grand total unchanged at ~$2,322.72
+      (redistributed across four phases). All under the $2,500 R4 cap.
+    - **Note on HDZero:** an HDZero digital-FPV path (switchable FPV↔thermal on one link) was
+      explored in depth and **not adopted** — the committed build keeps the bundled analog FPV
+      for piloting and takes the thermal onboard-only. No HDZero parts entered the model/BOM.
+    - **Files changed (2026-07-07):** `BOM.md` (Phase 2 trimmed, Phase 4 added, totals),
+      `systems_engineering_plan.md` (Phase 2 reworded, Phase 4 added), `SELECTED_COMPONENTS.md`
+      (OpenHD rows → Phase 4, port inventory, recording note, SBC-power load), `candidates.sysml`
+      (OpenHD package phase comments). **`model.sysml` not modified** — phases are a planning
+      artifact, not in the formal model, and the OpenHD parts live in `candidates.sysml`.
+
 ---
 
 ## E. Cross-reference note
@@ -592,9 +944,58 @@ any tool previously.
 **RESOLVED (2026-06-26).** Markdown prose now references the correct model element
 names. `README.md`'s Architecture section was rewritten to drop the removed
 `TelemetryTransmitter` / `TelemetryReceiver` parts (telemetry is carried by the
-ELRS `RadioReceiver` / `RadioControlTransmitter`), fix the `SurveillanceDrone` and
-`GroundControlStation` compositions, and add the current parts (`FpvCamera`,
-`GpsModule`, `ThermalVideoRecorder`, `UsbVideoCapture`, the `Compatibility`
-sub-package, and the thermal-detection analysis defs). The `CameraSubsystem` →
+ELRS `RadioReceiver` / `RcTx`), fix the `Drone` and
+`GCS` compositions, and add the current parts (`FpvCamera`,
+`GpsModule`, `ThermalVideoRecorder`, `UsbCap`, the `Compatibility`
+sub-package, and the thermal-detection analysis defs). The `IRCamera` →
 `CameraRequirements` package rename is reflected (README already listed
 `CameraRequirements`). Requirement IDs `R3_CAM_*` are unchanged.
+
+---
+
+## G. Attribute pruning — analytically-inert attributes removed (2026-07-10)
+
+**Context (David).** Audited every attribute in the model against its actual
+consumers: the `Analysis` package calcs/constraints, the derived rollups
+(`totalPower`/`totalCost`/`subTotalCost`), the `VideoFormatCompatible`
+constraint, and the external `analysis/flight_time_model.py` endurance/detection
+sweep. Goal: drop attributes that no analysis reads (also buys headroom under the
+CATIA Community **~500-element** import limit — see the balanced-export notes).
+
+**Verification performed first (per David's instruction):** grepped all five
+`analysis/*.py` + `.openclaw/tmp/*.py` scripts and confirmed there are **no
+hooks/settings** in the repo. This caught two attributes that *are* consumed and
+were therefore **kept**:
+- **`Battery.nominalVoltage`** and **`Battery.capacity_mAh`** — read by
+  `flight_time_model.py` (battery parser: `v_nom`, `cap_mah`, lines ~474–478).
+- Also confirmed `flight_time_model.py` reads **only `candidates.sysml`**
+  (`MODEL_SYSML` is declared but never `read_text()`), so edits to `model.sysml`
+  cannot affect the sweep. Script re-run end-to-end after the edits: **exit OK**,
+  baseline unchanged (iFlight Chimera9 ECO → 58.4 min, ~$1,674 system).
+
+**Removed from `model.sysml` AND `model_community_balanced.sysml` (7 attributes,
+zero `candidates.sysml` bindings, nothing reads them):**
+
+| Attribute | Part | Why inert |
+| --- | --- | --- |
+| `specificEnergy` (derived `energy/mass`) | `Battery` | computed, never consumed |
+| `outputVoltage` | `Ubec` | UBEC is a fixed pass-through in every analysis |
+| `maxTakeoffMass` | `Airframe` | no in-model mass rollup compares against it |
+| `cost_USD`, `mass`, `power`, `maxRange` | `GCS` | superseded — `totalCost` uses `gcs.subTotalCost`; no mass/power/range rollup reads the GCS's own scalars |
+
+`GCS.batteryEnergy` (exists only in `model.sysml`) was **left in place** — not in
+the audited-inert set.
+
+**Deliberately NOT removed (candidate-bound; hold real trade-study spec data).**
+`connector`(×37), `maxRange`(×39 on components), `maxCells_s`(×28),
+`netd`/`pixelPitch`/`resolutionV`(×15 each), `detectionRange`(×14),
+`maxCurrent_A`(×4), `batteryConnector`(×1) are all `:>>`-bound in
+`candidates.sysml`; removing them from the defs would invalidate those bindings
+and delete market data. David chose **"clean set only."** Note on
+**`resolutionV`**: the GSD calc uses only `resolutionH` because thermal pixels are
+square → GSD is isotropic (`hfov/resolutionH` ≡ `vfov/resolutionV`), so
+`resolutionV` is redundant *for the calc* — but it stays for now as candidate data.
+
+**Follow-up worth considering:** add a `totalMass` rollup so `mass` (currently the
+#1 driver of the *external* endurance model but analytically inert *in-model*) and
+`maxTakeoffMass`/payload requirements become load-bearing SysML.

@@ -56,12 +56,19 @@ injection at 5825 MHz / channel 165, ~7 Mbit/s at MCS1).
 
 ### Key compatibility flags
 
-- **RTL8812EU ARM64 driver note (W-A1):** One aarch64-specific issue was filed in
-  `OpenHD/rtl88x2eu` repo (issue #9) — verify it is closed before final procurement.
-  If open, fall back to W-A2 (Taobao RTL8812AU bare card, identical driver to W-A5).
-- **USB current draw (all RTL8812AU/EU at high TX):** These adapters draw up to 5V/2A
-  at full TX power. Verify the NanoPi M5's USB 3.0 port can sustain 900 mA; if not,
-  power the adapter via a dedicated regulator from the airframe 5V bus.
+- **RTL8812EU ARM64 driver note (W-A1) — VERIFIED 2026-07-06:** aarch64 is a first-class
+  build target. The `OpenHD/rtl88x2eu` Makefile carries explicit `CONFIG_PLATFORM_ARM64`
+  / `CONFIG_PLATFORM_ARM64_RPI` flags (default off; set `CONFIG_PLATFORM_I386_PC = n` +
+  `CONFIG_PLATFORM_ARM64_RPI = y`, then `make`/DKMS) — the same path used on aarch64
+  Raspberry Pi 4/5. **The previously-cited "issue #9" does not exist** (the repo has 0 open
+  issues / only closed PRs; upstream `svpcom/rtl8812eu` #9 is 404) — that citation was
+  spurious and is retracted. Only real variable: DKMS build against the running Ubuntu 22.04
+  kernel headers (5.15/6.x — in range). Not a procurement blocker.
+- **USB current draw — VERIFIED 2026-07-06:** the NanoPi M5's USB-A ports are USB 3.2 Gen 1
+  with **1.5 A per-port over-current protection**; the BL-M8812EU2 draws ~1 A at max TX,
+  comfortably under that. Powered by the board's 12 V/3 A UBEC (36 W ≫ ~16 W total load).
+  No separate adapter regulator needed. **Note: both M5 USB-A ports are then consumed**
+  (this adapter + the T13 thermal cam) — zero spare USB.
 - **TX power cap:** Set `driver_txpower_override` to 40–50 in WFB-ng config; >50
   causes PA clipping (not more range, just harmonic distortion).
 

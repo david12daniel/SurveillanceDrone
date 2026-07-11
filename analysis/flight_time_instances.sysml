@@ -64,7 +64,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 226.4;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -80,10 +80,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1567.47;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1738.47;
-  :>> endurancePer1000USD = 33.61;
+  :>> droneCost_USD = 1498.47;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1673.92;
+  :>> endurancePer1000USD = 34.9;
   :>> meetsBudgetR4 = true;
  }
 
@@ -101,7 +101,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 226.4;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -117,10 +117,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1567.47;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1738.47;
-  :>> endurancePer1000USD = 33.61;
+  :>> droneCost_USD = 1498.47;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1673.92;
+  :>> endurancePer1000USD = 34.9;
   :>> meetsBudgetR4 = true;
  }
 
@@ -137,7 +137,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 226.4;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -153,10 +153,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1525.47;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1696.47;
-  :>> endurancePer1000USD = 33.85;
+  :>> droneCost_USD = 1456.47;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1631.92;
+  :>> endurancePer1000USD = 35.19;
   :>> meetsBudgetR4 = true;
  }
 
@@ -173,7 +173,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 220.3;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -189,10 +189,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1520.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1691.98;
-  :>> endurancePer1000USD = 33.62;
+  :>> droneCost_USD = 1451.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1627.43;
+  :>> endurancePer1000USD = 34.96;
   :>> meetsBudgetR4 = true;
  }
 
@@ -209,7 +209,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 220.3;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -225,10 +225,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1478.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1649.98;
-  :>> endurancePer1000USD = 33.89;
+  :>> droneCost_USD = 1409.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1585.43;
+  :>> endurancePer1000USD = 35.27;
   :>> meetsBudgetR4 = true;
  }
 
@@ -245,7 +245,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 183.6;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -261,10 +261,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1497.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1668.98;
-  :>> endurancePer1000USD = 29.6;
+  :>> droneCost_USD = 1428.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1604.43;
+  :>> endurancePer1000USD = 30.79;
   :>> meetsBudgetR4 = true;
  }
 
@@ -281,7 +281,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 146.9;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -297,10 +297,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1439.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1610.98;
-  :>> endurancePer1000USD = 30.55;
+  :>> droneCost_USD = 1370.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1546.43;
+  :>> endurancePer1000USD = 31.83;
   :>> meetsBudgetR4 = true;
  }
 
@@ -317,7 +317,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 183.6;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -333,10 +333,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1455.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1626.98;
-  :>> endurancePer1000USD = 29.83;
+  :>> droneCost_USD = 1386.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1562.43;
+  :>> endurancePer1000USD = 31.06;
   :>> meetsBudgetR4 = true;
  }
 
@@ -353,7 +353,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 146.9;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -369,10 +369,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1397.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1568.98;
-  :>> endurancePer1000USD = 30.74;
+  :>> droneCost_USD = 1328.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1504.43;
+  :>> endurancePer1000USD = 32.06;
   :>> meetsBudgetR4 = true;
  }
 
@@ -389,7 +389,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 183.6;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -405,10 +405,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1515.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1686.97;
-  :>> endurancePer1000USD = 28.53;
+  :>> droneCost_USD = 1446.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1622.42;
+  :>> endurancePer1000USD = 29.67;
   :>> meetsBudgetR4 = true;
  }
 
@@ -425,7 +425,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 183.6;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -441,10 +441,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1473.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1644.97;
-  :>> endurancePer1000USD = 28.76;
+  :>> droneCost_USD = 1404.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1580.42;
+  :>> endurancePer1000USD = 29.93;
   :>> meetsBudgetR4 = true;
  }
 
@@ -461,7 +461,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 188.7;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -477,10 +477,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1395.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1566.97;
-  :>> endurancePer1000USD = 29.76;
+  :>> droneCost_USD = 1326.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1502.42;
+  :>> endurancePer1000USD = 31.04;
   :>> meetsBudgetR4 = true;
  }
 
@@ -497,7 +497,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 188.7;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -513,10 +513,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1353.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1524.97;
-  :>> endurancePer1000USD = 30.07;
+  :>> droneCost_USD = 1284.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1460.42;
+  :>> endurancePer1000USD = 31.4;
   :>> meetsBudgetR4 = true;
  }
 
@@ -533,7 +533,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 226.4;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -549,10 +549,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1355.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1526.98;
-  :>> endurancePer1000USD = 30.03;
+  :>> droneCost_USD = 1286.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1462.43;
+  :>> endurancePer1000USD = 31.35;
   :>> meetsBudgetR4 = true;
  }
 
@@ -569,7 +569,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 226.4;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -585,10 +585,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1313.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1484.98;
-  :>> endurancePer1000USD = 30.42;
+  :>> droneCost_USD = 1244.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1420.43;
+  :>> endurancePer1000USD = 31.81;
   :>> meetsBudgetR4 = true;
  }
 
@@ -605,7 +605,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 151.0;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -621,10 +621,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1368.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1539.97;
-  :>> endurancePer1000USD = 26.99;
+  :>> droneCost_USD = 1299.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1475.42;
+  :>> endurancePer1000USD = 28.17;
   :>> meetsBudgetR4 = true;
  }
 
@@ -641,7 +641,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 226.4;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -657,10 +657,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1435.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1606.97;
-  :>> endurancePer1000USD = 25.81;
+  :>> droneCost_USD = 1366.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1542.42;
+  :>> endurancePer1000USD = 26.9;
   :>> meetsBudgetR4 = true;
  }
 
@@ -677,7 +677,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 226.4;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -693,10 +693,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1393.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1564.97;
-  :>> endurancePer1000USD = 26.14;
+  :>> droneCost_USD = 1324.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1500.42;
+  :>> endurancePer1000USD = 27.27;
   :>> meetsBudgetR4 = true;
  }
 
@@ -713,7 +713,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 151.0;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -729,10 +729,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1326.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1497.97;
-  :>> endurancePer1000USD = 27.25;
+  :>> droneCost_USD = 1257.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1433.42;
+  :>> endurancePer1000USD = 28.48;
   :>> meetsBudgetR4 = true;
  }
 
@@ -749,7 +749,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 151.0;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -765,10 +765,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1381.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1552.97;
-  :>> endurancePer1000USD = 25.4;
+  :>> droneCost_USD = 1312.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1488.42;
+  :>> endurancePer1000USD = 26.5;
   :>> meetsBudgetR4 = true;
  }
 
@@ -785,7 +785,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 113.2;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -801,10 +801,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1418.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1589.97;
-  :>> endurancePer1000USD = 24.48;
+  :>> droneCost_USD = 1349.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1525.42;
+  :>> endurancePer1000USD = 25.52;
   :>> meetsBudgetR4 = true;
  }
 
@@ -821,7 +821,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 151.0;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -837,10 +837,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1339.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1510.97;
-  :>> endurancePer1000USD = 25.66;
+  :>> droneCost_USD = 1270.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1446.42;
+  :>> endurancePer1000USD = 26.81;
   :>> meetsBudgetR4 = true;
  }
 
@@ -857,7 +857,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 113.2;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -873,10 +873,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1330.45;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1501.45;
-  :>> endurancePer1000USD = 25.48;
+  :>> droneCost_USD = 1261.45;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1436.9;
+  :>> endurancePer1000USD = 26.63;
   :>> meetsBudgetR4 = true;
  }
 
@@ -893,7 +893,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 226.4;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -909,10 +909,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1395.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1566.97;
-  :>> endurancePer1000USD = 24.42;
+  :>> droneCost_USD = 1326.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1502.42;
+  :>> endurancePer1000USD = 25.47;
   :>> meetsBudgetR4 = true;
  }
 
@@ -929,7 +929,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 113.2;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -945,10 +945,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1376.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1547.97;
-  :>> endurancePer1000USD = 24.63;
+  :>> droneCost_USD = 1307.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1483.42;
+  :>> endurancePer1000USD = 25.7;
   :>> meetsBudgetR4 = true;
  }
 
@@ -965,7 +965,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 226.4;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -981,10 +981,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1353.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1524.97;
-  :>> endurancePer1000USD = 24.77;
+  :>> droneCost_USD = 1284.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1460.42;
+  :>> endurancePer1000USD = 25.86;
   :>> meetsBudgetR4 = true;
  }
 
@@ -1001,7 +1001,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 94.3;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -1017,10 +1017,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1295.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1466.98;
-  :>> endurancePer1000USD = 25.55;
+  :>> droneCost_USD = 1226.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1402.43;
+  :>> endurancePer1000USD = 26.73;
   :>> meetsBudgetR4 = true;
  }
 
@@ -1037,7 +1037,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 113.2;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -1053,10 +1053,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1288.45;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1459.45;
-  :>> endurancePer1000USD = 25.69;
+  :>> droneCost_USD = 1219.45;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1394.9;
+  :>> endurancePer1000USD = 26.88;
   :>> meetsBudgetR4 = true;
  }
 
@@ -1073,7 +1073,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 113.2;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -1089,10 +1089,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1434.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1605.97;
-  :>> endurancePer1000USD = 23.23;
+  :>> droneCost_USD = 1365.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1541.42;
+  :>> endurancePer1000USD = 24.2;
   :>> meetsBudgetR4 = true;
  }
 
@@ -1109,7 +1109,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 91.8;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -1125,10 +1125,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1364.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1535.98;
-  :>> endurancePer1000USD = 24.07;
+  :>> droneCost_USD = 1295.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1471.43;
+  :>> endurancePer1000USD = 25.13;
   :>> meetsBudgetR4 = true;
  }
 
@@ -1145,7 +1145,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 94.3;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -1161,10 +1161,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1253.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1424.98;
-  :>> endurancePer1000USD = 25.72;
+  :>> droneCost_USD = 1184.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1360.43;
+  :>> endurancePer1000USD = 26.94;
   :>> meetsBudgetR4 = true;
  }
 
@@ -1181,7 +1181,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 113.2;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -1197,10 +1197,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1392.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1563.97;
-  :>> endurancePer1000USD = 23.38;
+  :>> droneCost_USD = 1323.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1499.42;
+  :>> endurancePer1000USD = 24.39;
   :>> meetsBudgetR4 = true;
  }
 
@@ -1217,7 +1217,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 91.8;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -1233,10 +1233,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1322.98;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1493.98;
-  :>> endurancePer1000USD = 24.19;
+  :>> droneCost_USD = 1253.98;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1429.43;
+  :>> endurancePer1000USD = 25.28;
   :>> meetsBudgetR4 = true;
  }
 
@@ -1253,7 +1253,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 94.3;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "included";
@@ -1269,10 +1269,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1341.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1512.97;
-  :>> endurancePer1000USD = 23.44;
+  :>> droneCost_USD = 1272.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1448.42;
+  :>> endurancePer1000USD = 24.48;
   :>> meetsBudgetR4 = true;
  }
 
@@ -1289,7 +1289,7 @@ package FlightTimeAnalysis {
   :>> usableEnergy_Wh = 94.3;
   :>> thermalCam = "T13";
   :>> sbc = "SBC3";
-  :>> dvr = "DVR9";
+  :>> dvr = "—";
   :>> vtx = "included";
   :>> fpv = "included";
   :>> gps = "G6";
@@ -1305,10 +1305,10 @@ package FlightTimeAnalysis {
   :>> meetsR6_30min = true;
   :>> meetsR8_60min = false;
   :>> flyable = true;
-  :>> droneCost_USD = 1299.97;
-  :>> gcsCost_USD = 171.0;
-  :>> totalSystemCost_USD = 1470.97;
-  :>> endurancePer1000USD = 23.59;
+  :>> droneCost_USD = 1230.97;
+  :>> gcsCost_USD = 175.45;
+  :>> totalSystemCost_USD = 1406.42;
+  :>> endurancePer1000USD = 24.67;
   :>> meetsBudgetR4 = true;
  }
 

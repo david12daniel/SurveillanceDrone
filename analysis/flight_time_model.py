@@ -210,6 +210,14 @@ class Component:
     footprint_mm: Optional[tuple] = None     # (length, width) PCB/body footprint [mm], parsed from `dimensions`
 
 
+# Placeholder used when no DVR participates in a build. The standalone DVR was
+# removed from the architecture (the SBC records onboard), so configs are no
+# longer gated on having a compatible DVR; this null object keeps the DVR CSV
+# columns populated with zeros/placeholder instead of crashing on None.
+_NULL_DVR = Component(category="dvr", ident="—", name="(none — SBC records)",
+                      mass_g=0.0, power_w=0.0, cost=0.0)
+
+
 # ──────────────────────────────────────────────────────────────────────────
 # Core physics
 # ──────────────────────────────────────────────────────────────────────────
@@ -339,10 +347,10 @@ def parse_part_blocks(text: str) -> list[dict]:
 
 # SysML part-def type → component category label
 _CATEGORY_BY_TYPE = {
-    "CameraSubsystem": "thermal",
-    "SingleBoardComputerPayload": "sbc",
+    "IRCamera": "thermal",
+    "SBCPayload": "sbc",
     "ThermalVideoRecorder": "dvr",
-    "VideoTransmitter": "vtx",
+    "Vtx": "vtx",
     "FpvCamera": "fpv",
     "GpsModule": "gps",
     "RadioReceiver": "rx",
@@ -510,7 +518,7 @@ def load_model():
                 cost=float(a.get("cost_USD", 0.0)),
                 footprint_mm=_parse_dims(a.get("dimensions")),
             ))
-        elif b["type"] == "RadioControlTransmitter":
+        elif b["type"] == "RcTx":
             # cheapest full integrated handheld radio (Phase-1 / backup manual control);
             # skip bare TX modules that need a host radio.
             c = float(a.get("cost_USD", 0.0))
@@ -522,7 +530,7 @@ def load_model():
             c = float(a.get("cost_USD", 0.0))
             if c > 0 and str(a.get("extraHardwareNeeded", "")).strip().lower() == "none" and (tlm_min is None or c < tlm_min):
                 tlm_min = c; tlm_name = str(a.get("name", b["ident"]))
-        elif b["type"] == "VideoReceiver":
+        elif b["type"] == "Vrx":
             # A real RF receiver (not a bare AV-capture dongle) with range MARGIN
             # over the hard 2.8 km video link — require >= 4 km so the costed pick
             # isn't sitting exactly at the limit (VRX1 = 2.8 km, zero margin). The
@@ -612,6 +620,9 @@ def evaluate(af: Airframe, bat: Battery, thermal: Component, sbc: Component,
              dvr: Component, vtx: Optional[Component], reps: dict,
              rep_pow: dict, p: PhysicsParams, config_id: str,
              gcs_base_cost: float = 0.0, vrx_by_format: Optional[dict] = None) -> dict:
+    if dvr is None:
+        dvr = _NULL_DVR
+
     # Resolve peripherals with inclusion logic.
     vtx_id, vtx_name, vtx_src, vtx_m, vtx_p, vtx_c = _peripheral(af.vtx_incl, vtx, reps["vtx"], rep_pow["vtx"])
     fpv_id, fpv_name, fpv_src, fpv_m, fpv_p, fpv_c = _peripheral(af.fpv_incl, None, reps["fpv"], rep_pow["fpv"])
@@ -815,7 +826,6 @@ def iter_configs(airframes, components, batteries, p: PhysicsParams,
         # VTX is swept only when not bundled; otherwise a single "included" pass.
         vtx_opts = [None] if af.vtx_incl else components["vtx"]
         inner_per_bat = len(thermals) * len(sbcs) * len(vtx_opts)
-        inner_per_thermal = len(sbcs) * len(vtx_opts)
         for bat in batteries:
             # ── Filter P1: battery cell count must fit the airframe window ──
             if af.min_cells is not None and not (af.min_cells <= bat.cells_s <= af.max_cells):
@@ -823,12 +833,12 @@ def iter_configs(airframes, components, batteries, p: PhysicsParams,
                     stats["voltage_pruned"] += inner_per_bat
                 continue
             for thermal in thermals:
-                # ── Filter V2: thermal must have a compatible (recordable) DVR ──
+                # V2 thermal↔DVR filter retired: the standalone DVR was removed from
+                # the architecture (the SBC records onboard), so a config is no longer
+                # dropped for lacking a compatible DVR. If DVR candidates are ever
+                # restored, the lightest compatible one is still used; otherwise None
+                # (→ _NULL_DVR in evaluate).
                 dvr = compatible_dvr(thermal)
-                if dvr is None:
-                    if stats is not None:
-                        stats["video_pruned"] += inner_per_thermal
-                    continue
                 for sbc in sbcs:
                     for vtx in vtx_opts:
                         n += 1
@@ -995,15 +1005,15 @@ def write_markdown(top, baseline, total, n_af, n_bat, n_comp, p, reps, rep_pow,
           f"USB control dongle) **plus a ground video receiver matched to the airframe's "
           f"VTX format** ({_vrx_blurb}). Analog frames use the cheap analog VRX; frames "
           f"with a digital air unit (DJI/Walksnail) carry the matching goggles. Bundled "
-          f"VTX/FPV/GPS/RX add $0 (already in the airframe price); the DVR is included "
-          f"(earlier-stage part)."),
+          f"VTX/FPV/GPS/RX add $0 (already in the airframe price); no DVR "
+          f"(the SBC records onboard)."),
          (f"- **Compatibility filtering** (declared in "
           f"`DroneSystemModel::Architecture::Compatibility`): {unfiltered:,} raw "
           f"pairings reduced to {total:,} real configs — pruned "
           f"{stats['voltage_pruned']:,} on battery↔airframe cell-count (P1, e.g. a "
-          f"4S pack on a 6S-only frame) and {stats['video_pruned']:,} on "
-          f"thermal↔DVR video format (V2, a thermal whose output no DVR can "
-          f"record — CVBS via DVR1-6 or digital HDMI/USB via DVR7-9)."
+          f"4S pack on a 6S-only frame). The former V2 thermal↔DVR video-format "
+          f"filter is retired: the standalone DVR was removed from the architecture "
+          f"(the SBC records onboard)."
           if stats and unfiltered is not None else
           "- Compatibility filtering: not applied (no cell/format data)."),
          "",
@@ -1253,7 +1263,7 @@ def main() -> None:
         print(f"SBC (fixed)           : {FIXED_SBC_ID}  (locked design choice, not swept)")
     print(f"Unfiltered pairings   : {unfiltered:,}")
     print(f"  pruned voltage (P1) : {stats['voltage_pruned']:,}  (battery cells vs airframe window)")
-    print(f"  pruned video   (V2) : {stats['video_pruned']:,}  (thermal output vs CVBS DVR)")
+    print(f"  (V2 thermal-DVR filter retired -- DVR removed from architecture)")
     print(f"REAL configurations   : {total:,}")
     # Physical-integration summary (§C16): how many configs the SBC actually fits on.
     _sbc = next((s for s in components["sbc"] if s.ident == FIXED_SBC_ID), components["sbc"][0])

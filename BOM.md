@@ -3,7 +3,7 @@
 Full procurement list, **sorted by build phase** with a subtotal per phase. Derived from
 [`SELECTED_COMPONENTS.md`](SELECTED_COMPONENTS.md) (selections) and
 [`candidates.sysml`](candidates.sysml) (names, IDs, links, costs). **Part #** = the model
-candidate ID (the project's internal part number). Three phases.
+candidate ID (the project's internal part number). Four build phases — **Phase 4 (OpenHD video downlink) is a future capability** held separate from the committed Phase 1–3 system.
 
 > **Flight battery = `BAT10`** (Upgrade Energy 6S 12 Ah Amprius) — `BAT09` is out of stock.
 > **2× `BAT22`** (GNB) are procured as development/shakedown packs (spare the Amprius on early flights).
@@ -14,8 +14,8 @@ candidate ID (the project's internal part number). Three phases.
 
 | Product | Part # | Link | Cost |
 |---|---|---|---|
-| iFlight Chimera9 ECO 6S (9", PNP) + **GPS pre-installed** | `AF3a` | [shop.iflight.com](https://shop.iflight.com/Chimera9-ECO-6S-Pro2068) | $457.99 |
-| HQ 9X4X3 props — 4-pack (extra set) | — | shop.iflight.com / HQ | $17.00 |
+| iFlight Chimera9 ECO 6S (9", PNP) — incl. **GPS + analog VTX + FPV cam + 4 extra props**, w/ shipping | `AF3a` | [shop.iflight.com](https://shop.iflight.com/Chimera9-ECO-6S-Pro2068) | $490.99 |
+| HQ 9X4X3 props — 4-pack (extra set) | — | *(included w/ `AF3a`)* | $0.00 |
 | iFlight True Diversity ELRS receiver | `iFlightTD` | [shop.iflight.com](https://shop.iflight.com/) | $31.99 |
 | RadioMaster TX12 Mark II ELRS radio | `TX5` | [radiomasterrc.com](https://www.radiomasterrc.com/products/tx12) | $117.93 |
 | HGLRC Hermes ELRS SIM USB Dongle — primary laptop control + telemetry | `TLM2` | [amazon.com](https://www.amazon.com/s?k=HGLRC+Hermes+ELRS+USB+dongle) | $16.00 |
@@ -28,20 +28,18 @@ candidate ID (the project's internal part number). Three phases.
 | USB-A→USB-C adapter (MacBook Air) | — | generic | $11.00 |
 | FPV camera + 5.8 GHz analog VTX | *(bundled w/ `AF3a`)* | — | $0.00 |
 | GCS laptop (existing MacBook Air) | — | — | $0.00 |
-| **Phase 1 subtotal** | | | **$1,354.75** |
+| **Phase 1 subtotal** | | | **$1,370.75** |
 
-## Phase 2 — EO/IR thermal camera + SBC + OpenHD digital downlink
+## Phase 2 — EO/IR thermal camera + SBC (onboard, live-inference feed)
 
 | Product | Part # | Link | Cost |
 |---|---|---|---|
 | PurpleRiver Mini 640 thermal camera (640×512, 12 µm, 13 mm) | `T13` | [thermal-image.com](https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/) | $650.00 |
-| NanoPi M5, 4 GB SBC (Rockchip RK3576) — onboard recording + AI inference | `SBC3` | [friendlyelec.com](https://www.friendlyelec.com/index.php?route=product/product&path=69&product_id=309) | $126.00 |
+| NanoPi M5, 4 GB SBC (Rockchip RK3576) — real-time onboard AI inference (thermal via USB-UVC) | `SBC3` | [friendlyelec.com](https://www.friendlyelec.com/index.php?route=product/product&path=69&product_id=309) | $126.00 |
 | SBC mount + cooling (3D-printed deck + 30 mm fan + heat-set hardware) | — | fabricated ([reference/cad-resources.md](reference/cad-resources.md)) | ~$15.00 |
-| LB-LINK BL-M8812EU2 RTL8812EU bare WiFi module (air side) + USB-A stub + 2× u.fl→RP-SMA pigtails | `WLAN_AIR1` | [aliexpress.com](https://www.aliexpress.com/item/1005007098141054.html) | ~$20.00 |
-| Alfa AWUS036ACH RTL8812AU USB-C WiFi adapter (ground side) | `WLAN_GND1` | [rokland.com](https://store.rokland.com/products/alfa-awus036ach-usb-c-802-11ac-ac1200-dual-band-high-power-wifi-usb-adapter) | $65.00 |
-| Foxeer Echo 2 Max 5.8 GHz linear patch antenna × 2 (ground diversity, 60° beam, RP-SMA male) | `ANT_GND1` + `ANT_GND2` | [foxeer.com](https://www.foxeer.com/foxeer-echo-2-max-high-gain-antenna-g-434) | $60.00 |
-| VMware Fusion (ground station VM — free personal use) | — | vmware.com | $0.00 |
-| **Phase 2 subtotal** | | | **~$936.00** |
+| SBC power — 2-6S→12V 3A UBEC (2-pack) | — | [amazon.com](https://www.amazon.com/2pcs-2S-6S-DC-DC-Converter-Module/dp/B0CTZHJR5L) | $9.99 |
+| SBC power — USB-C power-only cable (bare wire→USB-C male, 20AWG 5A) | — | [amazon.com](https://www.amazon.com/USB-C-Power-Copper-Connector-Device/dp/B0GBGLNR52) | $7.99 |
+| **Phase 2 subtotal** | | | **~$808.98** |
 
 ## Phase 3 — AI detection + autonomous route modification (software)
 
@@ -50,41 +48,72 @@ candidate ID (the project's internal part number). Three phases.
 | All hardware on-board since Phase 2. Phase 3 is software-only: deploy INT8-quantized model via RKNN toolchain, integrate MAVLink autonomous route modification. | — | — | $0.00 |
 | **Phase 3 subtotal** | | | **$0.00** |
 
+## Phase 4 — Future capability: OpenHD digital video downlink to ground station
+
+> **Deferred / future capability (moved here 2026-07-07).** Phases 1–3 are the committed build.
+> Phase 4 adds a live digital downlink of the thermal (and/or AI-annotated) video to the ground
+> station via OpenHD/WFB-ng. Held separate so its cost is **not** part of the committed system.
+
+| Product | Part # | Link | Cost |
+|---|---|---|---|
+| LB-LINK BL-M8812EU2 RTL8812EU bare WiFi module (air side) + USB-A stub + 2× u.fl→RP-SMA pigtails | `WLAN_AIR1` | [aliexpress.com](https://www.aliexpress.com/item/1005007098141054.html) | ~$20.00 |
+| Air-side antennas — 5.8 GHz RHCP cloverleaf, RP-SMA male × 2 (pair) | — | [amazon.com](https://www.amazon.com/5-8GHz-Cloverleaf-Antenna-Receiver-Transmitter/dp/B0CDZ8FXFW) | $13.99 |
+| Alfa AWUS036ACH RTL8812AU USB-C WiFi adapter (ground side) | `WLAN_GND1` | [rokland.com](https://store.rokland.com/products/alfa-awus036ach-usb-c-802-11ac-ac1200-dual-band-high-power-wifi-usb-adapter) | $65.00 |
+| Foxeer Echo 2 Max 5.8 GHz linear patch antenna × 2 (ground diversity, 60° beam, RP-SMA male) | `ANT_GND1` + `ANT_GND2` | [foxeer.com](https://www.foxeer.com/foxeer-echo-2-max-high-gain-antenna-g-434) | $60.00 |
+| Air-module 5 V power — spare 2nd unit of the Phase 2 UBEC 2-pack (set to 5 V) | — | *(already procured in Phase 2)* | $0.00 |
+| VMware Fusion (ground station VM — free personal use) | — | vmware.com | $0.00 |
+| **Phase 4 subtotal** | | | **~$158.99** |
+
 ---
 
 ## Totals
 
 | Phase | Subtotal |
 |---|---|
-| Phase 1 — flight + FPV + waypoints | $1,354.75 |
-| Phase 2 — thermal + SBC + OpenHD digital downlink | ~$936.00 |
+| Phase 1 — flight + FPV + waypoints | $1,370.75 |
+| Phase 2 — thermal + SBC (onboard) | ~$808.98 |
 | Phase 3 — AI deployment (software only) | $0.00 |
-| **Grand total (all procurement)** | **~$2,290.75** |
+| **Committed system subtotal (Phases 1–3)** | **~$2,179.73** |
+| Phase 4 — OpenHD downlink (*future capability*) | ~$158.99 |
+| **Grand total (all four phases)** | **~$2,338.72** |
 
-**R4 integrated-system cost ≈ $1,960** (≤ $2,500 ✓) — the grand total minus **reusable/support
-items not part of the per-drone flight system**: the 2× `BAT22` development packs ($220) and
-the `CHG1` charger ($100). Both totals are under the $2,500 R4 cap.
+**R4 integrated-system cost** (phase grand total minus **reusable/support items** — the 2× `BAT22`
+development packs ($220) and the `CHG1` charger ($112)):
+- **Committed (Phases 1–3): ≈ $1,848** (≤ $2,500 ✓)
+- **With Phase 4 (all four phases): ≈ $2,007** (≤ $2,500 ✓)
+
+Both are under the $2,500 R4 cap.
 
 ## Next steps
-- **Phase 2 pricing** — T13 updated to $650.00 ($590 base + $60 shipping, confirmed 2026-07-05).
-  DVR9 removed from architecture — SBC handles onboard recording (moved from Phase 3).
-  Remaining items: confirm actual purchase prices for WLAN_AIR1, WLAN_GND1, and Foxeer Echo 2 Max
-  antennas; update candidates.sysml cost_USD and BOM subtotal accordingly.
-- **Phase 3 pricing** — all hardware procured in Phase 2; Phase 3 is software-only (RKNN model
-  deployment, MAVLink integration), $0 hardware.
-- Recompute grand total and R4 system cost once remaining Phase 2 prices are confirmed.
+- **OpenHD → Phase 4 (2026-07-07):** the OpenHD digital video-downlink capability (`WLAN_AIR1`,
+  air/ground antennas, `WLAN_GND1`, VMware VM) was moved to a **future Phase 4**. The committed
+  build (Phases 1–3) is analog FPV for piloting + thermal→SBC **live onboard inference**, with **no
+  thermal downlink and no onboard recording**. Phase 4 prices (WLAN_AIR1, WLAN_GND1, Foxeer) remain
+  estimates — confirm before building Phase 4.
+- **Phase 2** — T13 confirmed $650.00 ($590 base + $60 shipping) as the **USB** variant (thermal →
+  SBC over USB-UVC for live inference; MIPI and CVBS were evaluated and rejected — see
+  [`MODEL_ISSUES.md`](MODEL_ISSUES.md)).
+- **Phase 3** — software-only (RKNN model deployment + MAVLink autonomous route modification), $0
+  hardware; runs live inference on the Phase 2 thermal feed.
+- **SBC power — RESOLVED (2026-07-06):** the NanoPi M5 USB-C port accepts wide-input DC 6–20 V
+  *without PD negotiation* (onboard buck), so no PD-trigger module is needed. **Selected + priced:**
+  2-6S→12V 3A UBEC 2-pack ($9.99) + USB-C power-only cable ($7.99) — $17.98 total. The 2-pack's
+  spare unit (set to 5 V) powers the Phase 4 air WiFi module. Build check: UBEC jumper on 12 V (not
+  5 V) before connecting the SBC. The T13 thermal cam needs no power part — USB-bus-powered (<1 W).
 
 ## Notes
 - **Part # = model candidate ID** (the internal part number in [`candidates.sysml`](candidates.sysml));
   "—" = no catalog part yet (generic/fabricated/TBD).
 - **Battery:** `BAT10` is the flight default (`BAT09` out of stock); the **2× `BAT22`** are
   development/shakedown packs (cheap, robust — fly these first, spare the Amprius).
-- **Bundled at $0:** the FPV camera + analog VTX ship with the Chimera9 ECO PNP. **GPS is now
-  pre-installed** (iFlight BLITZ M10 GPS V2 Mini, `G4`; cost folded into the airframe line at
-  $457.99 incl. shipping). **Existing at $0:** the MacBook Air GCS.
-- **DVR removed:** the standalone Monster UVC Recorder (`DVR9`) was dropped from the architecture
-  (2026-07-05). The SBC (`SBC3`) handles all onboard recording via USB-UVC from the T13 thermal
-  camera, eliminating the need for a separate DVR.
+- **Bundled at $0:** the FPV camera + analog VTX + GPS + 4 extra props all ship with the Chimera9
+  ECO — their cost is folded into the single airframe line at **$490.99** (incl. shipping; GPS =
+  iFlight BLITZ M10 GPS V2 Mini, `G4`). The separate props line is therefore $0. **Existing at $0:**
+  the MacBook Air GCS.
+- **No recording / no DVR:** the thermal feed is **not recorded** — it streams live from the T13
+  (USB-UVC) to the SBC (`SBC3`) for **real-time inference** that drives autonomous actions (Phase 3).
+  The standalone DVR (`DVR9`) was dropped 2026-07-05; with live-inference-only there is no recording
+  device in the architecture at all.
 - **TBD lines:** the flight-controller firmware (ArduPilot/PX4 vs Betaflight — a configuration
   choice, no cost).
 - The flight-time sweep reports ~$1,690 for the drone + GCS using *cost-representative* RX/radio;

@@ -61,10 +61,10 @@ System- and subsystem-level requirements with `subsets` traceability:
 
 ### Architecture
 `part def`s with attributes, ports, and formal `satisfy` traceability:
-- **SurveillanceDrone** — composes the airborne parts (Airframe, Battery, CameraSubsystem [thermal], FpvCamera, GpsModule, SingleBoardComputerPayload, RadioReceiver, VideoTransmitter) wired with typed power/video interfaces; derives `totalPower`.
-- **AerialThermalObservationSystem** — composes SurveillanceDrone + GroundControlStation + ViewingComputer; connects the wireless RF links; derives `totalCost` (the MacBook Air `ViewingComputer` is an external actor, excluded from cost).
-- **GroundControlStation** — two-tier, laptop-based: `laptopLink` (ELRS USB dongle — primary control + telemetry) + `rcTx` (handheld radio — Phase-1/backup) + `VideoReceiver` + `UsbVideoCapture` + `groundAntenna` (5.8 GHz directional patch for video-link range margin).
-- Component defs — **Airframe** (incl. `minCells_s`/`maxCells_s`, `maxThrustPerMotor_g`, and a **physical-integration layer**: `payloadDeckLength_mm`/`payloadDeckWidth_mm`/`payloadCapacity_g`/`batteryMount`), **Battery** (energy, chemistry, cells, `length/width/height_mm`), **CameraSubsystem** (thermal), **FpvCamera**, **GpsModule**, **SingleBoardComputerPayload**, **RadioReceiver**, **VideoTransmitter**, **VideoReceiver**, **UsbVideoCapture**, **Antenna** (`gain_dBi`, band, polarization — feeds the RF link budget), **AntiSparkFilter** (inline XT60, in the drone power path), **Charger** (6S Li-ion/LiPo bench charger — ground-support equipment).
+- **Drone** — composes the airborne parts (Airframe, Battery, IRCamera [thermal], FpvCamera, GpsModule, SBCPayload, RadioReceiver, Vtx) wired with typed power/video interfaces; derives `totalPower`.
+- **AerialObservationSystem** — composes Drone + GCS + Laptop; connects the wireless RF links; derives `totalCost` (the MacBook Air `Laptop` is an external actor, excluded from cost).
+- **GCS** — two-tier, laptop-based: `laptopLink` (ELRS USB dongle — primary control + telemetry) + `rcTx` (handheld radio — Phase-1/backup) + `Vrx` + `UsbCap` + `groundAntenna` (5.8 GHz directional patch for video-link range margin).
+- Component defs — **Airframe** (incl. `minCells_s`/`maxCells_s`, `maxThrustPerMotor_g`, and a **physical-integration layer**: `payloadDeckLength_mm`/`payloadDeckWidth_mm`/`payloadCapacity_g`/`batteryMount`), **Battery** (energy, chemistry, cells, `length/width/height_mm`), **IRCamera** (thermal), **FpvCamera**, **GpsModule**, **SBCPayload**, **RadioReceiver**, **Vtx**, **Vrx**, **UsbCap**, **Antenna** (`gain_dBi`, band, polarization — feeds the RF link budget), **AntiSparkFilter** (inline XT60, in the drone power path), **Charger** (6S Li-ion/LiPo bench charger — ground-support equipment).
 - **Compatibility** (sub-package) — typed `port def`s, `enum def`s (`VideoFormat`, `RfBand`), `constraint def`s, and `interface def`s declaring which pairings are real (battery↔airframe cell-count **and connector**, video-format chain, RF band). The structure is validated by Syside; the **rules are executed by the flight-time sweep**.
 
 ### Analysis
@@ -105,10 +105,12 @@ and `cost_vs_flighttime.png`. The narrative `analysis/*_market_analysis.md` /
 
 ## Build roadmap (`systems_engineering_plan.md`)
 
-Three incremental phases: **(1)** basic LOS manual flight + FPV/analog video downlink to the
-laptop + GPS waypoint routes (airframe + ELRS + battery + VRX/antenna + GPS + dongle) →
-**(2)** thermal camera + SBC onboard recording + OpenHD digital downlink → **(3)** AI detection/autonomous route modification (software-only, no new hardware).
-+ autonomous route modification via MAVLink.
+Three committed phases + a deferred Phase 4 (future capability): **(1)** basic LOS manual flight +
+FPV/analog video downlink to the laptop + GPS waypoint routes (airframe + ELRS + battery + VRX/antenna
++ GPS + dongle) → **(2)** thermal camera (USB) + SBC — thermal streams live to the SBC, **no recording,
+no downlink** → **(3)** AI detection + autonomous route modification via MAVLink, real-time inference on
+the live thermal feed (software-only, no new hardware) → **(4, deferred future)** OpenHD digital video
+downlink of the thermal/AI feed to the ground station.
 
 ## Tooling
 

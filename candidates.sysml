@@ -6,7 +6,8 @@ package DroneCandidates {
   * live in analysis/*.csv. Each candidate is a SysML v2 part usage typed by the
   * matching definition in DroneSystemModel::Architecture, with attribute values
   * bound via redefinition (:>>). This keeps the option data co-located with the
-  * model schema it conforms to.
+  * model schema it conforms to. (Resolves against model.sysml — the sole
+  * `DroneSystemModel` root since the 2026-07-11 fork de-conflict; MODEL_ISSUES.md §C30.)
   *
   * Conventions:
   *  - Usage name carries the CSV row ID (airframes prefixed "AF" since SysML
@@ -222,14 +223,14 @@ package DroneCandidates {
    :>> name = "iFlight Chimera9 ECO";
    :>> purchaseUrl = "https://shop.iflight.com/Chimera9-ECO-6S-Pro2068";
    :>> purchaseType = "PNP";
-   :>> cost_USD = 385.99;            // 2026-07-01: $474.99 total - $72 ship - $17 props = $385.99 (drone + GPS bundled)
+   :>> cost_USD = 385.99;            // component cost (drone + GPS bundled) used by the sweep; as-purchased all-in = $490.99 (incl. VTX + FPV cam + 4 extra props + shipping) per BOM, confirmed 2026-07-08
    :>> mass = 729.0 [g];            // 721g PNP + 8g iFlight BLITZ M10 GPS V2 Mini (G4, pre-installed)
    :>> batteryConnector = "XT60";   // XT60 lead — matches the XT60 packs + anti-spark (R4_BAT_IF)
    :>> propSize_in = 9.0;
    :>> wheelbase = 405.0 [mm];
    :>> flightController = "BLITZ F7 (updated Jun 2026)";
    :>> esc = "BLITZ E55 4-in-1 55A";
-   :>> fcFirmware = "TBD — ArduPilot Copter or PX4 (open action item; see MODEL_ISSUES.md)";
+   :>> fcFirmware = "ArduPilot ArduCopter >= 4.5 — SELECTED 2026-07-10 (autonomy contract + mission app built on ArduCopter AUTO/GUIDED; analysis/software_by_component.md §2, MODEL_ISSUES.md §C28)";
    :>> escFirmware = "BLHeli_32";
    :>> fcProtocols = "CRSF-in | UBX-in | DSHOT600-out | MAVLink2-out";
    :>> motors = "XING-E 2809 800KV";
@@ -843,7 +844,7 @@ package DroneCandidates {
  // =========================================================================
  package ThermalCameraCandidates {
 
-  part T1 : CameraSubsystem {
+  part T1 : IRCamera {
    :>> name = "Lepton 2.5";
    :>> purchaseUrl = "https://groupgets.com/products/flir-lepton-2-5";
    :>> brand = "FLIR / Teledyne";
@@ -867,7 +868,7 @@ package DroneCandidates {
    :>> detectionRange = 15.0 [m];
   }
 
-  part T2 : CameraSubsystem {
+  part T2 : IRCamera {
    :>> name = "Lepton 3.0";
    :>> purchaseUrl = "https://groupgets.com/products/flir-lepton-3-0";
    :>> brand = "FLIR / Teledyne";
@@ -891,7 +892,7 @@ package DroneCandidates {
    :>> detectionRange = 25.0 [m];
   }
 
-  part T3 : CameraSubsystem {
+  part T3 : IRCamera {
    :>> name = "Lepton 3.5";
    :>> purchaseUrl = "https://groupgets.com/products/flir-lepton-3-5";
    :>> brand = "FLIR / Teledyne";
@@ -915,7 +916,7 @@ package DroneCandidates {
    :>> detectionRange = 25.0 [m];
   }
 
-  part T4 : CameraSubsystem {
+  part T4 : IRCamera {
    :>> name = "DroneThermal v4 (Lepton Carrier)";
    :>> purchaseUrl = "https://www.flytron.com/thermal-solutions/60-dronethermal-v4.html";
    :>> brand = "GroupGets / Horus Dynamics";
@@ -928,7 +929,7 @@ package DroneCandidates {
    :>> dimensions = "20x20x10";
   }
 
-  part T5 : CameraSubsystem {
+  part T5 : IRCamera {
    :>> name = "Horus Dynamics Lepton Drone Kit";
    :>> purchaseUrl = "https://horusdynamics.com/shop/lepton-kit-hdk1500/";
    :>> brand = "Horus Dynamics";
@@ -951,7 +952,7 @@ package DroneCandidates {
    :>> operatingTempMax_C = 80.0;
   }
 
-  part T6 : CameraSubsystem {
+  part T6 : IRCamera {
    :>> name = "Waveshare LWIR 80x62";
    :>> purchaseUrl = "https://www.waveshare.com/infrared-thermal-camera-module.htm";
    :>> brand = "Waveshare";
@@ -975,7 +976,7 @@ package DroneCandidates {
    :>> detectionRange = 10.0 [m];
   }
 
-  part T7 : CameraSubsystem {
+  part T7 : IRCamera {
    :>> name = "Heimann HTPA80x64d";
    :>> purchaseUrl = "https://www.mouser.com/ProductDetail/heimann-sensor/htpa80x64d";
    :>> brand = "Heimann Sensor";
@@ -999,7 +1000,7 @@ package DroneCandidates {
    :>> detectionRange = 8.0 [m];
   }
 
-  part T8 : CameraSubsystem {
+  part T8 : IRCamera {
    :>> name = "Generic 256x192 CVBS Module";
    :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=256x192+thermal+camera+module+CVBS";
    :>> brand = "Generic OEM (Chinese)";
@@ -1025,7 +1026,7 @@ package DroneCandidates {
    :>> detectionRange = 50.0 [m];
   }
 
-  part T9 : CameraSubsystem {
+  part T9 : IRCamera {
    :>> name = "Generic 384x288 CVBS Module";
    :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=384x288+thermal+camera+module+CVBS";
    :>> brand = "Generic OEM (Chinese)";
@@ -1051,7 +1052,7 @@ package DroneCandidates {
    :>> detectionRange = 80.0 [m];
   }
 
-  part T10 : CameraSubsystem {
+  part T10 : IRCamera {
    :>> name = "Generic 640x512 CVBS Module";
    :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=640x512+thermal+camera+module+CVBS";
    :>> brand = "Generic OEM (Chinese)";
@@ -1077,7 +1078,7 @@ package DroneCandidates {
    :>> detectionRange = 160.0 [m];
   }
 
-  part T11 : CameraSubsystem {
+  part T11 : IRCamera {
    :>> name = "Axisflying 640 Thermal";
    :>> purchaseUrl = "https://www.axisflying.com/products/axisflying-high-resolution-256192-384288-640512-thermal-imaging-camera-for-fpv-drone?VariantsId=10201";
    :>> brand = "Axisflying";
@@ -1103,7 +1104,7 @@ package DroneCandidates {
    :>> detectionRange = 160.0 [m];
   }
 
-  part T12 : CameraSubsystem {
+  part T12 : IRCamera {
    :>> name = "iVcan Mini-640-CVBS";
    :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=iVcan+Mini+640+CVBS+thermal";
    :>> brand = "iVcan";
@@ -1129,7 +1130,7 @@ package DroneCandidates {
    :>> detectionRange = 160.0 [m];
   }
 
-  part T13 : CameraSubsystem {
+  part T13 : IRCamera {
    :>> name = "PurpleRiver Mini 640";
    :>> purchaseUrl = "https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/";
    :>> brand = "PurpleRiver";
@@ -1156,7 +1157,7 @@ package DroneCandidates {
    :>> detectionRange = 160.0 [m];
   }
 
-  part T14 : CameraSubsystem {
+  part T14 : IRCamera {
    :>> name = "Arducam 640x512 USB Thermal";
    :>> purchaseUrl = "https://www.arducam.com/arducam-640x512-12mm-50hz-high-speed-usb-thermal-imaging-module-with-9-1mm-lens-precision-temperature-measurement.html";
    :>> brand = "Arducam";
@@ -1182,7 +1183,7 @@ package DroneCandidates {
    :>> detectionRange = 160.0 [m];
   }
 
-  part T15 : CameraSubsystem {
+  part T15 : IRCamera {
    :>> name = "Seek Thermal Mosaic Core 320";
    :>> purchaseUrl = "https://www.amazon.com/s?k=seek+thermal+mosaic+320";
    :>> brand = "Seek Thermal";
@@ -1208,7 +1209,7 @@ package DroneCandidates {
    :>> detectionRange = 60.0 [m];
   }
 
-  part T16 : CameraSubsystem {
+  part T16 : IRCamera {
    :>> name = "FLIR Boson 640";
    :>> purchaseUrl = "https://groupgets.com/products/flir-boson-640";
    :>> brand = "FLIR / Teledyne";
@@ -1720,7 +1721,7 @@ package DroneCandidates {
   // R4_SBC_PWR + no-active-cooling, which SBC2 fails); ~1.6 min less hover than the
   // lighter SBC1, but SBC1's Amlogic toolchain is the weak link. See MODEL_ISSUES B3.
 
-  part SBC1 : SingleBoardComputerPayload {
+  part SBC1 : SBCPayload {
    :>> name = "Radxa ZERO 2 Pro";
    :>> purchaseUrl = "https://radxa.com/products/zero/zero2pro";
    :>> cost_USD = 113.0;            // total solution
@@ -1748,7 +1749,7 @@ package DroneCandidates {
    :>> osSupport = "Ubuntu / Armbian / Android";
   }
 
-  part SBC2 : SingleBoardComputerPayload {
+  part SBC2 : SBCPayload {
    :>> name = "Orange Pi 5 (8 GB)";
    :>> purchaseUrl = "https://www.orangepi.org/";
    :>> cost_USD = 150.0;
@@ -1776,7 +1777,7 @@ package DroneCandidates {
    :>> osSupport = "Ubuntu / Armbian / Debian / Android / Orange Pi OS";
   }
 
-  part SBC3 : SingleBoardComputerPayload {
+  part SBC3 : SBCPayload {
    :>> name = "NanoPi M5 (4 GB)";
    :>> purchaseUrl = "https://www.friendlyelec.com/index.php?route=product/product&path=69&product_id=309";
    :>> cost_USD = 126.0;
@@ -2061,7 +2062,7 @@ package DroneCandidates {
  // =========================================================================
  package RadioControlTransmitterCandidates {
 
-  part TX1 : RadioControlTransmitter {
+  part TX1 : RcTx {
    :>> name = "RadioMaster Boxer (M2) ELRS";
    :>> purchaseUrl = "https://www.radiomasterrc.com/products/boxer";
    :>> brand = "RadioMaster";
@@ -2088,7 +2089,7 @@ package DroneCandidates {
    :>> sdCardSlot = true;
   }
 
-  part TX2 : RadioControlTransmitter {
+  part TX2 : RcTx {
    :>> name = "RadioMaster TX16S Mark II ELRS";
    :>> purchaseUrl = "https://www.radiomasterrc.com/products/tx16s";
    :>> brand = "RadioMaster";
@@ -2115,7 +2116,7 @@ package DroneCandidates {
    :>> sdCardSlot = true;
   }
 
-  part TX3 : RadioControlTransmitter {
+  part TX3 : RcTx {
    :>> name = "RadioMaster TX16S MK3 ELRS";
    :>> purchaseUrl = "https://www.radiomasterrc.com/products/tx16s-mk3";
    :>> brand = "RadioMaster";
@@ -2142,7 +2143,7 @@ package DroneCandidates {
    :>> sdCardSlot = true;
   }
 
-  part TX4 : RadioControlTransmitter {
+  part TX4 : RcTx {
    :>> name = "RadioMaster TX15 ELRS";
    :>> purchaseUrl = "https://www.radiomasterrc.com/products/tx15";
    :>> brand = "RadioMaster";
@@ -2169,7 +2170,7 @@ package DroneCandidates {
    :>> sdCardSlot = true;
   }
 
-  part TX5 : RadioControlTransmitter {
+  part TX5 : RcTx {
    :>> name = "RadioMaster TX12 Mark II ELRS";
    :>> purchaseUrl = "https://www.radiomasterrc.com/products/tx12";
    :>> brand = "RadioMaster";
@@ -2196,7 +2197,7 @@ package DroneCandidates {
    :>> sdCardSlot = true;
   }
 
-  part TX6 : RadioControlTransmitter {
+  part TX6 : RcTx {
    :>> name = "RadioMaster Zorro ELRS";
    :>> purchaseUrl = "https://www.radiomasterrc.com/products/zorro";
    :>> brand = "RadioMaster";
@@ -2223,7 +2224,7 @@ package DroneCandidates {
    :>> sdCardSlot = true;
   }
 
-  part TX7 : RadioControlTransmitter {
+  part TX7 : RcTx {
    :>> name = "RadioMaster Pocket ELRS";
    :>> purchaseUrl = "https://www.radiomasterrc.com/products/pocket";
    :>> brand = "RadioMaster";
@@ -2249,7 +2250,7 @@ package DroneCandidates {
    :>> sdCardSlot = true;
   }
 
-  part TX8 : RadioControlTransmitter {
+  part TX8 : RcTx {
    :>> name = "Jumper T20 V2 ELRS";
    :>> purchaseUrl = "https://www.amazon.com/s?k=Jumper+T20+V2+ELRS";
    :>> brand = "Jumper";
@@ -2276,7 +2277,7 @@ package DroneCandidates {
    :>> sdCardSlot = true;
   }
 
-  part TX9 : RadioControlTransmitter {
+  part TX9 : RcTx {
    :>> name = "Jumper T-Pro V2 ELRS";
    :>> purchaseUrl = "https://www.amazon.com/s?k=Jumper+T-Pro+V2+ELRS";
    :>> brand = "Jumper";
@@ -2303,7 +2304,7 @@ package DroneCandidates {
    :>> sdCardSlot = true;
   }
 
-  part TX10 : RadioControlTransmitter {
+  part TX10 : RcTx {
    :>> name = "BetaFPV LiteRadio 3 Pro ELRS";
    :>> purchaseUrl = "https://www.amazon.com/s?k=BetaFPV+LiteRadio+3+Pro";
    :>> brand = "BetaFPV";
@@ -2330,7 +2331,7 @@ package DroneCandidates {
    :>> sdCardSlot = true;
   }
 
-  part TXM1 : RadioControlTransmitter {
+  part TXM1 : RcTx {
    :>> name = "RadioMaster Ranger ELRS 2.4GHz Module";
    :>> purchaseUrl = "https://www.radiomasterrc.com/products/ranger";
    :>> brand = "RadioMaster";
@@ -2349,7 +2350,7 @@ package DroneCandidates {
    :>> maxChannels = 16;
   }
 
-  part TXM2 : RadioControlTransmitter {
+  part TXM2 : RcTx {
    :>> name = "RadioMaster Ranger Micro ELRS 2.4GHz Module";
    :>> purchaseUrl = "https://www.radiomasterrc.com/products/ranger-micro";
    :>> brand = "RadioMaster";
@@ -2368,7 +2369,7 @@ package DroneCandidates {
    :>> maxChannels = 16;
   }
 
-  part TXM3 : RadioControlTransmitter {
+  part TXM3 : RcTx {
    :>> name = "Happymodel ES24TX Pro ELRS Module";
    :>> purchaseUrl = "https://www.amazon.com/s?k=Happymodel+ES24TX+Pro";
    :>> brand = "Happymodel";
@@ -2387,7 +2388,7 @@ package DroneCandidates {
    :>> maxChannels = 16;
   }
 
-  part TXM4 : RadioControlTransmitter {
+  part TXM4 : RcTx {
    :>> name = "Happymodel ES24TX Slim Pro ELRS Module";
    :>> purchaseUrl = "https://shop.iflight.com/";
    :>> brand = "Happymodel";
@@ -2406,7 +2407,7 @@ package DroneCandidates {
    :>> maxChannels = 16;
   }
 
-  part TXM5 : RadioControlTransmitter {
+  part TXM5 : RcTx {
    :>> name = "BetaFPV ELRS Nano TX Module";
    :>> purchaseUrl = "https://betafpv.com/";
    :>> brand = "BetaFPV";
@@ -2433,7 +2434,7 @@ package DroneCandidates {
  // =========================================================================
  package VideoTransmitterCandidates {
 
-  part V1 : VideoTransmitter {
+  part V1 : Vtx {
    :>> name = "BLITZ Whoop 1.6W";
    :>> purchaseUrl = "https://www.team-blacksheep.com/";
    :>> vtxType = "Analog VTX";
@@ -2455,7 +2456,7 @@ package DroneCandidates {
    :>> includedWithAirframe = true; // Chimera9 ECO (#3), Chimera7 Pro V2 (#8)
   }
 
-  part V2 : VideoTransmitter {
+  part V2 : Vtx {
    :>> name = "BLITZ Whoop 2.5W";
    :>> purchaseUrl = "https://www.racedayquads.com/";
    :>> vtxType = "Analog VTX";
@@ -2477,7 +2478,7 @@ package DroneCandidates {
    :>> includedWithAirframe = true;
   }
 
-  part V3 : VideoTransmitter {
+  part V3 : Vtx {
    :>> name = "GEPRC RAD 1.6W";
    :>> purchaseUrl = "https://www.racedayquads.com/";
    :>> vtxType = "Analog VTX";
@@ -2498,7 +2499,7 @@ package DroneCandidates {
    :>> includedWithAirframe = true; // MARK4 LR7 (#1), Crocodile75 V3 (#7)
   }
 
-  part V4 : VideoTransmitter {
+  part V4 : Vtx {
    :>> name = "EMAX 2.5W VTX";
    :>> purchaseUrl = "https://speedybee.com/";
    :>> vtxType = "Analog VTX";
@@ -2519,7 +2520,7 @@ package DroneCandidates {
    :>> includedWithAirframe = true; // EMAX Hawk 7 (#5)
   }
 
-  part V5 : VideoTransmitter {
+  part V5 : Vtx {
    :>> name = "RushFPV Tank SOLO 1W";
    :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+TX805";
    :>> vtxType = "Analog VTX";
@@ -2541,7 +2542,7 @@ package DroneCandidates {
    :>> includedWithAirframe = false;
   }
 
-  part V6 : VideoTransmitter {
+  part V6 : Vtx {
    :>> name = "RushFPV Tank MAX SOLO 2.5W";
    :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+TX1200";
    :>> vtxType = "Analog VTX";
@@ -2563,7 +2564,7 @@ package DroneCandidates {
    :>> includedWithAirframe = false;
   }
 
-  part V7 : VideoTransmitter {
+  part V7 : Vtx {
    :>> name = "HGLRC Zeus 1.6W VTX PRO";
    :>> purchaseUrl = "https://www.racedayquads.com/";
    :>> vtxType = "Analog VTX";
@@ -2585,7 +2586,7 @@ package DroneCandidates {
    :>> includedWithAirframe = false;
   }
 
-  part V8 : VideoTransmitter {
+  part V8 : Vtx {
    :>> name = "AKK X2-Ultimate 1W";
    :>> purchaseUrl = "https://www.racedayquads.com/";
    :>> vtxType = "Analog VTX";
@@ -2607,7 +2608,7 @@ package DroneCandidates {
    :>> includedWithAirframe = false;
   }
 
-  part V10 : VideoTransmitter {
+  part V10 : Vtx {
    :>> name = "AKK A1918 1W";
    :>> purchaseUrl = "https://www.getfpv.com/";
    :>> vtxType = "Analog VTX";
@@ -2629,7 +2630,7 @@ package DroneCandidates {
    :>> includedWithAirframe = false;
   }
 
-  part V11 : VideoTransmitter {
+  part V11 : Vtx {
    :>> name = "SoloGood TS582000 2W";
    :>> purchaseUrl = "https://www.getfpv.com/";
    :>> vtxType = "Analog VTX";
@@ -2657,7 +2658,7 @@ package DroneCandidates {
  // =========================================================================
  package VideoReceiverCandidates {
 
-  part VRX1 : VideoReceiver {
+  part VRX1 : Vrx {
    :>> name = "Standard Analog VRX + USB Capture Dongle";
    :>> purchaseUrl = "https://www.amazon.com/s?k=TBS+Fusion+diversity";
    :>> vrxType = "Separate stack (VRX + capture)";
@@ -2670,7 +2671,7 @@ package DroneCandidates {
    :>> includedWithAirframe = false;
   }
 
-  part VRX3 : VideoReceiver {
+  part VRX3 : Vrx {
    :>> name = "Flying Tech USB-C Analog FPV Capture Adapter";
    :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+ROTG01";
    :>> vrxType = "Capture dongle only";
@@ -2682,7 +2683,7 @@ package DroneCandidates {
    :>> includedWithAirframe = false;
   }
 
-  part VRX4 : VideoReceiver {
+  part VRX4 : Vrx {
    :>> name = "Generic AV-to-USB Capture Card (ATCCPYDM)";
    :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+ROTG02";
    :>> vrxType = "Capture dongle only";
@@ -2694,7 +2695,7 @@ package DroneCandidates {
    :>> includedWithAirframe = false;
   }
 
-  part VRX5 : VideoReceiver {
+  part VRX5 : Vrx {
    :>> name = "CVBS/AV to USB Module Board (bare PCB)";
    :>> purchaseUrl = "https://www.amazon.com/s?k=Flysight+FSV200";
    :>> vrxType = "Capture dongle only";
@@ -2708,7 +2709,7 @@ package DroneCandidates {
 
   // ── Better-range ground receivers (market research 2026-06-27) ──────────
   // The hard 2.8 km video link is gated by the GROUND side; these add margin.
-  part VRX6 : VideoReceiver {
+  part VRX6 : Vrx {
    :>> name = "Skydroid 150CH 5.8GHz True-Diversity UVC Receiver";
    :>> purchaseUrl = "https://www.alibaba.com/product-detail/SKYDROID-5-8GHz-FPV-Receiver-UVC_1601393061166.html"; // select dual-antenna variant; USB 5V 190mA powered (no separate supply)
    :>> vrxType = "True-diversity UVC receiver (laptop-direct)";
@@ -2724,7 +2725,7 @@ package DroneCandidates {
    :>> includedWithAirframe = false;
   }
 
-  part VRX7 : VideoReceiver {
+  part VRX7 : Vrx {
    :>> name = "TBS Fusion Diversity Module + USB capture";
    :>> purchaseUrl = "https://www.team-blacksheep.com/";
    :>> vrxType = "Premium diversity module (AV out -> UVC capture for laptop)";
@@ -2746,7 +2747,7 @@ package DroneCandidates {
   // ground receiver to each airframe's VTX video format (CVBS → analog VRX;
   // DJI → VRX8; Walksnail → VRX9). NB: digital systems use goggles as the ground
   // receiver (HDMI/USB out to laptop), NOT a laptop UVC dongle.
-  part VRX8 : VideoReceiver {
+  part VRX8 : Vrx {
    :>> name = "DJI Goggles N3 (digital receiver)";
    :>> purchaseUrl = "https://store.dji.com/product/dji-goggles-n3";
    :>> vrxType = "DJI digital FPV goggles (O3/O4 Air Unit ground receiver)";
@@ -2762,7 +2763,7 @@ package DroneCandidates {
    :>> includedWithAirframe = false;
   }
 
-  part VRX9 : VideoReceiver {
+  part VRX9 : Vrx {
    :>> name = "Walksnail Avatar HD Goggles L (digital receiver)";
    :>> purchaseUrl = "https://www.caddxfpv.com/products/walksnail-avatar-hd-goggles-l";
    :>> vrxType = "Walksnail digital FPV goggles (Avatar HD ground receiver)";
@@ -2800,6 +2801,7 @@ package DroneCandidates {
   }
 
   // OpenHD ground-station directional panels (×2 for spatial diversity on AWUS036ACH dual RP-SMA ports)
+  // Phase 4 (deferred future capability, moved 2026-07-07) — part of the OpenHD downlink, not the committed Phase 1-3 build.
   // See analysis/openhd-ground-antenna-trade-study.md — SELECTED: ANT_GND1 / ANT_GND2 (updated 2026-07-02)
   // Switched from Lumenier AXII Quadro (40°, 14.7 dBic) → Foxeer Echo 2 Max (60°, 13 dBi) for wider beam.
   part ANT_GND1 : Antenna {
@@ -2922,7 +2924,7 @@ package DroneCandidates {
  // =========================================================================
  package UsbVideoCaptureCandidates {
 
-  part VC1 : UsbVideoCapture {
+  part VC1 : UsbCap {
    :>> name = "Flying Tech USB-C Analog FPV Capture Adapter";
    :>> purchaseUrl = "https://www.flyingtech.co.uk/product/usb-c-analog-fpv-video-capture-adapter";
    :>> captureType = "USB Capture Adapter";
@@ -2937,7 +2939,7 @@ package DroneCandidates {
    :>> busPowered = true;
   }
 
-  part VC2 : UsbVideoCapture {
+  part VC2 : UsbCap {
    :>> name = "CVBS/AV to USB Module Board";
    :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=CVBS+to+USB+UVC+capture";
    :>> captureType = "USB Capture Module (bare PCB)";
@@ -2952,7 +2954,7 @@ package DroneCandidates {
    :>> busPowered = true;
   }
 
-  part VC3 : UsbVideoCapture {
+  part VC3 : UsbCap {
    :>> name = "ATCCPYDM / Generic AV-to-USB Capture Card";
    :>> purchaseUrl = "https://www.amazon.com/s?k=AV+to+USB+capture+card+UVC";
    :>> captureType = "USB Capture Card";
@@ -2967,7 +2969,7 @@ package DroneCandidates {
    :>> busPowered = true;
   }
 
-  part VC4 : UsbVideoCapture {
+  part VC4 : UsbCap {
    :>> name = "EasyCAP USB 2.0";
    :>> purchaseUrl = "https://www.amazon.com/s?k=EasyCAP+USB+2.0";
    :>> captureType = "USB Capture Adapter";
@@ -2982,7 +2984,7 @@ package DroneCandidates {
    :>> busPowered = true;
   }
 
-  part VC5 : UsbVideoCapture {
+  part VC5 : UsbCap {
    :>> name = "Magewell USB Capture HDMI";
    :>> purchaseUrl = "https://www.magewell.com/";
    :>> captureType = "USB Capture Dongle";
@@ -2995,233 +2997,6 @@ package DroneCandidates {
    :>> macOsCompatible = true;
    :>> driverlessUVC = true;
    :>> busPowered = true;
-  }
- }
-
- // =========================================================================
- // THERMAL VIDEO RECORDER (inline DVR) CANDIDATES  (source: analysis/thermal_dvr_candidates.csv)
- // =========================================================================
- package ThermalVideoRecorderCandidates {
-
-  part DVR1 : ThermalVideoRecorder {
-   :>> name = "RunCam Mini FPV DVR (RUNCAM-DVR-S)";
-   :>> purchaseUrl = "https://shop.runcam.com/runcam-dvr-mini/";
-   :>> cost_USD = 17.99;           // 29.99 at Amazon
-   :>> mass = 3.5 [g];
-   :>> power = 1.3 [W];
-   :>> storageCapacity = 32.0;
-   :>> recordingFormat = "MJPEG / AVI";
-   :>> dimensions = "25x25x6 mm (est)";
-   :>> mountPattern = "20x20mm M2";
-   :>> inputVoltageMin = 3.3 [V];
-   :>> inputVoltageMax = 5.5 [V];
-   :>> currentMax = 0.25 [A];      // 250 mA
-   :>> videoInput = "CVBS analog";
-   :>> inputPortType = "Solder pads (1.0mm pitch)";
-   :>> videoPassThrough = true;
-   :>> passThroughMethod = "Direct solder: Camera V_OUT -> DVR V_IN / DVR V_OUT -> VTX V_IN";
-   :>> maxResolution = "720x480 (D1)";
-   :>> frameRate_fps = 30.0;
-   :>> storageType = "microSD";
-   :>> audioRecording = true;
-   :>> startStopControl = "Via flight controller GPIO (SpeedyBee App)";
-  }
-
-  part DVR2 : ThermalVideoRecorder {
-   :>> name = "Eachine EV100 Micro AV Recorder";
-   :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+EV100+Micro+DVR";
-   :>> cost_USD = 16.14;
-   :>> mass = 9.0 [g];
-   :>> power = 1.2 [W];
-   :>> storageCapacity = 32.0;
-   :>> recordingFormat = "AVI (MJPEG)";
-   :>> dimensions = "38.5x30.8x12.5 mm";
-   :>> mountPattern = "N/A (double-sided tape)";
-   :>> inputVoltageMin = 5.0 [V];
-   :>> inputVoltageMax = 7.4 [V];  // 2S
-   :>> currentMax = 0.24 [A];      // 240 mA
-   :>> videoInput = "CVBS analog";
-   :>> inputPortType = "3.5mm TRRS AV jack + JST-SH 1.0mm";
-   :>> videoPassThrough = true;
-   :>> passThroughMethod = "Included A/V cable splits to RCA; internal pass-through circuit";
-   :>> maxResolution = "1280x480 (HD)";
-   :>> frameRate_fps = 30.0;
-   :>> storageType = "TF/microSD";
-   :>> audioRecording = true;
-   :>> startStopControl = "Push-button (on module)";
-  }
-
-  part DVR3 : ThermalVideoRecorder {
-   :>> name = "Eachine ProDVR";
-   :>> purchaseUrl = "https://www.amazon.com/s?k=Eachine+ProDVR";
-   :>> cost_USD = 16.46;
-   :>> mass = 9.9 [g];
-   :>> power = 1.0 [W];
-   :>> storageCapacity = 32.0;
-   :>> recordingFormat = "AVI (MJPEG)";
-   :>> dimensions = "41x32.9x9 mm";
-   :>> mountPattern = "N/A (adhesive included)";
-   :>> inputVoltageMin = 5.0 [V];
-   :>> inputVoltageMax = 5.0 [V];
-   :>> currentMax = 0.2 [A];       // ~200 mA
-   :>> videoInput = "CVBS analog";
-   :>> inputPortType = "JST-SH 1.0mm 5-pin + solder pad backup";
-   :>> videoPassThrough = true;
-   :>> passThroughMethod = "Breakout cable: Video In/Out/Audio/Power; internal pass-through";
-   :>> maxResolution = "1280x480 (HD)";
-   :>> frameRate_fps = 30.0;
-   :>> storageType = "TF/microSD";
-   :>> audioRecording = true;
-   :>> startStopControl = "Push-button (on module)";
-  }
-
-  part DVR4 : ThermalVideoRecorder {
-   :>> name = "Generic Mini FPV DVR (Aluminum Case)";
-   :>> purchaseUrl = "https://www.aliexpress.com/wholesale?SearchText=Mini+FPV+DVR+CVBS";
-   :>> cost_USD = 14.99;
-   :>> mass = 12.0 [g];
-   :>> power = 1.3 [W];
-   :>> storageCapacity = 32.0;
-   :>> recordingFormat = "MJPEG / AVI";
-   :>> dimensions = "40x30x15 mm (est)";
-   :>> mountPattern = "N/A (adhesive)";
-   :>> inputVoltageMin = 5.0 [V];
-   :>> inputVoltageMax = 8.4 [V];
-   :>> currentMax = 0.25 [A];
-   :>> videoInput = "CVBS analog";
-   :>> inputPortType = "Pigtail leads (pre-wired)";
-   :>> videoPassThrough = true;
-   :>> passThroughMethod = "Pre-wired pigtails: Camera V_OUT -> V_IN lead; V_OUT lead -> VTX";
-   :>> maxResolution = "1280x480 (HD)";
-   :>> frameRate_fps = 30.0;
-   :>> storageType = "TF/microSD";
-   :>> audioRecording = true;
-   :>> startStopControl = "Push-button";
-  }
-
-  part DVR5 : ThermalVideoRecorder {
-   :>> name = "Generic Mini FPV DVR (eBay)";
-   :>> purchaseUrl = "https://speedybee.com/";
-   :>> cost_USD = 11.99;
-   :>> mass = 9.0 [g];
-   :>> power = 1.2 [W];
-   :>> storageCapacity = 32.0;     // includes 32GB TF card
-   :>> recordingFormat = "MJPEG";
-   :>> dimensions = "38x30x12 mm (est)";
-   :>> mountPattern = "N/A (adhesive)";
-   :>> inputVoltageMin = 5.0 [V];
-   :>> inputVoltageMax = 5.0 [V];
-   :>> currentMax = 0.24 [A];
-   :>> videoInput = "CVBS analog";
-   :>> inputPortType = "Pigtail leads (pre-wired)";
-   :>> videoPassThrough = true;
-   :>> passThroughMethod = "Pre-wired pigtails: Camera V_OUT -> V_IN; V_OUT -> VTX";
-   :>> maxResolution = "1280x480 (HD)";
-   :>> frameRate_fps = 30.0;
-   :>> storageType = "TF/microSD";
-   :>> audioRecording = true;
-   :>> startStopControl = "Remote button included";
-  }
-
-  part DVR6 : ThermalVideoRecorder {
-   :>> name = "Generic Mini FPV DVR (no card)";
-   :>> purchaseUrl = "https://www.amazon.com/s?k=Flytron+Micro+DVR";
-   :>> cost_USD = 8.99;
-   :>> mass = 8.0 [g];
-   :>> power = 1.1 [W];
-   :>> storageCapacity = 32.0;     // max supported (no card included)
-   :>> recordingFormat = "MJPEG";
-   :>> dimensions = "38x30x12 mm (est)";
-   :>> mountPattern = "N/A (adhesive)";
-   :>> inputVoltageMin = 5.0 [V];
-   :>> inputVoltageMax = 5.0 [V];
-   :>> currentMax = 0.22 [A];
-   :>> videoInput = "CVBS analog";
-   :>> inputPortType = "Pigtail leads (pre-wired)";
-   :>> videoPassThrough = true;
-   :>> passThroughMethod = "Pre-wired pigtails: Camera V_OUT -> V_IN; V_OUT -> VTX";
-   :>> maxResolution = "1280x480 (HD)";
-   :>> frameRate_fps = 30.0;
-   :>> storageType = "TF/microSD";
-   :>> audioRecording = true;
-   :>> startStopControl = "Push-button";
-  }
-
-  // ── Digital-input DVRs (HDMI / USB-UVC) ──────────────────────────────
-  // Standalone recorders for DIGITAL thermal outputs (DVR1-6 are CVBS-only).
-  // These are far heavier than analog FPV DVRs, but the DVR is excluded from
-  // the max-flight-time (SBC-stage) calc — it only affects cost and earlier-
-  // stage camera↔DVR compatibility, so the weight is acceptable.
-  part DVR7 : ThermalVideoRecorder {
-   :>> name = "ezcap273 Portable HDMI Recorder";
-   :>> purchaseUrl = "https://www.amazon.com/s?k=ezcap273";
-   :>> cost_USD = 65.99;           // ~60-75
-   :>> mass = 180.0 [g];           // confirmed: ezcap.com spec (150x66.5x23mm, 3.5in LCD, 3000mAh)
-   :>> power = 2.5 [W];            // 5V 2A supply
-   :>> storageCapacity = 256.0;    // microSD (up to)
-   :>> recordingFormat = "H.264 MP4";
-   :>> dimensions = "150x66.5x23 mm";
-   :>> mountPattern = "N/A (handheld unit)";
-   :>> inputVoltageMin = 5.0 [V];
-   :>> inputVoltageMax = 5.0 [V];
-   :>> currentMax = 2.0 [A];
-   :>> videoInput = "HDMI";
-   :>> inputPortType = "HDMI Type-A";
-   :>> videoPassThrough = false;   // capture-to-SD; no analog VTX loop
-   :>> passThroughMethod = "N/A (standalone HDMI capture; no VTX loop-through)";
-   :>> maxResolution = "1920x1080 @ 60fps";
-   :>> frameRate_fps = 60.0;
-   :>> storageType = "microSD";
-   :>> audioRecording = true;
-   :>> startStopControl = "On-unit buttons / 3.5in touchscreen";
-  }
-
-  part DVR8 : ThermalVideoRecorder {
-   :>> name = "Zowietek megaDVR III (HDMI/SDI)";
-   :>> purchaseUrl = "https://www.amazon.com/s?k=Zowietek+mega+DVR+III";
-   :>> cost_USD = 650.0;           // est (professional dual-input recorder)
-   :>> mass = 430.0 [g];           // est: megaDVR II spec = 431g; III similar (4.3in touch)
-   :>> power = 5.0 [W];            // est (USB-C powered)
-   :>> storageCapacity = 256.0;    // TF / USB
-   :>> recordingFormat = "H.264 MP4";
-   :>> dimensions = "handheld, 4.3in touchscreen";
-   :>> mountPattern = "N/A (handheld + tripod mount)";
-   :>> inputVoltageMin = 5.0 [V];
-   :>> inputVoltageMax = 5.0 [V];
-   :>> currentMax = 2.0 [A];
-   :>> videoInput = "HDMI / SDI";
-   :>> inputPortType = "HDMI Type-A + 3G-SDI";
-   :>> videoPassThrough = true;    // HDMI/SDI loop-out
-   :>> passThroughMethod = "HDMI/SDI loop-out to monitor/air-unit";
-   :>> maxResolution = "1920x1080 @ 60fps";
-   :>> frameRate_fps = 60.0;
-   :>> storageType = "TF / USB";
-   :>> audioRecording = true;
-   :>> startStopControl = "Touchscreen / buttons";
-  }
-
-  part DVR9 : ThermalVideoRecorder {
-   :>> name = "Monster UVC Recorder (standalone USB-UVC DVR)";
-   :>> purchaseUrl = "https://www.amazon.com/s?k=Monster+UVC+Recorder";
-   :>> cost_USD = 129.0;           // EST — emerging 2026 product, price not finalized
-   :>> mass = 60.0 [g];            // EST — specs not yet published
-   :>> power = 2.5 [W];            // EST
-   :>> storageCapacity = 256.0;    // microSD (est)
-   :>> recordingFormat = "H.264 MP4";
-   :>> dimensions = "small box (est)";
-   :>> mountPattern = "N/A (adhesive, est)";
-   :>> inputVoltageMin = 5.0 [V];
-   :>> inputVoltageMax = 5.0 [V];
-   :>> currentMax = 1.0 [A];       // EST
-   :>> videoInput = "USB UVC";
-   :>> inputPortType = "USB-A host (UVC)";
-   :>> videoPassThrough = false;   // records UVC camera to SD; no analog loop
-   :>> passThroughMethod = "N/A (records a UVC USB camera to SD, no VTX loop)";
-   :>> maxResolution = "1920x1080";
-   :>> frameRate_fps = 30.0;
-   :>> audioRecording = true;
-   :>> startStopControl = "On-unit button";
-   :>> firmware = "factory (Monster UVC Recorder)";
   }
  }
 
@@ -3785,7 +3560,7 @@ package DroneCandidates {
  }
 
  // =========================================================================
- // OPENHD AIR-SIDE WIFI ADAPTER CANDIDATES  (Phase 2+)
+ // OPENHD AIR-SIDE WIFI ADAPTER CANDIDATES  (Phase 4 — deferred future capability, moved 2026-07-07)
  // USB WiFi adapter mounted on the NanoPi M5 SBC, transmits the WFB-ng
  // digital thermal video stream at 5825 MHz (channel 165) to the ground station.
  // Trade study: analysis/openhd-air-wifi-adapter-trade-study.md
@@ -3794,7 +3569,7 @@ package DroneCandidates {
  package OpenHDAirAdapterCandidates {
 
   // SELECTED — lightest (~18 g), highest TX power (>29 dBm), WFB-ng author's own test hardware
-  part WLAN_AIR1 : OpenHDWifiAdapter {
+  part WLAN_AIR1 : OhdWifiTx {
    :>> name = "LB-LINK BL-M8812EU2 (RTL8812EU bare module, air side)";
    :>> purchaseUrl = "https://www.aliexpress.com/item/1005007098141054.html";
    :>> cost_USD = 12.0;            // ~$10-15 on AliExpress (plus ~$5-8 for USB stub + u.fl pigtails)
@@ -3810,7 +3585,7 @@ package DroneCandidates {
   }
 
   // Alternative — proven RTL8812AU, heavier consumer adapter
-  part WLAN_AIR2 : OpenHDWifiAdapter {
+  part WLAN_AIR2 : OhdWifiTx {
    :>> name = "Alfa AWUS036ACH (RTL8812AU, USB-C, air side)";
    :>> purchaseUrl = "https://store.rokland.com/products/alfa-awus036ach-usb-c-802-11ac-ac1200-dual-band-high-power-wifi-usb-adapter";
    :>> cost_USD = 65.0;
@@ -3828,7 +3603,7 @@ package DroneCandidates {
  }
 
  // =========================================================================
- // OPENHD GROUND-SIDE WIFI ADAPTER CANDIDATES  (Phase 2+)
+ // OPENHD GROUND-SIDE WIFI ADAPTER CANDIDATES  (Phase 4 — deferred future capability, moved 2026-07-07)
  // USB WiFi adapter plugged into MacBook Air, passed through to ARM64 Ubuntu 22.04
  // VM (VMware Fusion, xHCI mode) to receive the WFB-ng digital video stream.
  // Trade study: analysis/openhd-ground-wifi-adapter-trade-study.md
@@ -3837,7 +3612,7 @@ package DroneCandidates {
  package OpenHDGroundAdapterCandidates {
 
   // SELECTED — dual standard RP-SMA ports for diversity panels; canonical WFB-ng GS hardware
-  part WLAN_GND1 : OpenHDGroundReceiver {
+  part WLAN_GND1 : OhdGndRx {
    :>> name = "Alfa AWUS036ACH (RTL8812AU, USB-C, ground side)";
    :>> purchaseUrl = "https://store.rokland.com/products/alfa-awus036ach-usb-c-802-11ac-ac1200-dual-band-high-power-wifi-usb-adapter";
    :>> cost_USD = 65.0;
@@ -3854,7 +3629,7 @@ package DroneCandidates {
   }
 
   // Alternative — cheaper bare module; needs RP-SMA pigtails
-  part WLAN_GND2 : OpenHDGroundReceiver {
+  part WLAN_GND2 : OhdGndRx {
    :>> name = "LB-LINK BL-M8812EU2 (RTL8812EU bare module, ground side)";
    :>> purchaseUrl = "https://www.aliexpress.com/item/1005007098141054.html";
    :>> cost_USD = 12.0;

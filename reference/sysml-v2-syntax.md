@@ -78,7 +78,7 @@ Common library types this project uses: `ScalarValues::Real`, `ScalarValues::Int
 ## Ports and connections
 
 ```sysml
-part def CameraSubsystem {
+part def IRCamera {
     port video_out;     // bare port (untyped) — used heavily in model.sysml
     port power;
 }
@@ -90,7 +90,7 @@ connection connect a.p to b.q;  // connection usage (e.g. wireless RF links)
 ```
 
 In `model.sysml`, internal subsystem wiring uses `interface connect`, while the
-top-level RF links in `AerialThermalObservationSystem` use `connection connect`.
+top-level RF links in `AerialObservationSystem` use `connection connect`.
 
 ## Requirements and traceability — the conventions that matter here
 
@@ -159,7 +159,7 @@ constraint def MinFlightTimeReq {
 
 // ANALYSIS CASE: subject FIRST, then bind calcs and assert constraints.
 analysis def MinFlightTimeCheck {
-    subject system : Architecture::AerialThermalObservationSystem;
+    subject system : Architecture::AerialObservationSystem;
 
     calc ftc : FlightTimeCalc {
         in batteryEnergy = system.drone.battery.energy;
@@ -193,6 +193,13 @@ Key rules learned (all were real errors — see MODEL_ISSUES.md §A10):
   `calc def` with a `return` for computations.
 - To get a plain magnitude for non-dimensional math (e.g. score = time / cost),
   import `QuantityCalculations::ToReal` and call `ToReal(flightTime)`.
+- **`send` actions need a payload AND a receiver** (Syside: "A send action must
+  have at least 2 owned input parameters") — bare `send X();` fails. The payload
+  also **cannot construct a datatype by invocation** (`send TargetDetected()` →
+  "Invocation expression must invoke a `Behavior`"). Idiom (see
+  `behavior.sysml` / MODEL_ISSUES.md §C25): declare a named event attribute and
+  send it to the part that exhibits the accepting state machine:
+  `attribute evt : TargetDetected;` … `then send evt to missionContext;`
 
 ## Specialization / redefinition operators
 
@@ -291,8 +298,9 @@ parametric execution tooling beyond what the Syside LSP provides.
   power` + `port power` collides — rename the port `power_in`).
 - A `constraint` body holds a boolean expression with **no** trailing `;`
   (parameter `in`/`out` bindings do take `;`).
-- Watch for name collisions between a requirements *package* and a *part def*
-  (e.g. `CameraSubsystem`); give them distinct names.
+- Watch for name collisions between a requirements *package* and a *part def*;
+  give them distinct names (this model pairs the `CameraRequirements` package with
+  the `IRCamera` part def — the part def was renamed from `CameraSubsystem`).
 - Definitions need a body `{ }` or a terminating `;` (e.g. `part def Engine;`).
 - Units are written in brackets: `1500 [kg]`, `120 [m]`.
 - Quote any identifier containing spaces: `package 'Trade studies'`.

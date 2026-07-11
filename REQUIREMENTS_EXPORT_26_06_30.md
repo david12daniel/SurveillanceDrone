@@ -46,10 +46,11 @@ This document records system and subsystem requirements (§3), their verificatio
 ## 3. Requirements
 
 ### 3.1 Required states and modes
-The system is fielded in three incremental capability phases (operational modes), each a superset of the prior (see `systems_engineering_plan.md`):
+The system is fielded in **three committed capability phases plus a deferred Phase 4** (future capability), each a superset of the prior (see `systems_engineering_plan.md`):
 1. **Phase 1 — Flight + FPV + waypoints:** airframe + ELRS control link + battery + FPV/analog video downlink to the laptop + GPS pre-programmed waypoint routes.
-2. **Phase 2 — Thermal + SBC + OpenHD downlink:** adds the thermal camera + SBC (recording + future inference) + OpenHD digital video downlink (footage survives RF loss; SBC records locally).
-3. **Phase 3 — Onboard autonomy (software):** deploys the detection/classification model on the already-installed SBC + integrates MAVLink autonomous route modification. *No hardware procurement in Phase 3.*
+2. **Phase 2 — Thermal + SBC (onboard):** adds the thermal camera (USB) + SBC. The thermal streams live to the SBC for real-time inference — **no recording and no downlink** in the committed build.
+3. **Phase 3 — Onboard autonomy (software):** deploys the detection/classification model on the already-installed SBC + integrates MAVLink autonomous route modification, running **real-time inference on the live thermal feed**. *No hardware procurement in Phase 3.*
+4. **Phase 4 — OpenHD downlink (deferred future capability):** adds a live digital video downlink of the thermal/AI feed to the ground station (`WLAN_AIR1` + air antennas, `WLAN_GND1` + Foxeer ground antennas, VMware VM). Not part of the committed Phase 1–3 system.
 
 Flight states within any phase: **disarmed/idle, armed, takeoff, cruise (2.23 m/s surveillance), loiter, return-to-launch (failsafe), land.**
 
@@ -108,7 +109,7 @@ video chain, GPS/SBC↔flight-controller data) are specified in the **[IRS](INTE
 
 ### 3.5 System internal data requirements
 - **Telemetry data:** altitude, GPS position, battery voltage, heading, ground speed, flight mode (CRSF over the ELRS link; surfaced per R4_GCS_TELEM).
-- **Video stream:** thermal LWIR 640×512 @ 25 Hz (live downlink + onboard recording); FPV piloting video (analog CVBS).
+- **Video stream:** thermal LWIR 640×512 @ 25 Hz — streamed live over USB to the onboard SBC for real-time inference (not recorded; live ground downlink is the deferred Phase 4/OpenHD capability); FPV piloting video (analog CVBS) to the laptop.
 - **GNSS data:** position/velocity/time to the flight controller (NMEA/UBX).
 - **SBC↔FC data:** detection results / route commands (MAVLink, Phase 4).
 
@@ -137,7 +138,7 @@ packet rate. No site-specific data tables beyond operator-defined routes.
 - The SBC shall host the detection/classification inference workload (NPU-accelerated) — selected baseline: NanoPi M5 (RK3576, 6 TOPS), passively cooled (consistent with R4_SBC_TEMP).
 
 ### 3.11 System quality factors
-- **Reliability:** control and video links reliable to ≥ 2.8 km LOS (**R4_GCS_RANGE**); footage retained on-card independent of RF link quality (Phase 2+ SBC onboard recording).
+- **Reliability:** control and video links reliable to ≥ 2.8 km LOS (**R4_GCS_RANGE**); the thermal mission does not depend on the RF link — inference runs onboard on the live USB feed, so detections/actions continue independent of downlink quality (the Phase 4 OpenHD downlink, when built, is for operator awareness only).
 - **Maintainability / usability:** COTS modules, field-portable hand-held GCS (**R4_GCS_WT**), single-operator setup.
 
 ### 3.12 Design and construction constraints
@@ -206,11 +207,11 @@ Built from commercially-available (COTS) modules to minimize custom fabrication 
 |---|---|
 | **Battery** | R4_BAT_VOLT, R4_BAT_ENERGY, R4_BAT_ENERGY_STRETCH, R4_BAT_WT, R4_BAT_DISCHARGE, R4_BAT_COST, R4_BAT_IF |
 | **Airframe** | R4_AF_PAYLOAD, R4_AF_WT, R4_AF_PROP_CFG, R4_AF_PWR_DIST, R4_AF_ASSY, R4_AF_STIFF, R4_AF_LANDING, R4_AF_COST |
-| **CameraSubsystem** | R3_CAM_WT, R3_CAM_PWR, R3_CAM_FOV, R3_CAM_NETD, R3_CAM_RES, R3_CAM_COST, R3_CAM_IF |
-| **SingleBoardComputerPayload** | R4_SBC_PWR, R4_SBC_WT, R4_SBC_COST, R4_SBC_VIDEO_IN, R4_SBC_VIDEO_PROC, R4_SBC_DATA_AF, R4_SBC_TEMP |
-| **GroundControlStation** | R4_GCS_RANGE, R4_GCS_VIDEO_DISP, R4_GCS_TELEM, R4_GCS_CTRL, R4_GCS_BAT, R4_GCS_WT, R4_GCS_COST, R4_GCS_IF |
-| **RadioControlTransmitter** | R4_GCS_CTRL, R4_GCS_TELEM |
-| **VideoReceiver** | R4_GCS_VIDEO_DISP |
+| **IRCamera** | R3_CAM_WT, R3_CAM_PWR, R3_CAM_FOV, R3_CAM_NETD, R3_CAM_RES, R3_CAM_COST, R3_CAM_IF |
+| **SBCPayload** | R4_SBC_PWR, R4_SBC_WT, R4_SBC_COST, R4_SBC_VIDEO_IN, R4_SBC_VIDEO_PROC, R4_SBC_DATA_AF, R4_SBC_TEMP |
+| **GCS** | R4_GCS_RANGE, R4_GCS_VIDEO_DISP, R4_GCS_TELEM, R4_GCS_CTRL, R4_GCS_BAT, R4_GCS_WT, R4_GCS_COST, R4_GCS_IF |
+| **RcTx** | R4_GCS_CTRL, R4_GCS_TELEM |
+| **Vrx** | R4_GCS_VIDEO_DISP |
 
 > Mission requirements R1, R2, R6, R7, R8 are satisfied at the system level (emergent — verified by the endurance/flight analysis), and refined to the satisfying subsystems via the `subsets` links in §5.1.
 
