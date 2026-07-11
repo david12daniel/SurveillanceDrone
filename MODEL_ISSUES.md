@@ -793,6 +793,18 @@ any tool previously.
       21 993→17 216 chars (−22%), 431 elements unchanged.** balanced is now a
       generated minified export (header says so); the readable source is
       model.sysml. A regenerator script is the obvious next automation.
+      **FOLLOW-UP 2 (2026-07-11): then hit the ELEMENT limit** (comments aren't
+      elements, so the char minify didn't help there). Stripped the **76 empty
+      component data-attribute declarations (cost/mass/power/specs) + the
+      cost/power rollups** — they carry NO values in balanced (the `:>>` bindings
+      live in `candidates.sysml`, which CATIA never imports), so this is zero
+      content loss; every value remains in model.sysml. **Kept** the structural
+      skeleton (parts, ports, connects, interfaces, satisfy), Requirements,
+      Behavior, and the Software register. **Result: 431→354 elements (proxy;
+      ≈ −18%), 17 216→14 154 chars.** If David hits the cap yet again, the next
+      levers (in order) are: drop the deferred **Phase-4 OpenHD parts** (OhdWifiTx/
+      OhdGndRx + wifi antennas — not in the committed build), then the Software
+      register, then thin the subsystem requirement packages.
     - **File roles now:** `model.sysml` = authoritative full model (all pillars);
       `candidates.sysml` = data (`DroneCandidates`, resolves to model.sysml);
       `model_community_balanced.sysml` = lean CATIA export (`DroneSystemModel_Community`,

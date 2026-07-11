@@ -1,4 +1,4 @@
-// MINIFIED CATIA/MSOSA export — comments/docs stripped and Analysis/Views/UseCases omitted to fit the Community char+element caps. Authoritative source is model.sysml (all pillars, full docs); regenerate from it — do not hand-edit. MODEL_ISSUES.md §C30.
+// MINIFIED CATIA/MSOSA export — comments/docs stripped; Analysis/Views/UseCases omitted; component data attributes (cost/mass/power/specs) and cost/power rollups stripped (they carry no values here — the :>> bindings live in candidates.sysml — and are pure element cost). Kept: parts, ports, connects, interfaces, satisfy, requirements, behavior, software register. Authoritative source is model.sysml (all pillars, full docs); regenerate from it — do not hand-edit. MODEL_ISSUES.md §C30.
 package DroneSystemModel_Community {
  private import ScalarValues::*;
  private import SI::*;
@@ -159,14 +159,6 @@ package DroneSystemModel_Community {
  }
  }
  part def Battery {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute energy : EnergyValue;
- attribute cells_s : Integer;
- attribute capacity_mAh : Real;
- attribute nominalVoltage : ElectricPotentialDifferenceValue;
- attribute maxContinuousDischarge_A : Real;
- attribute connector : String;
  port pwr_out;
  port charge_pwr_in;
  satisfy R4_BAT_VOLT;
@@ -178,36 +170,19 @@ package DroneSystemModel_Community {
  satisfy R4_BAT_IF;
  }
  part def AntiSparkFilter {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute connector : String;
- attribute maxCells_s : Integer;
  port pwr_in;
  port pwr_out;
  satisfy R4_BAT_IF;
  }
  part def Charger {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute maxCells_s : Integer;
- attribute connector : String;
  port ac_pwr_in;
  port charge_pwr_out;
  }
  part def Ubec {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute maxCurrent_A : Real;
  port pwr_in;
  port pwr_out;
  }
  part def Airframe {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
- attribute minCells_s : Integer;
- attribute maxCells_s : Integer;
- attribute batteryConnector : String;
  port battery_pwr_in;
  port vbat_pwr_out;
  port gps_pwr_dta;
@@ -235,15 +210,6 @@ package DroneSystemModel_Community {
  satisfy R4_AF_COST;
  }
  part def IRCamera {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
- attribute hfov : Real;
- attribute netd : TemperatureValue;
- attribute resolutionH : Integer;
- attribute resolutionV : Integer;
- attribute pixelPitch : LengthValue;
- attribute detectionRange : LengthValue;
  port usb_pwr_vid {
   port vid : Compatibility::VideoSourcePort;
  }
@@ -256,9 +222,6 @@ package DroneSystemModel_Community {
  satisfy R3_CAM_IF;
  }
  part def SBCPayload {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
  port usbc_pwr_in;
  port usba1_pwr_vid {
   port vid : Compatibility::VideoSinkPort;
@@ -300,36 +263,20 @@ package DroneSystemModel_Community {
  satisfy R4_SBC_TEMP;
  }
  part def FpvCamera {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
- attribute maxRange : LengthValue;
  port pwr_vid {
   port vid : Compatibility::VideoSourcePort;
  }
  }
  part def GpsModule {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
- attribute connector : String;
  port pwr_dta;
  port gnss_rf_in;
  }
  part def RadioReceiver {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
- attribute maxRange : LengthValue;
  port pwr_dta;
  port rf_in_a;
  port rf_in_b;
  }
  part def RcTx {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
- attribute maxRange : LengthValue;
  port user_controls;
  port telem_dta_out;
  port rf_out;
@@ -337,41 +284,27 @@ package DroneSystemModel_Community {
  satisfy R4_GCS_TELEM;
  }
  part def Vtx {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
- attribute maxRange : LengthValue;
  port pwr_vid_dta {
   port vid : Compatibility::VideoSinkPort;
  }
  port rf_out;
  }
  part def Vrx {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
  port rf_in;
  port vid_out : Compatibility::VideoSourcePort;
  satisfy R4_GCS_VIDEO_DISP;
  }
  part def UsbCap {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
  port vid_in : Compatibility::VideoSinkPort;
  port usb_pwr_dta {
   port vid : Compatibility::VideoSourcePort;
  }
  }
  part def TelemetryGroundLink {
- attribute cost_USD : Real;
  port rf_out;
  port usb_pwr_dta;
  }
  part def OhdWifiTx {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
  port usb_pwr_dta;
  port rf_out_a;
  port rf_out_b;
@@ -379,9 +312,6 @@ package DroneSystemModel_Community {
  satisfy R4_GCS_RANGE;
  }
  part def OhdGndRx {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute power : PowerValue;
  port rf_in_a;
  port rf_in_b;
  port usb_pwr_dta;
@@ -389,9 +319,6 @@ package DroneSystemModel_Community {
  satisfy R4_GCS_RANGE;
  }
  part def Antenna {
- attribute cost_USD : Real;
- attribute mass : MassValue;
- attribute connector : String;
  port rf_in;
  port rf_out;
  satisfy R4_GCS_RANGE;
@@ -417,9 +344,6 @@ package DroneSystemModel_Community {
  connect openHDRx.usb_pwr_dta to viewingComputer.usb_ohd_pwr_dta;
  connect laptopLink.usb_pwr_dta to viewingComputer.usb_elrs_pwr_dta;
  connect rcTx.telem_dta_out to viewingComputer.usb_radio_dta;
- attribute subTotalCost : Real =
- laptopLink.cost_USD + rcTx.cost_USD + videoRx.cost_USD + capture.cost_USD + groundAntenna.cost_USD
- + openHDRx.cost_USD + openHDAntennaA.cost_USD + openHDAntennaB.cost_USD;
  satisfy R4_GCS_RANGE;
  satisfy R4_GCS_VIDEO_DISP;
  satisfy R4_GCS_TELEM;
@@ -466,8 +390,6 @@ package DroneSystemModel_Community {
  interface connect rxAntennaB.rf_out to rx.rf_in_b;
  interface connect wifiTx.rf_out_a to wifiAntennaA.rf_in;
  interface connect wifiTx.rf_out_b to wifiAntennaB.rf_in;
- attribute totalPower : PowerValue =
- platform.power + camera.power + fpvCam.power + gps.power + sbc.power + rx.power + vtx.power + wifiTx.power;
  view Drone : DS_Views::SymbolicViews::iv;
  }
  part def Operator;
@@ -494,23 +416,6 @@ package DroneSystemModel_Community {
  connection connect drone.wifiAntennaA.rf_out to gcs.openHDAntennaA.rf_in;
  connection connect drone.wifiAntennaB.rf_out to gcs.openHDAntennaB.rf_in;
  connection connect gcs.charger.charge_pwr_out to drone.battery.charge_pwr_in;
- attribute totalCost : Real =
- drone.platform.cost_USD
- + drone.battery.cost_USD
- + drone.camera.cost_USD
- + drone.fpvCam.cost_USD
- + drone.gps.cost_USD
- + drone.sbc.cost_USD
- + drone.rx.cost_USD
- + drone.vtx.cost_USD
- + drone.wifiTx.cost_USD
- + drone.ubec.cost_USD
- + drone.vtxAntenna.cost_USD
- + drone.rxAntennaA.cost_USD
- + drone.rxAntennaB.cost_USD
- + drone.wifiAntennaA.cost_USD
- + drone.wifiAntennaB.cost_USD
- + gcs.subTotalCost;
  view AerialObservationSystem : DS_Views::SymbolicViews::iv;
  }
  }
