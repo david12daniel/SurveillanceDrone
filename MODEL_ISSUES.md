@@ -786,7 +786,13 @@ any tool previously.
       limits it previously satisfied**, while now carrying the behavior. (If David
       prefers use-case *diagrams* in CATIA, the alternative is to keep `UseCases`
       and instead minify balanced's Architecture attributes — the §C24 reserve
-      lever — to recover the elements.)
+      lever — to recover the elements.) **FOLLOW-UP (2026-07-11): David still hit
+      the CATIA *character* limit at ~22 k**, so balanced was fully **minified —
+      ALL `//` comments + blank lines stripped** (CATIA never imports `//`
+      comments — only `doc /* */` — so this drops zero model content). **Result:
+      21 993→17 216 chars (−22%), 431 elements unchanged.** balanced is now a
+      generated minified export (header says so); the readable source is
+      model.sysml. A regenerator script is the obvious next automation.
     - **File roles now:** `model.sysml` = authoritative full model (all pillars);
       `candidates.sysml` = data (`DroneCandidates`, resolves to model.sysml);
       `model_community_balanced.sysml` = lean CATIA export (`DroneSystemModel_Community`,
