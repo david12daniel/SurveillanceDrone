@@ -805,6 +805,13 @@ any tool previously.
       levers (in order) are: drop the deferred **Phase-4 OpenHD parts** (OhdWifiTx/
       OhdGndRx + wifi antennas — not in the committed build), then the Software
       register, then thin the subsystem requirement packages.
+      **FOLLOW-UP 3 (2026-07-11): added the system-level requirement doc text back**
+      (R1–R8, R3_1, R3_2 — the `shall` statements, pulled verbatim from model.sysml
+      so the two stay consistent) so CATIA requirement diagrams/tables show real
+      text instead of empty IDs. Cost as predicted: **+1 417 chars (14 384→15 901),
+      +0 elements** — a `doc` attaches as the requirement's documentation property,
+      not a counted model element in MSOSA. Subsystem-requirement docs stay stripped
+      (adding all 47 would be +7 k chars, back near the char cap).
     - **File roles now:** `model.sysml` = authoritative full model (all pillars);
       `candidates.sysml` = data (`DroneCandidates`, resolves to model.sysml);
       `model_community_balanced.sysml` = lean CATIA export (`DroneSystemModel_Community`,

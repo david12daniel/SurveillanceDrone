@@ -1,4 +1,4 @@
-// MINIFIED CATIA/MSOSA export — comments/docs stripped; Analysis/Views/UseCases omitted; component data attributes (cost/mass/power/specs) and cost/power rollups stripped (they carry no values here — the :>> bindings live in candidates.sysml — and are pure element cost). Kept: parts, ports, connects, interfaces, satisfy, requirements, behavior, software register. Authoritative source is model.sysml (all pillars, full docs); regenerate from it — do not hand-edit. MODEL_ISSUES.md §C30.
+// MINIFIED CATIA/MSOSA export — // comments stripped; Analysis/Views/UseCases omitted; component data attributes (cost/mass/power/specs) and cost/power rollups stripped (they carry no values here — the :>> bindings live in candidates.sysml — and are pure element cost). Kept: parts, ports, connects, interfaces, satisfy, requirements (system-level R1–R8/R3_1/R3_2 carry their doc text; subsystem-requirement docs stripped for budget), behavior, software register. Authoritative source is model.sysml (all pillars, full docs); regenerate from it — do not hand-edit. MODEL_ISSUES.md §C30.
 package DroneSystemModel_Community {
  private import ScalarValues::*;
  private import SI::*;
@@ -8,24 +8,34 @@ package DroneSystemModel_Community {
  private import ISQElectromagnetism::*;
  package Requirements {
  requirement R1 {
+ doc /* The system shall operate at a nominal cruising altitude relative to ground level between 90 meters and 120 meters. */
  }
  requirement R2 {
+ doc /* The drone shall maintain a steady ground speed of 2.23 meters/second. */
  }
  requirement R3 {
+ doc /* At nominal cruising altitude (90m to 120m AGL), the thermal imaging system shall enable a remote operator to detect and classify heat signatures to distinguish deer, turkey, other animals, and humans under clear-night conditions with a minimum target-to-background temperature differential of 5°C. */
  }
  requirement R3_1 {
+ doc /* Detection: A human operator viewing the live video feed shall be able to identify the presence of a deer-, turkey-, or human-sized heat source at 120m AGL with a confidence level of at least 90%. */
  }
  requirement R3_2 {
+ doc /* Classification: A human operator viewing the live video feed shall be able to correctly classify a detected heat source as deer, turkey, other animal, or human at 90m AGL with a confidence level of at least 80%. */
  }
  requirement R4 {
+ doc /* The total cost for the entire integrated system shall be under $2,500. */
  }
  requirement R5 {
+ doc /* The system shall minimize DIY soldering. */
  }
  requirement R6 {
+ doc /* Minimum sustained flight time: 30 minutes in non-wind (0 m/s) conditions. */
  }
  requirement R7 {
+ doc /* Minimum linear distance during surveillance: 2800 meters when performing surveillance at 2.2 m/s in sustained wind conditions of 4.5 m/s. */
  }
  requirement R8 {
+ doc /* Stretch Goal: sustained flight time of 60 minutes in non-wind (0 m/s) conditions. */
  }
  package CameraRequirements {
  requirement R3_CAM_WT {
