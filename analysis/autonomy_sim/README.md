@@ -1,5 +1,7 @@
 # Autonomy loop — SITL/mock validation harness
 
+> **Live development moved to its own repo: [`../../../DroneMissionApp`](../../../DroneMissionApp)** (capability **D-2**, `github.com/david12daniel/DroneMissionApp`). This directory is the **frozen de-risking prototype** that proved the AUTO→GUIDED→AUTO control contract; ongoing mission-app work happens in that repo. (2026-07-12)
+
 De-risks the **UC-5 control contract** (the AUTO→GUIDED→AUTO mission loop) from
 [`behavior.sysml`](../../behavior.sysml) *before* any computer-vision work, and
 gives the onboard mission app a home. The thermal detector is injected, so this
