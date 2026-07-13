@@ -410,6 +410,8 @@ package DroneSystemModel_Community {
  interface connect rxAntennaB.rf_out to rx.rf_in_b;
  interface connect wifiTx.rf_out_a to wifiAntennaA.rf_in;
  interface connect wifiTx.rf_out_b to wifiAntennaB.rf_in;
+ connection swRouterToFc connect sbc.mavlinkRouter.fc to platform.fcSoftware.sbc_mav;
+ allocate swRouterToFc to sbcMavUart;
  view Drone : DS_Views::SymbolicViews::iv;
  }
  part def Operator;
@@ -437,6 +439,8 @@ package DroneSystemModel_Community {
  connection connect drone.wifiAntennaA.rf_out to gcs.openHDAntennaA.rf_in;
  connection connect drone.wifiAntennaB.rf_out to gcs.openHDAntennaB.rf_in;
  connection connect gcs.charger.charge_pwr_out to drone.battery.charge_pwr_in;
+ connection swFcToGcs connect drone.platform.fcSoftware.gcs_mav to gcs.viewingComputer.gcsApp.mav;
+ allocate swFcToGcs to elrsTelemetry;
  view AerialObservationSystem : DS_Views::SymbolicViews::iv;
  }
  }

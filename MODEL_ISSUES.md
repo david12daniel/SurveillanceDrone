@@ -835,8 +835,11 @@ any tool previously.
     target them. **SysML learned:** `allocate <connection> to <interface>`
     validates in Syside; a part *usage* can add its own `port`s alongside its
     `:>>` redefinitions. All clean in Syside (only the standing `DS_Views` errors
-    remain). **Cap impact on the export:** +11 elements (354→**365**, ≪ 500) and
-    +290 chars (15 901→**16 191**, ≪ ~22 k) — both comfortably under. Typed item
+    remain). **Cap impact on the export:** +15 elements (354→**369**, ≪ 500) and
+    +550 chars (15 901→**16 452**, ≪ ~22 k) — both comfortably under. (NB: the
+    first scripted pass silently dropped the two cross-component connections
+    because their insertion anchors were the `totalPower`/`totalCost` rollups,
+    which had already been stripped from the lean export; caught + fixed.) Typed item
     flows (MavlinkStream/VideoFrame/Detections) were deliberately NOT added — the
     ports are untyped to keep the element count down; the "what flows" is in the
     port names + model.sysml doc comments. Not in candidates.sysml (schema only).
