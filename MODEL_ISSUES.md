@@ -818,6 +818,29 @@ any tool previously.
       no Analysis/Views/UseCases). `behavior.sysml`, `test.sysml`, and the CATIA
       backup are gone.
 
+31. **DECISION (2026-07-12) — software interconnection layer added (`Architecture::
+    Software` register parts now have ports + connections + allocations).** Per
+    David: gave the six software items MAVLink/inference ports and wired them, in
+    both `model.sysml` (full, doc'd) and `model_community_balanced.sysml` (lean).
+    **SBC-internal (on-board IPC, no wire):** `missionApp.mav ↔ mavlinkRouter.app`;
+    `missionApp.infer ↔ rknnRuntime.infer` (the Detector seam); `allocate
+    thermalModel to rknnRuntime` (the .rknn is executed by the runtime).
+    **Cross-component MAVLink, each allocated to the physical bearer it rides:**
+    `sbc.mavlinkRouter.fc ↔ platform.fcSoftware.sbc_mav` (in `Drone`) **allocated
+    to the named `sbcMavUart` interface** (the FC↔SBC UART, `sbc_dta↔uart_dta`);
+    `drone.platform.fcSoftware.gcs_mav ↔ gcs.viewingComputer.gcsApp.mav` (in
+    `AerialObservationSystem`) **allocated to the named `elrsTelemetry` link**
+    (carries FC telemetry + the SBC's STATUSTEXT alerts to QGC). The two
+    previously-unnamed physical interfaces were **named** so the allocations can
+    target them. **SysML learned:** `allocate <connection> to <interface>`
+    validates in Syside; a part *usage* can add its own `port`s alongside its
+    `:>>` redefinitions. All clean in Syside (only the standing `DS_Views` errors
+    remain). **Cap impact on the export:** +11 elements (354→**365**, ≪ 500) and
+    +290 chars (15 901→**16 191**, ≪ ~22 k) — both comfortably under. Typed item
+    flows (MavlinkStream/VideoFrame/Detections) were deliberately NOT added — the
+    ports are untyped to keep the element count down; the "what flows" is in the
+    port names + model.sysml doc comments. Not in candidates.sysml (schema only).
+
 ---
 
 ## D. Candidate data gaps & uncertainties (from the source CSVs)

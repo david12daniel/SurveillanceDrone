@@ -1,4 +1,4 @@
-// MINIFIED CATIA/MSOSA export — // comments stripped; Analysis/Views/UseCases omitted; component data attributes (cost/mass/power/specs) and cost/power rollups stripped (they carry no values here — the :>> bindings live in candidates.sysml — and are pure element cost). Kept: parts, ports, connects, interfaces, satisfy, requirements (system-level R1–R8/R3_1/R3_2 carry their doc text; subsystem-requirement docs stripped for budget), behavior, software register. Authoritative source is model.sysml (all pillars, full docs); regenerate from it — do not hand-edit. MODEL_ISSUES.md §C30.
+// MINIFIED CATIA/MSOSA export — // comments stripped; Analysis/Views/UseCases omitted; component data attributes (cost/mass/power/specs) and cost/power rollups stripped (they carry no values here — the :>> bindings live in candidates.sysml — and are pure element cost). Kept: parts, ports, connects, interfaces, satisfy, requirements (system-level R1–R8/R3_1/R3_2 carry their doc text; subsystem-requirement docs stripped for budget), behavior, software register + interconnections. Authoritative source is model.sysml (all pillars, full docs); regenerate from it — do not hand-edit. MODEL_ISSUES.md §C30/§C31.
 package DroneSystemModel_Community {
  private import ScalarValues::*;
  private import SI::*;
@@ -209,6 +209,8 @@ package DroneSystemModel_Community {
   :>> version = ">= 4.5";
   :>> license = "GPLv3";
   :>> status = Software::SwStatus::EXISTS;
+  port sbc_mav;
+  port gcs_mav;
  }
  satisfy R4_AF_PAYLOAD;
  satisfy R4_AF_WT;
@@ -243,18 +245,23 @@ package DroneSystemModel_Community {
   :>> version = "2.x";
   :>> license = "Rockchip (free redistribution)";
   :>> status = Software::SwStatus::EXISTS;
+  port infer;
  }
  part mavlinkRouter : Software::SoftwareItem {
   :>> productName = "mavlink-router";
   :>> version = "current";
   :>> license = "Apache-2.0";
   :>> status = Software::SwStatus::EXISTS;
+  port app;
+  port fc;
  }
  part missionApp : Software::SoftwareItem {
   :>> productName = "Onboard mission application (D-2)";
   :>> version = "0.1 skeleton (analysis/autonomy_sim)";
   :>> license = "project-developed";
   :>> status = Software::SwStatus::TO_DEVELOP;
+  port mav;
+  port infer;
  }
  part thermalModel : Software::SoftwareItem {
   :>> productName = "LWIR wildlife detect/classify model (D-1)";
@@ -264,6 +271,9 @@ package DroneSystemModel_Community {
   satisfy R3_1;
   satisfy R3_2;
  }
+ connect missionApp.mav to mavlinkRouter.app;
+ connect missionApp.infer to rknnRuntime.infer;
+ allocate thermalModel to rknnRuntime;
  satisfy R4_SBC_PWR;
  satisfy R4_SBC_WT;
  satisfy R4_SBC_COST;
@@ -389,7 +399,7 @@ package DroneSystemModel_Community {
  interface connect platform.rx_pwr_dta to rx.pwr_dta;
  interface connect platform.vtx_pwr_vid_dta to vtx.pwr_vid_dta;
  interface connect platform.cam_pwr_vid to fpvCam.pwr_vid;
- interface connect platform.sbc_dta to sbc.uart_dta;
+ interface sbcMavUart connect platform.sbc_dta to sbc.uart_dta;
  interface connect sbc.usba1_pwr_vid to camera.usb_pwr_vid;
  interface fpvCamToFc : Compatibility::VideoLink connect fpvCam.pwr_vid.vid to platform.cam_pwr_vid.vid;
  interface fcToVtx : Compatibility::VideoLink connect platform.vtx_pwr_vid_dta.vid to vtx.pwr_vid_dta.vid;
@@ -415,13 +425,14 @@ package DroneSystemModel_Community {
   :>> version = "4.4+";
   :>> license = "Apache-2.0 / GPLv3";
   :>> status = Software::SwStatus::EXISTS;
+  port mav;
  }
  }
  part def AerialObservationSystem {
  part drone : Drone;
  part gcs : GCS;
  connection connect drone.vtxAntenna.rf_out to gcs.groundAntenna.rf_in;
- connection connect gcs.laptopLink.rf_out to drone.rxAntennaA.rf_in;
+ connection elrsTelemetry connect gcs.laptopLink.rf_out to drone.rxAntennaA.rf_in;
  connection connect gcs.rcTx.rf_out to drone.rxAntennaB.rf_in;
  connection connect drone.wifiAntennaA.rf_out to gcs.openHDAntennaA.rf_in;
  connection connect drone.wifiAntennaB.rf_out to gcs.openHDAntennaB.rf_in;

@@ -602,6 +602,8 @@ package DroneSystemModel {
   :>> version = ">= 4.5";
   :>> license = "GPLv3";
   :>> status = Software::SwStatus::EXISTS;
+  port sbc_mav;   // MAVLink to the SBC mavlink-router (rides the sbc_dta UART)
+  port gcs_mav;   // MAVLink telemetry to the GCS (rides the ELRS link)
  }
 
  satisfy R4_AF_PAYLOAD;
@@ -702,12 +704,15 @@ package DroneSystemModel {
   :>> version = "2.x";
   :>> license = "Rockchip (free redistribution)";
   :>> status = Software::SwStatus::EXISTS;
+  port infer;   // frames in / detections out (to missionApp); executes thermalModel
  }
  part mavlinkRouter : Software::SoftwareItem {
   :>> productName = "mavlink-router";
   :>> version = "current";
   :>> license = "Apache-2.0";
   :>> status = Software::SwStatus::EXISTS;
+  port app;   // MAVLink to the mission app (localhost)
+  port fc;    // MAVLink to the FC (rides the uart_dta UART)
  }
  part missionApp : Software::SoftwareItem {
   doc /* D-2: onboard mission application — the software realization of
@@ -720,6 +725,8 @@ package DroneSystemModel {
   :>> version = "0.1 skeleton (analysis/autonomy_sim)";
   :>> license = "project-developed";
   :>> status = Software::SwStatus::TO_DEVELOP;
+  port mav;     // MAVLink to the router (commands out / telemetry in)
+  port infer;   // frames out / detections in (the Detector seam, to rknnRuntime)
  }
  part thermalModel : Software::SoftwareItem {
   doc /* D-1: LWIR wildlife detection/classification model (640x512; deer /
@@ -734,6 +741,12 @@ package DroneSystemModel {
   satisfy R3_1;
   satisfy R3_2;
  }
+
+ // ── SBC-internal software interconnections (MODEL_ISSUES.md §C31) ──
+ // On-board IPC (localhost) — no physical wire; the mission app is the hub.
+ connect missionApp.mav to mavlinkRouter.app;      // MAVLink app <-> router
+ connect missionApp.infer to rknnRuntime.infer;    // frames out / detections in (Detector seam)
+ allocate thermalModel to rknnRuntime;             // the .rknn is loaded + executed by the runtime
 
  satisfy R4_SBC_PWR;
  satisfy R4_SBC_WT;
@@ -1139,7 +1152,7 @@ package DroneSystemModel {
  interface connect platform.rx_pwr_dta to rx.pwr_dta;
  interface connect platform.vtx_pwr_vid_dta to vtx.pwr_vid_dta;
  interface connect platform.cam_pwr_vid to fpvCam.pwr_vid;
- interface connect platform.sbc_dta to sbc.uart_dta;
+ interface sbcMavUart connect platform.sbc_dta to sbc.uart_dta;
  // --- Video-format compatibility across the bundled connectors (nested vid sub-ports)
  interface fpvCamToFc : Compatibility::VideoLink connect fpvCam.pwr_vid.vid to platform.cam_pwr_vid.vid;   // FPV cam -> FC OSD
  interface fcToVtx : Compatibility::VideoLink connect platform.vtx_pwr_vid_dta.vid to vtx.pwr_vid_dta.vid;  // FC OSD -> VTX
@@ -1156,6 +1169,11 @@ package DroneSystemModel {
  // --- OpenHD air antennas (2x MIMO), mounted on the drone
  interface connect wifiTx.rf_out_a to wifiAntennaA.rf_in;
  interface connect wifiTx.rf_out_b to wifiAntennaB.rf_in;
+
+ // --- Software MAVLink over the FC<->SBC UART: mavlink-router <-> ArduPilot,
+ //     allocated to the physical UART it rides on (MODEL_ISSUES.md §C31).
+ connection swRouterToFc connect sbc.mavlinkRouter.fc to platform.fcSoftware.sbc_mav;
+ allocate swRouterToFc to sbcMavUart;
 
  // Derived total electrical load (SBC handles onboard recording, no separate DVR)
  attribute totalPower : PowerValue =
@@ -1194,6 +1212,7 @@ package DroneSystemModel {
   :>> version = "4.4+";
   :>> license = "Apache-2.0 / GPLv3";
   :>> status = Software::SwStatus::EXISTS;
+  port mav;   // MAVLink to the FC (rides the ELRS telemetry link)
  }
  }
 
@@ -1207,13 +1226,19 @@ package DroneSystemModel {
  // Video downlink: drone analog VTX antenna → 5.8 GHz ground patch → analog VRX
  connection connect drone.vtxAntenna.rf_out to gcs.groundAntenna.rf_in;
  // ELRS control + telemetry (2.4 GHz, over air): the diversity antennas hear the dongle and the handheld
- connection connect gcs.laptopLink.rf_out to drone.rxAntennaA.rf_in;
+ connection elrsTelemetry connect gcs.laptopLink.rf_out to drone.rxAntennaA.rf_in;
  connection connect gcs.rcTx.rf_out to drone.rxAntennaB.rf_in;
  // Phase 2+: OpenHD digital thermal downlink: drone air antennas → ground antennas → OpenHD RX
  connection connect drone.wifiAntennaA.rf_out to gcs.openHDAntennaA.rf_in;
  connection connect drone.wifiAntennaB.rf_out to gcs.openHDAntennaB.rf_in;
  // Ground operations only: the bench charger charges the drone battery between flights.
  connection connect gcs.charger.charge_pwr_out to drone.battery.charge_pwr_in;
+
+ // --- Software MAVLink FC <-> GCS: ArduPilot telemetry <-> QGroundControl,
+ //     allocated to the ELRS link it rides on. Carries drone telemetry down and
+ //     the SBC's STATUSTEXT detection alerts (via the FC). MODEL_ISSUES.md §C31.
+ connection swFcToGcs connect drone.platform.fcSoftware.gcs_mav to gcs.viewingComputer.gcsApp.mav;
+ allocate swFcToGcs to elrsTelemetry;
 
  // Derived total acquisition cost (per-drone flight system).
  // The laptop (gcs.viewingComputer) and bench charger (gcs.charger) are support/enabling
