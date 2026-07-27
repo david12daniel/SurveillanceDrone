@@ -844,6 +844,104 @@ any tool previously.
     ports are untyped to keep the element count down; the "what flows" is in the
     port names + model.sysml doc comments. Not in candidates.sysml (schema only).
 
+32. **DECISION (2026-07-13) — item-flow layer added to `model.sysml` (typed
+    messages/flows on every connection).** Per David: document *all* the messages
+    and flows in the system as first-class SysML v2, where each transfer has a
+    from, a to, and the connection it rides over. This **supersedes the C31
+    deferral** ("typed item flows deliberately NOT added") — but **only in
+    `model.sysml`**. `model_community_balanced.sysml` is **left untouched** and
+    deliberately continues to omit this layer to stay under the CATIA Community
+    ~500-element cap (David's explicit instruction). When regenerating the lean
+    export, **strip the `Flows` package, the port item features, the nested
+    signal sub-ports, and every `flow`** — the balanced export keeps only the
+    untyped-port + named-connection form from C31.
+    **What was added (all in `Architecture`):**
+    - A new **`package Flows`** with 7 payload `item def`s — physical carriers
+      `ElectricalPower` / `RfSignal` / `VideoSignal`, and logical messages
+      `MavlinkData` / `CrsfData` / `GnssData` / `InferenceData` — plus the
+      data-bearing `port def`s (`PowerOut`/`PowerIn`, `MavlinkSerial`,
+      `CrsfSerial`, `GnssSerial`, `InferClient`/`InferServer`).
+    - **Directed `in`/`out` item features** added to the existing `Compatibility`
+      power/video/RF port defs (e.g. `VideoSourcePort { …; out video : VideoSignal; }`).
+    - **Nested signal sub-ports** on the combined physical connectors (a plug that
+      carries 9 V + video + UART now exposes `pwr` / `vid` / data sub-ports),
+      extending the pre-existing nested-`vid` idiom.
+    - A **named `flow` inside the body of every connection** it rides over —
+      `interface camToSbc : VideoLink connect … { flow thermalVideo from
+      camera.…vid.video to sbc.…vid.video; }` — covering power buses, the video
+      chain, the ELRS/OpenHD RF hops, GNSS, CRSF, the MAVLink UART/RF/localhost
+      links, and the SBC detector seam (~50 flows total).
+    **SysML v2 constructs used (all validated clean in Syside via the live LSP):**
+    the `flow <name> from <out feature> to <in feature>;` form **written inside a
+    connection body** (the official-release idiom — the flow's owning connection
+    *is* the one it flows over); directed item features on port defs; and **port
+    conjugation** (`~Flows::GnssSerial`) for one-way sink sides. Only the standing
+    `DS_Views` reference errors remain. See the `Flows` banner comment in
+    `model.sysml` and item 31 above for the layered (physical bearer ← logical
+    message) relationship that the software `allocate`s already expressed.
+    - **Follow-up (2026-07-13) — SBC frame-capture delegation.** Reviewing the
+      MSOSA diagram, the SBC software was internally wired but had no link to the
+      SBC's own I/O ports — so the Detector-seam "frames" had no visible source.
+      Added a `frameIn : VideoSinkPort` to `missionApp` and a **port-delegation
+      connector** `uvcToApp` from `usba1_pwr_vid.vid` to `missionApp.frameIn`,
+      closing the pipeline camera → usba1 (UVC) → missionApp → infer seam →
+      rknnRuntime. It is a *delegation* (boundary-in → child-in), so it carries
+      **no own `flow`** (a flow can't go `in`→`in`; the VideoSignal already flows
+      onto usba1 via `camToSbc`). Unlike the rest of the C32 item-flow layer, this
+      single structural connection **WAS added to `model_community_balanced.sysml`
+      too** (per David) — it's a plain connector, ~2 elements, no cap concern.
+    - **Follow-up 2 (2026-07-13) — MAVLink FC↔SBC re-routed through the physical
+      UART (supersedes C31's `swRouterToFc`).** David: "the mavlink SW doesn't
+      directly interface with the FC." Correct — `mavlink-router` opens the SBC's
+      serial device and writes bytes onto the UART; there is no direct IPC to
+      ArduPilot. So the direct SW-to-SW `swRouterToFc` (`sbc.mavlinkRouter.fc ↔
+      platform.fcSoftware.sbc_mav`, allocated to `sbcMavUart`) and its allocate
+      were **removed**, replaced by two **port delegations**: `routerToUart`
+      (`mavlinkRouter.fc → uart_dta`, in `SBCPayload`) and `fcMavToUart`
+      (`fcSoftware.sbc_mav → sbc_dta`, in `Airframe`). The end-to-end MAVLink is
+      now continuous through the hardware — `mavlinkRouter.fc → uart_dta →
+      [sbcMavUart wire, carries the MavlinkData flows] → sbc_dta →
+      fcSoftware.sbc_mav` — with no fictitious direct software link. Applied to
+      **both** `model.sysml` and the balanced export.
+    - **Follow-up 3 (2026-07-13) — MAVLink FC↔GCS re-routed through the physical
+      ELRS chain (supersedes C31's `swFcToGcs`).** Same treatment as follow-up 2,
+      for the telemetry link. Removed the direct `swFcToGcs` (`fcSoftware.gcs_mav
+      ↔ gcsApp.mav`, allocated to `elrsTelemetry`) and replaced it with two
+      delegations onto the physical chain that was already fully wired:
+      `fcTelemToRx` (`fcSoftware.gcs_mav → rx_pwr_dta`, in `Airframe` — MAVLink is
+      tunneled MAVLink-over-CRSF to the ELRS RX; in `model.sysml` it targets the
+      `.crsf` sub-port the `telemToRx` flow already rides) and `gcsMavFromDongle`
+      (`gcsApp.mav → usb_elrs_pwr_dta`, in `Laptop` — QGC reads it from the ELRS
+      USB dongle; `.mav` sub-port in `model.sysml`). The end-to-end telemetry path
+      is now continuous through hardware: `fcSoftware.gcs_mav → rx_pwr_dta →
+      [rxLink] → rx → [rxRfA/elrsTelemetry RF] → laptopLink dongle → [elrsDongleUsb]
+      → usb_elrs_pwr_dta → gcsApp.mav`, the RX and dongle being the (implicit)
+      CRSF↔RF↔USB tunneling hardware. Applied to **both** files. With this, **no
+      software register port crosses a device boundary via a fictitious direct
+      link** — every SW port delegates to the physical port it uses. (`model.sysml`
+      targets the typed `.crsf`/`.mav` sub-ports; the balanced export, which omits
+      the flow-layer sub-ports, delegates to the bare `rx_pwr_dta`/`usb_elrs_pwr_dta`
+      connectors.)
+    - **Follow-up 4 (2026-07-13) — balanced export element-budget trims (~497 →
+      ~438).** The delegations above pushed the lean export to ~3 elements under
+      the CATIA Community ~500-element cap. Per David ("keep all pillars, trim
+      fat"), two **balanced-only** cuts were applied (model.sysml keeps
+      everything): (1) **deferred Phase-4/OpenHD hardware omitted** — `OhdWifiTx`,
+      `OhdGndRx`, the wifi/openHD antenna usages, their ports/`satisfy`, and the
+      OpenHD connects (SBC `usba2_pwr_dta`, Laptop `usb_ohd_pwr_dta`); it is a
+      non-committed future capability (Phase 1–3 unaffected). (2) **software-register
+      attributes stripped** — the `SoftwareItem` def's 4 attributes + `SwStatus`
+      enum + all 24 `:>>` product/version/license/status bindings; the usage names
+      (`mavlinkRouter`, `missionApp`, …) still carry identity, and the values live
+      in `model.sysml`. Together ~59 fewer elements → ~62 of headroom. **Held back**
+      (offered, not applied): collapsing the RX diversity antennas `rxAntennaA/B`
+      to one (~5 more) — after Phase-4 removal that pair is the model's distinct
+      primary-dongle vs backup-handheld path, a real feature not worth losing for 5
+      elements when the target was already met. Requirements still satisfied (the
+      OpenHD `satisfy R4_GCS_VIDEO_DISP/RANGE` were redundant with `Vrx`/`Antenna`).
+      The export header comment + this file are the record of what the lean export
+      now omits; regeneration must reapply these cuts.
+
 ---
 
 ## D. Candidate data gaps & uncertainties (from the source CSVs)
@@ -914,6 +1012,23 @@ any tool previously.
 ---
 
 ## F. Architectural changes
+
+14. **DECISION (2026-07-27) — R3 operating condition reworded night → daytime.**
+    David confirmed the concept flies **daytime**, not at night: the thermal camera
+    detects/classifies by IR signature, which works in daylight, so night operation
+    is not required. `R3`'s doc text was changed from *"under clear-night conditions"*
+    to *"under clear daytime conditions"* (the ≥ 5 °C target-to-background differential
+    is unchanged). Propagated to every source artifact: `model.sysml` (R3),
+    `REQUIREMENTS_EXPORT_26_06_30.md` (R3 + §3.9), and the AI data-collection notes in
+    `analysis/software_by_component.md` (D1.1) / `analysis/software_gap_analysis.md`;
+    `analysis/requirements_traceability.csv` was regenerated from the model. **Not yet
+    regenerated (David's action):** the SysON **Requirements Table View** PNG
+    (`system_level_requirements.png`) — it is rendered from the model in SysON and lives
+    in SysON's project DB, so it must be re-exported by hand and re-dropped into
+    `presentation/assets/diagrams/` before the CDR deck's slide 6 shows the new wording.
+    **Engineering note to validate:** daytime thermal contrast can be *lower* than at
+    night (solar loading warms the background), so the ≥ 5 °C differential is the
+    condition to confirm during field thermal capture (D1.1).
 
 13. **DECISION (2026-07-05) — DVR removed; SBC moved to Phase 2.**
 

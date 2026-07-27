@@ -1,0 +1,52 @@
+requirement_id,package,doc_summary,phase,subsets_parent,subsets_root,satisfied_by
+R1,Requirements,The system shall operate at a nominal cruising altitude relative to ground level between 90 meters and 120 meters.,Phase1,,,
+R1_BHV_ALT_HOLD,Requirements,"The autonomous flight behavior (waypoint AUTO-mode route execution) shall hold the vehicle's actual altitude within the commanded 90-120m AGL survey band throughout the cruise phase of the sortie, correcting for wind and terrain variation.",Phase1,R1,R1,flyRoute
+R2,Requirements,The drone shall maintain a steady ground speed of 2.23 meters/second.,Phase1,,,
+R2_BHV_SPEED_HOLD,Requirements,"The autonomous flight behavior (waypoint AUTO-mode route execution) shall hold the vehicle's actual ground speed at 2.23 m/s throughout the cruise phase of the sortie, correcting for sustained wind up to 4.5 m/s (R7).",Phase1,R2,R2,flyRoute
+R3,Requirements,"At nominal cruising altitude (90m to 120m AGL), the thermal imaging system shall enable a remote operator to detect and classify heat signatures to distinguish deer, turkey, other animals, and humans under clear daytime conditions with a minimum target-to-background temperature differential of 5°C.",Phase3,,,
+R3_1,Requirements,"Detection: A human operator viewing the live video feed shall be able to identify the presence of a deer-, turkey-, or human-sized heat source at 120m AGL with a confidence level of at least 90%.",Phase3,,,thermalModel
+R3_2,Requirements,"Classification: A human operator viewing the live video feed shall be able to correctly classify a detected heat source as deer, turkey, other animal, or human at 90m AGL with a confidence level of at least 80%.",Phase3,,,thermalModel
+R3_CAM_COST,CameraRequirements,The camera subsystem cost shall not exceed 600 USD.,Phase2,R4,R4,IRCamera
+R3_CAM_FOV,CameraRequirements,The camera shall provide a horizontal field of view of at least 30 degrees.,Phase2,R3,R3,IRCamera
+R3_CAM_IF,CameraRequirements,The camera shall output analog CVBS or digital video (HDMI / CSI / USB) compatible with the selected SBC or VTX video input port.,Phase2,,,IRCamera
+R3_CAM_NETD,CameraRequirements,The thermal sensor NETD (noise equivalent temperature difference) shall not exceed 50mK.,Phase2,R3,R3,IRCamera
+R3_CAM_PWR,CameraRequirements,The camera subsystem shall consume no more than 4.5W average during continuous operation.,Phase2,,,IRCamera
+R3_CAM_RES,CameraRequirements,"The thermal sensor shall provide sufficient spatial resolution such that at 90m AGL a 0.5m x 0.5m target occupies at least 4 contiguous pixels in each dimension, enabling Johnson-criteria recognition.",Phase2,R3,R3,IRCamera
+R3_CAM_WT,CameraRequirements,The camera subsystem (sensor + lens + housing + cabling) shall not exceed 200g total mass.,Phase2,,,IRCamera
+R4,Requirements,"The total cost for the entire integrated system shall be under $2,500.",Phase2,,,
+R4_AF_ASSY,AirframeSubsystem,"The airframe assembly shall minimize DIY soldering, preferring pre-soldered power distribution boards, plug-in connectors, and screw-terminal motor connections.",Phase1,R5,R5,Airframe
+R4_AF_COST,AirframeSubsystem,The complete airframe subsystem cost (frame + motors + ESCs + propellers + power distribution) shall not cause the system total cost to exceed 2500 USD (R4).,Phase2,R4,R4,Airframe
+R4_AF_LANDING,AirframeSubsystem,The airframe shall provide landing gear or structural clearance of at least 30mm below the lowest payload component to prevent ground contact during landing and takeoff.,Phase2,,,Airframe
+R4_AF_PAYLOAD,AirframeSubsystem,"The airframe (frame + motors + ESCs + propellers + power distribution) shall have sufficient payload capacity to carry the combined mass of all onboard subsystems (battery, camera, SBC, cabling) while maintaining stable flight.",Phase2,,,Airframe
+R4_AF_PROP_CFG,AirframeSubsystem,The airframe shall accommodate propeller diameters and motor mounting patterns suitable for efficient cruise at 2.23 m/s and 90-120m AGL.,Phase1,"R1, R2",R1,Airframe
+R4_AF_PWR_DIST,AirframeSubsystem,"The airframe's power distribution wiring and connectors shall supply regulated voltage to the payload subsystems (camera, SBC) and unfiltered battery voltage to the ESCs.",Phase2,,,Airframe
+R4_AF_STIFF,AirframeSubsystem,The airframe structure shall be sufficiently rigid to prevent vibration-induced degradation of thermal image quality during cruise.,Phase2,R3,R3,Airframe
+R4_AF_WT,AirframeSubsystem,"The bare airframe mass (frame only, excluding motors, ESCs, and propellers) shall leave adequate margin such that the total takeoff mass does not exceed 80% of the airframe's rated maximum takeoff mass.",Phase2,,,Airframe
+R4_BAT_COST,BatterySubsystem,"The battery cost, when summed with all other subsystem costs, shall not cause the system total cost to exceed 2500 USD (R4).",Phase2,R4,R4,Battery
+R4_BAT_DISCHARGE,BatterySubsystem,The battery shall sustain continuous discharge at the system maximum current draw without triggering the airframe ESC's low-voltage cutoff or causing voltage sag that degrades flight performance.,Phase2,,,Battery
+R4_BAT_ENERGY,BatterySubsystem,"The battery shall store sufficient usable energy such that, when combined with the system total power draw as computed by FlightTimeCalc, the minimum sustained flight time of 1800 seconds (R6) is achieved.",Phase2,R6,R6,Battery
+R4_BAT_ENERGY_STRETCH,BatterySubsystem,The battery shall store sufficient usable energy such that the stretch-goal sustained flight time of 3600 seconds (R8) is achievable.,Phase2,R8,R8,Battery
+R4_BAT_IF,BatterySubsystem,The battery connector and form factor shall be physically compatible with the selected airframe's power input leads and battery mounting bay.,Phase1,,,"AntiSparkFilter, Battery"
+R4_BAT_VOLT,BatterySubsystem,"The battery nominal voltage shall be within the operating input voltage range of the airframe's flight controller, ESC, and payload voltage regulators.",Phase1,,,Battery
+R4_BAT_WT,BatterySubsystem,The battery mass shall not exceed the payload capacity of the selected airframe when combined with all other onboard subsystems.,Phase2,,,Battery
+R4_GCS_BAT,GCSSubsystem,"The GCS shall operate on internal battery power for a duration matching or exceeding the drone's maximum planned flight time, without requiring external AC power during field operation.",Phase1,,,GCS
+R4_GCS_COST,GCSSubsystem,"The GCS cost, when summed with all other subsystem costs, shall not cause the system total cost to exceed 2500 USD (R4).",Phase2,R4,R4,GCS
+R4_GCS_CTRL,GCSSubsystem,"The GCS shall provide flight control inputs (throttle, roll, pitch, yaw, arming, flight mode selection) with sufficient latency and resolution for safe manual operation at 2800m range.",Phase1,,,"GCS, RcTx"
+R4_GCS_IF,GCSSubsystem,The GCS receiver and transmitter shall be compatible with the drone's video transmitter and telemetry radio operating frequencies and protocols.,Phase1,,,GCS
+R4_GCS_RANGE,GCSSubsystem,The GCS control link and video receiver shall maintain a reliable connection with the drone at a slant range of at least 2800 meters under clear line-of-sight conditions.,Phase1,R7,R7,"Antenna, GCS, OhdGndRx, OhdWifiTx"
+R4_GCS_TELEM,GCSSubsystem,"The GCS display shall present real-time drone telemetry data (altitude, position, battery voltage, heading, speed) to the operator.",Phase1,,,"GCS, RcTx, gcsApp, monitorMission"
+R4_GCS_VIDEO_DISP,GCSSubsystem,"The GCS display shall render the thermal video feed at sufficient resolution, brightness, and size such that the operator can perform detection (R3.1) and classification (R3.2) tasks.",Phase4,R3,R3,"GCS, OhdGndRx, OhdWifiTx, Vrx"
+R4_GCS_WT,GCSSubsystem,"The GCS system (transmitter, display, antennas, battery) shall be portable and hand-held for field operation.",Phase1,,,GCS
+R4_SBC_COST,SBCSubsystem,The SBC cost shall not exceed 150 USD.,Phase2,R4,R4,SBCPayload
+R4_SBC_DATA_AF,SBCSubsystem,The SBC shall exchange telemetry and status data with the flight controller (airframe) through the data_af interface.,Phase3,,,"SBCPayload, mavlinkRouter"
+R4_SBC_PWR,SBCSubsystem,The SBC shall consume no more than 10W average during continuous operation at cruise.,Phase3,,,SBCPayload
+R4_SBC_TEMP,SBCSubsystem,The SBC shall operate within the full environmental temperature range of the drone system without active cooling.,Phase3,,,SBCPayload
+R4_SBC_VIDEO_IN,SBCSubsystem,The SBC shall accept a video input from the thermal camera that matches the camera's video output format.,Phase2,,,SBCPayload
+R4_SBC_VIDEO_PROC,SBCSubsystem,The SBC shall process the incoming video stream for live transmission to the ground control station without introducing a processing delay that degrades the operator's ability to detect and classify targets per R3.1 and R3.2.,Phase4,R3,R3,SBCPayload
+R4_SBC_WT,SBCSubsystem,The SBC (board + cabling + any enclosure) shall not exceed 100g total mass.,Phase2,,,SBCPayload
+R5,Requirements,The system shall minimize DIY soldering.,Phase2,,,
+R6,Requirements,Minimum sustained flight time: 30 minutes in non-wind (0 m/s) conditions.,Phase2,,,
+R6_BHV_RTL_RESERVE,Requirements,"The autonomous flight behavior shall command an automatic return-to-launch (RTL) when usable battery energy reaches a return-energy reserve threshold sufficient to guarantee the vehicle can return to the launch point and land before energy is depleted. Reserve threshold value: TBD (open policy decision, tracked separately from this requirement's existence).",Phase1,R6,R6,"executeRtl, fcSoftware"
+R7,Requirements,Minimum linear distance during surveillance: 2800 meters when performing surveillance at 2.2 m/s in sustained wind conditions of 4.5 m/s.,Phase2,,,
+R7_BHV_LINKLOSS_RTL,Requirements,"The autonomous flight behavior shall command an automatic return-to-launch (RTL) when the control link (ELRS) is lost beyond the flight controller's failsafe timeout, so a surveillance sortie fails safe rather than continuing uncommanded.",Phase1,R7,R7,"executeRtl, fcSoftware"
+R8,Requirements,Stretch Goal: sustained flight time of 60 minutes in non-wind (0 m/s) conditions.,Phase2,,,

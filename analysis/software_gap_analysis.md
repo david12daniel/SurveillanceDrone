@@ -59,7 +59,7 @@ No off-the-shelf deer/turkey/human classifier exists for 640×512 LWIR. This car
 
 - **Approach:** fine-tune a small object detector (YOLO-family) on thermal wildlife imagery, export ONNX → convert to `.rknn` for the NPU.
 - **Model:** Ultralytics YOLOv8n/YOLO11n (nano) is the pragmatic default for a 6-TOPS NPU at video rate. **License caveat: Ultralytics is AGPL-3.0** — fine for personal/hobbyist use, but it "infects" redistribution; YOLOv5 (also AGPL) or a permissively-licensed reimplementation are alternatives if that ever matters.
-- **Data sources (bootstrapping):** Teledyne **FLIR ADAS** thermal dataset (person/animal, research license), **BIRDSAI** (thermal wildlife, aerial, CC), plus **self-collected** deer/turkey thermal clips — expect this to be the real effort. Augment with rotation/scale to cover the 90–120 m altitude range and the ≥ 5 °C differential (R3) night condition.
+- **Data sources (bootstrapping):** Teledyne **FLIR ADAS** thermal dataset (person/animal, research license), **BIRDSAI** (thermal wildlife, aerial, CC), plus **self-collected** deer/turkey thermal clips — expect this to be the real effort. Augment with rotation/scale to cover the 90–120 m altitude range and the ≥ 5 °C differential (R3) daytime condition.
 - **Two operating points, one model:** R3_1 is *presence* at 120 m (favor recall); R3_2 is *species* at 90 m (favor per-class precision). The model runs at both altitudes; the mission app applies the two confidence thresholds (`detectThreshold = 0.90`, `classifyThreshold = 0.80`) already in the model.
 - **Verification:** this is where the R3_1/R3_2 percentages get earned — a held-out thermal test set + field demonstration per the requirements export §4 (Demonstration).
 

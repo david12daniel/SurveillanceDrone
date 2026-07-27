@@ -111,7 +111,7 @@ Status keys: ✅ built & tested in [`autonomy_sim/`](autonomy_sim/) · ◐ parti
 
 | ID | Work item | Notes |
 |---|---|---|
-| D1.1 | Data collection plan + rig | deer/turkey/human LWIR clips, 90–120 m look-down, ≥5 °C clear nights — **start now; longest lead** |
+| D1.1 | Data collection plan + rig | deer/turkey/human LWIR clips, 90–120 m look-down, daytime with ≥5 °C thermal contrast — **start now; longest lead** |
 | D1.2 | Bootstrap dataset assembly | FLIR ADAS + BIRDSAI subsets; class mapping to deer/turkey/other/human |
 | D1.3 | Labeling + augmentation pipeline | boxes; scale/rot/contrast augmentation across the altitude band |
 | D1.4 | Training pipeline | YOLO-nano fine-tune → ONNX (Ultralytics AGPL caveat) |

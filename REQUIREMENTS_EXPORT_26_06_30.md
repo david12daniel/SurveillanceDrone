@@ -64,7 +64,7 @@ Flight states within any phase: **disarmed/idle, armed, takeoff, cruise (2.23 m/
 - **R8** *(stretch)* — Sustained flight time of 60 minutes in non-wind (0 m/s) conditions.
 
 #### 3.2.2 Thermal detection & classification
-- **R3** — At nominal cruising altitude (90 m to 120 m AGL), the thermal imaging system shall enable a remote operator to detect and classify heat signatures to distinguish deer, turkey, other animals, and humans under clear-night conditions with a minimum target-to-background temperature differential of 5 °C.
+- **R3** — At nominal cruising altitude (90 m to 120 m AGL), the thermal imaging system shall enable a remote operator to detect and classify heat signatures to distinguish deer, turkey, other animals, and humans under clear daytime conditions with a minimum target-to-background temperature differential of 5 °C.
 - **R3_1** — *Detection:* a human operator viewing the live video feed shall be able to identify the presence of a deer-, turkey-, or human-sized heat source at 120 m AGL with a confidence level of at least 90%.
 - **R3_2** — *Classification:* a human operator viewing the live video feed shall be able to correctly classify a detected heat source as deer, turkey, other animal, or human at 90 m AGL with a confidence level of at least 80%.
 - **R3_CAM_FOV** *(⊆R3)* — The camera shall provide a horizontal field of view of at least 30 degrees.
@@ -128,7 +128,7 @@ packet rate. No site-specific data tables beyond operator-defined routes.
 *Not formally specified (single-operator hobbyist system).* Considerations for future capture: control-link integrity (ELRS), protection of recorded footage on removable media, and applicable airspace/wildlife-observation regulations.
 
 ### 3.9 System environment requirements
-- Operation under **clear-night** conditions with a **≥ 5 °C** target-to-background differential (**R3**).
+- Operation under **clear daytime** conditions with a **≥ 5 °C** target-to-background differential (**R3**).
 - Sustained **wind to 4.5 m/s** during surveillance (**R7**).
 - **R4_SBC_TEMP** — The SBC shall operate within the full environmental temperature range of the drone system without active cooling.
 

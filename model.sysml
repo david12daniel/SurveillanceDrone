@@ -33,13 +33,25 @@ package DroneSystemModel {
  @PhaseTag { phase = Phase::Phase1; }
  }
 
+ requirement R1_BHV_ALT_HOLD {
+ doc /* The autonomous flight behavior (waypoint AUTO-mode route execution) shall hold the vehicle's actual altitude within the commanded 90-120m AGL survey band throughout the cruise phase of the sortie, correcting for wind and terrain variation. */
+ @PhaseTag { phase = Phase::Phase1; }
+ subsets R1;
+ }
+
  requirement R2 {
  doc /* The drone shall maintain a steady ground speed of 2.23 meters/second. */
  @PhaseTag { phase = Phase::Phase1; }
  }
 
+ requirement R2_BHV_SPEED_HOLD {
+ doc /* The autonomous flight behavior (waypoint AUTO-mode route execution) shall hold the vehicle's actual ground speed at 2.23 m/s throughout the cruise phase of the sortie, correcting for sustained wind up to 4.5 m/s (R7). */
+ @PhaseTag { phase = Phase::Phase1; }
+ subsets R2;
+ }
+
  requirement R3 {
- doc /* At nominal cruising altitude (90m to 120m AGL), the thermal imaging system shall enable a remote operator to detect and classify heat signatures to distinguish deer, turkey, other animals, and humans under clear-night conditions with a minimum target-to-background temperature differential of 5°C. */
+ doc /* At nominal cruising altitude (90m to 120m AGL), the thermal imaging system shall enable a remote operator to detect and classify heat signatures to distinguish deer, turkey, other animals, and humans under clear daytime conditions with a minimum target-to-background temperature differential of 5°C. */
  @PhaseTag { phase = Phase::Phase3; } // fulfilled by onboard inference + telemetry alerts in the committed build (David 2026-07-09; see MODEL_ISSUES.md)
  }
 
@@ -68,9 +80,21 @@ package DroneSystemModel {
  @PhaseTag { phase = Phase::Phase2; } // binds at the full-mission-payload configuration (final mass/power = Phase 2)
  }
 
+ requirement R6_BHV_RTL_RESERVE {
+ doc /* The autonomous flight behavior shall command an automatic return-to-launch (RTL) when usable battery energy reaches a return-energy reserve threshold sufficient to guarantee the vehicle can return to the launch point and land before energy is depleted. Reserve threshold value: TBD (open policy decision, tracked separately from this requirement's existence). */
+ @PhaseTag { phase = Phase::Phase1; }
+ subsets R6;
+ }
+
  requirement R7 {
  doc /* Minimum linear distance during surveillance: 2800 meters when performing surveillance at 2.2 m/s in sustained wind conditions of 4.5 m/s. */
  @PhaseTag { phase = Phase::Phase2; }
+ }
+
+ requirement R7_BHV_LINKLOSS_RTL {
+ doc /* The autonomous flight behavior shall command an automatic return-to-launch (RTL) when the control link (ELRS) is lost beyond the flight controller's failsafe timeout, so a surveillance sortie fails safe rather than continuing uncommanded. */
+ @PhaseTag { phase = Phase::Phase1; }
+ subsets R7;
  }
 
  requirement R8 {
@@ -337,11 +361,13 @@ package DroneSystemModel {
  port def PowerSourcePort {
  attribute cells_s : ScalarValues::Integer;
  attribute connector : String;                  // battery discharge connector (XT60 / XT90 / EC5)
+ out power : Flows::ElectricalPower;             // the DC power this source delivers
  }
  port def PowerSinkPort {
  attribute minCells_s : ScalarValues::Integer;
  attribute maxCells_s : ScalarValues::Integer;
  attribute connector : String;                  // airframe battery-lead connector
+ in power : Flows::ElectricalPower;              // the DC power this sink draws
  }
 
  // Compatibility predicate (boolean body — no trailing ';').
@@ -392,8 +418,8 @@ package DroneSystemModel {
  HDZERO;
  WALKSNAIL;
  }
- port def VideoSourcePort { attribute format : VideoFormat; }
- port def VideoSinkPort { attribute format : VideoFormat; }
+ port def VideoSourcePort { attribute format : VideoFormat; out video : Flows::VideoSignal; }
+ port def VideoSinkPort { attribute format : VideoFormat; in video : Flows::VideoSignal; }
  constraint def VideoFormatCompatible {
  in src : VideoFormat;
  in snk : VideoFormat;
@@ -419,8 +445,8 @@ package DroneSystemModel {
  GHZ_2_4;
  MHZ_900;
  }
- port def RfSourcePort { attribute band : RfBand; }
- port def RfSinkPort { attribute band : RfBand; }
+ port def RfSourcePort { attribute band : RfBand; out rf : Flows::RfSignal; }
+ port def RfSinkPort { attribute band : RfBand; in rf : Flows::RfSignal; }
  constraint def RfBandCompatible {
  in src : RfBand;
  in snk : RfBand;
@@ -434,6 +460,40 @@ package DroneSystemModel {
  in snk = sink.band;
  }
  }
+ }
+
+ // ════════════════════════════════════════════════════════════════════
+ // Item-flow layer  (added 2026-07-13, MODEL_ISSUES.md §C32)
+ // ════════════════════════════════════════════════════════════════════
+ // Documents WHAT moves across the physical/logical connections declared
+ // in Drone / GCS / AerialObservationSystem. Each transfer is a named
+ // `flow` written inside the body of the connection it rides over, from a
+ // source `out` feature to a sink `in` feature. Payloads are typed by the
+ // item defs below; the directed item features live on the Compatibility
+ // power/video/RF port defs and on the message sub-ports declared here.
+ package Flows {
+
+ // ── Physical carriers ──
+ item def ElectricalPower;   // DC power over a wire, USB bus power, or charge lead
+ item def RfSignal;          // modulated radio energy over an antenna / the air gap
+ item def VideoSignal;       // video frames (signal format carried by the port's VideoFormat)
+
+ // ── Logical messages / serial data ──
+ item def MavlinkData;       // MAVLink 2 (FC <-> SBC UART, FC <-> GCS link, router <-> app)
+ item def CrsfData;          // ELRS / CRSF control uplink + telemetry (RX <-> FC)
+ item def GnssData;          // u-blox UBX / NMEA position fix (GPS -> FC)
+ item def InferenceData;     // thermal frames + detection results (SBC detector seam)
+
+ // ── Directed signal sub-ports for the data-bearing plugs ──
+ // (the Compatibility power/video/RF port defs already carry their own
+ //  in/out item features; these cover the UART / USB-data connectors.)
+ port def PowerOut { out power : ElectricalPower; }
+ port def PowerIn  { in  power : ElectricalPower; }
+ port def MavlinkSerial { out txMav : MavlinkData; in rxMav : MavlinkData; }   // bidirectional UART
+ port def CrsfSerial    { out txCrsf : CrsfData;  in rxCrsf : CrsfData; }      // bidirectional (control up / telem down)
+ port def GnssSerial    { out fix : GnssData; }                               // GPS -> FC (one-way)
+ port def InferClient   { out frames : InferenceData; in detections : InferenceData; }  // mission-app side of the seam
+ port def InferServer   { in  frames : InferenceData; out detections : InferenceData; }  // runtime side of the seam
  }
 
  part def Battery {
@@ -457,7 +517,7 @@ package DroneSystemModel {
  attribute height_mm : ScalarValues::Real;
 
  port pwr_out : Compatibility::PowerSourcePort;   // XT60 discharge lead
- port charge_pwr_in;   // charge/balance lead from the bench charger (ground ops)
+ port charge_pwr_in : Flows::PowerIn;   // charge/balance lead from the bench charger (ground ops)
 
  satisfy R4_BAT_VOLT;
  satisfy R4_BAT_ENERGY;
@@ -506,7 +566,7 @@ package DroneSystemModel {
  attribute acIntegrated : Boolean;                 // built-in AC PSU (no external supply needed)
 
  port ac_pwr_in;        // AC mains input
- port charge_pwr_out;   // DC charge lead to the battery pack
+ port charge_pwr_out : Flows::PowerOut;   // DC charge lead to the battery pack
 
  doc /* Bench battery charger — ground-support (enabling) equipment. Must support the
  pack's chemistry (Li-ion AND LiPo), cell count (6S), and connector (XT60), with enough
@@ -524,8 +584,8 @@ package DroneSystemModel {
  attribute inputCellsMin_s : ScalarValues::Integer;
  attribute inputCellsMax_s : ScalarValues::Integer;
 
- port pwr_in;    // taps raw VBAT from the FC breakout pad
- port pwr_out;   // regulated 12V to the SBC USB-C
+ port pwr_in : Flows::PowerIn;    // taps raw VBAT from the FC breakout pad
+ port pwr_out : Flows::PowerOut;  // regulated 12V to the SBC USB-C
 
  doc /* Dedicated 2-6S -> 12V UBEC that powers the SBC directly off the battery. The FC's
  5V BEC cannot feed the ~10 W SBC, and raw 6S peaks above the M5's 20 V USB-C input ceiling,
@@ -582,29 +642,47 @@ package DroneSystemModel {
  // Combined plugs carry power + video + data on one connector; the name lists what it carries.
  // Internal BEC rails: 5V 2.5A feeds the GPS+RX plugs; 9V 2A feeds the VTX+cam plugs.
  port battery_pwr_in : Compatibility::PowerSinkPort;  // XT60 from the anti-spark
- port vbat_pwr_out;      // raw VBAT breakout pad -> UBEC
- port gps_pwr_dta;       // 4-pin GPS plug: 5V + UART
- port rx_pwr_dta;        // 6-pin RX plug: 5V + UART (control uplink + telemetry)
+ port vbat_pwr_out : Flows::PowerOut;   // raw VBAT breakout pad -> UBEC
+ port gps_pwr_dta {      // 4-pin GPS plug: 5V + UART
+  port pwr : Flows::PowerOut;         // 5V to the GPS
+  port gnss : ~Flows::GnssSerial;     // position fix in from the GPS
+ }
+ port rx_pwr_dta {       // 6-pin RX plug: 5V + UART (control uplink + telemetry)
+  port pwr : Flows::PowerOut;      // 5V to the RX
+  port crsf : Flows::CrsfSerial;   // CRSF control down / telemetry up
+ }
  port vtx_pwr_vid_dta {  // 5-pin VTX plug: 9V + video + smartaudio UART
+  port pwr : Flows::PowerOut;                  // 9V to the VTX
   port vid : Compatibility::VideoSourcePort;   // FC OSD video out to the VTX
  }
  port cam_pwr_vid {      // FPV cam pads: 9V + analog video-in
+  port pwr : Flows::PowerOut;                  // 9V to the FPV camera
   port vid : Compatibility::VideoSinkPort;     // FPV camera video in to the FC OSD
  }
- port sbc_dta;           // spare UART pads: MAVLink to the SBC (data only)
+ port sbc_dta : Flows::MavlinkSerial;   // spare UART pads: MAVLink to the SBC (data only)
 
  // FC firmware — implements ALL flight functions F1–F14 (software_by_component.md §2):
  // stabilization, EKF, AUTO waypoints @2.23 m/s, GUIDED external control, CRSF/ELRS,
- // telemetry, OSD, logging. The FS_*/BATT_* failsafe parameter VALUES realize the
- // two open SSS §3.7 failsafe requirements (config-as-requirement).
+ // telemetry, OSD, logging. The FS_*/BATT_* failsafe parameter VALUES realize
+ // R6_BHV_RTL_RESERVE / R7_BHV_LINKLOSS_RTL (config-as-requirement).
  part fcSoftware : Software::SoftwareItem {
   :>> productName = "ArduPilot ArduCopter";
   :>> version = ">= 4.5";
   :>> license = "GPLv3";
   :>> status = Software::SwStatus::EXISTS;
-  port sbc_mav;   // MAVLink to the SBC mavlink-router (rides the sbc_dta UART)
-  port gcs_mav;   // MAVLink telemetry to the GCS (rides the ELRS link)
+  port sbc_mav : Flows::MavlinkSerial;   // MAVLink to the SBC mavlink-router (rides the sbc_dta UART)
+  port gcs_mav : Flows::MavlinkSerial;   // MAVLink telemetry to the GCS (rides the ELRS link)
+  satisfy R6_BHV_RTL_RESERVE;
+  satisfy R7_BHV_LINKLOSS_RTL;
  }
+
+ // The FC firmware reaches the SBC over the physical UART, not a direct SW link:
+ // its MAVLink port delegates to the sbc_dta pads (which wire to the SBC uart_dta).
+ interface fcMavToUart connect fcSoftware.sbc_mav to sbc_dta;
+ // FC telemetry to the GCS is tunneled MAVLink-over-CRSF to the ELRS RX (rx_pwr_dta),
+ // then over the ELRS RF link — it is NOT a direct SW link to QGC. Delegates to the
+ // same CRSF plug the telemToRx flow already rides.
+ interface fcTelemToRx connect fcSoftware.gcs_mav to rx_pwr_dta.crsf;
 
  satisfy R4_AF_PAYLOAD;
  satisfy R4_AF_WT;
@@ -643,6 +721,7 @@ package DroneSystemModel {
  attribute detectionRange : LengthValue;    // est. human/animal detection [m]
 
  port usb_pwr_vid {   // USB-C to the SBC: bus power in + UVC video out (one cable)
+  port pwr : Flows::PowerIn;                 // 5V bus power from the SBC
   port vid : Compatibility::VideoSourcePort;
  }
 
@@ -690,12 +769,16 @@ package DroneSystemModel {
  attribute videoProtocolOut : String;                 // "RTSP H.264 → GCS (optional)"
  attribute recordingFormat : String;                  // "MP4/H.264 → NVMe or SD"
 
- port usbc_pwr_in;    // USB-C power in (from the 12V UBEC)
+ port usbc_pwr_in : Flows::PowerIn;   // USB-C power in (from the 12V UBEC)
  port usba1_pwr_vid {  // USB-A #1: bus power out + UVC video in (thermal camera)
+  port pwr : Flows::PowerOut;               // 5V bus power to the thermal camera
   port vid : Compatibility::VideoSinkPort;
  }
- port usba2_pwr_dta;  // USB-A #2: bus power out + data (OpenHD air module, Phase 4)
- port uart_dta;       // GPIO UART: MAVLink to the FC
+ port usba2_pwr_dta {  // USB-A #2: bus power out + data (OpenHD air module, Phase 4)
+  port pwr : Flows::PowerOut;                  // 5V bus power to the air unit
+  port vid : Compatibility::VideoSourcePort;   // encoded thermal video to the air unit
+ }
+ port uart_dta : Flows::MavlinkSerial;   // GPIO UART: MAVLink to the FC
 
  // ── SBC software stack (software_by_component.md §3) ──
  // The two TO_DEVELOP items below are the project's ENTIRE development scope.
@@ -704,15 +787,16 @@ package DroneSystemModel {
   :>> version = "2.x";
   :>> license = "Rockchip (free redistribution)";
   :>> status = Software::SwStatus::EXISTS;
-  port infer;   // frames in / detections out (to missionApp); executes thermalModel
+  port infer : Flows::InferServer;   // frames in / detections out (to missionApp); executes thermalModel
  }
  part mavlinkRouter : Software::SoftwareItem {
   :>> productName = "mavlink-router";
   :>> version = "current";
   :>> license = "Apache-2.0";
   :>> status = Software::SwStatus::EXISTS;
-  port app;   // MAVLink to the mission app (localhost)
-  port fc;    // MAVLink to the FC (rides the uart_dta UART)
+  port app : Flows::MavlinkSerial;   // MAVLink to the mission app (localhost)
+  port fc : Flows::MavlinkSerial;    // MAVLink to the FC (rides the uart_dta UART)
+  satisfy R4_SBC_DATA_AF;
  }
  part missionApp : Software::SoftwareItem {
   doc /* D-2: onboard mission application — the software realization of
@@ -725,8 +809,9 @@ package DroneSystemModel {
   :>> version = "0.1 skeleton (analysis/autonomy_sim)";
   :>> license = "project-developed";
   :>> status = Software::SwStatus::TO_DEVELOP;
-  port mav;     // MAVLink to the router (commands out / telemetry in)
-  port infer;   // frames out / detections in (the Detector seam, to rknnRuntime)
+  port frameIn : Compatibility::VideoSinkPort;   // UVC thermal frames captured from the usba1 port
+  port mav : Flows::MavlinkSerial;     // MAVLink to the router (commands out / telemetry in)
+  port infer : Flows::InferClient;   // frames out / detections in (the Detector seam, to rknnRuntime)
  }
  part thermalModel : Software::SoftwareItem {
   doc /* D-1: LWIR wildlife detection/classification model (640x512; deer /
@@ -742,10 +827,25 @@ package DroneSystemModel {
   satisfy R3_2;
  }
 
- // ── SBC-internal software interconnections (MODEL_ISSUES.md §C31) ──
+ // ── SBC-internal software interconnections (MODEL_ISSUES.md §C31/§C32) ──
+ // Thermal frames arriving on the usba1 UVC port are delegated to the mission
+ // app's capture input — the physical SOURCE of the Detector-seam frames below.
+ // Port delegation — no own flow: the VideoSignal already flows onto usba1 (camToSbc)
+ // and this connector hands that same input to the mission app.
+ interface uvcToApp connect usba1_pwr_vid.vid to missionApp.frameIn;
+ // The mavlink-router owns the SBC's physical UART — it does NOT interface with
+ // the FC directly. Its FC-facing port delegates to uart_dta and the MAVLink
+ // rides the uart_dta<->sbc_dta wire (sbcMavUart) to the FC (delegation, no flow).
+ interface routerToUart connect mavlinkRouter.fc to uart_dta;
  // On-board IPC (localhost) — no physical wire; the mission app is the hub.
- connect missionApp.mav to mavlinkRouter.app;      // MAVLink app <-> router
- connect missionApp.infer to rknnRuntime.infer;    // frames out / detections in (Detector seam)
+ connection appToRouter connect missionApp.mav to mavlinkRouter.app {   // MAVLink app <-> router
+  flow appToRouterMav from missionApp.mav.txMav to mavlinkRouter.app.rxMav;
+  flow routerToAppMav from mavlinkRouter.app.txMav to missionApp.mav.rxMav;
+ }
+ connection detectorSeam connect missionApp.infer to rknnRuntime.infer {   // frames out / detections in (Detector seam)
+  flow frameFeed from missionApp.infer.frames to rknnRuntime.infer.frames;
+  flow detectionFeed from rknnRuntime.infer.detections to missionApp.infer.detections;
+ }
  allocate thermalModel to rknnRuntime;             // the .rknn is loaded + executed by the runtime
 
  satisfy R4_SBC_PWR;
@@ -780,6 +880,7 @@ package DroneSystemModel {
  attribute goggleCompatibility : String;
 
  port pwr_vid {   // cam pads to FC: power in + analog video out
+  port pwr : Flows::PowerIn;                 // 9V from the FC
   port vid : Compatibility::VideoSourcePort;
  }
 
@@ -809,8 +910,11 @@ package DroneSystemModel {
  attribute firmware : String;                         // e.g. "u-blox M10 HPG 1.32 (factory)"
  attribute outputProtocol : String;                   // "UBX binary" / "NMEA 0183"
 
- port pwr_dta;     // 4-pin plug to FC: 5V power in + UART
- port gnss_rf_in;  // GNSS antenna (satellite RF in)
+ port pwr_dta {    // 4-pin plug to FC: 5V power in + UART
+  port pwr : Flows::PowerIn;      // 5V from the FC
+  port gnss : Flows::GnssSerial;  // position fix out to the FC
+ }
+ port gnss_rf_in : Compatibility::RfSinkPort;  // GNSS antenna (satellite RF in)
 
  doc /* GPS module providing position, velocity, and time data to the flight controller. Critical for return-to-home and autonomous waypoint navigation (Phase 1+). May be pre-installed with some airframe packages. */
  }
@@ -839,7 +943,10 @@ package DroneSystemModel {
  attribute includedWithAirframe : Boolean;
  attribute telemetryCapable : Boolean = true; // ELRS handles bidirectional RC + telemetry over one RF link
 
- port pwr_dta;   // plug to FC: 5V power in + UART (control out + telemetry in, one link)
+ port pwr_dta {   // plug to FC: 5V power in + UART (control out + telemetry in, one link)
+  port pwr : Flows::PowerIn;       // 5V from the FC
+  port crsf : Flows::CrsfSerial;   // CRSF control down / telemetry up
+ }
  port rf_in_a : Compatibility::RfSinkPort;   // 2.4 GHz true-diversity antenna A
  port rf_in_b : Compatibility::RfSinkPort;   // 2.4 GHz true-diversity antenna B
 
@@ -875,7 +982,7 @@ package DroneSystemModel {
  attribute telemetryCapable : Boolean = true; // ELRS TX module receives telemetry and pipes to GCS via USB
 
  port user_controls;   // operator sticks/switches (human input)
- port telem_dta_out;   // USB to the laptop: telemetry/joystick data
+ port telem_dta_out : Flows::MavlinkSerial;   // USB to the laptop: telemetry/joystick data
  port rf_out : Compatibility::RfSourcePort;   // 2.4 GHz antenna to the drone RX
 
  satisfy R4_GCS_CTRL;
@@ -906,6 +1013,7 @@ package DroneSystemModel {
  attribute includedWithAirframe : Boolean;
 
  port pwr_vid_dta {   // 5-pin plug to FC: 9V power in + video in + smartaudio UART
+  port pwr : Flows::PowerIn;                // 9V from the FC
   port vid : Compatibility::VideoSinkPort;
  }
  port rf_out : Compatibility::RfSourcePort;   // 5.8 GHz antenna
@@ -954,6 +1062,7 @@ package DroneSystemModel {
 
  port vid_in : Compatibility::VideoSinkPort;   // analog video from the VRX (CVBS)
  port usb_pwr_dta {   // USB to the laptop: bus power in + UVC video out
+  port pwr : Flows::PowerIn;                 // USB bus power from the laptop
   port vid : Compatibility::VideoSourcePort;
  }
 
@@ -972,7 +1081,10 @@ package DroneSystemModel {
  attribute extraHardwareNeeded : String;
 
  port rf_out : Compatibility::RfSourcePort;  // 2.4 GHz antenna to the drone RX
- port usb_pwr_dta;     // USB to the laptop (bus power + data)
+ port usb_pwr_dta {    // USB to the laptop (bus power + data)
+  port pwr : Flows::PowerIn;
+  port mav : Flows::MavlinkSerial;
+ }
 
  doc /* Ground-side ELRS USB dongle: plugs into the GCS laptop and provides the
  PRIMARY bidirectional control + telemetry link for Phase 1+ autonomous operation,
@@ -996,7 +1108,10 @@ package DroneSystemModel {
  attribute driverName : String;                   // DKMS driver package name
  attribute power : PowerValue;      // estimated power draw at max TX [W]
 
- port usb_pwr_dta;                                // USB from SBC USB-A #2 (bus power + data)
+ port usb_pwr_dta {                               // USB from SBC USB-A #2 (bus power + data)
+  port pwr : Flows::PowerIn;                 // 5V bus power from the SBC
+  port vid : Compatibility::VideoSinkPort;   // encoded thermal video from the SBC
+ }
  port rf_out_a : Compatibility::RfSourcePort;     // u.fl MIMO chain A -> air antenna A
  port rf_out_b : Compatibility::RfSourcePort;     // u.fl MIMO chain B -> air antenna B
 
@@ -1027,7 +1142,10 @@ package DroneSystemModel {
 
  port rf_in_a : Compatibility::RfSinkPort;         // ground antenna A
  port rf_in_b : Compatibility::RfSinkPort;         // ground antenna B
- port usb_pwr_dta;                                 // USB to the laptop (bus power + video data)
+ port usb_pwr_dta {                                // USB to the laptop (bus power + video data)
+  port pwr : Flows::PowerIn;                 // USB bus power from the laptop
+  port vid : Compatibility::VideoSourcePort; // decoded thermal video to the laptop
+ }
 
  satisfy R4_GCS_VIDEO_DISP;
  satisfy R4_GCS_RANGE;
@@ -1086,16 +1204,37 @@ package DroneSystemModel {
  part charger : Charger;
 
  // Internal GCS wiring. openHDAntennaA/B are the GROUND antennas (Foxeer Echo) feeding the ground RX.
- connect groundAntenna.rf_out to videoRx.rf_in;                     // patch antenna → analog VRX
- connect openHDAntennaA.rf_out to openHDRx.rf_in_a;                 // ground antenna A → OpenHD RX
- connect openHDAntennaB.rf_out to openHDRx.rf_in_b;                 // ground antenna B → OpenHD RX
- interface vrxToCapture : Compatibility::VideoLink connect videoRx.vid_out to capture.vid_in;  // analog VRX (CVBS) → USB capture
+ interface gndVideoRf connect groundAntenna.rf_out to videoRx.rf_in {                     // patch antenna → analog VRX
+  flow fpvVideoRf from groundAntenna.rf_out.rf to videoRx.rf_in.rf;
+ }
+ interface gndOhdRfA connect openHDAntennaA.rf_out to openHDRx.rf_in_a {                  // ground antenna A → OpenHD RX
+  flow ohdVideoRxA from openHDAntennaA.rf_out.rf to openHDRx.rf_in_a.rf;
+ }
+ interface gndOhdRfB connect openHDAntennaB.rf_out to openHDRx.rf_in_b {                  // ground antenna B → OpenHD RX
+  flow ohdVideoRxB from openHDAntennaB.rf_out.rf to openHDRx.rf_in_b.rf;
+ }
+ interface vrxToCapture : Compatibility::VideoLink connect videoRx.vid_out to capture.vid_in {  // analog VRX (CVBS) → USB capture
+  flow analogVideo from videoRx.vid_out.video to capture.vid_in.video;
+ }
  // Each laptop USB device on its own host port
- connect capture.usb_pwr_dta to viewingComputer.usb_cap_pwr_dta;    // capture dongle → laptop (USB)
- interface capToLaptop : Compatibility::VideoLink connect capture.usb_pwr_dta.vid to viewingComputer.usb_cap_pwr_dta.vid;  // UVC video → laptop
- connect openHDRx.usb_pwr_dta to viewingComputer.usb_ohd_pwr_dta;   // OpenHD thermal video → laptop
- connect laptopLink.usb_pwr_dta to viewingComputer.usb_elrs_pwr_dta;// PRIMARY control + telemetry → laptop
- connect rcTx.telem_dta_out to viewingComputer.usb_radio_dta;       // BACKUP telemetry → laptop
+ interface captureUsb connect capture.usb_pwr_dta to viewingComputer.usb_cap_pwr_dta {    // capture dongle → laptop (USB)
+  flow captureBusPower from viewingComputer.usb_cap_pwr_dta.pwr.power to capture.usb_pwr_dta.pwr.power;
+ }
+ interface capToLaptop : Compatibility::VideoLink connect capture.usb_pwr_dta.vid to viewingComputer.usb_cap_pwr_dta.vid {  // UVC video → laptop
+  flow uvcVideo from capture.usb_pwr_dta.vid.video to viewingComputer.usb_cap_pwr_dta.vid.video;
+ }
+ interface ohdGndUsb connect openHDRx.usb_pwr_dta to viewingComputer.usb_ohd_pwr_dta {   // OpenHD thermal video → laptop
+  flow ohdRxBusPower from viewingComputer.usb_ohd_pwr_dta.pwr.power to openHDRx.usb_pwr_dta.pwr.power;
+  flow ohdThermalToLaptop from openHDRx.usb_pwr_dta.vid.video to viewingComputer.usb_ohd_pwr_dta.vid.video;
+ }
+ interface elrsDongleUsb connect laptopLink.usb_pwr_dta to viewingComputer.usb_elrs_pwr_dta { // PRIMARY control + telemetry → laptop
+  flow elrsDongleBusPower from viewingComputer.usb_elrs_pwr_dta.pwr.power to laptopLink.usb_pwr_dta.pwr.power;
+  flow gcsToDongleMav from viewingComputer.usb_elrs_pwr_dta.mav.txMav to laptopLink.usb_pwr_dta.mav.rxMav;
+  flow dongleToGcsMav from laptopLink.usb_pwr_dta.mav.txMav to viewingComputer.usb_elrs_pwr_dta.mav.rxMav;
+ }
+ interface radioUsb connect rcTx.telem_dta_out to viewingComputer.usb_radio_dta {       // BACKUP telemetry → laptop
+  flow backupTelem from rcTx.telem_dta_out.txMav to viewingComputer.usb_radio_dta.rxMav;
+ }
 
  // Derived total GCS component cost (all ground-side hardware; laptop itself excluded as existing equipment)
  attribute subTotalCost : ScalarValues::Real =
@@ -1119,7 +1258,7 @@ package DroneSystemModel {
  existing equipment, excluded from procurement cost. */
 
  // CATIA MSOSA diagram binding (DS_Views library; does not resolve in Syside).
- view GCS : DS_Views::SymbolicViews::iv;
+
  }
 
  part def Drone {
@@ -1142,45 +1281,88 @@ package DroneSystemModel {
  part wifiAntennaB : Antenna;  // OpenHD air antenna B (cloverleaf)
 
  // --- Battery bus: battery -> anti-spark -> ESC/FC
- interface connect battery.pwr_out to antiSpark.pwr_in;
- interface batteryPwr : Compatibility::BatteryPowerInterface connect antiSpark.pwr_out to platform.battery_pwr_in;
+ interface batteryToFilter connect battery.pwr_out to antiSpark.pwr_in {
+  flow packDischarge from battery.pwr_out.power to antiSpark.pwr_in.power;   // pack discharge into the anti-spark
+ }
+ interface batteryPwr : Compatibility::BatteryPowerInterface connect antiSpark.pwr_out to platform.battery_pwr_in {
+  flow packPower from antiSpark.pwr_out.power to platform.battery_pwr_in.power;   // 6S pack power to the ESC/FC
+ }
  // UBEC taps raw VBAT from the FC breakout pad; SBC on its own 12V supply (NOT the FC BEC)
- interface connect platform.vbat_pwr_out to ubec.pwr_in;
- interface connect ubec.pwr_out to sbc.usbc_pwr_in;
+ interface ubecSupply connect platform.vbat_pwr_out to ubec.pwr_in {
+  flow vbatToUbec from platform.vbat_pwr_out.power to ubec.pwr_in.power;   // raw VBAT tap to the UBEC
+ }
+ interface sbcSupply connect ubec.pwr_out to sbc.usbc_pwr_in {
+  flow ubecToSbc from ubec.pwr_out.power to sbc.usbc_pwr_in.power;   // regulated 12 V to the SBC
+ }
  // --- FC peripheral plugs: each connect = ONE physical connector (power+video+data as named)
- interface connect platform.gps_pwr_dta to gps.pwr_dta;
- interface connect platform.rx_pwr_dta to rx.pwr_dta;
- interface connect platform.vtx_pwr_vid_dta to vtx.pwr_vid_dta;
- interface connect platform.cam_pwr_vid to fpvCam.pwr_vid;
- interface sbcMavUart connect platform.sbc_dta to sbc.uart_dta;
+ interface gpsLink connect platform.gps_pwr_dta to gps.pwr_dta {
+  flow gpsPower from platform.gps_pwr_dta.pwr.power to gps.pwr_dta.pwr.power;   // 5V to the GPS
+  flow gpsFix from gps.pwr_dta.gnss.fix to platform.gps_pwr_dta.gnss.fix;       // position fix to the FC
+ }
+ interface rxLink connect platform.rx_pwr_dta to rx.pwr_dta {
+  flow rxPower from platform.rx_pwr_dta.pwr.power to rx.pwr_dta.pwr.power;         // 5V to the RX
+  flow rcToFc from rx.pwr_dta.crsf.txCrsf to platform.rx_pwr_dta.crsf.rxCrsf;     // RC control uplink RX -> FC
+  flow telemToRx from platform.rx_pwr_dta.crsf.txCrsf to rx.pwr_dta.crsf.rxCrsf;  // telemetry FC -> RX
+ }
+ interface vtxPlug connect platform.vtx_pwr_vid_dta to vtx.pwr_vid_dta {
+  flow vtxPower from platform.vtx_pwr_vid_dta.pwr.power to vtx.pwr_vid_dta.pwr.power;   // 9V to the VTX
+ }
+ interface fpvCamPlug connect platform.cam_pwr_vid to fpvCam.pwr_vid {
+  flow fpvCamPower from platform.cam_pwr_vid.pwr.power to fpvCam.pwr_vid.pwr.power;     // 9V to the FPV cam
+ }
+ interface sbcMavUart connect platform.sbc_dta to sbc.uart_dta {
+  flow mavToSbc from platform.sbc_dta.txMav to sbc.uart_dta.rxMav;   // FC -> SBC (params, position, RC)
+  flow mavToFc  from sbc.uart_dta.txMav to platform.sbc_dta.rxMav;   // SBC -> FC (GUIDED setpoints, STATUSTEXT)
+ }
  // --- Video-format compatibility across the bundled connectors (nested vid sub-ports)
- interface fpvCamToFc : Compatibility::VideoLink connect fpvCam.pwr_vid.vid to platform.cam_pwr_vid.vid;   // FPV cam -> FC OSD
- interface fcToVtx : Compatibility::VideoLink connect platform.vtx_pwr_vid_dta.vid to vtx.pwr_vid_dta.vid;  // FC OSD -> VTX
- interface camToSbc : Compatibility::VideoLink connect camera.usb_pwr_vid.vid to sbc.usba1_pwr_vid.vid;     // thermal -> SBC (UVC)
+ interface fpvCamToFc : Compatibility::VideoLink connect fpvCam.pwr_vid.vid to platform.cam_pwr_vid.vid {   // FPV cam -> FC OSD
+  flow fpvVideo from fpvCam.pwr_vid.vid.video to platform.cam_pwr_vid.vid.video;
+ }
+ interface fcToVtx : Compatibility::VideoLink connect platform.vtx_pwr_vid_dta.vid to vtx.pwr_vid_dta.vid {  // FC OSD -> VTX
+  flow osdVideo from platform.vtx_pwr_vid_dta.vid.video to vtx.pwr_vid_dta.vid.video;
+ }
+ interface camToSbc : Compatibility::VideoLink connect camera.usb_pwr_vid.vid to sbc.usba1_pwr_vid.vid {   // thermal -> SBC (UVC)
+  flow thermalVideo from camera.usb_pwr_vid.vid.video to sbc.usba1_pwr_vid.vid.video;
+ }
  // --- Thermal on SBC USB-A #1 (one USB: bus power out + UVC video in)
- interface connect sbc.usba1_pwr_vid to camera.usb_pwr_vid;
+ interface thermalUsb connect sbc.usba1_pwr_vid to camera.usb_pwr_vid {
+  flow thermalBusPower from sbc.usba1_pwr_vid.pwr.power to camera.usb_pwr_vid.pwr.power;   // 5V bus power to the thermal cam
+ }
  // --- OpenHD air module on SBC USB-A #2 (Phase 4)
- interface connect sbc.usba2_pwr_dta to wifiTx.usb_pwr_dta;
+ interface ohdAirUsb connect sbc.usba2_pwr_dta to wifiTx.usb_pwr_dta {
+  flow ohdBusPower from sbc.usba2_pwr_dta.pwr.power to wifiTx.usb_pwr_dta.pwr.power;     // 5V bus power to the air unit
+  flow ohdVideoToAir from sbc.usba2_pwr_dta.vid.video to wifiTx.usb_pwr_dta.vid.video;  // encoded thermal video to the air unit
+ }
  // --- VTX analog video antenna
- interface connect vtx.rf_out to vtxAntenna.rf_in;
+ interface vtxRf connect vtx.rf_out to vtxAntenna.rf_in {
+  flow vtxVideoRf from vtx.rf_out.rf to vtxAntenna.rf_in.rf;   // 5.8 GHz analog FPV downlink onto the antenna
+ }
  // --- ELRS RX true-diversity antennas (2x) feed the receiver
- interface connect rxAntennaA.rf_out to rx.rf_in_a;
- interface connect rxAntennaB.rf_out to rx.rf_in_b;
+ interface rxRfA connect rxAntennaA.rf_out to rx.rf_in_a {
+  flow ctrlTelemRfA from rxAntennaA.rf_out.rf to rx.rf_in_a.rf;   // 2.4 GHz ELRS control+telem, diversity A
+ }
+ interface rxRfB connect rxAntennaB.rf_out to rx.rf_in_b {
+  flow ctrlTelemRfB from rxAntennaB.rf_out.rf to rx.rf_in_b.rf;   // 2.4 GHz ELRS control+telem, diversity B
+ }
  // --- OpenHD air antennas (2x MIMO), mounted on the drone
- interface connect wifiTx.rf_out_a to wifiAntennaA.rf_in;
- interface connect wifiTx.rf_out_b to wifiAntennaB.rf_in;
+ interface wifiRfA connect wifiTx.rf_out_a to wifiAntennaA.rf_in {
+  flow ohdVideoRfA from wifiTx.rf_out_a.rf to wifiAntennaA.rf_in.rf;   // OpenHD digital video, MIMO chain A
+ }
+ interface wifiRfB connect wifiTx.rf_out_b to wifiAntennaB.rf_in {
+  flow ohdVideoRfB from wifiTx.rf_out_b.rf to wifiAntennaB.rf_in.rf;   // OpenHD digital video, MIMO chain B
+ }
 
- // --- Software MAVLink over the FC<->SBC UART: mavlink-router <-> ArduPilot,
- //     allocated to the physical UART it rides on (MODEL_ISSUES.md §C31).
- connection swRouterToFc connect sbc.mavlinkRouter.fc to platform.fcSoftware.sbc_mav;
- allocate swRouterToFc to sbcMavUart;
+ // --- MAVLink FC<->SBC flows through the PHYSICAL UART (sbcMavUart above), not a
+ //     direct SW-to-SW link: mavlinkRouter.fc delegates to the SBC uart_dta and
+ //     fcSoftware.sbc_mav delegates to the FC sbc_dta (see routerToUart /
+ //     fcMavToUart in each part def). The MavlinkData flows live on sbcMavUart.
 
  // Derived total electrical load (SBC handles onboard recording, no separate DVR)
  attribute totalPower : PowerValue =
  platform.power + camera.power + fpvCam.power + gps.power + sbc.power + rx.power + vtx.power + wifiTx.power;
 
  // CATIA MSOSA diagram binding (DS_Views library; does not resolve in Syside).
- view Drone : DS_Views::SymbolicViews::iv;
+
  }
 
  // The human operator — external actor interacting with the ground control station.
@@ -1197,11 +1379,18 @@ package DroneSystemModel {
 
  // One USB host port per physically-attached device (via a hub in practice)
  port usb_cap_pwr_dta {  // analog video capture card (Phase 1): USB power + UVC video
+  port pwr : Flows::PowerOut;                // USB bus power to the capture dongle
   port vid : Compatibility::VideoSinkPort;
  }
- port usb_elrs_pwr_dta;  // ELRS telemetry dongle (Phase 1)
- port usb_ohd_pwr_dta;   // OpenHD ground RX (Phase 4)
- port usb_radio_dta;     // handheld radio telemetry/joystick
+ port usb_elrs_pwr_dta {  // ELRS telemetry dongle (Phase 1)
+  port pwr : Flows::PowerOut;
+  port mav : Flows::MavlinkSerial;
+ }
+ port usb_ohd_pwr_dta {  // OpenHD ground RX (Phase 4)
+  port pwr : Flows::PowerOut;
+  port vid : Compatibility::VideoSinkPort;
+ }
+ port usb_radio_dta : Flows::MavlinkSerial;     // handheld radio telemetry/joystick
 
  // GCS application (software_by_component.md §1) — covers route planning, mission
  // upload, telemetry/map display, FPV video, FC parameters/calibration, detection
@@ -1212,8 +1401,12 @@ package DroneSystemModel {
   :>> version = "4.4+";
   :>> license = "Apache-2.0 / GPLv3";
   :>> status = Software::SwStatus::EXISTS;
-  port mav;   // MAVLink to the FC (rides the ELRS telemetry link)
+  port mav : Flows::MavlinkSerial;   // MAVLink to the FC (rides the ELRS telemetry link)
+  satisfy R4_GCS_TELEM;
  }
+ // QGC receives telemetry from the ELRS USB dongle, not a direct SW link to the FC:
+ // its MAVLink port delegates to the usb_elrs_pwr_dta.mav sub-port.
+ interface gcsMavFromDongle connect gcsApp.mav to usb_elrs_pwr_dta.mav;
  }
 
  part def AerialObservationSystem {
@@ -1224,21 +1417,33 @@ package DroneSystemModel {
  // Wireless links between the drone and the ground station. Over-air RF terminates at the
  // ground antennas, which feed their receivers internally in GCS.
  // Video downlink: drone analog VTX antenna → 5.8 GHz ground patch → analog VRX
- connection connect drone.vtxAntenna.rf_out to gcs.groundAntenna.rf_in;
+ connection videoDownlinkRf connect drone.vtxAntenna.rf_out to gcs.groundAntenna.rf_in {
+  flow analogFpvDownlink from drone.vtxAntenna.rf_out.rf to gcs.groundAntenna.rf_in.rf;
+ }
  // ELRS control + telemetry (2.4 GHz, over air): the diversity antennas hear the dongle and the handheld
- connection elrsTelemetry connect gcs.laptopLink.rf_out to drone.rxAntennaA.rf_in;
- connection connect gcs.rcTx.rf_out to drone.rxAntennaB.rf_in;
+ connection elrsTelemetry connect gcs.laptopLink.rf_out to drone.rxAntennaA.rf_in {
+  flow elrsUplinkPrimary from gcs.laptopLink.rf_out.rf to drone.rxAntennaA.rf_in.rf;
+ }
+ connection ctrlUplinkBackupRf connect gcs.rcTx.rf_out to drone.rxAntennaB.rf_in {
+  flow elrsUplinkBackup from gcs.rcTx.rf_out.rf to drone.rxAntennaB.rf_in.rf;
+ }
  // Phase 2+: OpenHD digital thermal downlink: drone air antennas → ground antennas → OpenHD RX
- connection connect drone.wifiAntennaA.rf_out to gcs.openHDAntennaA.rf_in;
- connection connect drone.wifiAntennaB.rf_out to gcs.openHDAntennaB.rf_in;
+ connection ohdDownlinkRfA connect drone.wifiAntennaA.rf_out to gcs.openHDAntennaA.rf_in {
+  flow ohdDownlinkA from drone.wifiAntennaA.rf_out.rf to gcs.openHDAntennaA.rf_in.rf;
+ }
+ connection ohdDownlinkRfB connect drone.wifiAntennaB.rf_out to gcs.openHDAntennaB.rf_in {
+  flow ohdDownlinkB from drone.wifiAntennaB.rf_out.rf to gcs.openHDAntennaB.rf_in.rf;
+ }
  // Ground operations only: the bench charger charges the drone battery between flights.
- connection connect gcs.charger.charge_pwr_out to drone.battery.charge_pwr_in;
+ connection batteryCharge connect gcs.charger.charge_pwr_out to drone.battery.charge_pwr_in {
+  flow chargeCurrent from gcs.charger.charge_pwr_out.power to drone.battery.charge_pwr_in.power;
+ }
 
- // --- Software MAVLink FC <-> GCS: ArduPilot telemetry <-> QGroundControl,
- //     allocated to the ELRS link it rides on. Carries drone telemetry down and
- //     the SBC's STATUSTEXT detection alerts (via the FC). MODEL_ISSUES.md §C31.
- connection swFcToGcs connect drone.platform.fcSoftware.gcs_mav to gcs.viewingComputer.gcsApp.mav;
- allocate swFcToGcs to elrsTelemetry;
+ // --- MAVLink FC<->GCS flows through the PHYSICAL ELRS chain, not a direct SW-to-SW
+ //     link: fcSoftware.gcs_mav tunnels MAVLink-over-CRSF to the RX (fcTelemToRx),
+ //     crosses the ELRS RF link (elrsTelemetry) to the ground dongle, and reaches
+ //     QGC over the dongle USB (gcsMavFromDongle). Carries drone telemetry down +
+ //     the SBC's STATUSTEXT detection alerts (via the FC). MODEL_ISSUES.md §C32.
 
  // Derived total acquisition cost (per-drone flight system).
  // The laptop (gcs.viewingComputer) and bench charger (gcs.charger) are support/enabling
@@ -1263,7 +1468,7 @@ package DroneSystemModel {
  + gcs.subTotalCost;
 
  // CATIA MSOSA diagram binding (DS_Views library; does not resolve in Syside).
- view AerialObservationSystem : DS_Views::SymbolicViews::iv;
+
  }
  }
 
@@ -1279,6 +1484,7 @@ package DroneSystemModel {
   private import ScalarValues::*;
   private import Architecture::*;    // AerialObservationSystem, Operator, gcs/drone parts
   private import Phasing::*;         // @PhaseTag / Phase
+  private import Requirements::**;   // so `satisfy R1_BHV_ALT_HOLD;` etc. resolve unqualified
 
  // ════════════════════════════════════════════════════════════════════
  // State-machine trigger signals (UC-9/10 failsafes + flight-mode events)
@@ -1436,6 +1642,8 @@ package DroneSystemModel {
   action flyRoute {
    doc /* Waypoint route execution by the FC (ArduPilot AUTO). */
    @PhaseTag { phase = Phase::Phase1; }
+   satisfy R1_BHV_ALT_HOLD;
+   satisfy R2_BHV_SPEED_HOLD;
   }
   action streamThermal {
    doc /* IRCamera -> SBC live USB-UVC stream (no recording, no downlink). */
@@ -1485,6 +1693,7 @@ package DroneSystemModel {
    doc /* UC-6: operator watches telemetry (R4_GCS_TELEM), the FPV feed,
         link margins and battery state throughout the flight. */
    @PhaseTag { phase = Phase::Phase1; }
+   satisfy R4_GCS_TELEM;
   }
  }
 
@@ -1567,6 +1776,8 @@ package DroneSystemModel {
     doc /* Autonomous climb-and-return to the launch point. Corresponds to
          the former HandleLinkLoss.failsafeRtl / HandleLowBattery.
          commandReturn, now superseded by this state. */
+    satisfy R6_BHV_RTL_RESERVE;
+    satisfy R7_BHV_LINKLOSS_RTL;
    }
   }
 
@@ -2006,6 +2217,18 @@ package DroneSystemModel {
   view def VerificationView;
   view systemVerification : VerificationView {
    expose Analysis::**;
+  }
+
+  // ── 5. Drone interconnection view ──
+  // The Drone's internal structure — its nested part usages plus the
+  // `interface connect` links between their ports (the CATIA interconnection
+  // diagram of the Drone). Exposed recursively (`Drone::**`) so SysON's
+  // synchronized view materializes each part and connection as a node/edge;
+  // open it in SysON and auto-layout (Flow or Compact).
+  view def DroneInterconnectionView;
+  view droneInterconnection : DroneInterconnectionView {
+   expose Architecture::Drone;
+   expose Architecture::Drone::**;
   }
  }
 }
