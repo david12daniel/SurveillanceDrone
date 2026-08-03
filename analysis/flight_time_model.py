@@ -133,7 +133,8 @@ G = 9.80665             # gravitational acceleration [m/s²]
 RAIL_VOLTAGE_V = 5.0    # avionics rail voltage for deriving power from currentDraw
 SYSML_TOP_N = 100       # how many top configs to emit as SysML instances / MD rows
 FIXED_THERMAL_ID = "T13"  # lock the thermal camera (None = sweep all). David's choice:
-#                           T13 PurpleRiver Mini 640 (640x512, 12um, USB, 13mm lens).
+#                           T13 PurpleRiver Mini 640 (640x512, 12um, USB, 18mm lens as of
+#                           2026-07-29; ID unchanged). Mass still 21g pending 18mm confirm.
 FIXED_SBC_ID = "SBC3"     # lock the SBC (None = sweep all). David's choice: SBC3
 #                           NanoPi M5 (RK3576, mature RKNN toolchain, <=10W passive).
 FIXED_AIRFRAME_IDS = ["AF3a", "AF4a"]  # comparison sweep (2026-07-01): AF3a = iFlight

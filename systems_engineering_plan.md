@@ -49,7 +49,7 @@ is **not recorded and not downlinked** — it streams directly to the SBC for th
 deployed in Phase 3.
 
 **New Components (vs Phase 1)**
-- Thermal Camera Subsystem — **PurpleRiver Mini 640** (`T13`, 640×512, 12 µm, 13 mm lens, **USB** variant)
+- Thermal Camera Subsystem — **PurpleRiver Mini 640** (`T13`, 640×512, 12 µm, **18 mm lens**, **USB** variant)
 - Single-Board Computer — **NanoPi M5, 4 GB** (`SBC3`, Rockchip RK3576, RKNN NPU) — real-time inference
 - SBC mount + cooling (3D-printed deck + fan — see [`reference/cad-resources.md`](reference/cad-resources.md))
 - SBC power — 2-6S→12 V 3 A UBEC (2-pack) + USB-C power-only cable

@@ -397,16 +397,77 @@ VMETHOD = {"R1":"A, T","R2":"A, T","R3":"A, D, T","R3_1":"A, D","R3_2":"A, D, T"
            "R4":"I","R5":"I","R6":"A, T","R7":"A, T","R8":"A"}
 
 # ============================================================================
-# 5. SECTION — REQUIREMENTS
+# ---- 5. Operational Concept (OV-1) — DoDAF high-level operational graphic ----
+s = content_slide("Section 1 · System Overview", "Operational Concept  (OV-1)")
+framed_image(s, im("ov1_operational_concept.png"), ML, Inches(1.32), CW, Inches(5.4))
+caption(s, ML, Inches(6.82), CW,
+        "OV-1 High-Level Operational Concept Graphic (DoDAF) — the mission in context; callouts trace to R1 · R2 · R3 · R7")
+
+# ============================================================================
+# 6. SECTION — REQUIREMENTS
 # ============================================================================
 section_divider("1", "Requirements & Traceability",
     "Eight mission requirements decomposed into subsystem requirements, each allocated to a "
     "component via a formal satisfy link. Source: requirements_traceability.csv (SysML v2 model).")
 
+# ---- Shared SysML-style diagram helpers (used by the decomposition + BDD views) ----
+def vline(slide, x, y1, y2, color=ACCENT, wt=Pt(1.5)):
+    rect(slide, x, min(y1,y2), wt, abs(y2-y1), color)
+def hline(slide, x1, x2, y, color=ACCENT, wt=Pt(1.5)):
+    rect(slide, min(x1,x2), y, abs(x2-x1), wt, color)
+
+def sysml_box(slide, l, t, w, h, name, stereo="«part def»", fill=None, line=ACCENT,
+              name_size=13, name_color=NAVY, stereo_color=MUTED):
+    fill = fill if fill is not None else RGBColor(0xEA,0xF1,0xF7)
+    rect(slide, l, t, w, h, fill, line=line, line_w=Pt(1.25))
+    txt(slide, l, t+Inches(0.06), w, Inches(0.2), [[(stereo, 9, False, stereo_color)]], align=PP_ALIGN.CENTER)
+    txt(slide, l, t+Inches(0.25), w, h-Inches(0.3), [[(name, name_size, True, name_color)]],
+        align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.TOP)
+
+def def_panel(slide, l, t, w, h, defname, parts):
+    rect(slide, l, t, w, h, WHITE, line=ACCENT, line_w=Pt(1.5))
+    rect(slide, l, t, w, Inches(0.6), SLATE)
+    txt(slide, l, t+Inches(0.05), w, Inches(0.2), [[("«part def»", 9, False, RGBColor(0xBB,0xD0,0xE0))]], align=PP_ALIGN.CENTER)
+    txt(slide, l, t+Inches(0.24), w, Inches(0.3), [[(defname, 14, True, WHITE)]], align=PP_ALIGN.CENTER)
+    avail = h - Inches(0.78)
+    step = min(Inches(0.34), Emu(int(avail/max(len(parts),1))))
+    yy = t + Inches(0.72)
+    for role, typ in parts:
+        txt(slide, l+Inches(0.2), yy, w-Inches(0.4), step,
+            [[(role+"  :  ", 11.5, False, MUTED), (typ, 11.5, True, NAVY)]], anchor=MSO_ANCHOR.MIDDLE)
+        yy += step
+
+# ---- 6. Requirements decomposition tree (front of the Requirements section) ----
+s = content_slide("Section 1 · Requirements", "Requirements — Decomposition by Subsystem")
+txt(s, ML, Inches(1.25), CW, Inches(0.35),
+    [[("Mission requirements decompose into per-subsystem requirement packages in the SysML v2 model; each subsystem requirement subsets a mission requirement and is satisfied by a component.", 12, False, MUTED)]])
+sysml_box(s, Inches(4.42), Inches(1.78), Inches(4.5), Inches(0.72), "Mission Requirements  ·  R1–R8",
+          stereo="«requirements»", fill=NAVY, line=NAVY, name_size=13, name_color=WHITE, stereo_color=RGBColor(0xBB,0xD0,0xE0))
+subs = [("Airframe",["R4_AF"]), ("Battery",["R4_BAT"]), ("Thermal Camera",["R3_CAM"]),
+        ("SBC / Compute",["R4_SBC"]), ("Ground Control",["R4_GCS"]), ("Autonomy / Behavior",["BHV"])]
+def count_pref(prefs):
+    return sum(1 for d in derived if any(d['requirement_id'].startswith(p) or (p=="BHV" and "_BHV_" in d['requirement_id']) for p in prefs))
+n=len(subs); bw=Inches(1.83); gap=(CW-bw*n)//(n-1)
+bus_y=Inches(3.2); by=Inches(3.75); bh=Inches(1.5)
+vline(s, Inches(6.67), Inches(2.5), bus_y)
+firstc = ML + bw//2; lastc = ML + (n-1)*(bw+gap) + bw//2
+hline(s, firstc, lastc, bus_y)
+for i,(nm,prefs) in enumerate(subs):
+    x = ML + i*(bw+gap)
+    vline(s, x+bw//2, bus_y, by)
+    rect(s, x, by, bw, bh, RGBColor(0xEA,0xF1,0xF7), line=ACCENT, line_w=Pt(1.25))
+    txt(s, x, by+Inches(0.12), bw, Inches(0.2), [[("«requirements»", 8.5, False, MUTED)]], align=PP_ALIGN.CENTER)
+    txt(s, x, by+Inches(0.36), bw, Inches(0.55), [[(nm, 12, True, NAVY)]], align=PP_ALIGN.CENTER)
+    txt(s, x, by+Inches(1.0), bw, Inches(0.35), [[("%d requirements" % count_pref(prefs), 11, True, ACCENT)]], align=PP_ALIGN.CENTER)
+rect(s, ML, Inches(5.55), CW, Inches(0.95), PANEL, line=LINEC, line_w=Pt(0.75), shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+txt(s, ML+Inches(0.2), Inches(5.68), CW-Inches(0.4), Inches(0.75),
+    [[("Purpose of this view: ", 11.5, True, NAVY),
+      ("show the requirement decomposition structure — that requirements are modeled formally per subsystem and all trace up to R1–R8 and down to a component. The full requirement text and per-requirement allocation are in the three RTM slides that follow and in the model; this slide is the map, not the fine print.", 11.5, False, TEXT)]], line_spacing=1.08)
+
 # ---- 6. Mission requirements (image + verification side table) ----
 s = content_slide("Section 1 · Requirements", "Mission Requirements  (R1–R8)")
 framed_image(s, im("system_level_requirements.png"), ML, Inches(1.35), Inches(7.35), Inches(5.3))
-caption(s, ML, Inches(6.68), Inches(7.35), "Mission requirement set — SysML v2 requirement definitions (R1–R8, R3 detection/classification)")
+caption(s, ML, Inches(6.68), Inches(7.35), "Mission & autonomy requirements — SysML v2 Requirements Table (SysON export from model.sysml)")
 # side: verification method table
 vdata = [["Req", "Verify"]]
 for rid in MISSION_IDS:
@@ -483,59 +544,8 @@ rtm_slide("RTM — Airframe Subsystem & Autonomy Behavior", ["R4_AF", "BHV"],
 rtm_slide("RTM — Battery & Camera (Thermal Payload) Subsystems", ["R4_BAT", "R3_CAM"])
 rtm_slide("RTM — SBC (Onboard Compute) & Ground Control Subsystems", ["R4_SBC", "R4_GCS"])
 
-# ---- Shared SysML-style diagram helpers (used by the decomposition + BDD views) ----
-def vline(slide, x, y1, y2, color=ACCENT, wt=Pt(1.5)):
-    rect(slide, x, min(y1,y2), wt, abs(y2-y1), color)
-def hline(slide, x1, x2, y, color=ACCENT, wt=Pt(1.5)):
-    rect(slide, min(x1,x2), y, abs(x2-x1), wt, color)
-
-def sysml_box(slide, l, t, w, h, name, stereo="«part def»", fill=None, line=ACCENT,
-              name_size=13, name_color=NAVY, stereo_color=MUTED):
-    fill = fill if fill is not None else RGBColor(0xEA,0xF1,0xF7)
-    rect(slide, l, t, w, h, fill, line=line, line_w=Pt(1.25))
-    txt(slide, l, t+Inches(0.06), w, Inches(0.2), [[(stereo, 9, False, stereo_color)]], align=PP_ALIGN.CENTER)
-    txt(slide, l, t+Inches(0.25), w, h-Inches(0.3), [[(name, name_size, True, name_color)]],
-        align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.TOP)
-
-def def_panel(slide, l, t, w, h, defname, parts):
-    rect(slide, l, t, w, h, WHITE, line=ACCENT, line_w=Pt(1.5))
-    rect(slide, l, t, w, Inches(0.6), SLATE)
-    txt(slide, l, t+Inches(0.05), w, Inches(0.2), [[("«part def»", 9, False, RGBColor(0xBB,0xD0,0xE0))]], align=PP_ALIGN.CENTER)
-    txt(slide, l, t+Inches(0.24), w, Inches(0.3), [[(defname, 14, True, WHITE)]], align=PP_ALIGN.CENTER)
-    avail = h - Inches(0.78)
-    step = min(Inches(0.34), Emu(int(avail/max(len(parts),1))))
-    yy = t + Inches(0.72)
-    for role, typ in parts:
-        txt(slide, l+Inches(0.2), yy, w-Inches(0.4), step,
-            [[(role+"  :  ", 11.5, False, MUTED), (typ, 11.5, True, NAVY)]], anchor=MSO_ANCHOR.MIDDLE)
-        yy += step
-
-# ---- 11. Requirements decomposition tree (replaces the thumbnail montage) ----
-s = content_slide("Section 1 · Requirements", "Requirements — Decomposition by Subsystem")
-txt(s, ML, Inches(1.25), CW, Inches(0.35),
-    [[("Mission requirements decompose into per-subsystem requirement packages in the SysML v2 model; each subsystem requirement subsets a mission requirement and is satisfied by a component.", 12, False, MUTED)]])
-sysml_box(s, Inches(4.42), Inches(1.78), Inches(4.5), Inches(0.72), "Mission Requirements  ·  R1–R8",
-          stereo="«requirements»", fill=NAVY, line=NAVY, name_size=13, name_color=WHITE, stereo_color=RGBColor(0xBB,0xD0,0xE0))
-subs = [("Airframe",["R4_AF"]), ("Battery",["R4_BAT"]), ("Thermal Camera",["R3_CAM"]),
-        ("SBC / Compute",["R4_SBC"]), ("Ground Control",["R4_GCS"]), ("Autonomy / Behavior",["BHV"])]
-def count_pref(prefs):
-    return sum(1 for d in derived if any(d['requirement_id'].startswith(p) or (p=="BHV" and "_BHV_" in d['requirement_id']) for p in prefs))
-n=len(subs); bw=Inches(1.83); gap=(CW-bw*n)//(n-1)
-bus_y=Inches(3.2); by=Inches(3.75); bh=Inches(1.5)
-vline(s, Inches(6.67), Inches(2.5), bus_y)
-firstc = ML + bw//2; lastc = ML + (n-1)*(bw+gap) + bw//2
-hline(s, firstc, lastc, bus_y)
-for i,(nm,prefs) in enumerate(subs):
-    x = ML + i*(bw+gap)
-    vline(s, x+bw//2, bus_y, by)
-    rect(s, x, by, bw, bh, RGBColor(0xEA,0xF1,0xF7), line=ACCENT, line_w=Pt(1.25))
-    txt(s, x, by+Inches(0.12), bw, Inches(0.2), [[("«requirements»", 8.5, False, MUTED)]], align=PP_ALIGN.CENTER)
-    txt(s, x, by+Inches(0.36), bw, Inches(0.55), [[(nm, 12, True, NAVY)]], align=PP_ALIGN.CENTER)
-    txt(s, x, by+Inches(1.0), bw, Inches(0.35), [[("%d requirements" % count_pref(prefs), 11, True, ACCENT)]], align=PP_ALIGN.CENTER)
-rect(s, ML, Inches(5.55), CW, Inches(0.95), PANEL, line=LINEC, line_w=Pt(0.75), shape=MSO_SHAPE.ROUNDED_RECTANGLE)
-txt(s, ML+Inches(0.2), Inches(5.68), CW-Inches(0.4), Inches(0.75),
-    [[("Purpose of this view: ", 11.5, True, NAVY),
-      ("show the requirement decomposition structure — that requirements are modeled formally per subsystem and all trace up to R1–R8 and down to a component. The full requirement text and per-requirement allocation are on the three RTM slides above and in the model; this slide is the map, not the fine print.", 11.5, False, TEXT)]], line_spacing=1.08)
+# ---- Diagram helpers + Requirements-decomposition slide were relocated to the
+#      front of the Requirements section (just after the section divider, above). ----
 
 # ============================================================================
 # SECTION 2 — ARCHITECTURE
@@ -601,13 +611,13 @@ bullets(s, Inches(9.5), Inches(1.92), Inches(3.05), Inches(4.6), [
 
 # ---- 15. SBC subsystem ----
 s = content_slide("Section 2 · Architecture", "Onboard Compute (SBC) — Software Architecture")
-framed_image(s, im("sbc_internal_block_diagram.png"), ML, Inches(1.35), Inches(6.1), Inches(5.25))
-caption(s, ML, Inches(6.62), Inches(6.1), "SBCPayload internal block diagram — software items and ports")
+framed_image(s, im("sbc_internal_block_diagram_dev.png"), ML, Inches(1.35), Inches(6.1), Inches(5.25))
+caption(s, ML, Inches(6.62), Inches(6.1), "SBCPayload internal block diagram — amber boxes = to-be-developed software (D-1 thermalModel · D-2 missionApp)")
 bullets(s, Inches(6.95), Inches(1.5), Inches(5.75), Inches(5.1), [
     bullet_para(lead="NanoPi M5 (RK3576, 6 TOPS NPU).  ", size=13, text="Passive-cooled, ≤ 10 W — meets R4_SBC_PWR / R4_SBC_TEMP with no fan required."),
-    bullet_para("missionApp.  ", size=13, bold=True, color=NAVY, bullet=True),
+    bullet_para("missionApp  (D-2 · to develop).  ", size=13, bold=True, color=AMBER, bullet=True),
     bullet_para("Receives the thermal frame (UVC), runs the detect/investigate loop, commands routes via MAVLink.", size=12.5, level=1),
-    bullet_para("thermalModel → rknnRuntime.  ", size=13, bold=True, color=NAVY, bullet=True),
+    bullet_para("thermalModel  (D-1 · to develop) → rknnRuntime.  ", size=13, bold=True, color=AMBER, bullet=True),
     bullet_para("INT8 model allocated to the RKNN NPU runtime — the inference server for onboard classification.", size=12.5, level=1),
     bullet_para("mavlinkRouter.  ", size=13, bold=True, color=NAVY, bullet=True),
     bullet_para("Routes MAVLink between missionApp and the flight-controller UART (data_af interface).", size=12.5, level=1),
@@ -624,6 +634,7 @@ bullets(s, Inches(6.95), Inches(1.5), Inches(5.75), Inches(5.1), [
     bullet_para(lead="rcTx.  ", size=13, text="RadioMaster TX12 MkII (ELRS) — manual control uplink; primary in-flight MAVLink telemetry runs through the HGLRC Hermes USB dongle."),
     bullet_para(lead="groundAntenna.  ", size=13, text="TrueRC X-AIR patch (10 dBic, 120°) — closes the 2.8 km video link with margin."),
     bullet_para(lead="charger.  ", size=13, text="Ground-support equipment (HOTA D6 Pro) — not flown, excluded from system cost."),
+    bullet_para(lead="Phase 4 (deferred) — not shown on the diagram above.  ", size=12.5, lead_color=AMBER, color=MUTED, text="Ground OpenHD node for the future thermal-video downlink: openHDRx (Alfa AWUS036ACH Wi-Fi adapter) + openHDAntennaA / openHDAntennaB (Foxeer Echo 2 Max diversity antennas). Phase 4 options, not in the committed build."),
 ])
 
 # ---- 17. Interface design ----
@@ -672,6 +683,32 @@ bullets(s, Inches(6.95), Inches(5.12), Inches(5.6), Inches(1.4), [
 ], size=12)
 txt(s, Inches(6.9), Inches(3.7), Inches(5.8), Inches(0.6),
     [[("* Phase 4 downlink is a deferred future capability, shown for completeness; not part of the committed Phase 1–3 system.", 9.5, False, MUTED, True)]])
+
+# ---- Standards Profile (StdV-1) ----
+s = content_slide("Section 2 · Architecture", "Standards Profile  (StdV-1)")
+txt(s, ML, Inches(1.28), CW, Inches(0.3),
+    [[("The system is built on mature, open / de-facto-standard protocols — the interoperability basis behind the interfaces on the previous slide.", 12, False, MUTED)]])
+stdv = [["Domain", "Standard / protocol", "Where used"]]
+for a,b,c in [
+    ("Flight control / autonomy","ArduPilot ArduCopter ≥ 4.5 (GPLv3)","FC firmware — AUTO/GUIDED, FS_/BATT_ failsafes"),
+    ("Command & telemetry","MAVLink 2","FC ↔ SBC (UART) · FC ↔ GCS"),
+    ("RC control link","ExpressLRS / CRSF","2.4 GHz control uplink + telemetry"),
+    ("Ground-station app","QGroundControl 4.4+ (Apache-2.0)","Mission plan, telemetry, video, params"),
+    ("Thermal video","USB Video Class (UVC 1.1)","Thermal camera → SBC"),
+    ("FPV video","CVBS (analog composite)","FPV camera → VTX → ground VRX"),
+    ("Navigation","u-blox UBX / NMEA 0183","GPS → flight controller"),
+    ("AI inference runtime","RKNN (Rockchip NPU)","INT8 model on the NanoPi M5 (6 TOPS)"),
+    ("Detection sizing","Johnson criteria","Thermal detect / recognize analysis"),
+    ("Power connector","XT60","Battery → anti-spark → airframe"),
+    ("Digital downlink (Phase 4)","OpenHD / WFB-ng over 802.11 monitor mode","Deferred thermal video downlink"),
+    ("Regulatory","FAA Part 107 (+ BVLOS authorization)","Commercial UAS operation"),
+]:
+    stdv.append([a,b,c])
+add_table(s, ML, Inches(1.68), CW, len(stdv),
+          [Inches(2.85), Inches(4.6), Inches(4.64)], stdv,
+          aligns=[PP_ALIGN.LEFT,PP_ALIGN.LEFT,PP_ALIGN.LEFT], row_h=Inches(0.37), body_size=10, header_size=10.5)
+txt(s, ML, SH-Inches(0.55), CW, Inches(0.3),
+    [[("StdV-1 (DoDAF Standards Profile) — no proprietary lock-in on the committed build; every committed interface rides an open or de-facto-standard protocol.", 9.5, False, MUTED, True)]])
 
 # ============================================================================
 # SECTION 3 — BEHAVIOR
@@ -945,6 +982,36 @@ txt(s, Inches(8.35), Inches(5.3), Inches(4.2), Inches(1.1),
 txt(s, ML, Inches(6.45), Inches(7.2), Inches(0.4),
     [[("The endurance sweep reports ≈ $1,674 using cost-representative radio/RX; the BOM figure uses the actual selected parts, hence higher.", 9.5, False, MUTED, True)]])
 
+# ---- Systems Measures / performance scorecard (SV-7) ----
+s = content_slide("Section 4 · Analyses", "Performance Measures  (SV-7)")
+txt(s, ML, Inches(1.28), CW, Inches(0.3),
+    [[("Key performance parameters vs. their requirement thresholds, with the as-designed (analysis) value and margin — the quantitative scorecard behind the analyses.", 12, False, MUTED)]])
+sv7 = [["Measure", "Requirement", "As-designed (predicted)", "Margin", "Status"]]
+for r_ in [
+    ("Hover endurance","R6 ≥ 30 min","58.4 min (momentum model)","+95%","PASS"),
+    ("Stretch endurance","R8 ≥ 60 min","58.4 min hover (~60 cruise)","−3%","NOT MET"),
+    ("Surveillance range","R7 ≥ 2.8 km","≥ 3.3 km (weakest RF link)","+0.5 km","PASS"),
+    ("RF fade margin","Design ≥ 10 dB @ 2.8 km","+11.3 dB (weakest link)","+1.3 dB","PASS"),
+    ("Thermal detection @ 120 m","R3.1 ≥ 1.5 px","4.5 px on-target (deer)","+3.0 px","PASS"),
+    ("Thermal recognition @ 90 m","R3_CAM_RES ≥ 4 px","6.0 px (0.5 m target)","+2.0 px","PASS"),
+    ("System cost","R4 ≤ $2,500","≈ $1,848 committed","+$652 (26%)","PASS"),
+    ("SBC power","R4_SBC_PWR ≤ 10 W","≤ 10 W passive (RK3576)","at limit","PASS"),
+    ("Payload compute fit","Deck ≥ SBC footprint","110×70 vs 90×62 mm","+8 mm","PASS*"),
+    ("Cruise speed","R2 = 2.23 m/s","design point (control-tuned)","—","PLANNED"),
+]:
+    sv7.append(list(r_))
+bcsv = {}
+for i in range(1,len(sv7)):
+    st = sv7[i][4]; mg = sv7[i][3]
+    bcsv[(i,4)] = OKGRN if st.startswith("PASS") else (RED if "NOT MET" in st else SLATE)
+    bcsv[(i,3)] = RED if mg=="−3%" else (AMBER if mg in ("at limit","—") else OKGRN)
+add_table(s, ML, Inches(1.68), CW, len(sv7),
+          [Inches(2.95), Inches(2.35), Inches(3.4), Inches(1.6), Inches(1.79)], sv7,
+          aligns=[PP_ALIGN.LEFT,PP_ALIGN.LEFT,PP_ALIGN.LEFT,PP_ALIGN.CENTER,PP_ALIGN.CENTER],
+          row_h=Inches(0.4), body_size=10, header_size=10.5, body_colors=bcsv)
+txt(s, ML, SH-Inches(0.55), CW, Inches(0.3),
+    [[("SV-7 (DoDAF Systems Measures). All hard requirements met with margin; only the R8 stretch endurance is not met (documented). *Compute fit is marginal (custom deck); speed is a control-tuned target verified by flight test.", 9.5, False, MUTED, True)]])
+
 # ============================================================================
 # SECTION 5 — V&V, RISK, CLOSURE
 # ============================================================================
@@ -995,6 +1062,49 @@ bullets(s, Inches(7.3), Inches(2.05), Inches(5.15), Inches(4.3), [
     bullet_para(lead="Phase 3.  ", size=13, text="AI detection + MAVLink autonomous route modification (software only)."),
     bullet_para(lead="Phase 4 (deferred).  ", size=13, text="OpenHD digital thermal downlink to the ground station — future capability.", color=MUTED),
 ])
+
+# ---- Project Timeline (PV-2) ----
+s = content_slide("Section 5 · Closure", "Project Timeline  (PV-2)")
+txt(s, ML, Inches(1.26), CW, Inches(0.3),
+    [[("The build roadmap: three committed phases (1–3) plus a deferred Phase 4. Detailed design is complete; the next gate is procurement.", 12, False, MUTED)]])
+rect(s, ML, Inches(1.72), CW, Inches(0.5), NAVY, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+txt(s, ML+Inches(0.22), Inches(1.72), CW-Inches(0.44), Inches(0.5),
+    [[("▸ NOW — CDR: detailed design complete, verified by analysis.   Next gate → procurement, then phased build & test.", 12, True, WHITE)]], anchor=MSO_ANCHOR.MIDDLE)
+_phases = [
+    ("PHASE 1","Committed","Basic flight + FPV + waypoints",
+     ["Airframe · ELRS · battery","FPV cam · GPS · patch antenna","ArduPilot + QGroundControl"],
+     "LOS manual flight, waypoint routes, video to laptop","≈ $1,371"),
+    ("PHASE 2","Committed","Thermal payload + onboard compute",
+     ["PurpleRiver Mini 640 (thermal)","NanoPi M5 · UBEC · 3D-print mount"],
+     "Live onboard thermal inference (no recording / downlink)","≈ $809"),
+    ("PHASE 3","Committed","AI detection + autonomy (software)",
+     ["RKNN model deploy (D-1)","Mission app + MAVLink route mod (D-2)"],
+     "Real-time inference drives autonomous re-route","$0 HW"),
+    ("PHASE 4","Deferred","OpenHD digital thermal downlink",
+     ["Air / ground Wi-Fi adapters","Diversity antennas · ground VM"],
+     "Live thermal / AI video to the ground station","≈ $159 (future)"),
+]
+cw4 = (CW - Inches(0.3)*3)//4
+ptop = Inches(2.48); ch4 = Inches(4.0)
+for i,(ph,tag,title,items,deliv,cost) in enumerate(_phases):
+    x = ML + i*(cw4 + Inches(0.3)); deferred = (tag=="Deferred")
+    linecol = MUTED if deferred else ACCENT
+    rect(s, x, ptop, cw4, ch4, WHITE, line=linecol, line_w=Pt(1.0 if deferred else 1.5), shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x, ptop, cw4, Inches(0.64), RGBColor(0x9A,0xA7,0xB2) if deferred else ACCENT, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    txt(s, x, ptop+Inches(0.06), cw4, Inches(0.26), [[(ph, 13, True, WHITE)]], align=PP_ALIGN.CENTER)
+    txt(s, x, ptop+Inches(0.36), cw4, Inches(0.22), [[(tag, 9.5, True, WHITE)]], align=PP_ALIGN.CENTER)
+    txt(s, x+Inches(0.16), ptop+Inches(0.76), cw4-Inches(0.32), Inches(0.6), [[(title, 11.5, True, NAVY)]])
+    yy = ptop+Inches(1.5)
+    for it in items:
+        txt(s, x+Inches(0.16), yy, cw4-Inches(0.32), Inches(0.42), [[("· ", 10, True, linecol), (it, 10, False, TEXT)]])
+        yy += Inches(0.42)
+    txt(s, x+Inches(0.16), ptop+ch4-Inches(1.2), cw4-Inches(0.32), Inches(0.8),
+        [[("→ ", 10, True, linecol), (deliv, 10, False, MUTED, True)]], line_spacing=1.0)
+    txt(s, x+Inches(0.16), ptop+ch4-Inches(0.38), cw4-Inches(0.32), Inches(0.3), [[(cost, 11.5, True, NAVY if not deferred else MUTED)]])
+    if i < 3:
+        txt(s, x+cw4-Inches(0.03), ptop+ch4//2-Inches(0.18), Inches(0.36), Inches(0.34), [[("▸", 15, True, linecol)]], align=PP_ALIGN.CENTER)
+txt(s, ML, SH-Inches(0.5), CW, Inches(0.3),
+    [[("PV-2 (DoDAF Project Timeline). Phases 1–3 = committed system; Phase 4 (grey) is deferred. Sequence and dependency, not calendar dates.", 9.5, False, MUTED, True)]])
 
 # ---- 32. Risk ----
 s = content_slide("Section 5 · Closure", "Risk Assessment")
@@ -1074,7 +1184,7 @@ for text, ok in crit:
 rect(s, Inches(7.5), Inches(1.95), Inches(5.2), Inches(4.75), RGBColor(0x14,0x30,0x52), line=RGBColor(0x2a,0x44,0x63), line_w=Pt(1), shape=MSO_SHAPE.ROUNDED_RECTANGLE)
 txt(s, Inches(7.8), Inches(2.2), Inches(4.6), Inches(0.4), [[("RECOMMENDATION", 12, True, AMBER)]])
 txt(s, Inches(7.8), Inches(2.7), Inches(4.6), Inches(3.9),
-    [[("Proceed to fabrication & integration.", 16, True, WHITE)],
+    [[("Proceed to procurement, fabrication & integration.", 16, True, WHITE)],
      [("The detailed design is complete, fully traced, and verified by analysis with margin on cost, endurance, RF range, and thermal detection.", 12.5, False, RGBColor(0xC9,0xD8,0xE6))],
      [("Gate to operations on: (1) an instrumented Phase-1 flight to correlate the endurance model, (2) field thermal capture to validate detection/classification, and (3) an established FAA BVLOS regulatory path (Part 107).", 12.5, False, RGBColor(0xC9,0xD8,0xE6))]],
     space_after=Pt(10), line_spacing=1.06)
@@ -1094,8 +1204,12 @@ NOTES = [
 "This maps our package to the standard design-review content areas so you can confirm completeness at a glance. Every required area is addressed, with the slide where you'll find it. Only verification is 'plan defined' rather than complete — that is exactly right at CDR, because test execution happens at the next gate, not this one.",
 # 4 Mission / ConOps
 "The mission is autonomous daytime thermal survey of wildlife over open terrain — the thermal camera detects and classifies by heat signature, which works fine in daylight, so the concept is daytime-only. The operating point sets everything downstream: 90 to 120 meters altitude, 2.23 meters per second, a 2.8 kilometer survey line in up to 4.5 meters per second of wind, with at least a 5-degree target-to-background thermal contrast. A sortie plans a route, takes off, cruises while running live onboard thermal inference, investigates and classifies detections, then returns and lands. The autonomy stance: thermal is processed onboard in real time to drive route changes — no recording and no required downlink in the committed build, with a thermal-video downlink planned as a future capability in Phase 4.",
+# --- Operational Concept (OV-1) ---
+"This is the OV-1 — the DoDAF High-Level Operational Concept Graphic — the one picture that tells the whole mission story. By day, the drone flies an autonomous survey pattern at 90 to 120 meters, sweeping open terrain with its thermal camera and detecting and classifying wildlife and humans by their heat signature. It processes the thermal feed onboard in real time to re-route itself, so no video downlink is required. It stays linked to a single ground operator — a laptop running QGroundControl with an ELRS control-and-telemetry link and a directional video antenna — out to a 2.8-kilometer surveillance range in up to 4.5 meters per second of wind. Every callout ties back to a driving requirement: altitude R1, speed R2, detect and classify R3, range R7. Where the block diagrams that follow show structure, this shows the concept of operations.",
 # 5 Divider Requirements
 "We start with requirements and traceability — the foundation every later decision has to satisfy.",
+# Requirements decomposition (front of section)
+"This shows how the requirements decompose by subsystem in the model. The eight mission requirements at the top break down into per-subsystem requirement packages — airframe, battery, thermal camera, computer, ground control, and autonomy — each labeled with the number of requirements it holds. Every one of those subsets a mission requirement and is satisfied by a component. This is the structural map; the full requirement text and allocations are in the three RTM slides that follow. The point is that requirements are modeled formally in SysML, not just listed in a document.",
 # 6 Mission requirements
 "These are the eight top-level mission requirements, taken directly from the model. R1 and R2 set the flight envelope, R3 the thermal detect-and-classify capability, R4 the twenty-five-hundred-dollar cost cap, R6 and R8 endurance, and R7 range. The side panel shows the verification method for each. At CDR, analysis is complete for all of them; demonstrations and tests are planned and gated later.",
 # 7 Traceability approach
@@ -1106,8 +1220,7 @@ NOTES = [
 "Battery and thermal-camera requirements. The battery drives the endurance, energy, and voltage requirements; the camera drives detection, resolution, field of view, and NETD. These allocate to the Battery and IRCamera parts, and the cost sub-requirements roll up to the R4 budget.",
 # 10 RTM SBC/GCS
 "The onboard-computer and ground-control requirements. The SBC covers compute power, thermal video input, MAVLink data exchange, and the passive-cooling constraint. The GCS covers control authority, telemetry display, range, and video display. Note that the 2.8-kilometer range requirement allocates to the antennas and RF chain — we verify that directly in the link-budget analysis.",
-# 11 Subsystem req diagrams
-"This shows how the requirements decompose by subsystem in the model. The eight mission requirements at the top break down into per-subsystem requirement packages — airframe, battery, thermal camera, computer, ground control, and autonomy — each labeled with the number of requirements it holds. Every one of those subsets a mission requirement and is satisfied by a component. This is the structural map; the full requirement text and allocations are on the three RTM slides just before this. The point is that requirements are modeled formally in SysML, not just listed in a document.",
+# (Requirements-decomposition note moved to the front of the Requirements section)
 # 12 Divider Architecture
 "Now the system architecture — how the design is physically decomposed and interconnected.",
 # 13 Block-definition (composition) view
@@ -1122,6 +1235,8 @@ NOTES = [
 "The ground station is the laptop running QGroundControl, a 5.8-gigahertz analog video receiver captured over USB, the handheld ELRS radio for manual control, and the directional patch antenna that closes the video link at range. The charger shown is bench support equipment — not flown, and not counted in system cost.",
 # 17 Interfaces
 "This consolidates the interface design — internal wired interfaces on the left, external wireless on the right. The important part is the bottom box: compatibility is enforced formally. The cell-count rule keeps the battery matched to the airframe, the video-format chain stays consistent end to end, RF bands match per link, and the entire power chain is standardized on XT60. These are modeled as SysML constraints and actually enforced by our configuration sweep, so an incompatible build can't slip through.",
+# Standards Profile (StdV-1)
+"This is the StdV-1 — the standards profile — the open and de-facto-standard protocols the system is built on. Command and telemetry are MAVLink 2; the control link is ExpressLRS over CRSF; the thermal camera is standard USB video class; navigation is u-blox UBX; the flight stack is ArduPilot; the ground station is QGroundControl; inference runs on Rockchip's RKNN. The takeaway is no proprietary lock-in on the committed build — every committed interface rides an open or de-facto standard — and the one regulatory item, FAA Part 107 plus a BVLOS authorization, is called out here too.",
 # 18 Divider Behavior
 "Next, the functional and behavioral design — what the system does, and how it sequences and fails safe.",
 # 19 State machine
@@ -1148,12 +1263,16 @@ NOTES = [
 "Analysis four asks the practical question: does it physically fit? We model each airframe's usable deck and each component's envelope. The binding constraint is the NanoPi M5's 90-by-62-millimeter footprint. The selected Chimera9 deck accepts it with about 8 millimeters to spare — and that fit is a key reason we chose it over the lighter endurance leader, which is a no-fit. Caveat: the deck dimensions are still estimates and should be confirmed against vendor CAD before the Phase 2 build.",
 # 30 Cost
 "Analysis five, cost. The committed system rolls up to about eighteen-hundred-forty-eight dollars against the twenty-five-hundred-dollar cap — roughly 26 percent margin. The thermal camera at six-hundred-fifty dollars is the single largest line. Even all four phases together stay around two thousand dollars. Cost is a solved problem for this design.",
+# Performance measures (SV-7)
+"This is the SV-7 — the systems-measures scorecard — the quantitative bottom line of the analysis section. Each row pairs a performance measure with its requirement threshold, the as-designed value from the analysis, the margin, and a pass or fail. The headline is that every hard requirement is met with margin: endurance nearly double the thirty-minute floor, range and RF margin positive, thermal pixels-on-target above the Johnson thresholds, and cost twenty-six percent under the cap. The only miss is the sixty-minute stretch goal, which we flag rather than hide, and SBC power sits right at its ten-watt limit.",
 # 31 Divider Closure
 "Finally: verification planning, the manufacturing approach, risk, open items, and the CDR exit assessment.",
 # 32 VCRM
 "The verification cross-reference matrix shows how every requirement will be verified and its status today. Cost and soldering are verified now, by inspection. Everything else is analysis-complete with test or demonstration planned — which is the correct posture at CDR; test readiness is the next gate. The one exception is the 60-minute stretch goal, which the design does not meet, and we have documented that rather than hidden it.",
 # 33 Manufacturing
 "Producibility. We minimize soldering, per requirement R5, by using a plug-and-play airframe — the only solder joint in the committed build is the onboard computer's power leads. Nearly everything is off-the-shelf; the single fabricated part is a 3D-printed computer mount. And the build is phased into three incremental stages, each independently testable before the next is added.",
+# Project timeline (PV-2)
+"This is the PV-2 — the project timeline — the roadmap in one picture. Three committed phases build on each other: Phase 1 is basic flight with FPV and waypoints; Phase 2 adds the thermal payload and onboard computer; Phase 3 is software-only, the AI detection and autonomous re-routing. Phase 4, in grey, is the deferred digital video downlink. The banner marks where we are — at CDR, detailed design complete, with procurement as the next gate. There are no calendar dates yet; this shows sequence and dependency, and that each phase is independently testable before the next.",
 # 34 Risk
 "The risk posture. The three highest risks are: first, the design is modeled but not yet flown, so the headline numbers are predictions; second, species classification is unproven without real thermal data; and third, the regulatory path — at 2.8 kilometers the survey is beyond visual line of sight, which requires FAA authorization, and commercial operation requires a Part 107 certificate. Operating in daylight rather than after dark lowers this risk, but the BVLOS range keeps it on the list. Each has a defined mitigation. At CDR, 'not yet built' is expected; the material risks are the estimates and these external items, and we are naming them openly.",
 # 35 Open items

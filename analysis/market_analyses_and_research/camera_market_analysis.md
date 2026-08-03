@@ -347,6 +347,15 @@ For the 30° HFOV requirement, the key question is which lens focal length to ch
 
 The 9.1mm option gives wider area coverage (48° HFOV) but drops to 4.2 px on target — barely meeting R3_CAM_RES (4 px). The 15mm gives better resolution but fails the FOV requirement.
 
+> **DECISION UPDATE (2026-07-29): 18 mm selected** (superseding the 13 mm "sweet spot" above).
+> The ≥30° FOV requirement (R3_CAM_FOV) is a *coverage* floor, not a flight one — the FPV
+> camera flies the drone, never the thermal — so it was relaxed for this surveillance-only
+> payload. 18 mm gives **8.3 px** on a 0.5 m target @90 m (vs 6.0 for 13 mm), still detects
+> @120 m, and is the shortest lens that **recognizes at a 45° oblique tilt**. Cost: HFOV
+> drops to **24.1°** and area/sweep falls ~28%. Full trade (15/18/25/35 mm, nadir + 45°, and
+> area-coverage math) in [`../thermal_detection_offnadir_analysis.md`](../thermal_detection_offnadir_analysis.md).
+> R3_CAM_FOV re-tag pending model approval — see `MODEL_ISSUES.md`.
+
 ---
 
 ## 7. Camera Subsystem Budget Impact (Best Candidates)

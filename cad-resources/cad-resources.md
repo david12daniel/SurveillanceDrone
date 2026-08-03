@@ -33,7 +33,7 @@ print). Onshape Free is the gentlest on-ramp if FreeCAD feels heavy.
 
 ### A. iFlight Chimera9 ECO — airframe (`AF3a` / `AF3b`)
 - **Official 3D/STEP:** none. iFlight's [official 3D-file library](https://iflightrc.freshdesk.com/support/solutions/48000400496) has no Chimera9 (only Nazgul/iH3/Defender/MegaBee).
-- **Official doc (use this):** **Chimera9 ECO Frame Assembly Guide PDF** — on the [frame-kit page](https://shop.iflight.com/Chimera9-ECO-Frame-Kit-Pro2080) (`C015262-...-20231215.pdf`). Has the plate outlines → trace it.
+- **Official doc:** **Chimera9 ECO Frame Assembly Guide PDF** — on the [frame-kit page](https://shop.iflight.com/Chimera9-ECO-Frame-Kit-Pro2080) (`C015262-...-20231215.pdf`; download tab / `download_id=347`). **NB (verified 2026-07-28): this is an *exploded assembly diagram + bill-of-materials only* — NOT a dimensioned drawing. It has no to-scale orthographic plate view and no hole-coordinate table, so you CANNOT trace a plate outline from it.** What it *is* good for: the fastener/standoff BOM (M3×20 & M3×30 Al standoffs, 3×5×8 double-pass standoffs, stack screws → tells you available stack heights + thread sizes) and the plate stack-up / part layout. Get the actual plate outline via **calipers on the real frame**, a **community STEP donor** (below), or a **parametric approximation from the key dims** (further below). Local copy: [`Chimera9_ECO_Frame_Assembly_Guide.pdf`](Chimera9_ECO_Frame_Assembly_Guide.pdf).
 - **Adaptable community models (same Chimera design language):**
   - [iFlight Chimera 7" frame replica — **STEP source** (MakerWorld)](https://makerworld.com/en/models/739796-iflight-chimera-7-inch-frame-replica)
   - [Chimera 7 Pro V2 GoPro/payload mount (Printables)](https://www.printables.com/model/385547-iflight-chimera-7-pro-v2-gopro-9-10-11-mount) — good SBC-deck starting point
@@ -48,7 +48,7 @@ print). Onshape Free is the gentlest on-ramp if FreeCAD feels heavy.
 ### C. PurpleRiver Mini 640 — thermal camera (`T13`)
 - **Official 3D/STEP:** none public; available only via **OEM/ODM request** (vendor pre-sales WhatsApp +86 130 1605 4201).
 - **Official doc:** [Mini 640 specifications PDF](https://www.thermal-image.com/download/purpleriver-mini640-thermal-camera-specifications/) (≈140 KB).
-- **Verified dimensions:** body **21 × 21 mm** (without lens), **< 20 g**; lens options 4–75 mm — **T13 uses the 13 mm lens**. Trivial to model: a 21 × 21 × ~21 mm body box + a ~Ø13–16 mm lens barrel. (NB: `candidates.sysml` currently lists T13 as `~17x17x35` — reconcile to the vendor's 21 × 21 mm body.)
+- **Verified dimensions** (iRay OEM drawing — see [`iRay_MINI_384-640_Module_Manual_V1.10.pdf`](iRay_MINI_384-640_Module_Manual_V1.10.pdf)): core body **21 × 21 mm** (±0.10), depth ~8–10.3 mm, **< 20 g** core; **8 × M2 tapped holes** (4 front + 4 rear) on an **18.40 mm** pattern; Ø21 front lens boss; rear 50-pin Hirose DF40C-50DP. Lens options 4–75 mm — **T13 uses the 18 mm lens** (SELECTED 2026-07-29, was 13 mm). Overall with lens ≈ **21 × 21 × ~34 mm** (~24 mm barrel — estimate, caliper). Full spec: [`mini640_t13_cad_spec.md`](mini640_t13_cad_spec.md).
 
 ### D. Battery — `BAT09` Lumenier 6S 12 Ah Amprius / `BAT10` Upgrade Energy 6S3P 12 Ah
 - No CAD needed — model as a **keep-out box** for strap routing / clearance:
@@ -68,12 +68,16 @@ standoff tops) plus each component's footprint and keep-out volume.
 2. Make one project folder; save as `chimera9_integration.FCStd`.
 
 **Phase 1 — Build the component bodies** (Part Design workbench; one Body each)
-1. **Frame top-plate fixture:** open the **Assembly Guide PDF**, export the top-plate
-   page as an image, insert it on a sketch plane (`Std Image` / TechDraw), and
-   **scale it to the known 405 mm wheelbase** (or the 360 mm overall length). Trace
-   the plate outline + the 30.5 × 30.5 stack holes + standoff holes → **Pad** to
-   2 mm. This is your mounting reference. Add 4 **standoff posts** at the stack
-   pattern up to the 21 mm stack height as the deck's attachment points.
+1. **Frame top-plate fixture:** the Assembly Guide PDF is an exploded/BOM view (no
+   to-scale outline — see §2A), so **don't try to trace it.** Build the mounting
+   reference from what you actually have: sketch the **30.5 × 30.5 stack hole pattern**
+   (φ3) at the origin — that is the real bolt interface for the deck — inside a plate
+   **envelope** approximated from the key dims (overall **360 × 235 mm**, wheelbase
+   **405 mm**). **Pad** to 2 mm. Refine the true plate outline + exact hole positions
+   later from **calipers on the real frame** or a **community STEP donor** (§2A). Add 4
+   **standoff posts** at the stack pattern up to the 21 mm stack height as the deck's
+   attachment points. (For the mount deliverable the stack pattern + envelope is what
+   matters; the decorative plate edge is clearance context only.)
 2. **NanoPi M5:** Pad a **90 × 62 × 1.6 mm** PCB; add the 4 mounting holes (coords
    from the wiki drawing); Pad a **keep-out box ~90 × 62 × 25 mm** above it for the
    heatsink + connectors. (For mount design the keep-out box is what matters.)

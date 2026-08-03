@@ -34,12 +34,12 @@ candidate ID (the project's internal part number). Four build phases — **Phase
 
 | Product | Part # | Link | Cost |
 |---|---|---|---|
-| PurpleRiver Mini 640 thermal camera (640×512, 12 µm, 13 mm) | `T13` | [thermal-image.com](https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/) | $650.00 |
+| PurpleRiver Mini 640 thermal camera (640×512, 12 µm, **18 mm lens**) | `T13` | [thermal-image.com](https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/) | $700.00† |
 | NanoPi M5, 4 GB SBC (Rockchip RK3576) — real-time onboard AI inference (thermal via USB-UVC) | `SBC3` | [friendlyelec.com](https://www.friendlyelec.com/index.php?route=product/product&path=69&product_id=309) | $126.00 |
 | SBC mount + cooling (3D-printed deck + 30 mm fan + heat-set hardware) | — | fabricated ([reference/cad-resources.md](reference/cad-resources.md)) | ~$15.00 |
 | SBC power — 2-6S→12V 3A UBEC (2-pack) | — | [amazon.com](https://www.amazon.com/2pcs-2S-6S-DC-DC-Converter-Module/dp/B0CTZHJR5L) | $9.99 |
 | SBC power — USB-C power-only cable (bare wire→USB-C male, 20AWG 5A) | — | [amazon.com](https://www.amazon.com/USB-C-Power-Copper-Connector-Device/dp/B0GBGLNR52) | $7.99 |
-| **Phase 2 subtotal** | | | **~$808.98** |
+| **Phase 2 subtotal** | | | **~$858.98** |
 
 ## Phase 3 — AI detection + autonomous route modification (software)
 
@@ -71,16 +71,16 @@ candidate ID (the project's internal part number). Four build phases — **Phase
 | Phase | Subtotal |
 |---|---|
 | Phase 1 — flight + FPV + waypoints | $1,370.75 |
-| Phase 2 — thermal + SBC (onboard) | ~$808.98 |
+| Phase 2 — thermal + SBC (onboard) | ~$858.98 |
 | Phase 3 — AI deployment (software only) | $0.00 |
-| **Committed system subtotal (Phases 1–3)** | **~$2,179.73** |
+| **Committed system subtotal (Phases 1–3)** | **~$2,229.73** |
 | Phase 4 — OpenHD downlink (*future capability*) | ~$158.99 |
-| **Grand total (all four phases)** | **~$2,338.72** |
+| **Grand total (all four phases)** | **~$2,388.72** |
 
 **R4 integrated-system cost** (phase grand total minus **reusable/support items** — the 2× `BAT22`
 development packs ($220) and the `CHG1` charger ($112)):
-- **Committed (Phases 1–3): ≈ $1,848** (≤ $2,500 ✓)
-- **With Phase 4 (all four phases): ≈ $2,007** (≤ $2,500 ✓)
+- **Committed (Phases 1–3): ≈ $1,898** (≤ $2,500 ✓)
+- **With Phase 4 (all four phases): ≈ $2,057** (≤ $2,500 ✓)
 
 Both are under the $2,500 R4 cap.
 
@@ -90,9 +90,14 @@ Both are under the $2,500 R4 cap.
   build (Phases 1–3) is analog FPV for piloting + thermal→SBC **live onboard inference**, with **no
   thermal downlink and no onboard recording**. Phase 4 prices (WLAN_AIR1, WLAN_GND1, Foxeer) remain
   estimates — confirm before building Phase 4.
-- **Phase 2** — T13 confirmed $650.00 ($590 base + $60 shipping) as the **USB** variant (thermal →
-  SBC over USB-UVC for live inference; MIPI and CVBS were evaluated and rejected — see
-  [`MODEL_ISSUES.md`](MODEL_ISSUES.md)).
+- **Phase 2** — T13 confirmed **$700.00** ($640 base [$590 + **$50 for the 18 mm lens**, confirmed
+  2026-07-29] + $60 shipping) as the **USB** variant (thermal → SBC over USB-UVC for live inference;
+  MIPI and CVBS were evaluated and rejected — see [`MODEL_ISSUES.md`](MODEL_ISSUES.md)). †
+  **Lens = 18 mm** (updated 2026-07-29 from 13 mm for better on-target resolution + 45° oblique
+  recognition; HFOV 24.1° accepted since IR is surveillance-only — see
+  [`analysis/thermal_detection_offnadir_analysis.md`](analysis/thermal_detection_offnadir_analysis.md)).
+  Price confirmed (+$50). **Still confirm the 18 mm variant's mass** (~5–10 g over the 13 mm);
+  update `candidates.sysml` T13 mass if so (nose-payload CG).
 - **Phase 3** — software-only (RKNN model deployment + MAVLink autonomous route modification), $0
   hardware; runs live inference on the Phase 2 thermal feed.
 - **SBC power — RESOLVED (2026-07-06):** the NanoPi M5 USB-C port accepts wide-input DC 6–20 V

@@ -1134,8 +1134,8 @@ package DroneCandidates {
    :>> name = "PurpleRiver Mini 640";
    :>> purchaseUrl = "https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/";
    :>> brand = "PurpleRiver";
-   :>> cost_USD = 650.00;            // $590 base + $60 shipping (confirmed 2026-07-05)
-   :>> mass = 21.0 [g];
+   :>> cost_USD = 700.00;            // $640 base ($590 + $50 for 18mm lens, confirmed 2026-07-29) + $60 shipping
+   :>> mass = 21.0 [g];             // TODO confirm: 18mm lens is heavier than 13mm (core <20g w/o lens); likely +5-10g. Nose payload -> re-check flight-time CG.
    :>> power = 0.8 [W];
    :>> resolutionH = 640;
    :>> resolutionV = 512;
@@ -1144,12 +1144,15 @@ package DroneCandidates {
    :>> spectralRange = "8-14 um (LWIR)";
    :>> frameRate_Hz = 25.0;
    :>> netd = 0.05 [K];
-   :>> hfov = 33.0;                 // 640px x 12um = 7.68mm sensor + 13mm lens: 2*atan(7.68/(2*13)) ~= 32.9 deg
-   :>> lensOptions = "13";
+   :>> hfov = 24.1;                 // 640px x 12um = 7.68mm sensor + 18mm lens: 2*atan(7.68/(2*18)) ~= 24.1 deg (19.4 VFOV)
+   :>> lensOptions = "18";          // 18mm SELECTED (was 13mm). Surveillance-only IR (not for flight) => FOV<30 accepted;
+                                    // 18mm gives 8.3px on 0.5m @90m (vs 13mm 6.0) and recognizes at 45deg tilt.
+                                    // NB: 24.1 deg is BELOW R3_CAM_FOV (>=30) — deliberate coverage trade, see
+                                    // analysis/thermal_detection_offnadir_analysis.md and MODEL_ISSUES.md.
    :>> outputInterface = "USB";
    :>> outputProtocol = "USB UVC 1.1";
    :>> radiometric = true;
-   :>> dimensions = "~17x17x35";
+   :>> dimensions = "21x21x~34";    // core 21x21x10.3 + ~24mm 18mm-lens barrel (iRay drawing; lens length est., caliper)
    :>> inputVoltageMin = 5.0 [V];
    :>> inputVoltageMax = 24.0 [V];
    :>> operatingTempMin_C = -40.0;

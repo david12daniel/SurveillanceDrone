@@ -154,6 +154,19 @@ any tool previously.
    22.2 V/14.8 V (3.7 V/cell average). 4S 12000mAh has only one confirmed product
    (Lumenier NAV Amprius, sold out as of 2026-06); alternatives exist at 4S 10Ah.
 
+7. **OPEN (2026-07-29) — R3_CAM_FOV (≥30°) now violated by the selected 18 mm lens.**
+   The thermal lens was changed **13 mm → 18 mm** (`T13`, `candidates.sysml`; see
+   `SELECTED_COMPONENTS.md`, `BOM.md`, `analysis/thermal_detection_offnadir_analysis.md`).
+   18 mm HFOV = **24.1°**, below R3_CAM_FOV's ≥30°. This is a **deliberate trade**: the ≥30°
+   figure is a *coverage/swath* floor, not a flight/controllability requirement (the FPV
+   camera flies the drone, never the thermal), and 18 mm buys better on-target resolution
+   (8.3 px @90 m) plus recognition at a 45° oblique tilt, at ~28% less area/sweep. All other
+   camera requirements still pass (R3_CAM_RES improves). **Action needed (David, requires
+   `model.sysml` edit — protected file):** re-tag **R3_CAM_FOV as a coverage *goal*** (or lower
+   the threshold to ~24°), and review the def-level `satisfy R3_CAM_FOV` on `IRCamera` (now a
+   false structural claim). Until then the model asserts a requirement the selected part
+   doesn't meet. **No `model.sysml` change has been made** pending approval.
+
 ---
 
 ## C. Modeling decisions (SysML v2 representation choices)
