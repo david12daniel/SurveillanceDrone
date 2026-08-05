@@ -121,7 +121,8 @@ The build must fit the SBC envelope: T13 streams 640×512 @ 25 Hz. YOLO-nano on 
 | link-loss / low-batt failsafe | ArduPilot params | (config values) | Test |
 
 ## Open questions / risks
-1. **Classification retry/timeout policy** — `InvestigateAndClassify.adjustOrbit` loop is unbounded in the model; needs a loiter-time budget + a "log as unclassified, resume" exit. (Also a small R6 endurance draw.)
+1. ~~**Classification retry/timeout policy** — `InvestigateAndClassify.adjustOrbit` loop is unbounded in the model; needs a loiter-time budget + a "log as unclassified, resume" exit. (Also a small R6 endurance draw.)~~
+   **RESOLVED 2026-08-05:** 30 s loiter time budget per investigation, then log as unclassified and resume. See `analysis/classify_loiter_budget.md`.
 2. **Low-battery reserve threshold** — still the open R6-derived gap; pick `BATT_LOW_MAH`.
 3. **Thermal training data** — the single biggest build risk; self-collected deer/turkey thermal footage is likely required to hit 90/80%.
 4. **Ultralytics AGPL** — fine for personal use; revisit if the app is ever shared/distributed.
