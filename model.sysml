@@ -1599,8 +1599,9 @@ package DroneSystemModel {
    else adjustOrbit;
 
   action adjustOrbit {
-   doc /* Adjust loiter orbit/aspect and retry classification; bounded by the
-        loiter time budget (retry/timeout policy TBD). */
+   doc /* Adjust loiter orbit/aspect and retry classification; bounded by a
+        30 s loiter time budget per investigation (task 0.4 / D2.9).
+        On budget exhaustion: log POI as unclassified and resume route. */
   }
   then classifyLoop;
 

@@ -40,13 +40,16 @@ class MissionApp:
 
     def __init__(self, conn, detector: Detector, *, target_system: int = 1,
                  detect_thr: float = 0.90, classify_thr: float = 0.80,
-                 classify_timeout_ticks: int = 40):
+                 classify_timeout_ticks: int = 40,
+                 loiter_time_budget_s: float = 30.0):
         self.conn = conn
         self.detector = detector
         self.target_system = target_system
         self.detect_thr = detect_thr            # R3_1
         self.classify_thr = classify_thr        # R3_2
         self.classify_timeout_ticks = classify_timeout_ticks
+        self.loiter_time_budget_s = loiter_time_budget_s   # D2.9: 30 s loiter budget (task 0.4)
+        self._investigate_start: float | None = None         # wall-clock entry time of INVESTIGATE
         self.state = self.SWEEP
         self.fc_mode: int | None = None
         self.position: tuple[int, int, float] | None = None  # lat_e7, lon_e7, rel_alt_m
@@ -123,6 +126,7 @@ class MissionApp:
                 self._set_mode("GUIDED")                              # send TargetDetected
                 self._command_descent(lat, lon, CLASSIFY_ALT_M)      # descend 120->90 m
                 self._classify_ticks = 0
+                self._investigate_start = time.time()                # D2.9: start the loiter budget clock
                 self.state = self.INVESTIGATE
 
         elif self.state == self.INVESTIGATE:
@@ -132,8 +136,15 @@ class MissionApp:
                 self._alert(f"CLASSIFY {species} {conf:.2f}")
                 self._set_mode("AUTO")                                # send InvestigationComplete
                 self.state = self.SWEEP
+            # D2.9: outer loiter time budget (task 0.4) — 30 s wall-clock per
+            # investigation, then log-as-unclassified and resume. The inner
+            # classify_timeout_ticks (0.8 s) still bounds per-aspect sampling.
+            loiter_elapsed = time.time() - (self._investigate_start or time.time())
+            if loiter_elapsed >= self.loiter_time_budget_s:
+                self._alert("UNCLASSIFIED loiter-budget-timeout")     # log POI & resume
+                self._set_mode("AUTO")                                # send InvestigationComplete
+                self.state = self.SWEEP
             elif self._classify_ticks >= self.classify_timeout_ticks:
-                # Open policy item: log-and-resume on timeout (see gap analysis §Open).
                 self._alert("UNCLASSIFIED timeout")
                 self._set_mode("AUTO")
                 self.state = self.SWEEP
