@@ -207,7 +207,7 @@ estimates.
 
 ## Suggested near-term ordering
 
-1. **0.1 / 0.2 / 0.3** — the model approvals David owns; they unblock nothing else but leave the model asserting a false claim until closed.
+1. **0.2 / 0.3** — the remaining model approvals David owns (0.1 closed 2026-08-11); they unblock nothing else but leave the model asserting a false claim until closed.
 2. **D1.1** — start thermal data collection immediately. It is the longest lead and needs no hardware.
 3. **D2.13** — the SITL suite, also hardware-free, and it validates the failsafe params before they matter.
 4. **Phase 1 procurement (1.1–1.10)** — long shipping tails (iFlight, Alibaba, Upgrade Energy).
