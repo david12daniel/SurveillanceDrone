@@ -47,10 +47,13 @@ def test_low_battery_fs_rtl(sitl_conn):
 
 
 def test_rtl_speed_param(sitl_conn):
-    """RTL_SPEED=12 should be accepted and readable."""
-    name = "RTL_SPEED"
+    """RTL_SPEED_MS=12 should be accepted and readable.
+
+    Renamed from RTL_SPEED on modern ArduCopter (task D2.13, 2026-08-10).
+    """
+    name = "RTL_SPEED_MS"
     value = 12.0
     set_param(sitl_conn, name, value, 9)  # MAV_PARAM_TYPE_REAL32
     got = get_param(sitl_conn, name)
-    assert got is not None, "Could not read RTL_SPEED"
-    assert abs(got - 12.0) < 0.1, f"RTL_SPEED: expected 12.0, got {got}"
+    assert got is not None, "Could not read RTL_SPEED_MS"
+    assert abs(got - 12.0) < 0.1, f"RTL_SPEED_MS: expected 12.0, got {got}"

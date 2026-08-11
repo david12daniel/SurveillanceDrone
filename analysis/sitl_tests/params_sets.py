@@ -31,7 +31,10 @@ LOW_BATTERY_FS = {
     "BATT_CRT_VOLT": (19.2, REAL32),   # 3.2 V/cell critical
     "BATT_FS_LOW_ACT":  (2, INT8),     # 2 = RTL on low battery
     "BATT_FS_CRT_ACT":  (1, INT8),     # 1 = Land on critical battery
-    "FS_BATT_ENABLE":   (1, INT8),     # Enable battery failsafe
+    # FS_BATT_ENABLE doesn't exist on modern ArduCopter (confirmed via a
+    # full PARAM_REQUEST_LIST dump against 4.7.0, task D2.13, 2026-08-10)
+    # -- the standalone enable flag was removed; setting a nonzero
+    # BATT_FS_LOW_ACT/BATT_FS_CRT_ACT above is what enables the failsafe.
     "BATT_MONITOR":     (4, INT8),     # 4 = Fuel level + voltage
 }
 """Low-battery failsafe: BATT_LOW_MAH=700 mAh triggers RTL at 700 mAh remaining
@@ -40,7 +43,9 @@ BATT_CRT_MAH=350 triggers immediate landing if the RTL drain continues to critic
 
 # ── Return speed (enables the fast-RTL power-bucket advantage) ──────────────
 RTL_CRUISE = {
-    "RTL_SPEED": (12.0, REAL32),       # 12 m/s return speed (power-bucket sweet spot)
+    # Renamed from RTL_SPEED on modern ArduCopter (confirmed via a full
+    # PARAM_REQUEST_LIST dump against 4.7.0, task D2.13, 2026-08-10).
+    "RTL_SPEED_MS": (12.0, REAL32),    # 12 m/s return speed (power-bucket sweet spot)
 }
 """RTL return speed: 12 m/s is the power-bucket minimum (~136 W on AF3a+T13+SBC3+BAT10),
 returning from 2.8 km in ~5.4 min with only 555 mAh bare draw."""

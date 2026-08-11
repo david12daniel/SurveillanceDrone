@@ -9,12 +9,20 @@ from pymavlink import mavutil
 from pymavlink.dialects.v20 import ardupilotmega as AP
 
 # ArduCopter mode numbers (must match the firmware build).
-# Verified against ArduCopter 4.5 — see task D2.14.
+# Verified live via test_mode_ack.py (D2.14, 2026-08-10) against both SITL
+# binaries actually in use: APM:Copter V3.3 (d6053245, the "old" binary) and
+# ArduCopter V4.7.0 (1511f271, the "modern" binary — NOT 4.5 as previously
+# assumed here; check with `strings <binary> | grep 'ArduCopter V'`). Both
+# accept SET_MODE at these numbers and report back via HEARTBEAT.custom_mode.
 MODE = {"STABILIZE": 0, "AUTO": 3, "GUIDED": 4, "LOITER": 5, "RTL": 6, "LAND": 9}
 
 # Timeouts (conservative for SITL on modest hardware)
 MODE_TIMEOUT_S = 10.0
-ARM_TIMEOUT_S = 20.0
+# GPS/EKF-home convergence genuinely takes ~20-25s wall-clock after boot
+# (confirmed empirically, task D2.13, 2026-08-10) regardless of --speedup --
+# the simulated GPS cold-start isn't sped up along with the physics loop.
+# Give arm_and_check's retry loop enough margin to ride that out.
+ARM_TIMEOUT_S = 35.0
 TAKEOFF_TIMEOUT_S = 30.0
 POSITION_TIMEOUT_S = 60.0
 
@@ -122,13 +130,35 @@ def get_param(conn: mavutil.mavfile, name: str, timeout: float = 5.0) -> float |
 
 
 def arm_and_check(conn: mavutil.mavfile, timeout: float = ARM_TIMEOUT_S) -> bool:
-    """Arm the vehicle and wait for the armed bit in HEARTBEAT."""
-    conn.mav.command_long_send(
-        conn.target_system, conn.target_component,
-        mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM,
-        0, 1, 0, 0, 0, 0, 0, 0)
+    """Arm the vehicle and wait for the armed bit in HEARTBEAT.
+
+    Resends the arm command every 2 s while waiting: a rejected attempt
+    (e.g. GPS/home not converged yet) does not retry itself, and SITL's
+    pre-arm gates can take 20+ real seconds to clear after boot even once
+    the vehicle otherwise looks ready. A real GCS keeps asking rather than
+    trying once and giving up -- match that instead of racing the gate.
+
+    Deliberately polls only ONE message type (HEARTBEAT) per iteration.
+    recv_match(type=X, blocking=False) internally loops, discarding every
+    non-matching message it passes over while hunting for X. Under the
+    full-rate telemetry stream this suite now requests (needed for
+    GLOBAL_POSITION_INT/EKF_STATUS_REPORT -- see conftest.py), that hunt
+    can eat straight through a genuine "armed" HEARTBEAT while chasing a
+    rarer type like COMMAND_ACK/STATUSTEXT earlier in the same iteration,
+    so the vehicle can arm for real and this loop still never observes it.
+    Confirmed empirically (task D2.13, 2026-08-10): adding COMMAND_ACK/
+    STATUSTEXT polling here for debugging was enough, by itself, to turn
+    a reliably-passing arm sequence into one that always timed out.
+    """
     deadline = time.time() + timeout
+    next_attempt = 0.0
     while time.time() < deadline:
+        if time.time() >= next_attempt:
+            conn.mav.command_long_send(
+                conn.target_system, conn.target_component,
+                mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM,
+                0, 1, 0, 0, 0, 0, 0, 0)
+            next_attempt = time.time() + 2.0
         hb = conn.recv_match(type="HEARTBEAT", blocking=False)
         if hb is not None and hb.get_srcComponent() == mavutil.mavlink.MAV_COMP_ID_AUTOPILOT1:
             armed = hb.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED
@@ -215,9 +245,12 @@ def send_position_target(conn: mavutil.mavfile, lat_e7: int, lon_e7: int,
     coord_frame: 6 = MAV_FRAME_GLOBAL_RELATIVE_ALT_INT (position only).
     """
     type_mask = 0b0000111111111000  # position only (ignore vel/accel/yaw)
-    ms = int(time.time() * 1000)
+    # time_boot_ms is milliseconds since the FC's own boot, not a wall-clock
+    # timestamp -- a Unix-epoch ms value (~1.76e12 in 2026) overflows this
+    # field's uint32 range and crashes struct.pack. 0 is the standard "not
+    # tracking boot-relative time" value a GCS/companion computer sends.
     conn.mav.set_position_target_global_int_send(
-        ms, conn.target_system, conn.target_component, coord_frame,
+        0, conn.target_system, conn.target_component, coord_frame,
         type_mask, lat_e7, lon_e7, alt_m,
         0, 0, 0, 0, 0, 0, 0, 0)
 
@@ -260,8 +293,16 @@ def upload_mission(conn: mavutil.mavfile, items: list[dict],
     conn.mav.mission_count_send(conn.target_system, conn.target_component, n)
     deadline = time.time() + timeout
     received_seq = -1
-    while received_seq < n:
-        msg = conn.recv_match(type="MISSION_REQUEST_INT", blocking=False)
+    # ArduPilot requests items via the legacy MISSION_REQUEST message, not
+    # MISSION_REQUEST_INT, at least in this SITL configuration (confirmed
+    # by direct probing, task D2.13, 2026-08-10) -- listening for only the
+    # INT variant meant we never answered, so ArduPilot retried a few times
+    # and gave up with "Mission upload timeout". A real GCS answers either.
+    # Passing both types to recv_match in one call (rather than two
+    # separate type-filtered calls) avoids one silently discarding
+    # messages the other needed -- see arm_and_check's docstring.
+    while received_seq < n and time.time() < deadline:
+        msg = conn.recv_match(type=["MISSION_REQUEST", "MISSION_REQUEST_INT"], blocking=False)
         if msg is not None:
             if msg.seq == received_seq + 1:
                 received_seq = msg.seq

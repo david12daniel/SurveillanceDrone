@@ -75,12 +75,28 @@ those messages — two different failure modes. Both should pass before field de
 
 ## Common failure modes
 
+All of the below were confirmed by direct probing against the two real SITL
+binaries in this environment (task D2.13/D2.14, 2026-08-10), not guessed --
+see `conftest.py`/`helpers.py` docstrings and the `test_*.py` files' own
+comments for the full reasoning behind each fix.
+
 | Symptom | Likely cause |
 |---|---|
-| `EKF check fails` at arm | SITL needs GPS lock; add `--gps=ublox` or wait 15 s |
-| `COMMAND_ACK` has `result=4 (FAILED)` | Mode not available in current flight mode/state |
-| GUIDED target never converges | `WPNAV_LOIT_SPEED`/`WPNAV_SPEED` defaults too slow; test tolerance needs adjustment |
-| Failsafe not triggering | Parameter not save; call `PARAM_SET` with the right type |
+| `PreArm: Motors: Check frame class and type` | `FRAME_CLASS` defaults to 0 (undefined) on a fresh EEPROM when launching the raw binary directly. `conftest.py` sets it (and the legacy `FRAME` param for Copter 3.3). |
+| `PreArm: 3D Accel calibration needed`, never clears | Fresh EEPROM, never ran the interactive accelcal wizard. `conftest.py` sets `ARMING_SKIPCHK`/legacy `ARMING_CHECK` to skip just the INS check. |
+| `Arm: Check FS_THR_VALUE` / `Arm: Throttle too high` | No RC hardware means ArduPilot never sees RC_CHANNELS at all, reading as a permanent throttle failsafe. `conftest.py`'s `sitl_conn` fixture runs a background `RC_CHANNELS_OVERRIDE` feed (idle throttle) for the life of each connection. |
+| `MISSION_REQUEST`/`RC_CHANNELS_OVERRIDE` seem to be silently dropped | `target_component` defaults to 0 (broadcast) in pymavlink -- it does NOT auto-populate from the first HEARTBEAT the way `target_system` does. `COMMAND_LONG`-based commands tolerate broadcast targeting; several message types (notably `RC_CHANNELS_OVERRIDE`) don't. Set `conn.target_component` explicitly. |
+| `EKF check fails` at arm / arm command times out once | A single arm attempt doesn't retry itself, and GPS/home genuinely takes ~20-25 s wall-clock after boot (not sped up by `--speedup`). `arm_and_check` resends every 2 s instead of asking once. |
+| `struct.error: 'I' format requires 0 <= number...` sending a position target | `time_boot_ms` must be milliseconds since the FC's own boot, not `time.time()*1000` -- a Unix-epoch ms value overflows the field's uint32 range. Pass `0`. |
+| No `GLOBAL_POSITION_INT`/`EKF_STATUS_REPORT`/etc at all, only `HEARTBEAT`/`TIMESYNC` | SITL doesn't stream anything beyond the bare minimum until a client requests it, same as any real GCS would on connect. Send `REQUEST_DATA_STREAM(MAV_DATA_STREAM_ALL, ...)` once connected. |
+| A wait loop that checks several different message types per iteration (e.g. STATUSTEXT, then EKF_STATUS_REPORT, then HEARTBEAT) reports the wrong thing, or never sees an event you can independently confirm happened | `recv_match(type=X, blocking=False)` internally discards every non-matching message while hunting for X. Under this suite's full-rate telemetry stream, an earlier type-filtered poll in the same loop can eat a message a later one needed. Poll only one type per loop, or pass a list of types to a single `recv_match` call. |
+| A `while` loop with a computed `deadline` that never actually checks it | Easy to introduce by only checking a different loop condition (e.g. `received_seq < n`). Always include the deadline in the loop condition, not just compute it. |
+| ArduPilot requests mission items via `MISSION_REQUEST`, not `MISSION_REQUEST_INT` | Firmware-dependent; listen for both. |
+| `Auto: Missing Takeoff Cmd`, mission has a takeoff command | Mission item seq 0 is a conventional home/reference placeholder ArduPilot expects, not a real command -- real commands start at seq 1, matching QGroundControl/Mission Planner. |
+| `Arm: Auto mode not armable` | `AUTO_OPTIONS` bit 0 ("Allow Arming") is off by default -- a deliberate safety gate against arming directly in AUTO. Arm in GUIDED/STABILIZE first, then switch to AUTO, matching standard ArduCopter practice, rather than loosening that gate. |
+| GUIDED target never converges (lateral) | `WPNAV_*` parameters no longer exist on modern ArduCopter (renamed to `PSC_D_*`/`PSC_NE_*` under the position-controller rewrite); this doesn't block lateral GUIDED targets, which work fine once the above are fixed. |
+| GUIDED target never converges (**altitude-only**, same lat/lon as current position) | **Unresolved.** Confirmed real (not a timing/retry issue) via direct probing with settle delays, periodic resend, and continuous 4 Hz streaming -- the vehicle simply never moves in Z. Root cause not isolated; see `test_guided_altitude_change`'s docstring. |
+| SITL binary exits mid-test ("Closed connection on SERIAL0" is the last line in its own log, then the process is gone) | Confirmed real crash, not a test-harness bug: observed during an AUTO-mode takeoff sequence, and independently the shared SITL process appears to become less reliable the more mission-upload/arm/disarm/mode-change cycles it's put through in one session. `conftest.py`'s `sitl_conn` fixture checks `sitl_process.poll()` and skips cleanly instead of every remaining test independently timing out, but the crash itself isn't fixed -- consider a fresh SITL process per test file, or upstream-reporting the crash, as follow-up. |
 
 ---
 *Part of the Surveillance Drone project, D2.13. See TASKS.md for the full work breakdown.*

@@ -45,12 +45,22 @@ def test_set_mode_stabilize_ack(sitl_conn):
 
 
 def test_set_mode_invalid_rejected(sitl_conn):
-    """An invalid/unsupported mode number should be rejected by SITL."""
+    """An invalid/unsupported mode number should be rejected by SITL.
+
+    Uses MAV_CMD_DO_SET_MODE via command_long_send, not the raw legacy
+    SET_MODE message: SITL never emits a COMMAND_ACK for raw SET_MODE (only
+    a STATUSTEXT), so a test built on raw SET_MODE can never observe a
+    rejection this way. This matches how helpers.set_mode_via_command()
+    actually talks to the FC.
+    """
     invalid_mode = 99
-    sitl_conn.mav.set_mode_send(
-        sitl_conn.target_system,
+    sitl_conn.mav.command_long_send(
+        sitl_conn.target_system, sitl_conn.target_component,
+        mavutil.mavlink.MAV_CMD_DO_SET_MODE,
+        0,  # confirmation
         mavutil.mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
         invalid_mode,
+        0, 0, 0, 0, 0,
     )
     # Expect a COMMAND_ACK with result != ACCEPTED
     acks = []

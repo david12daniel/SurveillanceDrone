@@ -13,7 +13,30 @@ from helpers import (
 
 
 def test_guided_altitude_change(sitl_conn):
-    """Send a GUIDED altitude target and verify SITL descends to it."""
+    """Send a GUIDED altitude target and verify SITL descends to it.
+
+    KNOWN FAILING against the modern ArduCopter (4.7.0) SITL build as of
+    task D2.13 (2026-08-10) -- flagged here for follow-up, not silenced,
+    because this exact capability (GUIDED descend-to-classify-altitude) is
+    what UC-5/InvestigateAndClassify relies on in the real mission app.
+
+    Confirmed by direct probing (not just this test's own timing): the
+    vehicle holds its original takeoff altitude and never moves toward the
+    new Z target, even with a settle delay after takeoff, periodic resend,
+    and continuous 4Hz streaming of SET_POSITION_TARGET_GLOBAL_INT -- so
+    it isn't a one-shot-message-got-dropped race. The X/Y component of the
+    SAME message type works fine (test_guided_position_target_converges/
+    test_guided_position_is_safe below both pass, including under load
+    that moves the vehicle 50 m laterally). Root cause not isolated yet;
+    candidates worth checking next: the type_mask's bit 9 (FORCE_SET) is
+    unintentionally set by helpers.send_position_target's literal mask
+    (0b0000111111111000) -- probably harmless for Copter but not verified;
+    this firmware's position controller was rewritten around the PSC_D_*/
+    PSC_NE_* parameter families (WPNAV_SPEED_DN and friends no longer
+    exist at all, confirmed via a full PARAM_REQUEST_LIST dump), so a
+    Z-axis-specific gating in that rewrite is a stronger candidate than
+    anything on the test-harness side.
+    """
     lat = 42_3000000  # 42.3° in 1e7 (SITL home latitude)
     lon = -83_7000000  # -83.7° in 1e7
     start_alt = 20.0
@@ -23,14 +46,19 @@ def test_guided_altitude_change(sitl_conn):
     ok = guided_takeoff(sitl_conn, alt_m=start_alt)
     assert ok, "Guided takeoff failed"
 
-    # Command descent
-    send_position_target(sitl_conn, lat, lon, target_alt)
-    time.sleep(5.0)  # Let SITL respond
-
-    # Check current altitude
+    # guided_takeoff returns as soon as altitude is within 1 m of the takeoff
+    # target, which can still be a second or two before the climb itself has
+    # actually finished resolving. Resending periodically (like
+    # arm_and_check's retry loop) rather than a single fire-and-forget
+    # message rides out that specific race -- confirmed NOT sufficient by
+    # itself to fix this test; see the docstring above.
     deadline = time.time() + 20.0
+    next_send = 0.0
     reached = False
     while time.time() < deadline:
+        if time.time() >= next_send:
+            send_position_target(sitl_conn, lat, lon, target_alt)
+            next_send = time.time() + 2.0
         msg = sitl_conn.recv_match(type="GLOBAL_POSITION_INT", blocking=False)
         if msg is not None:
             alt = msg.relative_alt / 1000.0
