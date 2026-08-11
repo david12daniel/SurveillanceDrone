@@ -80,7 +80,20 @@ class MissionApp:
 
     def _command_descent(self, lat_e7: int, lon_e7: int, alt_m: float):
         # GUIDED position target: hold lat/lon, command target altitude (descend).
-        type_mask = 0b0000111111111000  # position only (ignore vel/accel/yaw)
+        # type_mask = 3576 (0b0000110111111000): x/y/z used, vel/accel ignored,
+        # yaw/yaw_rate ignored -- ArduPilot's own documented "position only"
+        # mask. An earlier version of this mask also set bit 9
+        # (POSITION_TARGET_TYPEMASK_FORCE_SET, giving 4088/0b0000111111111000)
+        # -- a common copy-paste artifact from example offboard-control code
+        # where that bit isn't actually one of the "ignore" bits. Confirmed
+        # against real ArduCopter 4.7.0 SITL (task D2.13/D2.15, 2026-08-11):
+        # with bit 9 set, a same-lat/lon lower-altitude target never moved the
+        # vehicle in Z at all -- this is the exact descend-to-classify call
+        # this function exists for, so that bit being set would have silently
+        # broken UC-5/InvestigateAndClassify's altitude change on real
+        # hardware. See analysis/sitl_tests/helpers.py's send_position_target
+        # for the same fix and the full investigation notes.
+        type_mask = 0b0000110111111000
         self.conn.mav.set_position_target_global_int_send(
             self._ms(), self.target_system, 1,
             mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT_INT,

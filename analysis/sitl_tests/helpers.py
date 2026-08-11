@@ -244,7 +244,23 @@ def send_position_target(conn: mavutil.mavfile, lat_e7: int, lon_e7: int,
 
     coord_frame: 6 = MAV_FRAME_GLOBAL_RELATIVE_ALT_INT (position only).
     """
-    type_mask = 0b0000111111111000  # position only (ignore vel/accel/yaw)
+    # Bits 0-2 clear (x/y/z position used), bits 3-8 set (vx/vy/vz/ax/ay/az
+    # ignored), bits 10-11 set (yaw/yaw_rate ignored) = 0b0000110111111000
+    # (3576), ArduPilot's own documented "position only" mask. An earlier
+    # version of this mask also set bit 9 (POSITION_TARGET_TYPEMASK_FORCE_SET,
+    # 0b0000111111111000 = 4088) -- a common copy-paste artifact from
+    # example offboard-control code, where bit 9 isn't actually one of the
+    # "ignore" bits. ArduCopter's GCS_MAVLink_Copter.cpp ORs the x/y/z
+    # ignore bits into a single pos_ignore bool, so a lateral-only target
+    # (x/y ignored, z not) still drops the WHOLE position including
+    # altitude if pos_ignore trips -- but confirmed empirically (task
+    # D2.13/D2.15, 2026-08-11) that the real, reproducible difference here
+    # is bit 9 itself: with it set, a same-lat/lon lower-altitude target
+    # never moved the vehicle in Z at all (lateral-offset targets at the
+    # same altitude worked fine); with it cleared, the vehicle descended
+    # cleanly and monotonically to the commanded altitude. Do not set bit 9
+    # here, and do not use it as a base for hand-built masks elsewhere.
+    type_mask = 0b0000110111111000
     # time_boot_ms is milliseconds since the FC's own boot, not a wall-clock
     # timestamp -- a Unix-epoch ms value (~1.76e12 in 2026) overflows this
     # field's uint32 range and crashes struct.pack. 0 is the standard "not

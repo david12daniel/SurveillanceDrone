@@ -15,27 +15,37 @@ from helpers import (
 def test_guided_altitude_change(sitl_conn):
     """Send a GUIDED altitude target and verify SITL descends to it.
 
-    KNOWN FAILING against the modern ArduCopter (4.7.0) SITL build as of
-    task D2.13 (2026-08-10) -- flagged here for follow-up, not silenced,
-    because this exact capability (GUIDED descend-to-classify-altitude) is
-    what UC-5/InvestigateAndClassify relies on in the real mission app.
+    This exact capability (GUIDED descend-to-classify-altitude) is what
+    UC-5/InvestigateAndClassify relies on in the real mission app, so it's
+    worth recording how this was fixed, not just that it now passes.
 
-    Confirmed by direct probing (not just this test's own timing): the
-    vehicle holds its original takeoff altitude and never moves toward the
-    new Z target, even with a settle delay after takeoff, periodic resend,
-    and continuous 4Hz streaming of SET_POSITION_TARGET_GLOBAL_INT -- so
-    it isn't a one-shot-message-got-dropped race. The X/Y component of the
-    SAME message type works fine (test_guided_position_target_converges/
-    test_guided_position_is_safe below both pass, including under load
-    that moves the vehicle 50 m laterally). Root cause not isolated yet;
-    candidates worth checking next: the type_mask's bit 9 (FORCE_SET) is
-    unintentionally set by helpers.send_position_target's literal mask
-    (0b0000111111111000) -- probably harmless for Copter but not verified;
-    this firmware's position controller was rewritten around the PSC_D_*/
-    PSC_NE_* parameter families (WPNAV_SPEED_DN and friends no longer
-    exist at all, confirmed via a full PARAM_REQUEST_LIST dump), so a
-    Z-axis-specific gating in that rewrite is a stronger candidate than
-    anything on the test-harness side.
+    Was KNOWN FAILING as of task D2.13 (2026-08-10): the vehicle held its
+    takeoff altitude and never moved toward a same-lat/lon lower-altitude
+    target, even with settle delays, periodic resend, and continuous 4Hz
+    streaming -- not a one-shot-message-dropped race. Root cause (confirmed
+    by hands-on verification against this firmware, task D2.15,
+    2026-08-11): helpers.send_position_target's type_mask had bit 9
+    (POSITION_TARGET_TYPEMASK_FORCE_SET) unintentionally set -- a common
+    copy-paste artifact from example offboard-control code, where that bit
+    isn't actually one of the "ignore" bits. Clearing it (mask 3576 /
+    0b0000110111111000, ArduPilot's own documented "position only" value,
+    down from 4088 / 0b0000111111111000) produced a clean, monotonic
+    descent from 20m to 10m. Same fix applied to the real mission app's
+    _command_descent() in analysis/autonomy_sim/mission_app.py, which had
+    the identical bug -- and should be checked against the live
+    DroneMissionApp repo (analysis/autonomy_sim/ is a frozen prototype;
+    see its README), since this would have silently broken the real
+    descend-to-classify behavior on actual hardware too.
+
+    Once fixed, this surfaced a separate timing wrinkle worth documenting:
+    how long ArduPilot takes to actually start responding to the new
+    target after a takeoff varies a lot run-to-run -- observed anywhere
+    from ~9s to ~25s before altitude even starts moving, then another
+    ~20-25s of steady descent once it does. A 20s total budget (the
+    original value) was too tight and failed intermittently even with a
+    correct fix; 60s gives comfortable margin for the slow end of that
+    range without masking a real non-convergence (a genuinely broken
+    target would never move at all, regardless of how long you wait).
     """
     lat = 42_3000000  # 42.3° in 1e7 (SITL home latitude)
     lon = -83_7000000  # -83.7° in 1e7
@@ -50,9 +60,10 @@ def test_guided_altitude_change(sitl_conn):
     # target, which can still be a second or two before the climb itself has
     # actually finished resolving. Resending periodically (like
     # arm_and_check's retry loop) rather than a single fire-and-forget
-    # message rides out that specific race -- confirmed NOT sufficient by
-    # itself to fix this test; see the docstring above.
-    deadline = time.time() + 20.0
+    # message rides out that race -- kept even though it wasn't the root
+    # cause of the original failure, since it's cheap and still good
+    # practice against a live FC.
+    deadline = time.time() + 60.0
     next_send = 0.0
     reached = False
     while time.time() < deadline:
@@ -67,7 +78,7 @@ def test_guided_altitude_change(sitl_conn):
                 break
         time.sleep(0.2)
 
-    assert reached, f"Vehicle did not descend to {target_alt}m within 20s"
+    assert reached, f"Vehicle did not descend to {target_alt}m within 60s"
 
 
 def test_guided_position_target_converges(sitl_conn):
