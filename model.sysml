@@ -102,6 +102,16 @@ package DroneSystemModel {
  @PhaseTag { phase = Phase::Phase2; }
  }
 
+ requirement R9 {
+ doc /* Area coverage: the system shall survey a contiguous area of at least 30 acres (12.1 hectares) in a single sortie, at the R1 nominal survey altitude and the R2 survey speed of 2.23 m/s, holding a 20 percent battery reserve. Covered area = usable swept track length x across-track flight-line spacing; the two contributing requirements are R3_CAM_FOV (sensor swath) and R4_GCS_SWEEP_SPACING (route spacing). Consistency with R6: at the R6 minimum endurance of 30 minutes the usable swept track is approximately 3210 m, which at the 46.1 m line spacing afforded by the selected 24.1 degree thermal lens covers approximately 36.6 acres. R9 is therefore satisfied by any design that meets R6, and R6 remains the governing endurance floor. R10 is the 60-acre stretch goal. */
+ @PhaseTag { phase = Phase::Phase2; }
+ }
+
+ requirement R10 {
+ doc /* Stretch Goal: survey a contiguous area of 60 acres (24.3 hectares) in a single sortie, at the R1 nominal survey altitude and the R2 survey speed with a 20 percent reserve. Requires approximately 49 minutes of usable endurance - above the R6 30-minute floor, but within the R8 60-minute stretch goal, which delivers approximately 73.2 acres. The reference build (Chimera9 ECO + 6S3P 12Ah Amprius, 58.4 min cruise) achieves approximately 71.2 acres and therefore already meets R10. Reported, not asserted - mirroring the R6 / R8 hard-versus-stretch pattern. */
+ @PhaseTag { phase = Phase::Phase2; }
+ }
+
  package CameraRequirements {
  requirement R3_CAM_WT {
  doc /* The camera subsystem (sensor + lens + housing + cabling) shall not exceed 200g total mass. */
@@ -114,9 +124,9 @@ package DroneSystemModel {
  }
 
  requirement R3_CAM_FOV {
- doc /* The camera shall provide a horizontal field of view of at least 30 degrees. */
+ doc /* The thermal camera shall image a continuous across-track ground swath of at least 42 meters at the 120m AGL nominal detection altitude, where swath = 2 x altitude x tan(HFOV/2). Derived from R9 (30 acres per sortie) at the R6 minimum endurance of 30 minutes, the R2 survey speed and a 20 percent reserve: 3210 m of usable track needs 37.8 m of line spacing, hence >= 42 m of swath at the 10 percent overlap required by R4_GCS_SWEEP_SPACING. The R10 / R8 stretch pair (60 acres at 60 minutes) yields the same 42 m floor, since both pairs share the same area-per-minute ratio. Verified by analysis from the camera's specified HFOV: the selected T13 at 18 mm (HFOV 24.1 degrees) yields 51.2 m, a 22 percent margin. Supersedes the former "at least 30 degrees" form, which stated a bare lens angle rather than the ground coverage it was intended to guarantee - and which the selected 18 mm lens failed while still meeting the coverage intent. */
  @PhaseTag { phase = Phase::Phase2; }
- subsets R3;
+ subsets R9;
  }
 
  requirement R3_CAM_NETD {
@@ -233,6 +243,12 @@ package DroneSystemModel {
  doc /* The GCS display shall render the thermal video feed at sufficient resolution, brightness, and size such that the operator can perform detection (R3.1) and classification (R3.2) tasks. */
  @PhaseTag { phase = Phase::Phase4; } // live-video-to-GCS chain — deferred OpenHD downlink (David 2026-07-09)
  subsets R3;   // refinement traceability (was 'refines')
+ }
+
+ requirement R4_GCS_SWEEP_SPACING {
+ doc /* The flight planning software shall generate survey routes whose across-track flight-line spacing does not exceed 90 percent of the thermal camera's ground swath at the planned survey altitude, guaranteeing at least 10 percent overlap between adjacent passes and gap-free ground coverage of the area of interest. Verified by demonstration: plan a survey grid in the GCS application and compare the generated line spacing against 0.9 x (2 x altitude x tan(HFOV/2)). The selected GCS application (QGroundControl 4.4+) computes this natively from camera FOV and a side-overlap setting. */
+ @PhaseTag { phase = Phase::Phase1; }
+ subsets R9;
  }
 
  requirement R4_GCS_TELEM {
@@ -1674,8 +1690,11 @@ package DroneSystemModel {
   }
   then action planRoute {
    doc /* UC-2: waypoint route at 90–120 m / 2.23 m/s within the energy budget
-        (R1, R2, R6, R7); built and uploaded in QGroundControl via MAVLink. */
+        (R1, R2, R6, R7); built and uploaded in QGroundControl via MAVLink.
+        Survey grids additionally set the across-track line spacing that
+        realizes gap-free coverage (R4_GCS_SWEEP_SPACING, supporting R9). */
    @PhaseTag { phase = Phase::Phase1; }
+   satisfy R4_GCS_SWEEP_SPACING;
   }
   then action launch {
    doc /* UC-3: arm -> takeoff -> climb to survey altitude (SSS §3.1 states). */

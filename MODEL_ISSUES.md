@@ -154,18 +154,51 @@ any tool previously.
    22.2 V/14.8 V (3.7 V/cell average). 4S 12000mAh has only one confirmed product
    (Lumenier NAV Amprius, sold out as of 2026-06); alternatives exist at 4S 10Ah.
 
-7. **OPEN (2026-07-29) — R3_CAM_FOV (≥30°) now violated by the selected 18 mm lens.**
+7. **RESOLVED (2026-08-11) — R3_CAM_FOV restated as a ground-swath floor; new mission
+   requirement R9 (area coverage) added.** *(Was OPEN 2026-07-29: the ≥30° HFOV form was
+   violated by the selected 18 mm lens.)*
    The thermal lens was changed **13 mm → 18 mm** (`T13`, `candidates.sysml`; see
    `SELECTED_COMPONENTS.md`, `BOM.md`, `analysis/thermal_detection_offnadir_analysis.md`).
-   18 mm HFOV = **24.1°**, below R3_CAM_FOV's ≥30°. This is a **deliberate trade**: the ≥30°
-   figure is a *coverage/swath* floor, not a flight/controllability requirement (the FPV
+   18 mm HFOV = **24.1°**, below the old R3_CAM_FOV ≥30°. This is a **deliberate trade**: the
+   ≥30° figure was a *coverage/swath* floor, not a flight/controllability requirement (the FPV
    camera flies the drone, never the thermal), and 18 mm buys better on-target resolution
-   (8.3 px @90 m) plus recognition at a 45° oblique tilt, at ~28% less area/sweep. All other
-   camera requirements still pass (R3_CAM_RES improves). **Action needed (David, requires
-   `model.sysml` edit — protected file):** re-tag **R3_CAM_FOV as a coverage *goal*** (or lower
-   the threshold to ~24°), and review the def-level `satisfy R3_CAM_FOV` on `IRCamera` (now a
-   false structural claim). Until then the model asserts a requirement the selected part
-   doesn't meet. **No `model.sysml` change has been made** pending approval.
+   (8.3 px @90 m) plus recognition at a 45° oblique tilt. All other camera requirements
+   still pass (R3_CAM_RES improves).
+
+   **Resolution (David approved 2026-08-11).** The old form stated a bare lens angle rather
+   than the ground coverage it was meant to guarantee, and conflated a *sensor* property with
+   a *route-planning* one. Four changes to `model.sysml`:
+   - **NEW `R9` (mission requirement, hard):** survey a contiguous area of **at least 30 acres
+     (12.1 ha) per sortie** at the R1 altitude / R2 speed with a 20% reserve.
+   - **NEW `R10` (mission requirement, stretch):** **60 acres (24.3 ha) per sortie** — reported,
+     not asserted, mirroring the R6 / R8 hard-versus-stretch pattern.
+   - **`R3_CAM_FOV` restated (camera):** ≥ **42 m** across-track ground swath at 120 m AGL
+     (`swath = 2·alt·tan(HFOV/2)`). Now `subsets R9` (was `R3`), since swath's real driver is
+     area coverage, not detection performance (which R3_CAM_RES owns). The selected T13 @18 mm
+     yields **51.2 m → 22% margin**, so the def-level `satisfy R3_CAM_FOV` on `IRCamera` is
+     **true again** and was left in place.
+   - **NEW `R4_GCS_SWEEP_SPACING` (flight-planning software):** generated line spacing
+     ≤ 90% of camera swath (≥10% overlap). `subsets R9`; satisfied by `ConductSortie.planRoute`
+     (allocated to QGroundControl). This is where the "no gaps between passes" obligation
+     actually belongs — it is operational, not a sensor property.
+
+   **Why 30 acres hard / 60 stretch (and not 60 hard).** A 60-acre hard floor would have made
+   **R9 outrank R6 as the endurance driver**: at 2.23 m/s and 46.1 m spacing, 60 acres needs
+   ≈5,270 m of swept track ≈ **49 min** usable endurance, well above the R6 30-min floor — so a
+   design that merely satisfied R6 would cover only ~36.6 acres and *fail* R9. Setting the hard
+   requirement at **30 acres** keeps R6 governing: R6's 30 min yields ~3,210 m of track →
+   **36.6 acres**, clearing R9 with margin. The 60-acre case moves to **R10**, which needs
+   ~49 min — inside the **R8** 60-min stretch (~73.2 acres). Hard and stretch now pair
+   coherently: **R6↔R9** and **R8↔R10**.
+
+   *Consistency check:* both pairs (30 ac @ 30 min, 60 ac @ 60 min) share the same
+   area-per-minute ratio and therefore derive the **same 42 m swath floor** — the R3_CAM_FOV
+   value is stable whether taken from the hard or the stretch pair.
+
+   *Derived artifacts regenerated:* `analysis/requirements_traceability.csv` (54 requirements).
+   *No `model_community_balanced.sysml` change needed* — that export deliberately omits the
+   Requirements pillar and all `satisfy` statements (see its header), and this change touched
+   nothing else. *Still to sync:* the SSS export `REQUIREMENTS_EXPORT_26_06_30.md`.
 
 ---
 
