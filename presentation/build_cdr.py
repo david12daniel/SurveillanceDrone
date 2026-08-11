@@ -1133,10 +1133,10 @@ s = content_slide("Section 5 · Closure", "Open Items  (TBD / TBR / Action)")
 oi = [["Item", "Type", "Owner action"]]
 for a,b,c in [
     ("RTL reserve-energy threshold value (R6_BHV_RTL_RESERVE)","TBR","Set policy value before first autonomous flight"),
-    ("FC firmware — resolved to ArduCopter, but issues log still marked OPEN","Doc","Reconcile MODEL_ISSUES.md §B7 with SELECTED_COMPONENTS"),
+    ("FC firmware — reconciled in MODEL_ISSUES.md §B7 (RESOLVED)","RESOLVED","Issues log updated 2026-08-09 to match SELECTED_COMPONENTS"),
     ("Selected-frame deck & battery-bay dimensions are estimates","TBR","Confirm from vendor CAD / measurement (Phase 2 gate)"),
     ("SBC mount — 3D-printed deck not yet designed or modeled","Design","Design the mount + add it to model.sysml and CAD (Phase 2 gate)"),
-    ("AF5 (EMAX Hawk 7) mass gap — non-selected frame","TBD","Close or remove; no effect on baseline"),
+    ("AF5 (EMAX Hawk 7) mass gap — non-selected frame","RETIRED","Retired 2026-08-08 from candidates.sysml (see MODEL_ISSUES.md B4). No effect on baseline."),
     ("Phase 4 (OpenHD) component pricing","TBD","Confirm before any Phase 4 build (deferred)"),
     ("Empirical validation of endurance / thermal / RF","Action","Flight test, field thermal capture, range test"),
 ]:

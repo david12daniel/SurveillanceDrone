@@ -24,7 +24,7 @@ All 15 airframe rows now have masses — 8 verified from manufacturer/review sou
 | iFlight Chimera9 ECO | PNP | 721g | ✅ Verified (iFlight) |
 | iFlight Chimera9 ECO | BNF | 726g (est.) | 📐 Estimated (721g + RX) |
 | DarwinFPV X9 | PNP | 664g (est.) | 📐 Estimated (287.8g frame + 4×71.6g motors + all electronics) |
-| EMAX Hawk 7 | BNF | ~550g | ✅ Verified (Alibaba listing) |
+| EMAX Hawk 7 | BNF | ~550g | ✅ Verified (Alibaba listing) — **RETIRED from candidates.sysml 2026-08-08** (non-selected frame; see MODEL_ISSUES.md §B4)
 | DeepSpace ROC7 O4 PRO | PNP+GPS | ~672g | ✅ Verified (unmanned.tech review) |
 | DeepSpace ROC7 O4 PRO | BNF | ~677g (est.) | 📐 Estimated (672g + RX) |
 | GEPRC Crocodile75 V3 | PNP | ~593g (est.) | ✅ Semi-verified (235g frame + infer from 597.5g BNF) |

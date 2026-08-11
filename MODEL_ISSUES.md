@@ -98,22 +98,18 @@ any tool previously.
    engine is available (same limitation as the flight-time calc, C10). SBC NPU
    load-margin columns can be added the same way if wanted.
 
-4. **PARTIALLY RESOLVED (2026-06-25) — 6 of 7 missing airframe masses now
-   filled; AF5 still missing.** Masses confirmed via web research and added to
-   `candidates.sysml`: AF4a 747g (darwinfpv.com product page), AF6a 667g /
-   AF6b 672g (RaceDayQuads listing; BNF with O4 Pro + GPS + ELRS RX = 672g;
-   PNP+GPS approximated at 672 − 5g RX = 667g), AF7 597.5g (fpv24.com + multiple
-   sources), AF9a 402g (Oscar Liang review), AF10 672g (same DeepSpace ROC7
-   hardware as AF6b). **OPEN — AF5 (EMAX Hawk 7 BNF) needs a decision.** Research
-   (2026-06-26) confirmed the EMAX Hawk ships in 7/8/9/10-inch sizes with "DC"
-   (deadcat) and "X" frame geometries; the ~890 g (X) / ~920 g (DC) figures David
-   found are for the **10-inch** version. AF5 is currently modeled as the **7-inch**
-   Hawk 7 (propSize_in = 7), for which a reliable as-built mass is still not
-   published (EMAX's page omits the spec table; a 7-inch BNF would be ~450–550 g,
-   not ~900 g). **ACTION (David, 2026-06-26):** David is contacting EMAX to confirm
-   the as-built mass of the 7-inch Hawk 7 (and, for reference, the 10-inch X 890 g /
-   DC 920 g variants). AF5 stays modeled as 7-inch (propSize_in = 7) and skipped by
-   the sweep until that mass is provided.
+4. **RESOLVED (2026-08-08) — AF5 (EMAX Hawk 7) retired from candidates.sysml.**
+   AF5 was the only remaining airframe lacking a confirmed as-built mass. The
+   airframe is locked to AF3a (iFlight Chimera9 ECO), so AF5 was retired from
+   `candidates.sysml` (commented out with a retrospect block) rather than leaving
+   it open-endedly waiting on EMAX. The bundled EMAX camera (A6) and VTX (V4)
+   candidates were kept (their `includedWithAirframe` comments updated to note
+   the retired frame). The flight-time model no longer encounters AF5 in its
+   sweep → zero skipped airframes. **Rationale for retirement over investigation:**
+   EMAX never published a spec table for the 7-inch BNF; the ~890–920 g figures
+   David found were for the 10-inch version; and the non-selected frame adds zero
+   value to the locked-AF3a trade space. Retiring closes MODEL_ISSUES.md B4 and
+   unblocks task 0.8 (totalMass rollup).
 
 5. **RESOLVED (2026-06-26) — real per-motor thrust now drives feasibility.** Added
    `Airframe.maxThrustPerMotor_g` and bound it from manufacturer/thrust-table data:
@@ -133,14 +129,6 @@ any tool previously.
    per-frame MTOM is still unbound — thrust-to-weight (via `maxThrustPerMotor_g`) is
    used instead.
 
-7. **OPEN (2026-07-01) — FC firmware choice: ArduPilot Copter vs PX4.**
-   The BLITZ F7 on the Chimera9 ECO (AF3a) supports both ArduPilot Copter and PX4.
-   Both satisfy the waypoint + MAVLink requirements; the choice affects GCS setup
-   (Mission Planner / QGroundControl tuning profiles) and the Phase 3 SBC MAVLink
-   integration. `AF3a.fcFirmware` is set to `"TBD"` in `candidates.sysml` until this
-   is decided. **Action needed:** pick ArduPilot or PX4 before Phase 1 first flight
-   (it is a configuration choice, not a procurement item).
-
 6. **RESOLVED (2026-06-25) — real `Battery` candidates now in model.**
    `Architecture::Battery` was extended with `name`, `chemistry`, `cells_s`,
    `capacity_mAh`, `nominalVoltage` (`ISQElectromagnetism::ElectricPotentialDifferenceValue`),
@@ -154,7 +142,17 @@ any tool previously.
    22.2 V/14.8 V (3.7 V/cell average). 4S 12000mAh has only one confirmed product
    (Lumenier NAV Amprius, sold out as of 2026-06); alternatives exist at 4S 10Ah.
 
-7. **OPEN (2026-07-29) — R3_CAM_FOV (≥30°) now violated by the selected 18 mm lens.**
+7. **RESOLVED (2026-07-10) — FC firmware choice: ArduPilot ArduCopter ≥ 4.5.**
+   Previously OPEN as "ArduPilot Copter vs PX4" (2026-07-01). The autonomy-contract
+   build (`analysis/autonomy_sim/`, §C26) is built and tested on ArduCopter AUTO/GUIDED,
+   so David selected ArduPilot ArduCopter ≥ 4.5 on 2026-07-10. `AF3a.fcFirmware` in
+   `candidates.sysml` was updated from `"TBD"` to `"ArduPilot ArduCopter >= 4.5 —
+   SELECTED 2026-07-10"`. The choice affects GCS setup (QGroundControl tuning
+   profiles — Mission Planner is Windows-only, the laptop is a MacBook Air) and the
+   Phase 3 SBC MAVLink integration, but is a configuration choice, not a procurement
+   item, so no ordering impact. See `SELECTED_COMPONENTS.md` for the formal record.
+
+8. **OPEN (2026-07-29) — R3_CAM_FOV (≥30°) now violated by the selected 18 mm lens.**
    The thermal lens was changed **13 mm → 18 mm** (`T13`, `candidates.sysml`; see
    `SELECTED_COMPONENTS.md`, `BOM.md`, `analysis/thermal_detection_offnadir_analysis.md`).
    18 mm HFOV = **24.1°**, below R3_CAM_FOV's ≥30°. This is a **deliberate trade**: the ≥30°
@@ -980,10 +978,11 @@ any tool previously.
   As-built weights from geprc.com. Heavy 7.5″ frames → ~47–49 min hover (near the
   ROC7 group); thrust 3000 g/motor is EST (GEPRC publishes no grams). Baseline
   unchanged: AF9a DarwinFPV 129, 69.1 min.
-- **MOSTLY RESOLVED (2026-06-26) — airframe masses filled (AF5 pending).** All
-  airframe `mass` values are now populated except AF5 (see B4 — pending a
-  7-inch-vs-10-inch decision). Wheelbase is still absent for a few BNF-only entries
-  (AF5, AF6a/b, AF10); the flight-time model falls back to a 250 mm default
+- **RESOLVED (2026-08-08) — all airframe masses now filled; AF5 retired (see §B4).**
+  AF5 was the last remaining mass gap and has been retired from candidates.sysml
+  (non-selected frame, airframe locked to AF3a). All 15 active airframes carry
+  confirmed or estimated masses. Wheelbase is still absent for a few BNF-only entries
+  (AF6a/b, AF10); the flight-time model falls back to a 250 mm default
   frontal-area width when wheelbase is missing, so the effect is minor.
 - **RESOLVED (2026-06-25) — BNF/PNP as-built masses corrected.** BNF variants
   now carry distinct masses reflecting their bundled electronics. Confirmed from

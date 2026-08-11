@@ -322,6 +322,13 @@ package DroneCandidates {
    :>> batteryMount = "top";   // EST
   }
 
+  /*
+   * RETIRED 2026-08-08 — EMAX Hawk 7, non-selected frame (airframe locked to AF3a).
+   * No confirmed as-built mass ever published; skipped by the flight-time sweep.
+   * Retired rather than left open-endedly waiting for EMAX.
+   * See MODEL_ISSUES.md B4 for resolution history.
+   */
+  /*
   part AF5 : Airframe {
    :>> minCells_s = 6;  // 6S build (7" ECOII2807 class); skipped in sweep (no mass)
    :>> maxCells_s = 6;
@@ -346,12 +353,13 @@ package DroneCandidates {
    :>> sourceConfidence = "High";
    :>> manufacturerFlightTime = "10-20 min";
    :>> manufacturerFlightTimeBattery = "6S 5000mAh LiPo";
-   // --- physical-integration layer (MODEL_ISSUES.md C16) ---
+   // --- physical-integration layer ---
    :>> payloadDeckLength_mm = 80.0;   // EST 0.27*wheelbase (no WB published, 7"-class default)
    :>> payloadDeckWidth_mm = 50.0;    // EST 0.17*wheelbase
    :>> payloadCapacity_g = 0.0;        // EST 50%-throttle lift ceiling (4*maxThrust/2 - frame)
    :>> batteryMount = "top";   // EST
   }
+  */
 
   part AF6a : Airframe {
    :>> minCells_s = 6;  // 6S build (Redline 2807 1350KV, 7" LR)
@@ -1354,7 +1362,7 @@ package DroneCandidates {
    :>> cost_USD = 15.0;
    :>> mass = 7.0 [g];
    :>> power = 0.7 [W];
-   :>> includedWithAirframe = true; // EMAX Hawk 7 (#5)
+   :>> includedWithAirframe = true; // RETIRED EMAX Hawk 7 (#5)
    :>> fovLens = "Standard FPV";
    :>> outputType = "CVBS analog";
    :>> mountingPattern = "14x14mm";
@@ -2520,7 +2528,7 @@ package DroneCandidates {
    :>> mountingPattern = "30.5x30.5mm (est)";
    :>> channelCount = 48;
    :>> pitMode = true;
-   :>> includedWithAirframe = true; // EMAX Hawk 7 (#5)
+   :>> includedWithAirframe = true; // RETIRED EMAX Hawk 7 (#5)
   }
 
   part V5 : Vtx {

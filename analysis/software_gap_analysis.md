@@ -126,7 +126,8 @@ The build must fit the SBC envelope: T13 streams 640×512 @ 25 Hz. YOLO-nano on 
 2. **Low-battery reserve threshold** — still the open R6-derived gap; pick `BATT_LOW_MAH`.
 3. **Thermal training data** — the single biggest build risk; self-collected deer/turkey thermal footage is likely required to hit 90/80%.
 4. **Ultralytics AGPL** — fine for personal use; revisit if the app is ever shared/distributed.
-5. **GUIDED-mode authority + operator override (UC-11)** — not yet modeled; decide whether the operator can veto/abort an autonomous investigation, and whether that's a QGC mode switch or an app input.
+5. ~~**GUIDED-mode authority + operator override (UC-11)** — not yet modeled; decide whether the operator can veto/abort an autonomous investigation, and whether that's a QGC mode switch or an app input.~~
+   **RESOLVED 2026-08-06:** Yes, operator can override. Mechanism = QGC mode switch (no dedicated app input). On override the app enters PASSIVE; re-enters SWEEP when the operator switches back to AUTO. See `analysis/operator_override_UC11.md`.
 6. **ArduCopter mode numbers** — verify AUTO=3/GUIDED=4 against the exact firmware build before hard-coding.
 
 ## Next steps
