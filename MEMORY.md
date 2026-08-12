@@ -47,3 +47,15 @@ The Surveillance Drone SysML V2 model (`model.sysml`) is a critical engineering 
 - **Token type:** Classic PAT with `repo` scope
 - **Reference:** See `TOOLS.md` for re-issuance instructions
 - **Important:** DO NOT commit `.git/git-creds` to the repo. It's in `.gitignore` implicitly via `.git/`.
+
+## Mission Control -- Agent Guide
+- Full onboarding doc for reading/modifying Mission Control data or code, at path:
+  /mnt/c/Users/Josiah Laperriere/Documents/Coding/Mission-Control/AGENTS.md
+- Covers: MCP tool usage, data model, the provider-to-domain-to-UI architecture
+  pattern, how to restart the app (it does NOT hot-reload), hard-won gotchas
+  (Windows strftime, WSL quote-flattening, SQLite CASCADE, flaky filters, rate
+  limits), and safety boundaries.
+- Scope reminder: this agent (Thermal Surveillance Drone) only touches tasks in the
+  "Surveillance Drone" project on the Mission Control Kanban board -- every other
+  project belongs to Agent Smith.
+- Read this before making any code change to Mission Control, not just data changes.
