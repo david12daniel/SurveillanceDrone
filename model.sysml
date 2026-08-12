@@ -81,9 +81,15 @@ package DroneSystemModel {
  }
 
  requirement R6_BHV_RTL_RESERVE {
- doc /* The autonomous flight behavior shall command an automatic return-to-launch (RTL) when usable battery energy reaches a return-energy reserve threshold sufficient to guarantee the vehicle can return to the launch point and land before energy is depleted. Reserve threshold value: TBD (open policy decision, tracked separately from this requirement's existence). */
+ doc /* The autonomous flight behavior shall command an automatic return-to-launch (RTL) when usable battery energy reaches a return-energy reserve threshold sufficient to guarantee the vehicle can return to the launch point and land before energy is depleted. Reserve threshold value: see R6_FS_BATT (static worst-case parameter set, closing the former SSS §3.7 gap). */
  @PhaseTag { phase = Phase::Phase1; }
  subsets R6;
+ }
+
+ requirement R6_FS_BATT {
+ doc /* Low-battery failsafe parameter set realizing R6_BHV_RTL_RESERVE's return-energy reserve threshold: a static, worst-case-distance reserve (David 2026-08-11 - a distance-adaptive reserve that shrinks as the vehicle nears the launch point was considered and deferred to Phase 3 as new SBC/Lua behavior rather than folded into this Phase 1 config item; see TASKS.md D2.17). BATT_LOW_MAH = 700 mAh (RTL trigger; a 30 percent margin over the 555 mAh bare-RTL energy cost of the worst-case 2.8 km return (R7) at RTL_SPEED = 12 m/s, the power-bucket-minimum return speed - see analysis/low_battery_reserve_analysis.md). BATT_CRT_MAH = 350 mAh (critical-landing trigger, half the low threshold - the absolute hard-floor backstop regardless of any dynamic logic added later). BATT_LOW_VOLT = 20.4 V (3.4 V/cell first-stage warning). BATT_CRT_VOLT = 19.2 V (3.2 V/cell critical stage). BATT_FS_LOW_ACT = 2 (RTL on low). BATT_FS_CRT_ACT = 1 (Land on critical). BATT_MONITOR = 4 (fuel level + voltage). RTL_SPEED = 12 m/s (the power-bucket return speed that makes the 700 mAh reserve sufficient; a slow 2.23 m/s return would need roughly 1950 mAh instead). Closes the SSS §3.7 low-battery-failsafe gap. */
+ @PhaseTag { phase = Phase::Phase1; }
+ subsets R6_BHV_RTL_RESERVE;
  }
 
  requirement R7 {
@@ -92,9 +98,15 @@ package DroneSystemModel {
  }
 
  requirement R7_BHV_LINKLOSS_RTL {
- doc /* The autonomous flight behavior shall command an automatic return-to-launch (RTL) when the control link (ELRS) is lost beyond the flight controller's failsafe timeout, so a surveillance sortie fails safe rather than continuing uncommanded. */
+ doc /* The autonomous flight behavior shall command an automatic return-to-launch (RTL) when the control link (ELRS) is lost beyond the flight controller's failsafe timeout, so a surveillance sortie fails safe rather than continuing uncommanded. Realization parameter set: see R7_FS_LINK (closing the former SSS §3.7 gap). */
  @PhaseTag { phase = Phase::Phase1; }
  subsets R7;
+ }
+
+ requirement R7_FS_LINK {
+ doc /* Link-loss failsafe parameter set realizing R7_BHV_LINKLOSS_RTL's control-link-loss RTL trigger. FS_THR_ENABLE = 1 (enable throttle-based RC failsafe, action = RTL). FS_THR_VALUE = 900 (the ELRS receiver outputs a throttle-channel value below 900, out of the ~1000-2000 PWM range, when it has lost the transmitter signal; ArduPilot reads that as link loss). FS_OPTIONS = 0 (no continue-on-failsafe exceptions - RTL fires unconditionally on link loss, even if the vehicle is mid-investigation in GUIDED mode; David 2026-08-11 - finishing the current investigation before RTLing was considered and rejected in favor of the simpler, safer unconditional abort). Closes the SSS §3.7 link-loss-failsafe gap. */
+ @PhaseTag { phase = Phase::Phase1; }
+ subsets R7_BHV_LINKLOSS_RTL;
  }
 
  requirement R8 {
@@ -679,8 +691,8 @@ package DroneSystemModel {
 
  // FC firmware — implements ALL flight functions F1–F14 (software_by_component.md §2):
  // stabilization, EKF, AUTO waypoints @2.23 m/s, GUIDED external control, CRSF/ELRS,
- // telemetry, OSD, logging. The FS_*/BATT_* failsafe parameter VALUES realize
- // R6_BHV_RTL_RESERVE / R7_BHV_LINKLOSS_RTL (config-as-requirement).
+ // telemetry, OSD, logging. The FS_*/BATT_* failsafe parameter VALUES (R6_FS_BATT,
+ // R7_FS_LINK) realize R6_BHV_RTL_RESERVE / R7_BHV_LINKLOSS_RTL (config-as-requirement).
  part fcSoftware : Software::SoftwareItem {
   :>> productName = "ArduPilot ArduCopter";
   :>> version = ">= 4.5";
@@ -689,7 +701,9 @@ package DroneSystemModel {
   port sbc_mav : Flows::MavlinkSerial;   // MAVLink to the SBC mavlink-router (rides the sbc_dta UART)
   port gcs_mav : Flows::MavlinkSerial;   // MAVLink telemetry to the GCS (rides the ELRS link)
   satisfy R6_BHV_RTL_RESERVE;
+  satisfy R6_FS_BATT;
   satisfy R7_BHV_LINKLOSS_RTL;
+  satisfy R7_FS_LINK;
  }
 
  // The FC firmware reaches the SBC over the physical UART, not a direct SW link:
@@ -1506,14 +1520,16 @@ package DroneSystemModel {
  // State-machine trigger signals (UC-9/10 failsafes + flight-mode events)
  // ════════════════════════════════════════════════════════════════════
  attribute def LinkLossDetected {
-  doc /* Control link (ELRS) lost beyond the FC failsafe timeout. (UC-9;
-       formal link-loss requirement still open — SSS §3.7.) Consumed by
-       FlightMode's flyingToRtlOnLinkLoss transition. */
+  doc /* Control link (ELRS) lost beyond the FC failsafe timeout, per the
+       FS_THR_ENABLE/FS_THR_VALUE/FS_OPTIONS parameter set (UC-9; R7_FS_LINK,
+       closing the former SSS §3.7 gap). Consumed by FlightMode's
+       flyingToRtlOnLinkLoss transition. */
  }
  attribute def LowBatteryReached {
-  doc /* Usable energy has reached the return reserve. Reserve threshold is an
-       OPEN requirement gap (R6 has no reserve policy). (UC-10) Consumed by
-       FlightMode's flyingToRtlOnLowBattery transition. */
+  doc /* Usable energy has reached the return reserve, per the BATT_LOW_MAH /
+       BATT_FS_LOW_ACT parameter set (UC-10; R6_FS_BATT, closing the former
+       SSS §3.7 gap). Consumed by FlightMode's flyingToRtlOnLowBattery
+       transition. */
  }
  attribute def ArmCommand {
   doc /* Operator arms via the GCS (R4_GCS_CTRL). SSS §3.1 disarmed -> armed. */
@@ -1533,6 +1549,19 @@ package DroneSystemModel {
        EMITTED by InvestigateAndClassify's terminal `send`; consumed by
        FlightMode's loiterToCruise transition. In the real software: the SBC
        app switches the FC back from GUIDED to AUTO via MAVLink. */
+ }
+ attribute def OperatorOverride {
+  doc /* UC-11 (analysis/operator_override_UC11.md, resolved 2026-08-06): the
+       operator aborts an in-progress investigation by switching the FC off
+       GUIDED via a QGC mode switch — no dedicated app input. External and
+       unmodeled-sender like ArmCommand/LaunchCommand (it originates with the
+       operator, not an onboard action def). Consumed by FlightMode's
+       loiterToCruiseOnOverride transition. RTL/LAND are NOT this trigger —
+       those already route through flyingToRtlOnLinkLoss/LowBattery-style
+       failsafe stand-down; this covers the remaining non-GUIDED modes
+       (including a direct switch back to AUTO). In the real software: the
+       SBC app detects fc_mode != GUIDED while INVESTIGATE-ing, alerts, and
+       resumes SWEEP once AUTO is confirmed. */
  }
 
  // ════════════════════════════════════════════════════════════════════
@@ -1678,8 +1707,11 @@ package DroneSystemModel {
        the FlightMode state machine (Layer 4, below) exhibited alongside this
        action on missionContext — see that state def's doc for why the
        earlier HandleLinkLoss/HandleLowBattery action defs were retired.
-       UC-8 (turnaround/charging), UC-11 (operator override of autonomy) and
-       UC-12 (GNSS degradation) are intentionally not yet modeled. */
+       UC-11 (operator override of autonomy) is now modeled as an exceptional
+       flow (see FlightMode.loiterToCruiseOnOverride and UseCases::
+       OperatorOverrideUC below, MODEL_ISSUES.md §B9). UC-8 (turnaround/
+       charging) and UC-12 (GNSS degradation) remain intentionally not yet
+       modeled. */
   @PhaseTag { phase = Phase::Phase3; } // the full function set lands with Phase 3 autonomy
 
   first start;
@@ -1738,7 +1770,12 @@ package DroneSystemModel {
        transitions therefore have modeled senders. Still stand-ins by intent:
        the takeoff/RTL/land do actions (that behavior lives in ArduPilot, not
        custom software) and the LinkLossDetected/LowBatteryReached triggers
-       (they originate in the FC/environment, outside the modeled software). */
+       (they originate in the FC/environment, outside the modeled software).
+       UC-11 OPERATOR OVERRIDE ADDED (2026-08-12, MODEL_ISSUES.md §B9):
+       loiterToCruiseOnOverride lets the operator abort an investigation via
+       any non-GUIDED QGC mode switch during loiter, mirroring cruise/loiter
+       sharing SweepAndDetect/InvestigateAndClassify — one more state-machine
+       edge realized by software, not new hardware. */
 
   entry; then disarmed;
 
@@ -1787,6 +1824,11 @@ package DroneSystemModel {
    transition loiterToCruise
     first loiter
     accept investigated : InvestigationComplete
+    then cruise;
+
+   transition loiterToCruiseOnOverride
+    first loiter
+    accept overrideCmd : OperatorOverride
     then cruise;
   }
 
@@ -1847,12 +1889,14 @@ package DroneSystemModel {
  // in the actions + state machine; this layer is intentionally thin.
  // Secondary actors (the observed wildlife/humans; the GNSS constellation) are
  // named in doc only — the thin veneer adds no part def for them.
- // NOT modeled (no backing behavior yet): UC-8 turnaround, UC-11 operator
- // override, UC-12 GNSS degradation, UC-13 Phase-4 thermal downlink.
- // Failsafes UC-9/UC-10 are EXCEPTIONAL flows (UML «extend»); SysML v2 use
- // cases offer only `include` (always-performed), so they are modeled as
- // standalone use case defs realized by the FlightMode failsafe transitions,
- // and deliberately NOT `include`d by ConductSortieUC.
+ // NOT modeled (no backing behavior yet): UC-8 turnaround, UC-12 GNSS
+ // degradation, UC-13 Phase-4 thermal downlink.
+ // Failsafes UC-9/UC-10, and now UC-11 operator override, are EXCEPTIONAL
+ // flows (UML «extend»); SysML v2 use cases offer only `include` (always-
+ // performed), so they are modeled as standalone use case defs realized by
+ // FlightMode transitions, and deliberately NOT `include`d by ConductSortieUC.
+ // UC-11 differs from UC-9/10 in having an actor (the operator originates
+ // the override, unlike the system-internal failsafes).
  package UseCases {
   private import Architecture::*;
 
@@ -1926,8 +1970,8 @@ package DroneSystemModel {
    subject system : AerialObservationSystem;
    objective {
     doc /* On control-link loss, autonomously return to launch (failsafe;
-         formal requirement open, SSS §3.7). Realized by the FlightMode
-         flyingToRtlOnLinkLoss transition. */
+         R7_FS_LINK). Realized by the FlightMode flyingToRtlOnLinkLoss
+         transition. */
    }
   }
 
@@ -1935,8 +1979,21 @@ package DroneSystemModel {
    subject system : AerialObservationSystem;
    objective {
     doc /* At the return-energy reserve, alert the operator and return
-         (R4_BAT_DISCHARGE, R6; reserve threshold TBD). Realized by the
-         FlightMode flyingToRtlOnLowBattery transition. */
+         (R4_BAT_DISCHARGE, R6_FS_BATT). Realized by the FlightMode
+         flyingToRtlOnLowBattery transition. */
+   }
+  }
+
+  use case def OperatorOverrideUC {   // UC-11 (exceptional / «extend»)
+   subject system : AerialObservationSystem;
+   actor operator : Operator;
+   objective {
+    doc /* Operator aborts an in-progress investigation by switching the FC
+         off GUIDED mode via QGC (no dedicated app input); the mission app
+         logs the override and resumes SWEEP once AUTO is confirmed
+         (analysis/operator_override_UC11.md). Realized by the FlightMode
+         loiterToCruiseOnOverride transition. Unlike UC-9/UC-10 this is
+         operator-initiated, not a system-internal failsafe. */
    }
   }
 

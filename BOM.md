@@ -36,10 +36,11 @@ candidate ID (the project's internal part number). Four build phases — **Phase
 |---|---|---|---|
 | PurpleRiver Mini 640 thermal camera (640×512, 12 µm, **18 mm lens**) | `T13` | [thermal-image.com](https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/) | $700.00† |
 | NanoPi M5, 4 GB SBC (Rockchip RK3576) — real-time onboard AI inference (thermal via USB-UVC) | `SBC3` | [friendlyelec.com](https://www.friendlyelec.com/index.php?route=product/product&path=69&product_id=309) | $126.00 |
+| SBC heatsink — **spec, not yet sourced**: ≤47×35 mm footprint, **25–30 mm fin height**, light/clear finish, thermal-adhesive mount | — | TBD — see note ‡ | ~$10–15 (est.) |
 | SBC mount + cooling (3D-printed deck + 30 mm fan + heat-set hardware) | — | fabricated ([reference/cad-resources.md](reference/cad-resources.md)) | ~$15.00 |
 | SBC power — 2-6S→12V 3A UBEC (2-pack) | — | [amazon.com](https://www.amazon.com/2pcs-2S-6S-DC-DC-Converter-Module/dp/B0CTZHJR5L) | $9.99 |
 | SBC power — USB-C power-only cable (bare wire→USB-C male, 20AWG 5A) | — | [amazon.com](https://www.amazon.com/USB-C-Power-Copper-Connector-Device/dp/B0GBGLNR52) | $7.99 |
-| **Phase 2 subtotal** | | | **~$858.98** |
+| **Phase 2 subtotal** | | | **~$871.48** |
 
 ## Phase 3 — AI detection + autonomous route modification (software)
 
@@ -71,16 +72,16 @@ candidate ID (the project's internal part number). Four build phases — **Phase
 | Phase | Subtotal |
 |---|---|
 | Phase 1 — flight + FPV + waypoints | $1,370.75 |
-| Phase 2 — thermal + SBC (onboard) | ~$858.98 |
+| Phase 2 — thermal + SBC (onboard) | ~$871.48 |
 | Phase 3 — AI deployment (software only) | $0.00 |
-| **Committed system subtotal (Phases 1–3)** | **~$2,229.73** |
+| **Committed system subtotal (Phases 1–3)** | **~$2,242.23** |
 | Phase 4 — OpenHD downlink (*future capability*) | ~$158.99 |
-| **Grand total (all four phases)** | **~$2,388.72** |
+| **Grand total (all four phases)** | **~$2,401.22** |
 
 **R4 integrated-system cost** (phase grand total minus **reusable/support items** — the 2× `BAT22`
 development packs ($220) and the `CHG1` charger ($112)):
-- **Committed (Phases 1–3): ≈ $1,898** (≤ $2,500 ✓)
-- **With Phase 4 (all four phases): ≈ $2,057** (≤ $2,500 ✓)
+- **Committed (Phases 1–3): ≈ $1,910** (≤ $2,500 ✓)
+- **With Phase 4 (all four phases): ≈ $2,069** (≤ $2,500 ✓)
 
 Both are under the $2,500 R4 cap.
 
@@ -100,6 +101,26 @@ Both are under the $2,500 R4 cap.
   update `candidates.sysml` T13 mass if so (nose-payload CG).
 - **Phase 3** — software-only (RKNN model deployment + MAVLink autonomous route modification), $0
   hardware; runs live inference on the Phase 2 thermal feed.
+- **SBC heatsink — NEW, added 2026-08-11 (see [`analysis/sbc_thermal_analysis.md`](analysis/sbc_thermal_analysis.md)):**
+  a passive heatsink is required regardless of the fan — the fan alone doesn't fix ground/bench
+  thermal failure, and the heatsink is what makes the *flight* case passive at all.
+  **‡ Deliberately specified, not sourced to a SKU.** The M5's mountable area is far more
+  constrained than a footprint number suggests: the 2× RJ45 / 2× USB-A / HDMI row is **14–20 mm
+  tall** and occupies the top ~18 mm of the board, the GPIO header takes the bottom ~7 mm, and the
+  M.2 E-Key socket blocks everything right of ~53 mm. A large flat block **cannot work at any
+  thickness** — it rests on the connector row with a ~15 mm air gap over the SoC and makes no
+  thermal contact. The usable flush-mount window is **~47 × 35 mm**, and the board's mounting holes
+  (~83 × 42 mm) match no COTS heatsink pattern, so attachment is by **thermal adhesive pad onto the
+  RK3576 package** (a window that size also covers the LPDDR4X, which is a bonus).
+  Lost base area is recovered with **fin height**: 25 mm is the floor for a passing flight case,
+  30 mm gives comfortable margin, and below 20 mm the flight case fails. Prefer a **light/clear
+  finish** over black anodised — worth ~13 °C on the ground (§6 of the thermal doc).
+  **Estimated mass ~48 g** at 25 mm fins (~54 g at 30 mm). That puts the SBC subsystem at
+  ~128 g against the **`R4_SBC_WT` 100 g cap** — a ~28 g breach. **Not a flight-safety issue**:
+  `R4_AF_PAYLOAD` margin on `AF3a` is ~4.1 kg (5145 g capacity vs. 1021 g current payload). It is a
+  subsystem-requirement conflict of the same shape as `R3_CAM_COST` — needs a waiver or a restated
+  `R4_SBC_WT`, not a design change. **Open action:** caliper the real board before ordering; a power
+  inductor near the top-left of the window may shrink the usable depth below 35 mm.
 - **SBC power — RESOLVED (2026-07-06):** the NanoPi M5 USB-C port accepts wide-input DC 6–20 V
   *without PD negotiation* (onboard buck), so no PD-trigger module is needed. **Selected + priced:**
   2-6S→12V 3A UBEC 2-pack ($9.99) + USB-C power-only cable ($7.99) — $17.98 total. The 2-pack's

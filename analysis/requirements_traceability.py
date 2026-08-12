@@ -16,10 +16,22 @@ model.sysml (not inferred):
                   satisfying element(s). Elements considered: part def, action
                   def, state def, and nested part/action/state usages.
 
-Output columns: requirement_id, package, doc_summary, phase, subsets_parent,
-subsets_root, satisfied_by.
+The V&V half of the matrix (the VCRM) is joined in from
+analysis/verification_methods.csv, which is the hand-authored engineering
+judgement that model.sysml does not carry: how each requirement is verified
+(I/A/D/T), at what level, under which V&V case, against what quantified
+success criterion, at which gate, and its status as of CDR.
 
-Never hand-edit the CSV — rerun this script after model.sysml changes.
+That side-car is the ONE file to hand-edit. The join is checked both ways and
+raises on any mismatch, so a requirement added to model.sysml without a
+verification method is a hard error rather than a silent hole in the VCRM.
+
+Output columns: requirement_id, package, doc_summary, phase, subsets_parent,
+subsets_root, satisfied_by, method, level, vv_case, gate, status_at_cdr,
+success_criterion.
+
+Never hand-edit the CSV — rerun this script after model.sysml or
+verification_methods.csv changes.
 """
 
 from __future__ import annotations
@@ -30,6 +42,10 @@ from pathlib import Path
 
 MODEL_PATH = Path(__file__).resolve().parent.parent / "model.sysml"
 OUTPUT_PATH = Path(__file__).resolve().parent / "requirements_traceability.csv"
+VERIFICATION_PATH = Path(__file__).resolve().parent / "verification_methods.csv"
+
+# Columns joined in from verification_methods.csv, in output order.
+VERIFICATION_FIELDS = ["method", "level", "vv_case", "gate", "status_at_cdr", "success_criterion"]
 
 _PACKAGE_RE = re.compile(r"\bpackage\s+(\w+)\s*\{")
 _REQUIREMENT_RE = re.compile(r"\brequirement\s+(\w+)\s*\{")
@@ -148,6 +164,42 @@ def resolve_root(req_id: str, requirements: dict[str, dict]) -> str:
         current = parent
 
 
+def load_verification(requirement_ids: set[str]) -> dict[str, dict]:
+    """Load the VCRM side-car and check it covers exactly the modeled requirements.
+
+    Verification coverage is the whole point of a cross-reference matrix, so both
+    directions are errors: a requirement with no verification method would be a
+    silent hole in the VCRM, and a verification row with no requirement means the
+    side-car is referring to something the model no longer has.
+    """
+    with VERIFICATION_PATH.open(newline="", encoding="utf-8") as f:
+        rows = {r["requirement_id"]: r for r in csv.DictReader(f)}
+
+    missing = sorted(requirement_ids - rows.keys())
+    orphaned = sorted(rows.keys() - requirement_ids)
+    problems = []
+    if missing:
+        problems.append(
+            f"{len(missing)} requirement(s) in model.sysml have no verification method: "
+            + ", ".join(missing)
+        )
+    if orphaned:
+        problems.append(
+            f"{len(orphaned)} row(s) in {VERIFICATION_PATH.name} match no requirement: "
+            + ", ".join(orphaned)
+        )
+    for req_id, row in sorted(rows.items()):
+        blank = [c for c in VERIFICATION_FIELDS if not (row.get(c) or "").strip()]
+        if blank:
+            problems.append(f"{req_id}: empty {', '.join(blank)}")
+    if problems:
+        raise SystemExit(
+            "VCRM coverage check failed — fix "
+            f"{VERIFICATION_PATH.name}:\n  - " + "\n  - ".join(problems)
+        )
+    return rows
+
+
 def main() -> None:
     text = MODEL_PATH.read_text(encoding="utf-8")
     package_spans = _find_package_spans(text)
@@ -155,20 +207,22 @@ def main() -> None:
     satisfier_spans = _find_satisfier_spans(text)
     satisfied_by = parse_satisfy_map(text, satisfier_spans)
 
+    verification = load_verification(set(requirements))
+
     rows = []
     for req_id in sorted(requirements):
         info = requirements[req_id]
-        rows.append(
-            {
-                "requirement_id": req_id,
-                "package": info["package"],
-                "doc_summary": info["doc_summary"],
-                "phase": info["phase"],
-                "subsets_parent": info["subsets_parent"],
-                "subsets_root": resolve_root(req_id, requirements) if info["subsets_parent"] else "",
-                "satisfied_by": ", ".join(sorted(satisfied_by.get(req_id, []))),
-            }
-        )
+        row = {
+            "requirement_id": req_id,
+            "package": info["package"],
+            "doc_summary": info["doc_summary"],
+            "phase": info["phase"],
+            "subsets_parent": info["subsets_parent"],
+            "subsets_root": resolve_root(req_id, requirements) if info["subsets_parent"] else "",
+            "satisfied_by": ", ".join(sorted(satisfied_by.get(req_id, []))),
+        }
+        row.update({c: verification[req_id][c] for c in VERIFICATION_FIELDS})
+        rows.append(row)
 
     with OUTPUT_PATH.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
@@ -181,12 +235,19 @@ def main() -> None:
                 "subsets_parent",
                 "subsets_root",
                 "satisfied_by",
-            ],
+            ]
+            + VERIFICATION_FIELDS,
         )
         writer.writeheader()
         writer.writerows(rows)
 
     print(f"Wrote {len(rows)} requirements to {OUTPUT_PATH}")
+    print(f"VCRM coverage: {len(rows)}/{len(rows)} requirements carry a verification method")
+    by_status: dict[str, int] = {}
+    for r in rows:
+        by_status[r["status_at_cdr"]] = by_status.get(r["status_at_cdr"], 0) + 1
+    for status, count in sorted(by_status.items(), key=lambda kv: -kv[1]):
+        print(f"  {count:3d}  {status}")
 
 
 if __name__ == "__main__":

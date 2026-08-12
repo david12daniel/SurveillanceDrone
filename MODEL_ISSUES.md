@@ -200,6 +200,123 @@ any tool previously.
    Requirements pillar and all `satisfy` statements (see its header), and this change touched
    nothing else. *Still to sync:* the SSS export `REQUIREMENTS_EXPORT_26_06_30.md`.
 
+8. **RESOLVED (2026-08-11) — the two SSS §3.7 failsafe parameter sets captured as
+   requirements: new `R6_FS_BATT` / `R7_FS_LINK`.** *(Closes TASKS.md 0.2/0.3; both had
+   sat as "TBD"/"open" since the requirements were first written.)*
+
+   **Source.** An OpenClaw nightly-agent session (WSL clone of this repo, uncommitted)
+   had already worked out the low-battery reserve policy decision (0.3) in
+   `analysis/low_battery_reserve_analysis.md` and a companion `params_sets.py`
+   (ArduPilot parameter values for both failsafes). That file was ported into this
+   (Windows) checkout's `analysis/` — it did not exist here before. David reviewed the
+   values 2026-08-11 before they were written into the model.
+
+   **`R6_FS_BATT` (subsets `R6_BHV_RTL_RESERVE`):** `BATT_LOW_MAH = 700` mAh (30% margin
+   over the 555 mAh bare-RTL cost of the worst-case 2.8 km return (R7) at `RTL_SPEED =
+   12` m/s — the multirotor power-bucket minimum; a slow 2.23 m/s return would need
+   ~1950 mAh instead), `BATT_CRT_MAH = 350`, `BATT_LOW_VOLT = 20.4` V (3.4 V/cell),
+   `BATT_CRT_VOLT = 19.2` V (3.2 V/cell), `BATT_FS_LOW_ACT = 2` (RTL),
+   `BATT_FS_CRT_ACT = 1` (Land), `BATT_MONITOR = 4` (fuel level + voltage). Static,
+   worst-case-distance reserve — **not** distance-adaptive.
+
+   **`R7_FS_LINK` (subsets `R7_BHV_LINKLOSS_RTL`):** `FS_THR_ENABLE = 1` (RTL on
+   throttle failsafe), `FS_THR_VALUE = 900` (ELRS RX outputs a below-range throttle
+   value on TX signal loss; ArduPilot reads that as link loss), `FS_OPTIONS = 0` (no
+   continue-on-failsafe exceptions — RTL fires unconditionally, even mid-investigation
+   in GUIDED mode).
+
+   **Two design forks surfaced with David during review, both resolved to the simpler
+   option for now:**
+   - **Low-battery: static vs. distance-adaptive reserve.** David asked whether the
+     reserve could shrink dynamically as the vehicle nears the launch point, instead of
+     always reserving for the worst-case 2.8 km — a real efficiency gain (a drone close
+     to home with the static 700 mAh reserve still has far more margin than it needs)
+     but it requires new software (SBC or FC Lua logic computing energy-needed-to-return
+     from live GPS distance each cycle), not a firmware parameter, so it doesn't fit the
+     "config-as-requirement" scope of 0.2. **Decision: keep `R6_FS_BATT` static for
+     Phase 1** (zero new software, and `BATT_CRT_MAH` remains an absolute hard-floor
+     backstop regardless); track the dynamic version as a new Phase 3 follow-up —
+     **TASKS.md D2.17** (Mission Control task id 142).
+   - **Link-loss: abort mid-investigation vs. finish it first.** `FS_OPTIONS` has a bit
+     to continue the current GUIDED action on RC failsafe (finish classifying before
+     RTLing) instead of aborting immediately. **Decision: unconditional abort
+     (`FS_OPTIONS = 0`)** — simpler and safer; matches the values already in the
+     ported analysis.
+
+   **Other `model.sysml` changes:** `fcSoftware` now also `satisfy`s `R6_FS_BATT` /
+   `R7_FS_LINK` (in addition to the existing `R6_BHV_RTL_RESERVE` /
+   `R7_BHV_LINKLOSS_RTL`). The now-stale "TBD"/"open requirement" doc text was updated
+   in four other spots that referenced the gap: `R6_BHV_RTL_RESERVE`'s doc, the
+   `LinkLossDetected`/`LowBatteryReached` attribute defs (Behavior pillar), and the
+   `HandleLinkLossUC`/`HandleLowBatteryUC` objective docs (UseCases veneer).
+
+   *Derived artifacts regenerated:* `analysis/requirements_traceability.csv` (56
+   requirements). *No `model_community_balanced.sysml` change needed* — same reasoning
+   as item 7 above (Requirements pillar + `satisfy` statements are excluded from that
+   export). TASKS.md 0.2 and 0.3 marked done; a new D2.17 task added for the deferred
+   dynamic-reserve idea.
+
+9. **RESOLVED (2026-08-12) — UC-11 operator override authority modeled and
+   implemented.** *(Closes TASKS.md 0.5 / Mission Control task #8; decision itself
+   was made 2026-08-06 in `analysis/operator_override_UC11.md`, David approved
+   proceeding to modeling + implementation 2026-08-12.)*
+
+   **The decision (unchanged from the 2026-08-06 analysis):** the operator can abort
+   an autonomous investigation, and the mechanism is a plain QGC flight-mode switch —
+   not a dedicated app input. Chosen because it works even if the SBC mission app has
+   crashed, needs zero new UI, and the operator already knows how to use it.
+
+   **`model.sysml` changes (Behavior pillar):** new `attribute def OperatorOverride`
+   trigger signal (external/unmodeled-sender, same category as `ArmCommand`/
+   `LaunchCommand` — it originates with the operator, not an onboard action def);
+   new `FlightMode.flying.loiterToCruiseOnOverride` transition (`first loiter, accept
+   overrideCmd : OperatorOverride, then cruise`), sitting alongside the existing
+   `loiterToCruise` (on `InvestigationComplete`); new `UseCases::OperatorOverrideUC`
+   (UC-11), modeled — like UC-9/UC-10 — as a standalone exceptional-flow use case def
+   realized by a `FlightMode` transition and deliberately not `include`d by
+   `ConductSortieUC`, but *with* an `actor operator : Operator` (unlike UC-9/UC-10,
+   this one is operator-initiated, not a system-internal failsafe). Updated the two
+   stale "UC-11 not yet modeled" doc comments (`ConductSortie`, `UseCases` package
+   header). Mirrored the state-machine pieces (not `OperatorOverrideUC` — `UseCases`
+   is excluded from that export) into `model_community_balanced.sysml`.
+
+   **Scope note — RTL/LAND are NOT the override trigger.** The original CONOPS table
+   in the analysis doc listed "operator switches to RTL" as an override case
+   resuming SWEEP, but that would fight the *already-modeled and tested* failsafe
+   stand-down (`flyingToRtlOnLinkLoss`/`flyingToRtlOnLowBattery`-style handling): if
+   the operator explicitly commands RTL, the vehicle should go fully passive, not
+   silently resume autonomous SWEEP mid-return. `OperatorOverride` therefore covers
+   every non-GUIDED mode *except* RTL/LAND (including a direct switch back to AUTO),
+   which is exactly what fires in the software (see below) since the RTL/LAND check
+   in `mission_app.py`'s `step()` already runs first and intercepts those two modes.
+
+   **`DroneMissionApp` changes (the live repo — `SurveillanceDrone/analysis/
+   autonomy_sim/` is the frozen prototype, not touched):**
+   - `mission_app.py` — the `INVESTIGATE` handler now checks `fc_mode != GUIDED` as
+     its first line; on a mismatch it alerts, logs an `("operator_override",
+     <mode>)` event, and transitions to `SWEEP` (which already gates on `fc_mode ==
+     AUTO`, so re-entry on a switch back to AUTO needs no extra logic — R-UC11-2 from
+     the analysis doc falls out for free).
+   - `alerts.py` — new `OVR` `STATUSTEXT` kind (`override()` constructor,
+     `SEV_OVERRIDE = MAV_SEVERITY_INFO` per the analysis doc's severity matrix,
+     `parse()` allow-list). Deliberately reuses the existing D2.10 structured
+     `KIND|species|lat,lon|alt|conf` wire schema rather than the illustrative
+     free-text `"[MISSION] OPERATOR_OVERRIDE"` string sketched in the original
+     analysis draft — that draft predates the structured-schema task (D2.10), and
+     the structured form is parseable/consistent with `DET`/`CLS`/`UNK`.
+   - `test_autonomy_loop.py` — new `test_operator_override_during_investigate`
+     (drives a real `FakeFC`, forces `STABILIZE` mid-`INVESTIGATE`, asserts the
+     override event, the `OVR` alert, and no spurious `AUTO` mode request). All 16
+     tests pass. Note for whoever builds D2.13: the override path never reaches
+     `PASSIVE`, so a `run()`-in-thread test must bound `max_ticks` tightly or the
+     background thread can outlive a short `join()` timeout — cost me one flaky
+     iteration before landing on `max_ticks=100`.
+
+   **Not done:** field-testing this against real ArduPilot SITL (tracked as a
+   D2.13 follow-up, TASKS.md); no new `R#` requirement was added (`R-UC11-1..4` in
+   the analysis doc are implementation notes, not formal model requirements), so
+   `analysis/requirements_traceability.csv` needed no regeneration.
+
 ---
 
 ## C. Modeling decisions (SysML v2 representation choices)

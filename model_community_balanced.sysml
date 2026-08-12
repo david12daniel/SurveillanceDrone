@@ -226,6 +226,8 @@ package DroneSystemModel_Community {
  }
  attribute def InvestigationComplete {
  }
+ attribute def OperatorOverride {
+ }
  action def InferFrame {
   out detectionConfidence : Real;
  }
@@ -319,6 +321,7 @@ package DroneSystemModel_Community {
    transition takeoff then cruise;
    transition first cruise accept detected : TargetDetected then loiter;
    transition first loiter accept investigated : InvestigationComplete then cruise;
+   transition first loiter accept overrideCmd : OperatorOverride then cruise;
   }
   state returnToLaunch {
    do action executeRtl;

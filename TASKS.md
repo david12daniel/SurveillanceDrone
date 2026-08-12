@@ -27,10 +27,10 @@ in the task's note rather than inflating the hours.
 | Phase 0 — cross-cutting model/docs | 12 | 33 h |
 | Phase 1 — flight + FPV + waypoints | 23 | 38.5 h |
 | Phase 2 — thermal + SBC | 18 | 53 h |
-| Phase 3 — AI detection + autonomy | 19 | 162 h |
-| **Committed build (Phases 0–3)** | **72** | **~286 h** |
+| Phase 3 — AI detection + autonomy | 20 | 168 h |
+| **Committed build (Phases 0–3)** | **73** | **~292 h** |
 | Phase 4 — deferred OpenHD downlink | 8 | 31 h |
-| **Total** | **80** | **~318 h** |
+| **Total** | **81** | **~323 h** |
 
 Phase 3 is over half the remaining effort, and **D1.1 alone (thermal data collection, ~48 h)
 is 15% of the whole project** — it is both the long pole and the only task with no hardware
@@ -45,10 +45,10 @@ These are not gated on hardware and should clear before/alongside Phase 1.
 | # | Task | Est. | Notes | Status |
 |---|---|--:|---|:--:|
 | 0.1 | ~~**Approve + apply the R3_CAM_FOV re-tag**~~ **DONE 2026-08-11** | **2 h** | Restated as a **≥42 m ground-swath floor** at 120 m AGL (not a bare lens angle), plus **new `R9`** (hard: ≥30 acres/sortie), **new `R10`** (stretch: 60 acres), and **new `R4_GCS_SWEEP_SPACING`** (line spacing ≤90% of swath) against the flight-planning software. T13 @18 mm gives 51.2 m → 22% margin, so `satisfy R3_CAM_FOV` on `IRCamera` is true again. Hard/stretch pairs coherently: **R6↔R9**, **R8↔R10**. See MODEL_ISSUES §B7. | ☑ |
-| 0.2 | **Capture the two failsafe parameter sets as real requirements** | **3 h** | SSS §3.7 link-loss + low-battery failsafes are "to be specified". Write the chosen `FS_THR_ENABLE`/`FS_OPTIONS`/`FS_THR_VALUE` and `BATT_LOW_VOLT`/`BATT_CRT_VOLT`/`BATT_FS_LOW_ACT`/`BATT_LOW_MAH` values into `model.sysml` as `R?_FS_LINK` / `R?_FS_BATT`. Closes the §3.7 gap. Requires model approval. | ☐ ⛔ needs David |
-| 0.3 | **Pick the low-battery reserve (`BATT_LOW_MAH`)** | **1 h** | The open R6-derived policy decision (`HandleLowBattery` reserve = TBD). Feeds 0.2 and 1.12. | ☐ |
+| 0.2 | ~~**Capture the two failsafe parameter sets as real requirements**~~ **DONE 2026-08-11** | **3 h** | SSS §3.7 link-loss + low-battery failsafes are "to be specified". Wrote the chosen `FS_THR_ENABLE`/`FS_OPTIONS`/`FS_THR_VALUE` and `BATT_LOW_VOLT`/`BATT_CRT_VOLT`/`BATT_FS_LOW_ACT`/`BATT_LOW_MAH` values into `model.sysml` as **`R7_FS_LINK`** / **`R6_FS_BATT`**. Closes the §3.7 gap. David reviewed two design forks during approval (static-vs-dynamic battery reserve, abort-vs-finish on link loss) and picked the simpler option for both — see MODEL_ISSUES.md §B8. Dynamic reserve tracked separately as D2.17. | ☑ |
+| 0.3 | ~~**Pick the low-battery reserve (`BATT_LOW_MAH`)**~~ **DONE 2026-08-11** | **1 h** | The open R6-derived policy decision (`HandleLowBattery` reserve = TBD). Feeds 0.2 and 1.12. Resolved via `analysis/low_battery_reserve_analysis.md` (700 mAh @ 12 m/s RTL_SPEED, 30% margin on the worst-case 2.8 km return) — ported into this repo and folded into `R6_FS_BATT` as part of closing 0.2. | ☑ |
 | 0.4 | **Decide the classify loiter time-budget policy** | **2 h** | `InvestigateAndClassify.adjustOrbit` is an unbounded loop in the model; needs a loiter-time budget + a "log as unclassified, resume" exit. Feeds D2.9. Small R6 endurance draw. | ☐ |
-| 0.5 | **Decide operator override authority (UC-11)** | **2 h** | Can the operator veto/abort an autonomous investigation, and is that a QGC mode switch or an app input? Not yet modeled. | ☐ |
+| 0.5 | ~~**Decide operator override authority (UC-11)**~~ **DONE 2026-08-12** | **2 h** | Can the operator veto/abort an autonomous investigation, and is that a QGC mode switch or an app input? Decided 2026-08-06 (`analysis/operator_override_UC11.md`): yes, via QGC mode switch, no dedicated app input. Modeled 2026-08-12 as `OperatorOverride` + `FlightMode.loiterToCruiseOnOverride` + `UseCases::OperatorOverrideUC` (MODEL_ISSUES.md §B9) and implemented in `DroneMissionApp/mission_app.py` (INVESTIGATE override check + `alerts.override`), with a new passing contract test. | ☑ |
 | 0.6 | **Reconcile the stale MODEL_ISSUES §B7 (FC firmware) entry** | **30 min** | Still reads OPEN, but firmware was RESOLVED 2026-07-10 (ArduCopter ≥ 4.5). Also two entries are both numbered "7". | ☐ |
 | 0.7 | **Resolve or retire AF5 (EMAX Hawk 7)** | **30 min** | Only airframe still lacking a confirmed as-built mass; skipped by the sweep. Airframe is locked to AF3a, so retiring AF5 from `candidates.sysml` is the cheap close. (MODEL_ISSUES §B4) | ☐ |
 | 0.8 | **Add a `totalMass` rollup to the model** | **3 h** | §G follow-up: `mass` drives the *external* endurance model but is analytically inert in-model. A rollup makes `maxTakeoffMass`/payload requirements load-bearing SysML. Requires model approval. | ☐ |
@@ -173,8 +173,9 @@ schema, D2.11 failsafe stand-down.
 | D2.8 | `adjustOrbit` loiter maneuver — active re-aim while classifying | **6 h** | | ☐ |
 | D2.9 | Classification controller **loiter time-budget policy** | **3 h** | Retry/timeout done; the budget itself is the open decision (→ 0.4) | ◐ |
 | D2.12 | Service hardening — systemd unit, watchdog, logging, config, safe stand-down | **6 h** | Field-ops requirement (single operator) | ☐ |
-| D2.13 | **Real ArduPilot SITL integration suite** | **12 h** | Adds mode-ACK, EKF/arming gates, GUIDED nav tracking, and real `FS_*`/`BATT_*` failsafe behavior. No hardware needed — **can start today.** | ☐ |
+| D2.13 | **Real ArduPilot SITL integration suite** | **12 h** | Adds mode-ACK, EKF/arming gates, GUIDED nav tracking, and real `FS_*`/`BATT_*` failsafe behavior. No hardware needed — **can start today.** Should also add a UC-11 case (operator forces a non-GUIDED mode mid-INVESTIGATE against real SITL, not just `FakeFC`) now that 0.5 is implemented against the mock FC. | ☐ |
 | D2.14 | **Verify ArduCopter mode numbers** (AUTO=3, GUIDED=4, RTL=6, LAND=9) against the exact firmware build | **1 h** | Hard-coded in `mission_app.py`; verify before flight | ☐ |
+| D2.17 | **Distance-adaptive low-battery RTL trigger** | **6 h** | Deferred from 0.2 (David 2026-08-11): SBC (or FC Lua script) computes energy-needed-to-return from the current GPS distance-to-home each cycle and commands RTL via MAVLink at ~10% margin, instead of waiting for the static `R6_FS_BATT` worst-case (2.8 km) threshold — avoids cutting a mission short when the drone is already near home with reserve to spare. `BATT_CRT_MAH` stays a firmware-level hard-floor backstop regardless. See MODEL_ISSUES.md §B8. | ☐ |
 
 ### 3C. Phase 3 integration + acceptance
 
@@ -207,8 +208,7 @@ estimates.
 
 ## Suggested near-term ordering
 
-1. **0.2 / 0.3** — the remaining model approvals David owns (0.1 closed 2026-08-11); they unblock nothing else but leave the model asserting a false claim until closed.
-2. **D1.1** — start thermal data collection immediately. It is the longest lead and needs no hardware.
-3. **D2.13** — the SITL suite, also hardware-free, and it validates the failsafe params before they matter.
-4. **Phase 1 procurement (1.1–1.10)** — long shipping tails (iFlight, Alibaba, Upgrade Energy).
-5. **1.23** — caliper the frame as soon as it lands; that single measurement unblocks all the Phase 2 CAD.
+1. **D1.1** — start thermal data collection immediately. It is the longest lead and needs no hardware.
+2. **D2.13** — the SITL suite, also hardware-free, and it validates the failsafe params before they matter.
+3. **Phase 1 procurement (1.1–1.10)** — long shipping tails (iFlight, Alibaba, Upgrade Energy).
+4. **1.23** — caliper the frame as soon as it lands; that single measurement unblocks all the Phase 2 CAD.
