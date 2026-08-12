@@ -317,6 +317,175 @@ any tool previously.
    the analysis doc are implementation notes, not formal model requirements), so
    `analysis/requirements_traceability.csv` needed no regeneration.
 
+10. **RESOLVED (2026-08-12) — D2.8 `adjustOrbit` implemented; D2.9's loiter budget
+    ported to the live `DroneMissionApp` repo.** *(Closes TASKS.md D2.8/D2.9,
+    Mission Control tasks #67/#68. Also fixes the stale TASKS.md 0.4 checkbox —
+    that decision and D2.9's original patch had already landed via a separate
+    session on 2026-08-05 and only reached this checkout on the 2026-08-12 merge
+    that closed out item 9 above.)*
+
+    **Porting gap found and fixed.** The 2026-08-05 D2.9 implementation (per
+    Mission Control task #68's own notes) only ever patched
+    `analysis/autonomy_sim/mission_app.py` — the frozen de-risking prototype —
+    never the live `DroneMissionApp` repo it was seeded from. The 30 s wall-clock
+    budget was ported into the live repo as part of this work, since D2.8
+    (`adjustOrbit`) and D2.9 (its outer bound) are the same piece of software: the
+    model's own `adjustOrbit` doc already ties them together ("bounded by a 30 s
+    loiter time budget per investigation"), so implementing one without the other
+    would leave the live app not matching what the model claims.
+
+    **`model.sysml`: no change needed.** The `adjustOrbit` doc (already updated
+    2026-08-05 per task 0.4/D2.9's approval) reads "Adjust loiter orbit/aspect and
+    retry classification; bounded by a 30 s loiter time budget per investigation
+    ... On budget exhaustion: log POI as unclassified and resume route." That is
+    already an accurate, sufficiently general description of what was built —
+    no new elements or doc rewrite required.
+
+    **`DroneMissionApp` changes:**
+    - `geolocation.py` — new `offset_latlon` / `bearing_deg` / `distance_m`
+      helpers (flat-earth, same assumption as `project_pixel_to_ground`), plus
+      **`standoff_from_poi`** — see the 45° correction below.
+    - `mission_app.py` — `_command_descent` renamed `_command_position_target`
+      (it now serves both the initial 120→90 m descent and adjustOrbit's
+      repositions) and gained a heading argument. New constructor params
+      `loiter_time_budget_s=30.0`, `orbit_step_deg=90.0`, `orbit_settle_s=1.5`.
+      The INVESTIGATE handler now: (1) checks the outer wall-clock budget first
+      — the only remaining give-up path, replacing the old
+      "`classify_timeout_ticks` reached ⇒ give up" branch; (2) on a per-aspect
+      timeout, steps the **viewing bearing**, commands a new standoff pose, and
+      waits `orbit_settle_s` before resuming classify sampling at the new aspect
+      (resetting the inner tick counter). `orbit_step_deg`/`orbit_settle_s` are
+      engineering estimates pending field tuning.
+    - `fake_fc.py` — records commanded yaw (and whether yaw was commanded at
+      all) and snaps its pose to commanded targets, so the tests exercise real
+      geometry rather than a stationary vehicle.
+
+    **45° MOUNT CORRECTION (found during review — the first cut of this work was
+    wrong).** David caught that the implementation assumed a nadir camera while
+    the as-built payload is the **45° down-look bracket** (TASKS.md 2.8, decided
+    2026-08-07 per Mission Control #46). The assumption was not introduced by
+    D2.8 — it was **latent in the original investigate descent**, which commanded
+    the vehicle to hover directly over the POI's lat/lon. Consequences and fix:
+    - For a rigid (non-gimbaled — there is no gimbal anywhere in this design)
+      camera tilted θ below forward, the boresight meets the ground
+      **`alt·cot(θ)` AHEAD of the vehicle** along its heading: 90 m ahead at the
+      90 m classify altitude, slant range 1.414·alt. Sitting over the POI puts
+      the target roughly 90 m *behind* the boresight — out of frame entirely,
+      not merely off-centre. Geometry cross-checks exactly against
+      `analysis/thermal_detection_offnadir_analysis.md` §2 (1.414·H).
+    - New `geolocation.standoff_from_poi(poi, alt, mount_pitch, view_bearing)`
+      returns the pose that puts the POI on the boresight: stand off by
+      `alt·cot(θ)` along `view_bearing`, and **yaw to face the target**. Both the
+      initial descent and every adjustOrbit step now use it. The initial descent
+      preserves the approach side (least-disturbance first look); adjustOrbit
+      steps `view_bearing` around the target.
+    - **Heading is now commanded** (`SET_POSITION_TARGET_GLOBAL_INT` yaw field,
+      `YAW_IGNORE` bit cleared). Previously yaw was always ignored — harmless for
+      nadir, fatal for a rigid tilted camera, where aspect is a function of
+      vehicle position *and* heading together.
+    - **`orbit_radius_m` was deleted, not fixed.** With a rigid camera the
+      standoff distance is *determined* by altitude and mount angle; it is not a
+      free parameter. The only free choice is which side to view from. (Corollary
+      worth recording: adjustOrbit is *only meaningful because* the camera is
+      tilted — a nadir camera sees the same aspect from every bearing, so the
+      45° decision is what gives D2.8 its purpose.)
+    - **Stale `CameraModel` defaults fixed too:** they read `hfov_deg=32.0`
+      (13 mm lens) and `mount_pitch_deg=90.0` (nadir) — i.e. the pre-decision
+      config on *both* axes, months after 18 mm (2026-07-29) and 45°
+      (2026-08-07) were selected. Now 24.1°/45°, with a regression test pinning
+      the 51.2 m nadir swath that R3_CAM_FOV is written against.
+    - **Unrelated pre-existing bug fixed in passing:** the position-target
+      `type_mask` was `0b0000111111111000`, which sets **bit 9 (`FORCE_SET`)**.
+      ArduCopter silently drops GUIDED targets with that bit set. Now uses the
+      canonical mask. This was pre-existing (D2.7-era), not introduced here.
+    - `test_geolocation.py` / `test_autonomy_loop.py` — 16 geolocation + 13
+      contract tests, **29 total, passing repeatedly**. The load-bearing one is
+      `test_standoff_puts_the_poi_on_the_boresight_at_45deg`: fly to the
+      returned pose, project the centre pixel through the *existing* (separately
+      tested) projection code, and land back on the POI within 5 cm — across
+      five viewing bearings. A nadir-configured app is also covered, asserting
+      it still sits over the target and commands no heading.
+
+    **Not done / flagged for David:**
+    - Field-tuning `orbit_step_deg`/`orbit_settle_s`; SITL coverage (D2.13).
+    - *(The nadir-only GSD gap first flagged here was **approved and fixed** the
+      same day — see item 11 below.)*
+
+    **`thermal_mount_angle_decision.md` ported (2026-08-12).** Mission Control #46's
+    rationale artifact existed only in the WSL OpenClaw clone — the third instance of
+    that porting gap (after `low_battery_reserve_analysis.md` and D2.9's code), so it
+    was copied in verbatim (md5-verified, not retyped). A sweep of the two `analysis/`
+    trees shows the gap is now closed except for `analysis/sitl_tests/` — the
+    in-progress D2.13 suite covered by `session-handoffs/2026-08-10-sitl-handoff.md`,
+    deliberately left in WSL since how to split/commit it is David's call.
+
+    **One caveat on that doc's reasoning, for the record.** Its §3 argues 45° helps
+    `InvestigateAndClassify` because "the camera is aimed *in the direction of
+    travel* — the target stays visible across a larger portion of each orbit." As
+    stated that does not hold: on a circular orbit the direction of travel is
+    *tangential*, so a forward-fixed camera looks past the target, not at it. What
+    actually keeps the target in frame — and what is now implemented — is yawing to
+    face the POI (the vehicle then crabs sideways, ArduPilot's ROI-style orbit), which
+    means the camera is deliberately **not** aimed along the direction of travel. The
+    §3 *conclusion* (45° is workable, indeed better, for the classify loop) stands
+    under that reading, and the other pillars of the decision — detect-before-overfly
+    on sweep, 4.17 px recognition margin, mechanical/clearance findings — are
+    unaffected. Worth knowing only because the mount angle is now load-bearing in
+    software: the standoff geometry above depends on it.
+
+11. **RESOLVED (2026-08-12) — the thermal analysis layer now evaluates the AS-BUILT
+    45° tilt, not nadir.** *(David approved the `model.sysml` change 2026-08-12,
+    immediately after it was flagged in item 10.)*
+
+    **The defect.** `Analysis::GroundSampleDistance` computes the **nadir** GSD
+    (`altitude · HFOV_rad / resolutionH` — its own comment said "at nadir"), and both
+    `ThermalRecognitionCheck` (R3_CAM_RES / R3_2) and `ThermalDetectionCheck` (R3_1)
+    fed it straight into the Johnson criteria. So since the 45° bracket was selected
+    (2026-08-07) the model had been asserting pass/fail against a geometry the system
+    does not have — and doing so **optimistically**, by exactly the factor that
+    matters most: recognition showed ~8.3 px against a 4 px floor when the true
+    along-range figure is ~4.2. The margin the model reported was roughly double the
+    real one. (Notably the *data* was fine — `T13.hfov = 24.1` for the 18 mm lens was
+    already correct in `candidates.sysml`; only the analysis geometry was wrong. The
+    stale-13 mm problem was confined to the Python `CameraModel`, see item 10.)
+
+    **The fix.** New `calc def OffNadirGsd` applies the degradation from
+    `analysis/thermal_detection_offnadir_analysis.md` §2 — a camera depressed `tilt`
+    off nadir views an on-axis target at slant range `alt/cos(tilt)`, stretching each
+    pixel's ground footprint by `1/cos(tilt)` cross-range and `1/cos(tilt)²`
+    along-range (×1.414 / **×2.000** at 45°). Both analysis defs now chain
+    `GroundSampleDistance → OffNadirGsd → PixelsAcrossTarget`, using the
+    **along-range** axis because it binds. `GroundSampleDistance` itself is unchanged
+    and still correct — it is now explicitly the nadir *base*, with its doc saying so.
+
+    **Why the factor is a bound constant, not `cos()`.** The model evaluates no trig
+    anywhere (the nadir calc uses the small-angle form for the same reason), and
+    Syside validates structure without executing calcs, so introducing
+    `TrigFunctions::cos` into a protected file could not have been verified here.
+    `alongRangeFactor = 2.0` is therefore bound per analysis def with the derivation
+    in-comment and an explicit warning to recompute `1/cos(tilt)²` if the bracket
+    angle changes. **This is a real coupling hazard** — two numbers that must move
+    together — which is why the tilt itself is now recorded in the model:
+    `IRCamera.mountTilt_deg` (new attribute, bound `= 45.0` on `T13` in
+    `candidates.sysml`). Before this the as-built mount angle appeared **nowhere** in
+    the model at all, despite being load-bearing for both the analysis layer and the
+    mission app's standoff geometry.
+
+    **Verdicts are unchanged — both checks still pass**, which is the point: this
+    corrects the *margin*, not the answer. Recognition ~4.2 px ≥ 4.0 (thin, and now
+    honestly thin — the tightest margin in the thermal chain); detection ~3.2 px ≥ 1.5
+    (comfortable — the tilt squeezes recognition, not detection).
+
+    *Verification:* `analysis/flight_time_model.py` re-run clean against the edited
+    `candidates.sysml` (34 real configs, baseline unchanged at 58.4 min / $1,724), so
+    the new attribute does not disturb the regex parser; all generated outputs
+    byte-identical. *No `model_community_balanced.sysml` change needed* — that export
+    omits the `Analysis` package entirely (CLAUDE.md), and `IRCamera` there carries no
+    attributes. **Not verified:** Syside diagnostics — this session has no CLI SysML
+    validator, so the new `calc def` + `calc` usages were written strictly to the
+    surrounding file's proven idiom. **Worth opening `model.sysml` in the editor to
+    confirm clean diagnostics before relying on it.**
+
 ---
 
 ## C. Modeling decisions (SysML v2 representation choices)

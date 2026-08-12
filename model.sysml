@@ -749,6 +749,10 @@ package DroneSystemModel {
  attribute operatingTempMin_C : ScalarValues::Real;  // [degC] (Celsius offset unit)
  attribute operatingTempMax_C : ScalarValues::Real;  // [degC]
  attribute detectionRange : LengthValue;    // est. human/animal detection [m]
+ attribute mountTilt_deg : ScalarValues::Real;    // as-built bracket depression off NADIR [deg]:
+                                                  // 0 = straight down, 45 = the SELECTED down-look
+                                                  // bracket (TASKS.md 2.8, 2026-08-07). Drives the
+                                                  // off-nadir GSD degradation in Analysis.
 
  port usb_pwr_vid {   // USB-C to the SBC: bus power in + UVC video out (one cable)
   port pwr : Flows::PowerIn;                 // 5V bus power from the SBC
@@ -2174,13 +2178,33 @@ package DroneSystemModel {
  // engine is needed for numeric verdicts — the per-camera numbers stay in the
  // analysis CSV until such a tool is available.
 
- // Ground sample distance [m/px] at nadir, small-angle approximation:
+ // Ground sample distance [m/px] at NADIR, small-angle approximation:
  //   GSD = altitude * (HFOV in radians) / horizontal pixels
+ // This is the nadir BASE only. The as-built payload is tilted (IRCamera::
+ // mountTilt_deg), so the checks below degrade this via OffNadirGsd before
+ // applying the Johnson criteria — see the next calc def.
  calc def GroundSampleDistance {
   in altitude_m : ScalarValues::Real;
   in hfov_deg : ScalarValues::Real;
   in resolutionH : ScalarValues::Integer;
   return gsd_m : ScalarValues::Real = altitude_m * (hfov_deg * 0.0174532925) / resolutionH;
+ }
+
+ // Off-nadir GSD degradation (analysis/thermal_detection_offnadir_analysis.md §2).
+ // A camera depressed `tilt` off nadir views an on-axis ground target at slant
+ // range R = altitude / cos(tilt), stretching each pixel's ground footprint:
+ //   cross-range GSD = GSD_nadir / cos(tilt)      -> x1.414 at 45 deg
+ //   along-range GSD = GSD_nadir / cos(tilt)^2    -> x2.000 at 45 deg  <- BINDING
+ // The along-range axis binds, so that is what the checks below use.
+ // Trig is not evaluated in-model (same reason the nadir calc uses the
+ // small-angle form, and why numeric verdicts still need an execution engine —
+ // A10/C10), so the factor is supplied as a bound constant. It MUST be kept
+ // consistent with IRCamera::mountTilt_deg: recompute 1/cos(tilt)^2 if the
+ // bracket angle ever changes (45 deg -> 2.0; nadir -> 1.0).
+ calc def OffNadirGsd {
+  in gsdNadir_m : ScalarValues::Real;
+  in degradationFactor : ScalarValues::Real;
+  return gsd_m : ScalarValues::Real = gsdNadir_m * degradationFactor;
  }
 
  // Pixels spanning the target across one dimension.
@@ -2203,16 +2227,25 @@ package DroneSystemModel {
  }
 
  // Recognition/classification check: does a 0.5 m target at 90 m AGL span
- // >= 4 px? (R3_CAM_RES, supporting R3_2.)
+ // >= 4 px ALONG-RANGE at the as-built 45 deg tilt? (R3_CAM_RES, supporting
+ // R3_2.) With T13 @ 18 mm this is the tightest margin in the whole thermal
+ // chain — ~4.2 px against a 4 px floor (the off-nadir analysis computes 4.17
+ // exactly), versus 8.3 px if the mount were nadir.
  analysis def ThermalRecognitionCheck {
   subject cam : Architecture::IRCamera;
   attribute altitude_m : ScalarValues::Real = 90.0;
   attribute targetSize_m : ScalarValues::Real = 0.5;
+  // Along-range degradation at the as-built 45 deg mount: 1 / cos(45 deg)^2 = 2.0.
+  attribute alongRangeFactor : ScalarValues::Real = 2.0;
 
-  calc gsd : GroundSampleDistance {
+  calc gsdNadir : GroundSampleDistance {
    in altitude_m = altitude_m;
    in hfov_deg = cam.hfov;
    in resolutionH = cam.resolutionH;
+  }
+  calc gsd : OffNadirGsd {
+   in gsdNadir_m = gsdNadir.gsd_m;
+   in degradationFactor = alongRangeFactor;
   }
   calc pot : PixelsAcrossTarget {
    in targetSize_m = targetSize_m;
@@ -2227,16 +2260,25 @@ package DroneSystemModel {
   return verdict : ScalarValues::Boolean = pixelsOnTarget >= 4.0;
  }
 
- // Detection check at the 120 m detection altitude (R3_1).
+ // Detection check at the 120 m detection altitude (R3_1), also along-range at
+ // the as-built 45 deg tilt: ~3.2 px against a 1.5 px floor (off-nadir analysis
+ // computes 3.13). Comfortable — detection during the sweep is unaffected by the
+ // tilt; it is only RECOGNITION (above) that the tilt squeezes.
  analysis def ThermalDetectionCheck {
   subject cam : Architecture::IRCamera;
   attribute altitude_m : ScalarValues::Real = 120.0;
   attribute targetSize_m : ScalarValues::Real = 0.5;
+  // Along-range degradation at the as-built 45 deg mount: 1 / cos(45 deg)^2 = 2.0.
+  attribute alongRangeFactor : ScalarValues::Real = 2.0;
 
-  calc gsd : GroundSampleDistance {
+  calc gsdNadir : GroundSampleDistance {
    in altitude_m = altitude_m;
    in hfov_deg = cam.hfov;
    in resolutionH = cam.resolutionH;
+  }
+  calc gsd : OffNadirGsd {
+   in gsdNadir_m = gsdNadir.gsd_m;
+   in degradationFactor = alongRangeFactor;
   }
   calc pot : PixelsAcrossTarget {
    in targetSize_m = targetSize_m;
