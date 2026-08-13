@@ -63,3 +63,27 @@ def test_failsafe_rtl_stands_down():
     assert app.state == MissionApp.PASSIVE
     assert ("failsafe_observed", "RTL") in app.events
     assert MODE["GUIDED"] not in fc.mode_cmds   # app issued no autonomy commands
+
+
+def test_position_target_mask_never_sets_force_set():
+    # Regression (D2.15): the original mask (0b0000111111111000) set bit 9
+    # (FORCE_SET), which makes ArduCopter silently drop GUIDED altitude-only
+    # position targets -- the vehicle never descends to the R3_2 classify
+    # altitude, with no error surfaced. See MODEL_ISSUES.md's type_mask entry.
+    from fake_fc import FakeFC
+    force_set = 0b0000001000000000
+    fc_conn, app_conn = _pair(14572)
+    fc = FakeFC(fc_conn, start_mode="AUTO", start_alt_m=120.0)
+    fc.start()
+    try:
+        app = MissionApp(app_conn, ScriptedDetector(detect_after_calls=10,
+                                                    classify_success_on_call=3))
+        app.run(max_ticks=200, tick_hz=50.0)
+    finally:
+        fc.stop(); fc.join(timeout=2)
+        fc_conn.close(); app_conn.close()
+
+    assert fc.position_target_masks, "expected a GUIDED position target"
+    for mask in fc.position_target_masks:
+        assert not mask & force_set, f"FORCE_SET must stay clear (mask {mask:#016b})"
+        assert not mask & 0b111, "position bits 0-2 must stay ENABLED (not ignored)"

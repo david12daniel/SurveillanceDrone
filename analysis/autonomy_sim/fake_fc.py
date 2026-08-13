@@ -32,6 +32,7 @@ class FakeFC(threading.Thread):
         # records for assertions
         self.mode_cmds: list[int] = []           # custom_mode values commanded to us
         self.position_targets: list[tuple[int, int, float]] = []
+        self.position_target_masks: list[int] = []
         self.statustexts: list[str] = []
 
     # ---- external control (simulate FC-side failsafe, e.g. link/batt) ----
@@ -72,6 +73,7 @@ class FakeFC(threading.Thread):
             self.mode_cmds.append(int(msg.param2))
         elif t == "SET_POSITION_TARGET_GLOBAL_INT":
             self.position_targets.append((msg.lat_int, msg.lon_int, msg.alt))
+            self.position_target_masks.append(int(msg.type_mask))
             self.alt_m = float(msg.alt)          # snap to commanded alt (mock descent)
         elif t == "STATUSTEXT":
             txt = msg.text
