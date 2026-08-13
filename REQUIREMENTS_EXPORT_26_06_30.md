@@ -60,7 +60,7 @@ Flight states within any phase: **disarmed/idle, armed, takeoff, cruise (2.23 m/
 - **R1** — The system shall operate at a nominal cruising altitude relative to ground level between 90 meters and 120 meters.
 - **R2** — The drone shall maintain a steady ground speed of 2.23 meters/second.
 - **R6** — Minimum sustained flight time: 30 minutes in non-wind (0 m/s) conditions.
-- **R7** — Minimum linear distance during surveillance: 2800 meters when performing surveillance at 2.2 m/s in sustained wind conditions of 4.5 m/s.
+- **R7** — Maximum operating range: the drone shall maintain control-link and video-link connectivity, and shall be capable of recovering under its own power, from a straight-line distance of at least 2800 meters from the GCS launch point. At this range the drone shall be able to perform surveillance at 2.2 m/s ground speed in sustained wind of 4.5 m/s.
 - **R8** *(stretch)* — Sustained flight time of 60 minutes in non-wind (0 m/s) conditions.
 
 #### 3.2.2 Thermal detection & classification

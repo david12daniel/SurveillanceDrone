@@ -9,7 +9,7 @@
 
 From model.sysml — requirement **R7**:
 
-> Minimum linear distance during surveillance: **2800 meters** (2.8 km) when performing surveillance at 2.2 m/s in sustained wind conditions of 4.5 m/s.
+> Maximum operating range: the drone shall maintain control-link and video-link connectivity, and shall be capable of recovering under its own power, from a straight-line distance of at least **2800 meters** from the GCS launch point. At this range the drone shall be able to perform surveillance at 2.2 m/s ground speed in sustained wind of 4.5 m/s.
 
 From model.sysml — requirement **R4_GCS_RANGE**:
 

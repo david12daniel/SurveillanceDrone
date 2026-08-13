@@ -93,7 +93,7 @@ package DroneSystemModel {
  }
 
  requirement R7 {
- doc /* Minimum linear distance during surveillance: 2800 meters when performing surveillance at 2.2 m/s in sustained wind conditions of 4.5 m/s. */
+ doc /* Maximum operating range: the drone shall maintain control-link and video-link connectivity, and shall be capable of recovering under its own power, from a straight-line distance of at least 2800 meters from the GCS launch point. At this range the drone shall be able to perform surveillance at 2.2 m/s ground speed in sustained wind of 4.5 m/s. (The range drives the GCS link budget (R4_GCS_RANGE), the return-energy reserve (R6_BHV_RTL_RESERVE), and the link-loss failsafe design (R7_BHV_LINKLOSS_RTL). The sortie track length derived from R6 endurance is governed by R9.) */
  @PhaseTag { phase = Phase::Phase2; }
  }
 
