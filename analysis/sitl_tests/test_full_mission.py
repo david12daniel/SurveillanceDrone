@@ -10,6 +10,7 @@ with real ArduPilot mode acceptance, navigation, and failsafe behavior.
 """
 import time
 import pytest
+from pymavlink import mavutil
 from helpers import (
     set_mode_via_command, arm_and_check, guided_takeoff,
     set_param, wait_mode, send_position_target, wait_position,
@@ -36,23 +37,34 @@ def test_full_detection_cycle_mission(sitl_conn):
     3. Switch to GUIDED, command a descent (simulating the detection cycle)
     4. Return to AUTO, verify it rejoins the mission
 
-    KNOWN FAILING as of task D2.13 (2026-08-10): three real bugs on the path
-    to this point were found and fixed (mission upload only listened for
-    MISSION_REQUEST_INT, not the legacy MISSION_REQUEST ArduPilot actually
-    sends; arming was attempted directly in AUTO, which
-    AUTO_OPTIONS/"Allow Arming" blocks by default; the mission was missing
-    the conventional seq-0 home placeholder, so AUTO reported "Missing
-    Takeoff Cmd"). What's left blocking this test is not fixable from here:
-    with all of the above fixed, AUTO correctly announces "Mission: 1
-    Takeoff" and arms, but the vehicle never climbs -- SERVO_OUTPUT_RAW
-    shows motors ramp to arm-idle (~1100) then cut to 1000 a few seconds
-    later, and direct process monitoring confirmed the arducopter SITL
-    binary itself crashes at that point ("Closed connection on SERIAL0" is
-    the last line in its own log, then the process is gone). This is a
-    binary-level SITL instability during AUTO-mode takeoff, not a
-    mission_app.py or test-harness bug -- worth flagging upstream or
-    trying a different SITL build, not chasing further from the Python
-    side.
+    History: originally blocked by a SITL binary crash during AUTO-mode
+    takeoff (task D2.13/#70, D2.16/#141) -- fixed by launching SITL through
+    sim_vehicle.py instead of raw-invoking the binary (see conftest.py's
+    sim_vehicle_script fixture). Once the crash was gone, a second, separate
+    issue surfaced: the vehicle armed and stayed alive but never climbed --
+    SERVO_OUTPUT_RAW sat flat at exactly the MOT_SPIN_ARM idle PWM (not even
+    a partial ramp) for a few seconds, then STATUSTEXT "Disarming motors"
+    fired. Root-caused (task #141, 2026-08-13) via direct ArduCopter source
+    inspection: `ModeAuto::takeoff_run()` (ArduCopter/mode_auto.cpp) only
+    force-sets `ap.auto_armed` when `AUTO_OPTIONS` bit 1
+    (AllowTakeOffWithoutRaisingThrottle) is set; otherwise it relies on the
+    generic `Copter::update_auto_armed()` (ArduCopter/system.cpp), which
+    requires the RC throttle input to read as non-zero. This suite's
+    `sitl_conn` fixture runs a background RC_CHANNELS_OVERRIDE feed holding
+    throttle at RC3_MIN specifically so the ARM-time "throttle too high"
+    gate passes -- but that same idle value reads as `ap.throttle_zero`,
+    so `auto_armed` never becomes true, `_AutoTakeoff::run()`
+    (ArduCopter/takeoff.cpp) perpetually hits its
+    `!auto_armed -> return` early gate before ever requesting spool-up, and
+    the land detector eventually disarms after a few seconds of the vehicle
+    looking "landed" (motors never left ground-idle). GUIDED-mode takeoff
+    (test_guided_altitude_change) is unaffected because
+    `Mode::do_user_takeoff_U_m()` (ArduCopter/takeoff.cpp) force-sets
+    auto_armed unconditionally on user-initiated takeoff, unlike AUTO's
+    mission-triggered path. Fix: set AUTO_OPTIONS bit 1 below -- this isn't
+    a test-only workaround, it's the documented, intended ArduCopter
+    mechanism for exactly this scenario (an autonomous companion computer
+    driving AUTO missions with no live RC throttle stick).
     """
     # ── 1. Upload a simple mission ──────────────────────────────────────────
     # seq 0 is a conventional home/reference placeholder, not a real command
@@ -105,6 +117,18 @@ def test_full_detection_cycle_mission(sitl_conn):
 
     ok = arm_and_check(sitl_conn)
     assert ok, "Arm in GUIDED failed"
+
+    # AUTO_OPTIONS bit 1 (AllowTakeOffWithoutRaisingThrottle) -- without
+    # this, ModeAuto::takeoff_run() never force-sets ap.auto_armed, and with
+    # no live RC throttle stick (this suite holds throttle at RC3_MIN via
+    # the sitl_conn fixture's override feed, satisfying the arm gate but
+    # reading as ap.throttle_zero), auto_armed never becomes true and
+    # _AutoTakeoff::run() never requests spool-up -- see this test's own
+    # docstring for the full trace. Value 2 = bit 1 only, leaving bit 0
+    # (Allow Arming) off on purpose, matching this test's existing
+    # arm-in-GUIDED-then-switch sequencing above.
+    ok = set_param(sitl_conn, "AUTO_OPTIONS", 2.0, mavutil.mavlink.MAV_PARAM_TYPE_REAL32)
+    assert ok, "Failed to set AUTO_OPTIONS"
 
     ok = set_mode_via_command(sitl_conn, "AUTO")
     assert ok, "AUTO mode command failed"
