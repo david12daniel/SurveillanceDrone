@@ -21,12 +21,22 @@ R3_CAM_NETD: ≤50 mK
 R3_CAM_FOV: ≥30° HFOV
 R3_CAM_WT: ≤200g
 R3_CAM_PWR: ≤4.5W
-R3_CAM_COST: ≤$600
+R3_CAM_COST: ≤$720 (raised from ≤$600, David 2026-08-12)
 R3_CAM_IF: CVBS or digital compatible with SBC/VTX
 R4_SBC_PWR: ≤10W
 R4_SBC_WT: ≤100g
 R4_SBC_COST: ≤$150
 ----------------------------------------------------------------------
+
+UPDATED 2026-08-12: pixels-on-target now account for the as-built 45°
+down-look mount (MOUNT_TILT_DEG / candidates.sysml T13.mountTilt_deg), not
+a top-down nadir view — see the ANALYSIS FUNCTIONS section and
+analysis/thermal_detection_offnadir_analysis.md §2. T13 (PurpleRiver Mini
+640, 18mm, the LOCKED camera) was also added to CAMERAS — it was missing
+from this candidate roster entirely. The RECOMMENDATIONS/ranking prose
+below is historical (predates both the 18mm lens and 45° mount decisions)
+and was not rewritten; candidates.sysml + SELECTED_COMPONENTS.md are the
+current source of truth for the actual selection.
 """
 
 import math
@@ -350,6 +360,26 @@ CAMERAS = [
         "notes": "Well-documented; most interfaces; OEM",
     },
     {
+        "id": "T13",
+        "model": "PurpleRiver Mini 640 (18mm)",
+        "res_w": 640,
+        "res_h": 512,
+        "pitch_um": 12.0,
+        "fov_h": 24.1,
+        "fov_v": 19.4,
+        "lens_mm": 18.0,
+        "netd_mk": 50,
+        "fps": 25,
+        "output": "USB UVC 1.1",
+        "total_cost": 700,
+        "mass_g": 21.0,
+        "power_w": 0.8,
+        "cvbs_natively": False,
+        "usb_natively": True,
+        "notes": "LOCKED (candidates.sysml, selected 2026-07-29); 45° down-look "
+                 "bracket (mountTilt_deg=45, selected 2026-08-07)",
+    },
+    {
         "id": "T14",
         "model": "Arducam 640×512 USB",
         "res_w": 640,
@@ -412,17 +442,33 @@ CAMERAS = [
 #  ANALYSIS FUNCTIONS
 # ═══════════════════════════════════════════════════════════════════════
 
+MOUNT_TILT_DEG = 45.0
+# As-built down-look mount (candidates.sysml T13.mountTilt_deg), selected
+# 2026-08-07. UPDATED 2026-08-12: this analysis previously assumed a nadir
+# (top-down) camera for every candidate, which the system does not have.
+# A rigid camera depressed `tilt` off nadir views an on-axis target at slant
+# range alt/cos(tilt); each pixel's ground footprint stretches by
+# 1/cos(tilt) cross-range and 1/cos(tilt)^2 along-range — see
+# analysis/thermal_detection_offnadir_analysis.md §2 and model.sysml's
+# OffNadirGsd calc, which this mirrors.
 
-def compute_gsd(pitch_um, focal_mm, alt_m):
+
+def compute_gsd(pitch_um, focal_mm, alt_m, tilt_deg=0.0):
     """
-    Ground Sampling Distance (meters per pixel)
-    GSD = (pixel_pitch) / focal_length × altitude
+    Ground Sampling Distance (meters per pixel), off-nadir aware.
+    Returns (gsd_cross_m, gsd_along_m) — the two ground footprints of one
+    pixel at *tilt_deg* off nadir. tilt_deg=0 (nadir) returns equal values,
+    both equal to the plain (pixel_pitch / focal_length) × altitude GSD used
+    before 2026-08-12.
     """
     pitch_m = pitch_um * 1e-6
     focal_m = focal_mm * 1e-3
     ifov_rad = pitch_m / focal_m
-    gsd_m_per_px = ifov_rad * alt_m
-    return gsd_m_per_px
+    theta = math.radians(tilt_deg)
+    slant_range_m = alt_m / math.cos(theta)
+    gsd_cross_m = slant_range_m * ifov_rad
+    gsd_along_m = gsd_cross_m / math.cos(theta)
+    return gsd_cross_m, gsd_along_m
 
 
 def pixels_on_target(target_m, gsd_m_per_px):
@@ -452,7 +498,15 @@ def johnson_level(pixels_min):
 
 
 def fov_ground_coverage(fov_h_deg, alt_m):
-    """Ground coverage width (meters) at given altitude."""
+    """
+    Ground coverage width (meters) at given altitude. Left as the nadir
+    approximation — a 45° tilt makes the true footprint a forward-shifted
+    trapezoid, not a rectangle, and that geometry hasn't been derived
+    anywhere in this project (analysis/thermal_detection_offnadir_analysis.md
+    §4 notes only that lens-to-lens swath *ratios* are tilt-independent, not
+    an absolute off-nadir footprint formula). Reported "Cov" columns are
+    therefore still the nadir figure.
+    """
     return 2 * alt_m * math.tan(math.radians(fov_h_deg / 2))
 
 
@@ -502,17 +556,26 @@ def analyze():
         results[cam_id] = {"camera": cam["model"], "altitudes": {}}
 
         for alt in altitudes:
-            gsd = compute_gsd(pitch_um, lens_mm, alt)
+            gsd_cross, gsd_along = compute_gsd(pitch_um, lens_mm, alt, MOUNT_TILT_DEG)
             coverage_w = fov_ground_coverage(hfov, alt)
             coverage_h = fov_ground_coverage(vfov, alt)
 
-            # Check R3_CAM_RES: 0.5m×0.5m at 90m → 4+ contiguous pixels
-            pix_05m = pixels_on_target(0.5, gsd)
+            # R3_CAM_RES: 0.5m×0.5m target — symmetric, so the along-range
+            # axis binds regardless of heading (matches model.sysml's
+            # OffNadirGsd chain, which uses along-range because it binds).
+            pix_05m = pixels_on_target(0.5, gsd_along)
 
             target_analysis = {}
             for tkey, tinfo in TARGETS.items():
-                pix_len = pixels_on_target(tinfo["length_m"], gsd)
-                pix_wid = pixels_on_target(tinfo["width_m"], gsd)
+                # Worst-case heading: the animal's minor (limiting) dimension
+                # is the one that happens to fall along-range, where the
+                # tilt penalty is largest (1/cos^2 vs 1/cos cross-range).
+                # length >= width for every profile in TARGETS, so this is
+                # the true worst case, not just a conservative guess: putting
+                # the smaller real dimension on the more-degraded axis always
+                # yields the smallest pixels_min_dim of the two headings.
+                pix_len = pixels_on_target(tinfo["length_m"], gsd_cross)
+                pix_wid = pixels_on_target(tinfo["width_m"], gsd_along)
                 pix_min = min(pix_len, pix_wid)
                 johnson = johnson_level(pix_min)
                 therm_qual = thermal_contrast_quality(netd_mk, tinfo["ΔT_typical_C"])
@@ -525,7 +588,8 @@ def analyze():
                 }
 
             results[cam_id]["altitudes"][alt] = {
-                "gsd_cm_per_px": round(gsd * 100, 2),
+                "gsd_cm_per_px": round(gsd_along * 100, 2),
+                "gsd_cross_cm_per_px": round(gsd_cross * 100, 2),
                 "ground_coverage_m": f"{round(coverage_w, 1)}m × {round(coverage_h, 1)}m",
                 "r3_cam_res_pixels_05m": round(pix_05m, 2),
                 "r3_cam_res_pass": pix_05m >= 4,
@@ -533,6 +597,100 @@ def analyze():
             }
 
     return results
+
+
+def write_csv(results, path="thermal_camera_analysis_expanded.csv"):
+    """
+    Regenerate the CSV that model.sysml's Analysis package comment cites as
+    the numeric backing for its detection/recognition calc chain (kept there
+    until a SysML v2 execution engine can run the calc defs directly). Now
+    off-nadir aware (MOUNT_TILT_DEG) — the committed CSV had been nadir-only.
+
+    NOT a byte-for-byte reproduction of the CSV previously in this repo:
+    that file's generator (with per-camera lens-variant rows like
+    "T13_13"/"T6_90"/"T7_fixed") predates this repo's git history and no
+    longer exists anywhere in the codebase, so its exact row expansion can't
+    be recovered. This writes one row per camera in CAMERAS (T1-T16 plus the
+    locked T13, which the old roster never included), the full candidate set
+    this script actually models today. The old "Radiometric" column is also
+    dropped — CAMERAS carries no structured field for it, only free-text
+    mentions in a few `notes`.
+    """
+    species_keys = list(TARGETS.keys())
+    header = [
+        "ID", "Model", "Resolution (Px)", "Pixel Pitch (µm)", "NETD (mK)",
+        "Frame Rate (fps)", "Lens (mm)", "HFOV (°)", "Mount Tilt (°)",
+        "Output Interface", "Weight (g)", "Power (W)", "Cost (USD)",
+        "CVBS Native", "USB Native",
+    ]
+    for alt in (90, 120):
+        header += [
+            f"GSD @{alt}m (cm/px, along-range)", f"GSD Cross @{alt}m (cm/px)",
+            f"Cov @{alt}m (m x m)", f"R3_CAM_RES 0.5m@{alt}m (px)",
+            f"R3_CAM_RES @{alt}m (>=4px?)",
+        ]
+        for tkey in species_keys:
+            label = TARGETS[tkey]["label"]
+            header += [
+                f"{label} Ln@{alt}m (px)", f"{label} Wi@{alt}m (px)",
+                f"{label} Min@{alt}m (px)", f"{label} Johnson@{alt}m",
+                f"{label} Thermal@{alt}m",
+            ]
+    for sbc_name in SBCS:
+        header += [f"{sbc_name} Compat", f"{sbc_name} NPU Load Margin (x)"]
+    header += [
+        "R3.1 Pass @120m (deer det)", "R3.2 Pass @90m (deer class)",
+        "Affordable?", "Notes",
+    ]
+
+    rows = []
+    for cam in CAMERAS:
+        r = results[cam["id"]]
+        row = [
+            cam["id"], cam["model"], f'{cam["res_w"]}x{cam["res_h"]}',
+            cam["pitch_um"], cam["netd_mk"], cam["fps"], cam["lens_mm"],
+            cam["fov_h"], MOUNT_TILT_DEG, cam["output"], cam["mass_g"],
+            cam["power_w"], cam["total_cost"],
+            "Yes" if cam["cvbs_natively"] else "No",
+            "Yes" if cam["usb_natively"] else "No",
+        ]
+        for alt in (90, 120):
+            a = r["altitudes"][alt]
+            row += [
+                a["gsd_cm_per_px"], a["gsd_cross_cm_per_px"], a["ground_coverage_m"],
+                a["r3_cam_res_pixels_05m"],
+                "PASS" if a["r3_cam_res_pass"] else "FAIL",
+            ]
+            for tkey in species_keys:
+                t = a["targets"][tkey]
+                row += [
+                    t["pixels_length"], t["pixels_width"], t["pixels_min_dim"],
+                    t["johnson_level"], t["thermal_contrast"],
+                ]
+        detector_pixels = cam["res_w"] * cam["res_h"]
+        for sbc_name, sbc in SBCS.items():
+            can_connect = (cam["usb_natively"] and "USB" in cam["output"]) or cam["cvbs_natively"]
+            _, margin = sbc_npu_requirement(detector_pixels, cam["fps"], sbc["npu_tops"])
+            row += [
+                "Yes" if can_connect else "No (needs interface board)",
+                "inf" if margin == float("inf") else round(margin, 1),
+            ]
+        a120, a90 = r["altitudes"][120], r["altitudes"][90]
+        deer120 = a120["targets"]["deer_whitetail"]["johnson_level"]
+        deer90 = a90["targets"]["deer_whitetail"]["johnson_level"]
+        r31_pass = deer120 in ("Detection", "Marginal Detection", "Recognition", "Identification")
+        r32_pass = deer90 in ("Recognition", "Identification")
+        row += [
+            "PASS" if r31_pass else "FAIL", "PASS" if r32_pass else "FAIL",
+            "Yes" if cam["total_cost"] <= 720 else "No", cam["notes"],
+        ]
+        rows.append(row)
+
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(header)
+        w.writerows(rows)
+    return path
 
 
 def print_report(results):
@@ -756,7 +914,7 @@ def print_report(results):
             limits.append("resolution too low")
         if deer90["johnson_level"] == "Insufficient":
             limits.append("can't detect deer")
-        if cam["total_cost"] > 600:
+        if cam["total_cost"] > 720:
             limits.append(f"${cam['total_cost']} exceeds budget")
         limit_str = limits[0] if limits else "none significant"
 
@@ -810,20 +968,20 @@ def print_report(results):
     print(f"\n{'─' * 100}")
     print("  ✅ REQUIREMENT COMPLIANCE MATRIX (Verified Options Only)")
     print(f"{'─' * 100}")
-    print(f"  {'Req':15s} {'T8 (256)':15s} {'T9 (384)':15s} {'T10 (640)':15s} {'T4 (Lepton)':15s} {'T11 (Axis640)':15s}")
-    print(f"  {'─' * 75}")
+    print(f"  {'Req':15s} {'T8 (256)':15s} {'T9 (384)':15s} {'T10 (640)':15s} {'T4 (Lepton)':15s} {'T11 (Axis640)':15s} {'T13 (LOCKED)':15s}")
+    print(f"  {'─' * 90}")
     checks = {
         "R3_CAM_RES (≥4px)": ["a90['r3_cam_res_pass']"],
         "R3_CAM_NETD (≤50mK)": ["40 ≤ 50"],
         "R3_CAM_FOV (≥30°)": ["cam['fov_h'] >= 30"],
         "R3_CAM_WT (≤200g)": ["cam['mass_g'] <= 200"],
         "R3_CAM_PWR (≤4.5W)": ["cam['power_w'] <= 4.5"],
-        "R3_CAM_COST (≤$600)": ["cam['total_cost'] <= 600"],
+        "R3_CAM_COST (≤$720)": ["cam['total_cost'] <= 720"],
         "R3_CAM_IF (CVBS/USB)": ["cam['cvbs_natively'] or cam['usb_natively']"],
         "R3.1 (deer@120m det)": ["a120['targets']['deer_whitetail']['johnson_level'] in ('Detection', 'Recognition', 'Identification', 'Marginal Detection')"],
     }
 
-    check_cams = ["T8", "T9", "T10", "T4", "T11"]
+    check_cams = ["T8", "T9", "T10", "T4", "T11", "T13"]
     for req_name, _ in checks.items():
         line = f"  {req_name:15s}"
         for cid in check_cams:
@@ -843,7 +1001,7 @@ def print_report(results):
             elif req_name.startswith("R3_CAM_PWR"):
                 ok = cam["power_w"] <= 4.5
             elif req_name.startswith("R3_CAM_COST"):
-                ok = cam["total_cost"] <= 600
+                ok = cam["total_cost"] <= 720
             elif req_name.startswith("R3_CAM_IF"):
                 ok = cam["cvbs_natively"] or cam["usb_natively"]
             elif req_name.startswith("R3.1"):
@@ -861,3 +1019,8 @@ def print_report(results):
 if __name__ == "__main__":
     results = analyze()
     print_report(results)
+    import os
+    out_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             "thermal_camera_analysis_expanded.csv")
+    write_csv(results, out_path)
+    print(f"\nWrote {out_path}")

@@ -54,6 +54,21 @@ def _shim():
     _tt.TTFont = _s
 _shim()
 
+def _stub_brep_from_stl():
+    # build123d/__init__.py unconditionally imports build123d.brep_from_stl
+    # (STL -> primitive detection, unused here), which pulls in sklearn ->
+    # pandas; an ABI-mismatched pandas/numpy pair crashes that import and
+    # takes `import build123d` down with it. Stub the submodule out first.
+    import sys, types
+    if "build123d.brep_from_stl" in sys.modules:
+        return
+    stub = types.ModuleType("build123d.brep_from_stl")
+    def _np(*a, **k):
+        raise NotImplementedError("brep_from_stl stubbed out (numpy/pandas ABI mismatch); unused here")
+    stub.detect_primitives = _np
+    sys.modules["build123d.brep_from_stl"] = stub
+_stub_brep_from_stl()
+
 try:
     from build123d import Box, Cylinder, Pos, Rot, Compound, export_step, export_stl
 except ImportError:

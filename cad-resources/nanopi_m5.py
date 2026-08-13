@@ -75,6 +75,35 @@ def _install_font_loader_shim():
 
 _install_font_loader_shim()
 
+
+def _install_brep_from_stl_stub():
+    """build123d/__init__.py unconditionally imports build123d.brep_from_stl
+    (STL -> primitive-shape detection), which pulls in sklearn -> pandas. If
+    the installed pandas predates the installed numpy's ABI, that import
+    raises ("numpy.dtype size changed... binary incompatibility") and takes
+    down the whole `import build123d` with it. This script never calls
+    detect_primitives, so stub the submodule out before importing build123d
+    rather than require a pandas/numpy version fix — a real future call to
+    it fails loudly instead of pretending to work."""
+    import sys
+    import types
+
+    if "build123d.brep_from_stl" in sys.modules:
+        return
+    stub = types.ModuleType("build123d.brep_from_stl")
+
+    def _detect_primitives_stub(*args, **kwargs):
+        raise NotImplementedError(
+            "build123d.brep_from_stl.detect_primitives is stubbed out in this "
+            "environment (numpy/pandas ABI mismatch); not used by this script."
+        )
+
+    stub.detect_primitives = _detect_primitives_stub
+    sys.modules["build123d.brep_from_stl"] = stub
+
+
+_install_brep_from_stl_stub()
+
 try:
     from build123d import (
         Box, Cylinder, Pos, Compound,

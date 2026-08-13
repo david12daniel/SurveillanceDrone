@@ -6,6 +6,11 @@
 memory/
 *.log
 
+# ArduPilot SITL run artifacts (dataflash logs, EEPROM param dump, terrain cache)
+logs/
+eeprom.bin
+terrain/
+
 # Python compiled files
 *.pyc
 __pycache__/

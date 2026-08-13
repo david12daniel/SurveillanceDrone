@@ -142,30 +142,519 @@ any tool previously.
    22.2 V/14.8 V (3.7 V/cell average). 4S 12000mAh has only one confirmed product
    (Lumenier NAV Amprius, sold out as of 2026-06); alternatives exist at 4S 10Ah.
 
-7. **RESOLVED (2026-07-10) — FC firmware choice: ArduPilot ArduCopter ≥ 4.5.**
-   Previously OPEN as "ArduPilot Copter vs PX4" (2026-07-01). The autonomy-contract
-   build (`analysis/autonomy_sim/`, §C26) is built and tested on ArduCopter AUTO/GUIDED,
-   so David selected ArduPilot ArduCopter ≥ 4.5 on 2026-07-10. `AF3a.fcFirmware` in
-   `candidates.sysml` was updated from `"TBD"` to `"ArduPilot ArduCopter >= 4.5 —
-   SELECTED 2026-07-10"`. The choice affects GCS setup (QGroundControl tuning
-   profiles — Mission Planner is Windows-only, the laptop is a MacBook Air) and the
-   Phase 3 SBC MAVLink integration, but is a configuration choice, not a procurement
-   item, so no ordering impact. See `SELECTED_COMPONENTS.md` for the formal record.
-
-8. **OPEN (2026-07-29) — R3_CAM_FOV (≥30°) now violated by the selected 18 mm lens.**
+7. **RESOLVED (2026-08-11) — R3_CAM_FOV restated as a ground-swath floor; new mission
+   requirement R9 (area coverage) added.** *(Was OPEN 2026-07-29: the ≥30° HFOV form was
+   violated by the selected 18 mm lens.)*
    The thermal lens was changed **13 mm → 18 mm** (`T13`, `candidates.sysml`; see
    `SELECTED_COMPONENTS.md`, `BOM.md`, `analysis/thermal_detection_offnadir_analysis.md`).
-   18 mm HFOV = **24.1°**, below R3_CAM_FOV's ≥30°. This is a **deliberate trade**: the ≥30°
-   figure is a *coverage/swath* floor, not a flight/controllability requirement (the FPV
+   18 mm HFOV = **24.1°**, below the old R3_CAM_FOV ≥30°. This is a **deliberate trade**: the
+   ≥30° figure was a *coverage/swath* floor, not a flight/controllability requirement (the FPV
    camera flies the drone, never the thermal), and 18 mm buys better on-target resolution
-   (8.3 px @90 m) plus recognition at a 45° oblique tilt, at ~28% less area/sweep. All other
-   camera requirements still pass (R3_CAM_RES improves). **Action needed (David, requires
-   `model.sysml` edit — protected file):** re-tag **R3_CAM_FOV as a coverage *goal*** (or lower
-   the threshold to ~24°), and review the def-level `satisfy R3_CAM_FOV` on `IRCamera` (now a
-   false structural claim). Until then the model asserts a requirement the selected part
-   doesn't meet. **No `model.sysml` change has been made** pending approval.
+   (8.3 px @90 m) plus recognition at a 45° oblique tilt. All other camera requirements
+   still pass (R3_CAM_RES improves).
+
+   **Resolution (David approved 2026-08-11).** The old form stated a bare lens angle rather
+   than the ground coverage it was meant to guarantee, and conflated a *sensor* property with
+   a *route-planning* one. Four changes to `model.sysml`:
+   - **NEW `R9` (mission requirement, hard):** survey a contiguous area of **at least 30 acres
+     (12.1 ha) per sortie** at the R1 altitude / R2 speed with a 20% reserve.
+   - **NEW `R10` (mission requirement, stretch):** **60 acres (24.3 ha) per sortie** — reported,
+     not asserted, mirroring the R6 / R8 hard-versus-stretch pattern.
+   - **`R3_CAM_FOV` restated (camera):** ≥ **42 m** across-track ground swath at 120 m AGL
+     (`swath = 2·alt·tan(HFOV/2)`). Now `subsets R9` (was `R3`), since swath's real driver is
+     area coverage, not detection performance (which R3_CAM_RES owns). The selected T13 @18 mm
+     yields **51.2 m → 22% margin**, so the def-level `satisfy R3_CAM_FOV` on `IRCamera` is
+     **true again** and was left in place.
+   - **NEW `R4_GCS_SWEEP_SPACING` (flight-planning software):** generated line spacing
+     ≤ 90% of camera swath (≥10% overlap). `subsets R9`; satisfied by `ConductSortie.planRoute`
+     (allocated to QGroundControl). This is where the "no gaps between passes" obligation
+     actually belongs — it is operational, not a sensor property.
+
+   **Why 30 acres hard / 60 stretch (and not 60 hard).** A 60-acre hard floor would have made
+   **R9 outrank R6 as the endurance driver**: at 2.23 m/s and 46.1 m spacing, 60 acres needs
+   ≈5,270 m of swept track ≈ **49 min** usable endurance, well above the R6 30-min floor — so a
+   design that merely satisfied R6 would cover only ~36.6 acres and *fail* R9. Setting the hard
+   requirement at **30 acres** keeps R6 governing: R6's 30 min yields ~3,210 m of track →
+   **36.6 acres**, clearing R9 with margin. The 60-acre case moves to **R10**, which needs
+   ~49 min — inside the **R8** 60-min stretch (~73.2 acres). Hard and stretch now pair
+   coherently: **R6↔R9** and **R8↔R10**.
+
+   *Consistency check:* both pairs (30 ac @ 30 min, 60 ac @ 60 min) share the same
+   area-per-minute ratio and therefore derive the **same 42 m swath floor** — the R3_CAM_FOV
+   value is stable whether taken from the hard or the stretch pair.
+
+   *Derived artifacts regenerated:* `analysis/requirements_traceability.csv` (54 requirements).
+   *No `model_community_balanced.sysml` change needed* — that export deliberately omits the
+   Requirements pillar and all `satisfy` statements (see its header), and this change touched
+   nothing else. *Still to sync:* the SSS export `REQUIREMENTS_EXPORT_26_06_30.md`.
+
+8. **RESOLVED (2026-08-11) — the two SSS §3.7 failsafe parameter sets captured as
+   requirements: new `R6_FS_BATT` / `R7_FS_LINK`.** *(Closes TASKS.md 0.2/0.3; both had
+   sat as "TBD"/"open" since the requirements were first written.)*
+
+   **Source.** An OpenClaw nightly-agent session (WSL clone of this repo, uncommitted)
+   had already worked out the low-battery reserve policy decision (0.3) in
+   `analysis/low_battery_reserve_analysis.md` and a companion `params_sets.py`
+   (ArduPilot parameter values for both failsafes). That file was ported into this
+   (Windows) checkout's `analysis/` — it did not exist here before. David reviewed the
+   values 2026-08-11 before they were written into the model.
+
+   **`R6_FS_BATT` (subsets `R6_BHV_RTL_RESERVE`):** `BATT_LOW_MAH = 700` mAh (30% margin
+   over the 555 mAh bare-RTL cost of the worst-case 2.8 km return (R7) at `RTL_SPEED =
+   12` m/s — the multirotor power-bucket minimum; a slow 2.23 m/s return would need
+   ~1950 mAh instead), `BATT_CRT_MAH = 350`, `BATT_LOW_VOLT = 20.4` V (3.4 V/cell),
+   `BATT_CRT_VOLT = 19.2` V (3.2 V/cell), `BATT_FS_LOW_ACT = 2` (RTL),
+   `BATT_FS_CRT_ACT = 1` (Land), `BATT_MONITOR = 4` (fuel level + voltage). Static,
+   worst-case-distance reserve — **not** distance-adaptive.
+
+   **`R7_FS_LINK` (subsets `R7_BHV_LINKLOSS_RTL`):** `FS_THR_ENABLE = 1` (RTL on
+   throttle failsafe), `FS_THR_VALUE = 900` (ELRS RX outputs a below-range throttle
+   value on TX signal loss; ArduPilot reads that as link loss), `FS_OPTIONS = 0` (no
+   continue-on-failsafe exceptions — RTL fires unconditionally, even mid-investigation
+   in GUIDED mode).
+
+   **Two design forks surfaced with David during review, both resolved to the simpler
+   option for now:**
+   - **Low-battery: static vs. distance-adaptive reserve.** David asked whether the
+     reserve could shrink dynamically as the vehicle nears the launch point, instead of
+     always reserving for the worst-case 2.8 km — a real efficiency gain (a drone close
+     to home with the static 700 mAh reserve still has far more margin than it needs)
+     but it requires new software (SBC or FC Lua logic computing energy-needed-to-return
+     from live GPS distance each cycle), not a firmware parameter, so it doesn't fit the
+     "config-as-requirement" scope of 0.2. **Decision: keep `R6_FS_BATT` static for
+     Phase 1** (zero new software, and `BATT_CRT_MAH` remains an absolute hard-floor
+     backstop regardless); track the dynamic version as a new Phase 3 follow-up —
+     **TASKS.md D2.17** (Mission Control task id 142).
+   - **Link-loss: abort mid-investigation vs. finish it first.** `FS_OPTIONS` has a bit
+     to continue the current GUIDED action on RC failsafe (finish classifying before
+     RTLing) instead of aborting immediately. **Decision: unconditional abort
+     (`FS_OPTIONS = 0`)** — simpler and safer; matches the values already in the
+     ported analysis.
+
+   **Other `model.sysml` changes:** `fcSoftware` now also `satisfy`s `R6_FS_BATT` /
+   `R7_FS_LINK` (in addition to the existing `R6_BHV_RTL_RESERVE` /
+   `R7_BHV_LINKLOSS_RTL`). The now-stale "TBD"/"open requirement" doc text was updated
+   in four other spots that referenced the gap: `R6_BHV_RTL_RESERVE`'s doc, the
+   `LinkLossDetected`/`LowBatteryReached` attribute defs (Behavior pillar), and the
+   `HandleLinkLossUC`/`HandleLowBatteryUC` objective docs (UseCases veneer).
+
+   *Derived artifacts regenerated:* `analysis/requirements_traceability.csv` (56
+   requirements). *No `model_community_balanced.sysml` change needed* — same reasoning
+   as item 7 above (Requirements pillar + `satisfy` statements are excluded from that
+   export). TASKS.md 0.2 and 0.3 marked done; a new D2.17 task added for the deferred
+   dynamic-reserve idea.
+
+9. **RESOLVED (2026-08-12) — UC-11 operator override authority modeled and
+   implemented.** *(Closes TASKS.md 0.5 / Mission Control task #8; decision itself
+   was made 2026-08-06 in `analysis/operator_override_UC11.md`, David approved
+   proceeding to modeling + implementation 2026-08-12.)*
+
+   **The decision (unchanged from the 2026-08-06 analysis):** the operator can abort
+   an autonomous investigation, and the mechanism is a plain QGC flight-mode switch —
+   not a dedicated app input. Chosen because it works even if the SBC mission app has
+   crashed, needs zero new UI, and the operator already knows how to use it.
+
+   **`model.sysml` changes (Behavior pillar):** new `attribute def OperatorOverride`
+   trigger signal (external/unmodeled-sender, same category as `ArmCommand`/
+   `LaunchCommand` — it originates with the operator, not an onboard action def);
+   new `FlightMode.flying.loiterToCruiseOnOverride` transition (`first loiter, accept
+   overrideCmd : OperatorOverride, then cruise`), sitting alongside the existing
+   `loiterToCruise` (on `InvestigationComplete`); new `UseCases::OperatorOverrideUC`
+   (UC-11), modeled — like UC-9/UC-10 — as a standalone exceptional-flow use case def
+   realized by a `FlightMode` transition and deliberately not `include`d by
+   `ConductSortieUC`, but *with* an `actor operator : Operator` (unlike UC-9/UC-10,
+   this one is operator-initiated, not a system-internal failsafe). Updated the two
+   stale "UC-11 not yet modeled" doc comments (`ConductSortie`, `UseCases` package
+   header). Mirrored the state-machine pieces (not `OperatorOverrideUC` — `UseCases`
+   is excluded from that export) into `model_community_balanced.sysml`.
+
+   **Scope note — RTL/LAND are NOT the override trigger.** The original CONOPS table
+   in the analysis doc listed "operator switches to RTL" as an override case
+   resuming SWEEP, but that would fight the *already-modeled and tested* failsafe
+   stand-down (`flyingToRtlOnLinkLoss`/`flyingToRtlOnLowBattery`-style handling): if
+   the operator explicitly commands RTL, the vehicle should go fully passive, not
+   silently resume autonomous SWEEP mid-return. `OperatorOverride` therefore covers
+   every non-GUIDED mode *except* RTL/LAND (including a direct switch back to AUTO),
+   which is exactly what fires in the software (see below) since the RTL/LAND check
+   in `mission_app.py`'s `step()` already runs first and intercepts those two modes.
+
+   **`DroneMissionApp` changes (the live repo — `SurveillanceDrone/analysis/
+   autonomy_sim/` is the frozen prototype, not touched):**
+   - `mission_app.py` — the `INVESTIGATE` handler now checks `fc_mode != GUIDED` as
+     its first line; on a mismatch it alerts, logs an `("operator_override",
+     <mode>)` event, and transitions to `SWEEP` (which already gates on `fc_mode ==
+     AUTO`, so re-entry on a switch back to AUTO needs no extra logic — R-UC11-2 from
+     the analysis doc falls out for free).
+   - `alerts.py` — new `OVR` `STATUSTEXT` kind (`override()` constructor,
+     `SEV_OVERRIDE = MAV_SEVERITY_INFO` per the analysis doc's severity matrix,
+     `parse()` allow-list). Deliberately reuses the existing D2.10 structured
+     `KIND|species|lat,lon|alt|conf` wire schema rather than the illustrative
+     free-text `"[MISSION] OPERATOR_OVERRIDE"` string sketched in the original
+     analysis draft — that draft predates the structured-schema task (D2.10), and
+     the structured form is parseable/consistent with `DET`/`CLS`/`UNK`.
+   - `test_autonomy_loop.py` — new `test_operator_override_during_investigate`
+     (drives a real `FakeFC`, forces `STABILIZE` mid-`INVESTIGATE`, asserts the
+     override event, the `OVR` alert, and no spurious `AUTO` mode request). All 16
+     tests pass. Note for whoever builds D2.13: the override path never reaches
+     `PASSIVE`, so a `run()`-in-thread test must bound `max_ticks` tightly or the
+     background thread can outlive a short `join()` timeout — cost me one flaky
+     iteration before landing on `max_ticks=100`.
+
+   **Not done:** field-testing this against real ArduPilot SITL (tracked as a
+   D2.13 follow-up, TASKS.md); no new `R#` requirement was added (`R-UC11-1..4` in
+   the analysis doc are implementation notes, not formal model requirements), so
+   `analysis/requirements_traceability.csv` needed no regeneration.
+
+10. **RESOLVED (2026-08-12) — D2.8 `adjustOrbit` implemented; D2.9's loiter budget
+    ported to the live `DroneMissionApp` repo.** *(Closes TASKS.md D2.8/D2.9,
+    Mission Control tasks #67/#68. Also fixes the stale TASKS.md 0.4 checkbox —
+    that decision and D2.9's original patch had already landed via a separate
+    session on 2026-08-05 and only reached this checkout on the 2026-08-12 merge
+    that closed out item 9 above.)*
+
+    **Porting gap found and fixed.** The 2026-08-05 D2.9 implementation (per
+    Mission Control task #68's own notes) only ever patched
+    `analysis/autonomy_sim/mission_app.py` — the frozen de-risking prototype —
+    never the live `DroneMissionApp` repo it was seeded from. The 30 s wall-clock
+    budget was ported into the live repo as part of this work, since D2.8
+    (`adjustOrbit`) and D2.9 (its outer bound) are the same piece of software: the
+    model's own `adjustOrbit` doc already ties them together ("bounded by a 30 s
+    loiter time budget per investigation"), so implementing one without the other
+    would leave the live app not matching what the model claims.
+
+    **`model.sysml`: no change needed.** The `adjustOrbit` doc (already updated
+    2026-08-05 per task 0.4/D2.9's approval) reads "Adjust loiter orbit/aspect and
+    retry classification; bounded by a 30 s loiter time budget per investigation
+    ... On budget exhaustion: log POI as unclassified and resume route." That is
+    already an accurate, sufficiently general description of what was built —
+    no new elements or doc rewrite required.
+
+    **`DroneMissionApp` changes:**
+    - `geolocation.py` — new `offset_latlon` / `bearing_deg` / `distance_m`
+      helpers (flat-earth, same assumption as `project_pixel_to_ground`), plus
+      **`standoff_from_poi`** — see the 45° correction below.
+    - `mission_app.py` — `_command_descent` renamed `_command_position_target`
+      (it now serves both the initial 120→90 m descent and adjustOrbit's
+      repositions) and gained a heading argument. New constructor params
+      `loiter_time_budget_s=30.0`, `orbit_step_deg=90.0`, `orbit_settle_s=1.5`.
+      The INVESTIGATE handler now: (1) checks the outer wall-clock budget first
+      — the only remaining give-up path, replacing the old
+      "`classify_timeout_ticks` reached ⇒ give up" branch; (2) on a per-aspect
+      timeout, steps the **viewing bearing**, commands a new standoff pose, and
+      waits `orbit_settle_s` before resuming classify sampling at the new aspect
+      (resetting the inner tick counter). `orbit_step_deg`/`orbit_settle_s` are
+      engineering estimates pending field tuning.
+    - `fake_fc.py` — records commanded yaw (and whether yaw was commanded at
+      all) and snaps its pose to commanded targets, so the tests exercise real
+      geometry rather than a stationary vehicle.
+
+    **45° MOUNT CORRECTION (found during review — the first cut of this work was
+    wrong).** David caught that the implementation assumed a nadir camera while
+    the as-built payload is the **45° down-look bracket** (TASKS.md 2.8, decided
+    2026-08-07 per Mission Control #46). The assumption was not introduced by
+    D2.8 — it was **latent in the original investigate descent**, which commanded
+    the vehicle to hover directly over the POI's lat/lon. Consequences and fix:
+    - For a rigid (non-gimbaled — there is no gimbal anywhere in this design)
+      camera tilted θ below forward, the boresight meets the ground
+      **`alt·cot(θ)` AHEAD of the vehicle** along its heading: 90 m ahead at the
+      90 m classify altitude, slant range 1.414·alt. Sitting over the POI puts
+      the target roughly 90 m *behind* the boresight — out of frame entirely,
+      not merely off-centre. Geometry cross-checks exactly against
+      `analysis/thermal_detection_offnadir_analysis.md` §2 (1.414·H).
+    - New `geolocation.standoff_from_poi(poi, alt, mount_pitch, view_bearing)`
+      returns the pose that puts the POI on the boresight: stand off by
+      `alt·cot(θ)` along `view_bearing`, and **yaw to face the target**. Both the
+      initial descent and every adjustOrbit step now use it. The initial descent
+      preserves the approach side (least-disturbance first look); adjustOrbit
+      steps `view_bearing` around the target.
+    - **Heading is now commanded** (`SET_POSITION_TARGET_GLOBAL_INT` yaw field,
+      `YAW_IGNORE` bit cleared). Previously yaw was always ignored — harmless for
+      nadir, fatal for a rigid tilted camera, where aspect is a function of
+      vehicle position *and* heading together.
+    - **`orbit_radius_m` was deleted, not fixed.** With a rigid camera the
+      standoff distance is *determined* by altitude and mount angle; it is not a
+      free parameter. The only free choice is which side to view from. (Corollary
+      worth recording: adjustOrbit is *only meaningful because* the camera is
+      tilted — a nadir camera sees the same aspect from every bearing, so the
+      45° decision is what gives D2.8 its purpose.)
+    - **Stale `CameraModel` defaults fixed too:** they read `hfov_deg=32.0`
+      (13 mm lens) and `mount_pitch_deg=90.0` (nadir) — i.e. the pre-decision
+      config on *both* axes, months after 18 mm (2026-07-29) and 45°
+      (2026-08-07) were selected. Now 24.1°/45°, with a regression test pinning
+      the 51.2 m nadir swath that R3_CAM_FOV is written against.
+    - **Unrelated pre-existing bug fixed in passing:** the position-target
+      `type_mask` was `0b0000111111111000`, which sets **bit 9 (`FORCE_SET`)**.
+      ArduCopter silently drops GUIDED targets with that bit set. Now uses the
+      canonical mask. This was pre-existing (D2.7-era), not introduced here.
+    - `test_geolocation.py` / `test_autonomy_loop.py` — 16 geolocation + 13
+      contract tests, **29 total, passing repeatedly**. The load-bearing one is
+      `test_standoff_puts_the_poi_on_the_boresight_at_45deg`: fly to the
+      returned pose, project the centre pixel through the *existing* (separately
+      tested) projection code, and land back on the POI within 5 cm — across
+      five viewing bearings. A nadir-configured app is also covered, asserting
+      it still sits over the target and commands no heading.
+
+    **Not done / flagged for David:**
+    - Field-tuning `orbit_step_deg`/`orbit_settle_s`; SITL coverage (D2.13).
+    - *(The nadir-only GSD gap first flagged here was **approved and fixed** the
+      same day — see item 11 below.)*
+
+    **`thermal_mount_angle_decision.md` ported (2026-08-12).** Mission Control #46's
+    rationale artifact existed only in the WSL OpenClaw clone — the third instance of
+    that porting gap (after `low_battery_reserve_analysis.md` and D2.9's code), so it
+    was copied in verbatim (md5-verified, not retyped). A sweep of the two `analysis/`
+    trees shows the gap is now closed except for `analysis/sitl_tests/` — the
+    in-progress D2.13 suite covered by `session-handoffs/2026-08-10-sitl-handoff.md`,
+    deliberately left in WSL since how to split/commit it is David's call.
+
+    **One caveat on that doc's reasoning, for the record.** Its §3 argues 45° helps
+    `InvestigateAndClassify` because "the camera is aimed *in the direction of
+    travel* — the target stays visible across a larger portion of each orbit." As
+    stated that does not hold: on a circular orbit the direction of travel is
+    *tangential*, so a forward-fixed camera looks past the target, not at it. What
+    actually keeps the target in frame — and what is now implemented — is yawing to
+    face the POI (the vehicle then crabs sideways, ArduPilot's ROI-style orbit), which
+    means the camera is deliberately **not** aimed along the direction of travel. The
+    §3 *conclusion* (45° is workable, indeed better, for the classify loop) stands
+    under that reading, and the other pillars of the decision — detect-before-overfly
+    on sweep, 4.17 px recognition margin, mechanical/clearance findings — are
+    unaffected. Worth knowing only because the mount angle is now load-bearing in
+    software: the standoff geometry above depends on it.
+
+11. **RESOLVED (2026-08-12) — the thermal analysis layer now evaluates the AS-BUILT
+    45° tilt, not nadir.** *(David approved the `model.sysml` change 2026-08-12,
+    immediately after it was flagged in item 10.)*
+
+    **The defect.** `Analysis::GroundSampleDistance` computes the **nadir** GSD
+    (`altitude · HFOV_rad / resolutionH` — its own comment said "at nadir"), and both
+    `ThermalRecognitionCheck` (R3_CAM_RES / R3_2) and `ThermalDetectionCheck` (R3_1)
+    fed it straight into the Johnson criteria. So since the 45° bracket was selected
+    (2026-08-07) the model had been asserting pass/fail against a geometry the system
+    does not have — and doing so **optimistically**, by exactly the factor that
+    matters most: recognition showed ~8.3 px against a 4 px floor when the true
+    along-range figure is ~4.2. The margin the model reported was roughly double the
+    real one. (Notably the *data* was fine — `T13.hfov = 24.1` for the 18 mm lens was
+    already correct in `candidates.sysml`; only the analysis geometry was wrong. The
+    stale-13 mm problem was confined to the Python `CameraModel`, see item 10.)
+
+    **The fix.** New `calc def OffNadirGsd` applies the degradation from
+    `analysis/thermal_detection_offnadir_analysis.md` §2 — a camera depressed `tilt`
+    off nadir views an on-axis target at slant range `alt/cos(tilt)`, stretching each
+    pixel's ground footprint by `1/cos(tilt)` cross-range and `1/cos(tilt)²`
+    along-range (×1.414 / **×2.000** at 45°). Both analysis defs now chain
+    `GroundSampleDistance → OffNadirGsd → PixelsAcrossTarget`, using the
+    **along-range** axis because it binds. `GroundSampleDistance` itself is unchanged
+    and still correct — it is now explicitly the nadir *base*, with its doc saying so.
+
+    **Why the factor is a bound constant, not `cos()`.** The model evaluates no trig
+    anywhere (the nadir calc uses the small-angle form for the same reason), and
+    Syside validates structure without executing calcs, so introducing
+    `TrigFunctions::cos` into a protected file could not have been verified here.
+    `alongRangeFactor = 2.0` is therefore bound per analysis def with the derivation
+    in-comment and an explicit warning to recompute `1/cos(tilt)²` if the bracket
+    angle changes. **This is a real coupling hazard** — two numbers that must move
+    together — which is why the tilt itself is now recorded in the model:
+    `IRCamera.mountTilt_deg` (new attribute, bound `= 45.0` on `T13` in
+    `candidates.sysml`). Before this the as-built mount angle appeared **nowhere** in
+    the model at all, despite being load-bearing for both the analysis layer and the
+    mission app's standoff geometry.
+
+    **Verdicts are unchanged — both checks still pass**, which is the point: this
+    corrects the *margin*, not the answer. Recognition ~4.2 px ≥ 4.0 (thin, and now
+    honestly thin — the tightest margin in the thermal chain); detection ~3.2 px ≥ 1.5
+    (comfortable — the tilt squeezes recognition, not detection).
+
+    *Verification:* `analysis/flight_time_model.py` re-run clean against the edited
+    `candidates.sysml` (34 real configs, baseline unchanged at 58.4 min / $1,724), so
+    the new attribute does not disturb the regex parser; all generated outputs
+    byte-identical. *No `model_community_balanced.sysml` change needed* — that export
+    omits the `Analysis` package entirely (CLAUDE.md), and `IRCamera` there carries no
+    attributes. **Not verified:** Syside diagnostics — this session has no CLI SysML
+    validator, so the new `calc def` + `calc` usages were written strictly to the
+    surrounding file's proven idiom. **Worth opening `model.sysml` in the editor to
+    confirm clean diagnostics before relying on it.**
+
+12. **RESOLVED (2026-08-12) — full analysis sweep for the 45° mount tilt (items
+    10/11 above), plus `R3_CAM_COST` raised to 720 USD.** *(David requested a full
+    rerun of the analysis suite to confirm everything accounts for the 45° mount;
+    approved the cost-cap change separately, same day.)*
+
+    **Sweep result.** `flight_time_model.py`, `sbc_thermal_analysis.py`,
+    `rf_link_budget.py`, and `requirements_traceability.py` were all rerun clean —
+    none depend on camera geometry, zero output drift. `model.sysml`'s Analysis
+    layer (items 10/11), `thermal_detection_offnadir_analysis.md`, and
+    `thermal_sim/generate_thermal_sim.py` already correctly modeled the 45° tilt.
+
+    **Two more stale analyses found and fixed.** `analysis/thermal_camera_analysis.py`
+    and `analysis/thermal_animal_discrimination.py` (→
+    `analysis/thermal_camera_analysis_expanded.csv`, which `model.sysml`'s Analysis
+    package comment cites as its numeric backing pending a SysML v2 execution engine)
+    were still computing pixels-on-target at **nadir only** — the same defect fixed
+    in items 10/11, uncorrected here. Both now take a `tilt_deg` parameter (default
+    45°) and apply the same `1/cos(tilt)` cross-range / `1/cos(tilt)²` along-range
+    degradation as `model.sysml`'s `OffNadirGsd`. `thermal_animal_discrimination.py`
+    additionally: (a) never had T13 in its candidate roster at all — added it with
+    real `candidates.sysml` specs; (b) for the asymmetric animal silhouettes (length
+    × width, unlike the model's symmetric 0.5×0.5 m reference target) applies a
+    worst-case axis pairing — the minor (limiting) dimension assigned to the
+    along-range axis, the major dimension to cross-range. This is the true worst
+    case, not just a conservative guess: since `length ≥ width` for every profile in
+    `TARGETS` and along-range GSD > cross-range GSD, `width / GSD_along` is provably
+    the global minimum pixel count over both physically-realizable headings; (c)
+    gained a CSV writer — none existed in the current script, and the committed CSV's
+    row scheme (`T13_13`, `T6_90`, `T7_fixed` lens-variant IDs) doesn't match any
+    version of the script in git history, so it is **not** a byte-for-byte
+    reproduction of the original file, just a rebuild from the current 16-camera
+    roster (T1–T16 + T13). Cross-check: the rebuilt CSV's T13 R3_CAM_RES margin comes
+    out to 4.17 px — matching item 11's model.sysml figure via an independently-coded
+    path (pitch/focal IFOV vs. HFOV/resolution).
+
+    Left alone, flagged rather than fixed: ground-swath/coverage figures in both
+    scripts stay nadir-approximated (no off-nadir footprint formula has been derived
+    anywhere in this project — see §4 of the offnadir analysis doc, which notes only
+    that lens-to-lens swath *ratios* are tilt-independent, not an absolute formula).
+
+    **`R3_CAM_COST` raised 600 → 720 USD.** Rebuilding the CSV surfaced (and
+    `analysis/requirements_traceability.csv` / `verification_methods.csv` had
+    already independently flagged, since the 18 mm lens was selected 2026-07-29) that
+    the locked T13 costs 700 USD against a 600 USD subsystem cap — a `NOT MET -
+    waiver required` line in both CSVs. David chose to restate the allocation rather
+    than waive it: `model.sysml`'s `R3_CAM_COST` doc now reads 720 USD (a small
+    margin over the 700 USD as-purchased price, not set exactly at cost). Updated
+    everywhere the cap is asserted: `model.sysml`, `verification_methods.csv` (hand
+    file; status flipped `NOT MET - waiver required` → `Verified by inspection`),
+    `requirements_traceability.csv` (regenerated via
+    `requirements_traceability.py`, which joins the two), and the `cost_max_usd` /
+    `R3_CAM_COST` thresholds in both analysis scripts above. The R4 system-level
+    $2,500 cap is unaffected (~$1,724 total system). Historical, dated documents
+    (`camera_market_analysis.md`, `camera_trade_study.md`, `thermal_dvr_market_analysis.md`,
+    `REQUIREMENTS_EXPORT_26_06_30.md`) were deliberately **not** rewritten — they are
+    point-in-time snapshots predating the 18 mm/45° decisions, consistent with how
+    items 10/11 left similarly-dated documents alone.
+
+    **Also incidentally corrected while rebuilding `verification_methods.csv`:** its
+    `R3_1`/`R3_2`/`R3_CAM_RES` success-criterion text still cited the old **nadir**
+    pixel figures (6.25 / 8.33 / 8.33 px) alongside the item-11 model fix, which had
+    already moved the formal verdicts to the off-nadir numbers (3.13 / 4.17 / 4.17
+    px). Same defect class as items 10/11, just a different file; corrected using the
+    already-approved numbers, no new derivation.
+
+13. **RESOLVED (2026-08-12) — second sweep pass found four more nadir-figure
+    references in live (non-dated-snapshot) documents.** *(David asked "what other
+    analyses are impacted by the 45 degree look-down angle?" after item 12; this is
+    that answer.)* No new computation — every fix below just propagates the
+    already-approved 3.13 px detect / 4.17 px recognize (T13, 18 mm, 45°) figures
+    from item 11 into places that still read the pre-fix nadir numbers.
+
+    - **`SELECTED_COMPONENTS.md`** (the authoritative locked-components record) cited
+      "8.3 px on 0.5 m @90 m" as the reason the 18 mm lens was picked — the nadir
+      figure, unqualified, in the single doc CLAUDE.md calls out as the one to keep in
+      sync. Updated to the 45° figure (4.17 px), with the nadir number kept
+      parenthetically for context.
+    - **`TASKS.md` item 2.17** ("Field-verify Johnson detect/recognize") — an **open**
+      task, not a log entry — described the geometric claim to field-verify as
+      "6.25 px / 8.33 px at nadir." A field crew reading only this line would aim to
+      confirm the wrong (nadir) numbers instead of the real 45°-tilt requirement
+      basis. Updated to cite 3.13 / 4.17 px as the basis, nadir kept for reference,
+      and flagged the 4.17 px margin as the load-bearing check.
+    - **`cad-resources/README.md` and `cad-resources/cad-resources.md`** — the CAD
+      guide's own two mount write-ups contradicted each other: the 45° section (added
+      later) said the 18 mm lens "recognizes at 45°," while the nadir section
+      (written first) claimed nadir was *required* because "any tilt breaks the
+      R3_1/R3_2 pixel budget" — literally false since item 11. `cad-resources.md`'s
+      build-pathway prose also still said "tilted ~15–25°," an even older estimate
+      predating both the nadir-required claim and the 45° decision. All three
+      corrected; the nadir mount section is now explicitly marked superseded
+      (2026-08-07, TASKS.md 2.8) rather than presented as a live build option.
+    - **`cad-resources/thermal_mount.py`** docstring carried the same false
+      "nadir required" claim as the README section describing it. Corrected in place
+      with a superseded note; the file itself (and its already-correct sibling
+      `thermal_mount_45.py`, `TILT_DEG = 45.0`) needed no geometry change — only the
+      prose was wrong. **Not verified by execution:** `build123d` fails to import in
+      this session's environment (`fontTools` chokes scanning an installed system
+      font — pre-existing, unrelated to this project) so neither mount script could
+      actually be rerun to confirm its STEP/STL outputs regenerate byte-identical.
+      Their generation logic is unchanged, so there's no specific reason to suspect
+      the committed `.step`/`.stl` files are stale, but this is inspection-only, not
+      re-execution.
+
+    **Checked and confirmed NOT camera-angle-dependent, left alone:**
+    `sbc_thermal_analysis.py`, `rf_link_budget.py`, `requirements_traceability.py`
+    (rerun clean in item 12); `analysis/autonomy_sim/` (the frozen prototype has no
+    camera-geometry code at all — grepped for `hfov`/`tilt`/`nadir`/`standoff`, zero
+    hits); `classify_loiter_budget.md` (already cites the correct 4.17 px figure);
+    `BOM.md` (mentions "45° oblique" but cites no pixel number to be stale);
+    `mini640_t13_cad_spec.md` (camera body dimensions, independent of mount angle).
+    The `DroneMissionApp` repo (the live mission-control code, separate from this
+    checkout) was already fixed for 45° per item 10 — not re-checked here since it
+    isn't accessible from this working directory.
+
+14. **RESOLVED (2026-08-12) — `build123d` import fixed in this environment; all
+    four CAD scripts re-executed, item-13's "not verified by execution" gap closed.**
+    *(David: "why would \[the build123d failure\] be impacted by the 45 degree
+    look-down change... go ahead and \[fix it\]" — it turned out not to be related
+    to the camera at all; two unrelated, pre-existing environment bugs.)*
+
+    **Bug 1 — a corrupt stock Windows font.** `build123d.text` scans every font in
+    `C:/Windows/Fonts` as a side effect of import (not lazily), with no error
+    handling around the `fontTools.ttLib.TTFont(path)` call. Tested every font in
+    both Windows font folders through `build123d`'s *actual* code paths (bare
+    `TTFont()` for `.ttf`/`.otf`, `ttLib.ttCollection.TTCollection()` for `.ttc`,
+    since build123d correctly routes collections through the latter): exactly one
+    file fails, `mstmc.ttf` ("bad sfntVersion" — not valid sfnt data). This was
+    **already known and already worked around** in this codebase —
+    `thermal_mount.py`, `nanopi_m5.py`, and `mini640_t13.py` each carry their own
+    `_install_font_loader_shim()` (patches `fontTools.ttLib.TTFont` to fall back to
+    a known-good system font on any parse failure, installed before importing
+    build123d). Only **`thermal_mount_45.py`** had it too, under a different name
+    (`_shim()`) — a naming difference that made an earlier grep for
+    `_install_font_loader_shim` miss it and wrongly report the file as unpatched.
+    All four scripts already had this half of the fix.
+
+    **Bug 2 — genuinely new, unrelated: numpy/pandas ABI mismatch.**
+    `build123d/__init__.py` unconditionally imports `build123d.brep_from_stl`
+    (STL → primitive-shape detection), which imports `sklearn` → `pandas`. The
+    installed `pandas` (2.1.4) predates numpy 2.0's ABI break; the installed numpy
+    is 2.2.6. `import pandas` itself now raises ("numpy.dtype size changed, may
+    indicate binary incompatibility") — this is what actually took down `import
+    build123d` in this session, *after* the already-working font shim did its job.
+    None of the four CAD scripts call `detect_primitives` (they only build
+    parametric shapes and export STEP/STL, never read an existing STL back in), so
+    rather than upgrade `pandas` system-wide — a shared-environment change outside
+    this project's scope, and not requested — added an `_install_brep_from_stl_stub()`
+    function (same style as the existing font shim) to all four scripts:
+    `thermal_mount.py`, `thermal_mount_45.py`, `nanopi_m5.py`, `mini640_t13.py`.
+    It stubs `sys.modules["build123d.brep_from_stl"]` with a `detect_primitives`
+    that raises `NotImplementedError` if ever actually called (loud failure, not
+    silent wrong behavior, for the hypothetical future case where one of these
+    scripts does start using it).
+
+    **Verification — all four scripts now run clean end-to-end** and regenerate
+    their STEP/STL outputs. Diffed the regenerated files against the committed
+    ones: **geometry is identical** in every case; the only diff in any `.step`
+    file is the embedded `FILE_NAME(...)` generation timestamp (OCCT stamps every
+    export with the current time), and the `.stl` files are unchanged entirely.
+    Confirms item 13's inspection-only conclusion — `thermal_mount_45.py`'s
+    `TILT_DEG = 45.0` geometry was already correct — this time by actually running
+    it, not just reading the code. The timestamp-only `.step` diffs were discarded
+    (not committed): no functional change, pure noise.
 
 ---
+
+15. **RESOLVED (2026-07-10) — FC firmware choice: ArduPilot ArduCopter ≥ 4.5.**
+    Previously OPEN as "ArduPilot Copter vs PX4" (2026-07-01). The autonomy-contract
+    build (`analysis/autonomy_sim/`, §C26) is built and tested on ArduCopter AUTO/GUIDED,
+    so David selected ArduPilot ArduCopter ≥ 4.5 on 2026-07-10. `AF3a.fcFirmware` in
+    `candidates.sysml` was updated from `"TBD"` to `"ArduPilot ArduCopter >= 4.5 —
+    SELECTED 2026-07-10"`. The choice affects GCS setup (QGroundControl tuning
+    profiles — Mission Planner is Windows-only, the laptop is a MacBook Air) and the
+    Phase 3 SBC MAVLink integration, but is a configuration choice, not a procurement
+    item, so no ordering impact. See `SELECTED_COMPONENTS.md` for the formal record.
+    **Numbered out of chronological order** (2026-07-10, earlier than items 8–14
+    above) — appended here during the 2026-08-12 WSL/Windows repo merge; this item
+    previously sat as a misnumbered duplicate "7." earlier in this list (see item 6
+    above), which the WSL clone's independent edit had already removed. Folding this
+    into strict chronological order is tracked as TASKS.md 0.6.
 
 ## C. Modeling decisions (SysML v2 representation choices)
 

@@ -1166,6 +1166,9 @@ package DroneCandidates {
    :>> operatingTempMin_C = -40.0;
    :>> operatingTempMax_C = 65.0;
    :>> detectionRange = 160.0 [m];
+   :>> mountTilt_deg = 45.0;        // 45deg down-look bracket SELECTED 2026-08-07 (TASKS.md 2.8,
+                                    // analysis/thermal_mount_angle_decision.md). Halves along-range
+                                    // pixels-on-target vs nadir -> Analysis::OffNadirGsd factor 2.0.
   }
 
   part T14 : IRCamera {

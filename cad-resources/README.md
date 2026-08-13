@@ -31,7 +31,7 @@ Built from the resources above (see the `*_cad_spec.md` files for the extracted 
 | `mini640_t13_with_keepout.step` | + rear DF40 connector box + lens-sweep clearance. |
 | `mini640_t13.stl` | Body+lens, quick view. |
 
-**Thermal-camera nose mount** ("beak", v1) — bolts the T13 to the Chimera9 top-plate front, camera aimed at **NADIR** (straight down; required by the detection analysis — model.sysml GSD is "at nadir", so any tilt breaks the R3_1/R3_2 pixel budget):
+**Thermal-camera nose mount** ("beak", v1) — bolts the T13 to the Chimera9 top-plate front, camera aimed at **NADIR** (straight down). **SUPERSEDED 2026-08-07 (TASKS.md 2.8)** by the 45° variant below — kept for reference only, do not build this one. The claim this section originally made ("any tilt breaks the R3_1/R3_2 pixel budget") turned out to be wrong: the 18 mm lens still recognizes at 45° (thin but passing, 4.17 px along-range @90 m — see `model.sysml` `OffNadirGsd`, 2026-08-12), which is why the tilt was chosen instead:
 | File | Notes |
 |---|---|
 | `thermal_mount.py` | **build123d** beak bracket. EXACT camera interface (4× M2 clearance on 18.40 + DF40 cutout, camera hangs lens-down). PARAMETRIC/caliper: `FRAME_BOLT_PITCH` (assumed 30.5 side-by-side), `BEAK_LEN`. |

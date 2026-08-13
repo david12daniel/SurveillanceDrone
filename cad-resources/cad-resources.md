@@ -88,7 +88,10 @@ standoff tops) plus each component's footprint and keep-out volume.
 1. Insert the frame fixture as the **fixed/grounded** part.
 2. Position the battery (Chimera9 is **top-mount** → on the top plate), then place the
    **SBC keep-out on a raised tier above the battery** (the §C16 "raised tier"
-   verdict), and the thermal unit at the **nose**, tilted ~15–25°.
+   verdict), and the thermal unit at the **nose**, tilted **45° off-nadir** — the
+   as-built down-look angle SELECTED 2026-08-07 (TASKS.md 2.8); use
+   [`thermal_mount_45.py`](thermal_mount_45.py) as the build target, not the
+   nadir `thermal_mount.py` (superseded — see its updated docstring).
 3. Check clearances: 9" prop disc, arms, **VTX ≤ 30 mm height**, stack ≤ 21 mm.
 
 **Phase 3 — Design the mount** (the actual deliverable)

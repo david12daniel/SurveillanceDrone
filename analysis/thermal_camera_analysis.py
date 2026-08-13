@@ -10,6 +10,19 @@ Purpose:
   other animals, and humans at 90–120 m AGL with a 5 °C minimum temperature
   differential.
 
+  UPDATED 2026-08-12: pixels-on-target now account for the as-built 45°
+  down-look mount (candidates.sysml T13.mountTilt_deg), not nadir. A tilted,
+  non-gimbaled camera views an on-axis target at slant range alt/cos(tilt),
+  which stretches the ground footprint of each pixel by 1/cos(tilt)
+  cross-range and 1/cos(tilt)^2 along-range (x1.414 / x2.000 at 45°) — see
+  analysis/thermal_detection_offnadir_analysis.md §2 and model.sysml's
+  OffNadirGsd calc, which this mirrors. The along-range axis binds, so all
+  single-dimension pixel checks below use it. Ground swath (check_fov) and
+  motion blur (check_motion_blur) are left at their nadir approximation —
+  neither correction has been derived for those; see the offnadir analysis
+  doc's note that swath *ratios* between lenses are tilt-independent even
+  though absolute swath isn't.
+
 Traceability:
   R3     – detect AND classify at 90 to 120 m AGL, ΔT ≥ 5 °C
   R3.1   – detection at 120 m, ≥ 90 % confidence
@@ -122,12 +135,19 @@ class CameraRequirements:
     hfov_min_deg: float            = 30.0      # R3_CAM_FOV
     netd_max_mk: float             = 50.0      # R3_CAM_NETD
     res_px_per_0_5m_at_90m: float  = 4.0       # R3_CAM_RES
-    cost_max_usd: float            = 600.0     # R3_CAM_COST
+    cost_max_usd: float            = 720.0     # R3_CAM_COST (raised from 600, David 2026-08-12)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 2.  Geometry helpers
 # ═══════════════════════════════════════════════════════════════════════════
+
+AS_BUILT_MOUNT_TILT_DEG = 45.0
+# candidates.sysml T13.mountTilt_deg — 45° down-look bracket selected
+# 2026-08-07 (TASKS.md 2.8). Recompute the off-nadir factors below if this
+# changes; the coupling is the same hazard flagged in model.sysml's
+# OffNadirGsd comment.
+
 
 def deg2rad(deg: float) -> float:
     return deg * math.pi / 180.0
@@ -138,27 +158,37 @@ def compute_ifov(hfov_deg: float, h_resolution: int) -> float:
     return hfov_deg / h_resolution
 
 
-def gsd(altitude_m: float, ifov_deg: float) -> float:
+def gsd(altitude_m: float, ifov_deg: float, tilt_deg: float = 0.0) -> float:
     """
-    Ground Sampling Distance (metres per pixel) at a given altitude.
-    Assumes nadir-looking camera.
+    Ground Sampling Distance (metres per pixel) along the ALONG-RANGE axis
+    at a given altitude and off-nadir tilt. tilt_deg=0 (default) reduces to
+    the plain nadir GSD used everywhere before 2026-08-12.
+
+    A camera depressed `tilt` off nadir views an on-axis target at slant
+    range alt/cos(tilt); each pixel's ground footprint stretches by
+    1/cos(tilt) cross-range and 1/cos(tilt)^2 along-range. The along-range
+    axis is larger and binds (analysis/thermal_detection_offnadir_analysis.md
+    §2; mirrors model.sysml's OffNadirGsd).
     """
-    return altitude_m * deg2rad(ifov_deg)
+    theta = deg2rad(tilt_deg)
+    slant_range_m = altitude_m / math.cos(theta)
+    gsd_cross_m = slant_range_m * deg2rad(ifov_deg)
+    return gsd_cross_m / math.cos(theta)
 
 
 def pixels_on_target(target_size_m: float,
-                     slant_range_m: float,
-                     ifov_deg: float) -> float:
+                     altitude_m: float,
+                     ifov_deg: float,
+                     tilt_deg: float = 0.0) -> float:
     """
-    Number of pixels subtended by *target_size_m* at *slant_range_m*,
-    given an IFOV of *ifov_deg* per pixel.
+    Number of pixels subtended by *target_size_m* on the along-range axis,
+    at *altitude_m* AGL and *tilt_deg* off nadir (0 = nadir).
 
-    Uses: pixels = target_size / (range × IFOV_rad)
-    Equivalent to: GSD = range × IFOV, then pixels = target / GSD.
+    Uses: GSD = off-nadir-adjusted range × IFOV, then pixels = target / GSD.
     """
-    if ifov_deg <= 0 or slant_range_m <= 0:
+    if ifov_deg <= 0 or altitude_m <= 0:
         return 0.0
-    gsd_m = gsd(slant_range_m, ifov_deg)
+    gsd_m = gsd(altitude_m, ifov_deg, tilt_deg)
     return target_size_m / gsd_m if gsd_m > 0 else float('inf')
 
 
@@ -178,10 +208,12 @@ def check_resolution(
     targets: TargetDimensions = TargetDimensions(),
     johnson: JohnsonCriteria = JohnsonCriteria(),
     camera_req: CameraRequirements = CameraRequirements(),
+    tilt_deg: float = AS_BUILT_MOUNT_TILT_DEG,
 ) -> Dict:
     """
     For a candidate camera (h_res x v_res, HFOV), compute pixels-on-target
-    for each species at the REQUIRED altitudes per R3.1 and R3.2.
+    for each species at the REQUIRED altitudes per R3.1 and R3.2, on the
+    binding along-range axis at *tilt_deg* off nadir (default: as-built 45°).
 
     Detection check  → 120 m (R3.1, worst altitude for detection)
     Classification check → 90 m (R3.2, specified altitude)
@@ -194,8 +226,10 @@ def check_resolution(
     ifov_deg = compute_ifov(hfov_deg, h_res)
     ifov_mrad = ifov_deg * 1000.0 / 180.0 * math.pi
 
-    gsd_90 = gsd(mission.altitude_min_m, ifov_deg)
-    gsd_120 = gsd(mission.altitude_max_m, ifov_deg)
+    gsd_90 = gsd(mission.altitude_min_m, ifov_deg, tilt_deg)
+    gsd_120 = gsd(mission.altitude_max_m, ifov_deg, tilt_deg)
+    gsd_90_nadir = gsd(mission.altitude_min_m, ifov_deg)
+    gsd_120_nadir = gsd(mission.altitude_max_m, ifov_deg)
 
     results = {
         "sensor_config": {
@@ -204,8 +238,11 @@ def check_resolution(
             "v_resolution": v_res,
             "ifov_deg_per_px": round(ifov_deg, 6),
             "ifov_mrad_per_px": round(ifov_mrad, 3),
+            "tilt_deg": tilt_deg,
             "gsd_at_90m_m": round(gsd_90, 4),
             "gsd_at_120m_m": round(gsd_120, 4),
+            "gsd_at_90m_nadir_m": round(gsd_90_nadir, 4),
+            "gsd_at_120m_nadir_m": round(gsd_120_nadir, 4),
         },
         "johnson_reference": asdict(johnson),
         "requirement_checks": {},
@@ -215,7 +252,7 @@ def check_resolution(
 
     # ── R3_CAM_RES check (4 px across 0.5 m at 90 m) ────────────────
     px_ref = pixels_on_target(
-        targets.ref_quadrant_target_m, mission.altitude_min_m, ifov_deg
+        targets.ref_quadrant_target_m, mission.altitude_min_m, ifov_deg, tilt_deg
     )
     res_pass = px_ref >= camera_req.res_px_per_0_5m_at_90m
     if not res_pass:
@@ -245,14 +282,14 @@ def check_resolution(
 
     for name, major_m, minor_m in species_list:
         # DETECTION at 120 m using LARGEST target dimension
-        px_detect = pixels_on_target(major_m, mission.altitude_max_m, ifov_deg)
+        px_detect = pixels_on_target(major_m, mission.altitude_max_m, ifov_deg, tilt_deg)
         det_50pct_pass = px_detect >= (johnson.detection_50pct_cycles * 2)
         # ~3 px for 90% confidence
         det_90pct_pass = px_detect >= 3.0
 
         # CLASSIFICATION at 90 m using SMALLEST target dimension
         #   (classification requires resolving the limiting axis)
-        px_classify = pixels_on_target(minor_m, mission.altitude_min_m, ifov_deg)
+        px_classify = pixels_on_target(minor_m, mission.altitude_min_m, ifov_deg, tilt_deg)
         cls_50pct_pass = px_classify >= (johnson.recognition_50pct_cycles * 2)
         # For 80% confidence, roughly 1.5x the 50% threshold ≈ 12 px
         cls_80pct_pass = px_classify >= 12.0
@@ -352,6 +389,7 @@ def analyse_camera_subsystem(
     targets: Optional[TargetDimensions] = None,
     johnson: Optional[JohnsonCriteria] = None,
     camera_req: Optional[CameraRequirements] = None,
+    tilt_deg: float = AS_BUILT_MOUNT_TILT_DEG,
 ) -> Dict:
     """
     Run all camera-subsystem requirement validation checks.
@@ -365,7 +403,7 @@ def analyse_camera_subsystem(
     ifov_deg = compute_ifov(hfov_deg, h_res)
 
     resolution = check_resolution(
-        hfov_deg, h_res, v_res, mission, targets, johnson, camera_req,
+        hfov_deg, h_res, v_res, mission, targets, johnson, camera_req, tilt_deg,
     )
     return {
         "mission": asdict(mission),
@@ -398,8 +436,11 @@ def _report(result: Dict) -> None:
     print(f"  Sensor:       {sc['h_resolution']}×{sc['v_resolution']}")
     print(f"  HFOV:         {sc['hfov_deg']}°")
     print(f"  IFOV:         {sc['ifov_mrad_per_px']} mrad/px")
-    print(f"  GSD @ 90 m:   {sc['gsd_at_90m_m']*100:.2f} cm/px")
-    print(f"  GSD @ 120 m:  {sc['gsd_at_120m_m']*100:.2f} cm/px")
+    print(f"  Mount tilt:   {sc['tilt_deg']}° off nadir (as-built)")
+    print(f"  GSD @ 90 m:   {sc['gsd_at_90m_m']*100:.2f} cm/px along-range "
+          f"(nadir would be {sc['gsd_at_90m_nadir_m']*100:.2f} cm/px)")
+    print(f"  GSD @ 120 m:  {sc['gsd_at_120m_m']*100:.2f} cm/px along-range "
+          f"(nadir would be {sc['gsd_at_120m_nadir_m']*100:.2f} cm/px)")
     print(f"  NETD:         {r['camera_requirements']['netd_max_mk']:.0f} mK")
     print(f"  Integration:  {r['motion_blur']['integration_s']*1000:.0f} ms")
     print()
@@ -494,18 +535,26 @@ def main():
 
     print()
     print("╔══════════════════════════════════════════════════════════╗")
-    print("║    BASELINE: 640×512, 30° HFOV, 50 mK NETD             ║")
+    print("║  AS-BUILT: T13 PurpleRiver Mini 640, 18mm/24.1° HFOV,   ║")
+    print("║  50 mK NETD, 45° down-look mount                        ║")
     print("╚══════════════════════════════════════════════════════════╝")
-    result = analyse_camera_subsystem(hfov_deg=30.0, h_res=640, v_res=512)
-    _report(result)
+    result_asbuilt = analyse_camera_subsystem(hfov_deg=24.1, h_res=640, v_res=512)
+    _report(result_asbuilt)
 
     with open(".openclaw/tmp/thermal_camera_analysis.json", "w") as f:
-        json.dump(result, f, indent=2)
+        json.dump(result_asbuilt, f, indent=2)
     print("Full JSON written to .openclaw/tmp/thermal_camera_analysis.json")
 
     print()
     print("╔══════════════════════════════════════════════════════════╗")
-    print("║    COMPARISON: 320×240, 30° HFOV, 50 mK NETD           ║")
+    print("║    BASELINE: 640×512, 30° HFOV, 50 mK NETD, 45° tilt    ║")
+    print("╚══════════════════════════════════════════════════════════╝")
+    result = analyse_camera_subsystem(hfov_deg=30.0, h_res=640, v_res=512)
+    _report(result)
+
+    print()
+    print("╔══════════════════════════════════════════════════════════╗")
+    print("║    COMPARISON: 320×240, 30° HFOV, 50 mK NETD, 45° tilt  ║")
     print("╚══════════════════════════════════════════════════════════╝")
     result2 = analyse_camera_subsystem(hfov_deg=30.0, h_res=320, v_res=240)
     _report(result2)

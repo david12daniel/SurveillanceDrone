@@ -2,10 +2,16 @@
 Thermal-camera nose mount ("beak") for the Chimera9 ECO — v1, parametric.
 
 Holds the PurpleRiver Mini 640 / T13 at the NOSE, aimed at NADIR (straight down),
-cantilevered forward from the top-plate front edge. Nadir is required by the
-detection analysis: model.sysml GroundSampleDistance is "at nadir" (GSD = altitude *
-IFOV), and camera_market_analysis.md computes GSD with range = AGL. Any tilt lengthens
-the slant range and breaks the R3_1/R3_2 Johnson pixel budget. See mini640_t13_cad_spec.md.
+cantilevered forward from the top-plate front edge.
+
+SUPERSEDED 2026-08-07 (TASKS.md 2.8) by thermal_mount_45.py -- kept for reference
+only, do not build this one. This docstring originally argued nadir was required
+because tilt "breaks the R3_1/R3_2 Johnson pixel budget"; that turned out to be
+wrong once computed properly (analysis/thermal_detection_offnadir_analysis.md) --
+the 18 mm lens still recognizes at 45 deg, thin but passing (4.17 px along-range
+@90 m; see model.sysml OffNadirGsd, 2026-08-12) -- which is why the 45 deg mount
+was chosen instead. See mini640_t13_cad_spec.md for the camera's own dimensions
+(unaffected by mount angle, still valid for either bracket).
 
 Geometry: a flat horizontal plate.
   * FRONT region  -> 4x M2 CLEARANCE holes on the camera's 18.40 mm pattern + a central
@@ -69,6 +75,35 @@ def _install_font_loader_shim():
 
 
 _install_font_loader_shim()
+
+
+def _install_brep_from_stl_stub():
+    """build123d/__init__.py unconditionally imports build123d.brep_from_stl
+    (STL -> primitive-shape detection), which pulls in sklearn -> pandas. If
+    the installed pandas predates the installed numpy's ABI, that import
+    raises ("numpy.dtype size changed... binary incompatibility") and takes
+    down the whole `import build123d` with it. This script never calls
+    detect_primitives, so stub the submodule out before importing build123d
+    rather than require a pandas/numpy version fix — a real future call to
+    it fails loudly instead of pretending to work."""
+    import sys
+    import types
+
+    if "build123d.brep_from_stl" in sys.modules:
+        return
+    stub = types.ModuleType("build123d.brep_from_stl")
+
+    def _detect_primitives_stub(*args, **kwargs):
+        raise NotImplementedError(
+            "build123d.brep_from_stl.detect_primitives is stubbed out in this "
+            "environment (numpy/pandas ABI mismatch); not used by this script."
+        )
+
+    stub.detect_primitives = _detect_primitives_stub
+    sys.modules["build123d.brep_from_stl"] = stub
+
+
+_install_brep_from_stl_stub()
 
 try:
     from build123d import Box, Cylinder, Pos, Rot, Compound, export_step, export_stl

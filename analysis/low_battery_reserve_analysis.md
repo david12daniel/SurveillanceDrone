@@ -4,6 +4,17 @@
 **Author:** Automated analysis (nightly agent)
 **Purpose:** Pick the `BATT_LOW_MAH` reserve threshold for the R6_BHV_RTL_RESERVE requirement, accounting for a **fast return-to-launch speed** (not the slow surveillance cruise).
 
+**Provenance note (2026-08-11):** this file was produced by an OpenClaw nightly-agent
+session in a separate WSL clone of this repo and ported into the main (Windows)
+checkout as part of closing TASKS.md items 0.2/0.3 — see `MODEL_ISSUES.md` §B8. The
+`BATT_LOW_MAH = 700 mAh` figure below is a **static, worst-case-distance** reserve.
+David reviewed it 2026-08-11 and asked whether the reserve could instead shrink
+dynamically as the vehicle nears the launch point (avoiding an early RTL when close
+to home with reserve to spare); that idea is real but requires new software (not a
+firmware parameter) and is tracked as a deferred Phase 3 follow-up (TASKS.md D2.17)
+rather than folded into this static analysis. `R6_FS_BATT` in `model.sysml` uses the
+700 mAh figure as the Phase 1 config-only backstop.
+
 ## Correction from Previous Analysis
 
 The initial analysis (2026-08-04) assumed the drone returns to launch at the **slow surveillance cruise speed of 2.23 m/s**. David pointed out this is wrong — the drone should fly back at a **much faster pace** after a low-battery event. The return speed is the primary lever to bring the excessive 63% margin down.
