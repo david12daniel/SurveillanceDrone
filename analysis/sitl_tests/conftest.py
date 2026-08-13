@@ -11,7 +11,9 @@ Skip tests if no SITL binary is found.
 """
 from __future__ import annotations
 import os
+import signal
 import subprocess
+import sys
 import threading
 import time
 import shutil
@@ -19,11 +21,7 @@ import shutil
 import pytest
 from pymavlink import mavutil
 
-# Mid-stick roll/pitch/yaw, throttle held at idle (matches RC3_MIN so the
-# arm-time "throttle too high" check passes). GUIDED/AUTO ignore RC stick
-# input for navigation once armed and flying -- this feed's only job is to
-# stand in for a live ELRS receiver so ArduPilot doesn't see an RC failsafe.
-_RC_OVERRIDE_IDLE = (1500, 1500, 1100, 1500, 0, 0, 0, 0)
+from helpers import get_param
 
 
 def pytest_addoption(parser):
@@ -33,6 +31,10 @@ def pytest_addoption(parser):
                      help="Connection string for the SITL instance (SERIAL0 TCP port)")
     parser.addoption("--sitl-home", default="42.3000,-83.7000,180,0",
                      help="Home location (lat,lon,alt,hdg)")
+    parser.addoption("--ardupilot-root", default=os.path.expanduser("~/ardupilot-sitl-src"),
+                     help="Path to an ArduPilot checkout providing Tools/autotest/"
+                          "sim_vehicle.py, used to launch SITL instead of the raw "
+                          "binary (see sim_vehicle_script's docstring for why)")
 
 
 @pytest.fixture(scope="session")
@@ -65,93 +67,98 @@ def sitl_home(request):
 
 
 @pytest.fixture(scope="session")
-def sitl_process(sitl_binary, sitl_connection_string, sitl_home):
+def sim_vehicle_script(request):
+    """Return the path to ArduPilot's sim_vehicle.py orchestrator, or skip.
+
+    Launching the prebuilt arducopter binary directly (the previous approach
+    here) crashes the SITL process non-deterministically during AUTO-mode
+    takeoff (task D2.13/#70, task D2.16/#141) -- direct process monitoring
+    confirmed the binary itself dies, not a test-harness or mission_app.py
+    bug. Launching the SAME binary through sim_vehicle.py instead (via
+    --vehicle-binary + --no-rebuild, which skips waf/compilation entirely)
+    eliminated the crash in repeated attempts during investigation. The
+    likely mechanism: sim_vehicle.py auto-loads
+    Tools/autotest/default_params/copter.parm, which a raw-binary launch
+    never had. See #141's notes for the full writeup.
+
+    This fixture expects an ArduPilot checkout (not a full build -- we only
+    need sim_vehicle.py and its waf/mavlink submodules to launch the
+    existing prebuilt binary):
+      git clone https://github.com/ArduPilot/ardupilot.git ~/ardupilot-sitl-src
+      cd ~/ardupilot-sitl-src && git checkout 1511f271   # tag Copter-4.7.0,
+                                                          # matches the binary
+                                                          # ("strings arducopter
+                                                          # | grep 'ArduCopter V'")
+      git submodule update --init modules/waf modules/mavlink
+    """
+    root = os.path.expanduser(request.config.getoption("--ardupilot-root"))
+    script = os.path.join(root, "Tools", "autotest", "sim_vehicle.py")
+    if not os.path.isfile(script):
+        pytest.skip(f"sim_vehicle.py not found at {script} -- see this "
+                    "fixture's docstring, or pass --ardupilot-root")
+    return script
+
+
+@pytest.fixture(scope="session")
+def sitl_process(sitl_binary, sim_vehicle_script, sitl_connection_string, sitl_home):
     """Start a SITL process for the test session and yield its listen address.
+
+    Launched through sim_vehicle.py rather than the raw binary -- see
+    sim_vehicle_script's docstring for why. sim_vehicle.py in turn launches
+    the actual vehicle binary via a detached background subshell (its
+    headless fallback when no terminal/tmux/screen is attached, see
+    run_in_terminal_window.sh), not as a direct child process -- confirmed
+    by process-tree inspection (task #141, 2026-08-13). Terminating just
+    this Popen's own PID would therefore leave the vehicle binary running as
+    an orphan holding the TCP port; start_new_session=True puts the whole
+    tree in one new process group at launch so the os.killpg below actually
+    reaches it.
 
     The process is terminated after all tests complete.
     Connect via SERIAL0 TCP (default port 5760 + instance*10).
     """
     cmd = [
-        sitl_binary,
-        "--home", sitl_home,
-        "--model", "+",  # default quadcopter model
-        "--speedup", "3",  # 3× real-time to make tests faster
-        "--instance", "2",  # unique instance to avoid port conflicts with other users
-        "--wipe",  # force a fresh EEPROM every run -- SITL persists params
-                   # (including the fixups below) to eeprom.bin in the cwd
-                   # and reuses it across runs by default. Without this,
-                   # state accumulated by earlier/other SITL sessions on the
-                   # same --instance can silently make arming flaky in ways
-                   # that have nothing to do with this suite's own code
-                   # (confirmed the hard way, task D2.13, 2026-08-10).
+        sys.executable, sim_vehicle_script,
+        "-v", "ArduCopter",
+        "-f", "+",  # default quadcopter model
+        "--vehicle-binary", sitl_binary,
+        "-N",  # --no-rebuild: launch --vehicle-binary as-is, skip waf/compilation
+        "-l", sitl_home,
+        "-S", "3",  # 3x real-time to make tests faster
+        "-I", "2",  # unique instance to avoid port conflicts with other users
+        "-w",  # force a fresh EEPROM every run -- SITL persists params to
+               # eeprom.bin in the cwd and reuses it across runs by default.
+               # Without this, state accumulated by earlier/other SITL
+               # sessions on the same --instance can silently make arming
+               # flaky in ways that have nothing to do with this suite's own
+               # code (confirmed the hard way, task D2.13, 2026-08-10).
+        "--no-mavproxy",
+        "--no-extra-ports",
     ]
 
     proc = subprocess.Popen(
         cmd,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
+        start_new_session=True,
     )
 
     # Give SITL a moment to boot
     time.sleep(5)
 
-    _apply_fresh_eeprom_fixups(sitl_connection_string)
-
     yield proc, sitl_connection_string
 
-    proc.terminate()
+    try:
+        os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
+    except ProcessLookupError:
+        pass
     try:
         proc.wait(timeout=10)
     except subprocess.TimeoutExpired:
-        proc.kill()
-
-
-def _apply_fresh_eeprom_fixups(conn_str):
-    """Work around two fresh-EEPROM SITL quirks that only appear when the
-    raw arducopter/apm binary is launched directly (sim_vehicle.py normally
-    papers over both via a bundled default-params file we don't have here):
-
-    1. The frame class defaults to undefined -> permanent "PreArm: Motors:
-       Check frame class and type", regardless of --model.
-    2. A never-calibrated virtual IMU permanently reports "PreArm: 3D Accel
-       calibration needed" (offsets/scale already sit at the identity
-       values a real cal would produce, so there's nothing to calibrate;
-       running the interactive MAVLink accelcal handshake against SITL is
-       unreliable). Skipping just the INS check leaves EKF/GPS/battery/etc
-       checks -- the ones these tests actually care about -- active.
-
-    This suite runs against two very different firmware builds (see the
-    README/CLAUDE.md): modern ArduCopter (4.7.0) uses FRAME_CLASS/
-    FRAME_TYPE and a bitmask ARMING_SKIPCHK; the legacy Copter 3.3 binary
-    predates both and instead has a single FRAME param and the older
-    ARMING_CHECK bitmask (where a bare "1" means "ALL", not just bit 0 --
-    to skip one specific check you replace it with the OR of every other
-    bit instead). Setting all four here is harmless: PARAM_SET on a name a
-    given firmware doesn't have is silently ignored by ArduPilot, so each
-    build only picks up the pair it understands.
-
-    Uses its own short-lived connection, opened and closed here: SITL's
-    SERIAL0 TCP port only accepts one client at a time, and this must not
-    hold the slot the sitl_conn fixture needs afterward for each test.
-
-    Confirmed via task D2.14/D2.13 probing (2026-08-10): none of this is
-    needed for the mode-number/mode-ACK behavior itself, only for arming.
-    """
-    conn = mavutil.mavlink_connection(conn_str, dialect="ardupilotmega",
-                                      source_system=255, source_component=191)
-    conn.wait_heartbeat(timeout=15)
-
-    def _set(name, value):
-        conn.mav.param_set_send(conn.target_system, conn.target_component,
-                                name.encode(), value, mavutil.mavlink.MAV_PARAM_TYPE_REAL32)
-        time.sleep(0.2)
-
-    _set("FRAME_CLASS", 1.0)                # modern: 1 = QUAD
-    _set("FRAME", 1.0)                       # legacy: 1 = "+" quad
-    _set("ARMING_SKIPCHK", 16.0)             # modern: bit 4 = INS only
-    _set("ARMING_CHECK", 131054.0)           # legacy: ALL bits except INS (bit 4 / value 16)
-    time.sleep(0.3)
-    conn.close()
+        try:
+            os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
+        except ProcessLookupError:
+            pass
 
 
 @pytest.fixture(scope="function")
@@ -222,13 +229,27 @@ def sitl_conn(sitl_process):
     conn.mav.request_data_stream_send(conn.target_system, conn.target_component,
                                       mavutil.mavlink.MAV_DATA_STREAM_ALL, 10, 1)
 
+    # Mid-stick roll/pitch/yaw, throttle held at idle. GUIDED/AUTO ignore RC
+    # stick input for navigation once armed and flying -- this feed's only
+    # job is to stand in for a live ELRS receiver so ArduPilot doesn't see an
+    # RC failsafe. The idle throttle value MUST match RC3_MIN or the
+    # "throttle not neutral" arm gate trips in GUIDED/AUTO -- read it live
+    # rather than hardcoding: RC3_MIN is 1000 under sim_vehicle.py's bundled
+    # copter.parm defaults but was 1100 under the old raw-binary launch path
+    # (board-compiled default), and silently differs again on any future
+    # launch-path change. Confirmed via task #141, 2026-08-13.
+    rc3_min = get_param(conn, "RC3_MIN", timeout=5.0)
+    if rc3_min is None:
+        rc3_min = 1100  # match the old hardcoded assumption if the read itself fails
+    idle_override = (1500, 1500, int(rc3_min), 1500, 0, 0, 0, 0)
+
     stop_event = threading.Event()
 
     def _feed():
         while not stop_event.is_set():
             try:
                 conn.mav.rc_channels_override_send(
-                    conn.target_system, conn.target_component, *_RC_OVERRIDE_IDLE)
+                    conn.target_system, conn.target_component, *idle_override)
             except OSError:
                 break
             stop_event.wait(0.2)
