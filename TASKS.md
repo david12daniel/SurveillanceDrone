@@ -137,7 +137,7 @@ No recording, no downlink.
 | 2.14 | Wire **SBC ↔ FC MAVLink over UART** (GPIO header, 1 of 4) | **2 h** | | ☐ |
 | 2.15 | Confirm the T13 enumerates as **`/dev/video0` UVC** and streams stable 640×512 @ ~25 Hz | **2 h** | USB-A #1; no driver work expected | ☐ |
 | 2.16 | Stand up **mavlink-router / mavproxy** on the SBC | **3 h** | So the mission app and the ground telemetry link can share the one FC serial port | ☐ |
-| 2.17 | **Field-verify Johnson detect/recognize at 90–120 m** | **6 h** | R3_1 @120 m, R3_2 @90 m — the geometric claim (6.25 px / 8.33 px at nadir) needs real imagery | ☐ |
+| 2.17 | **Field-verify Johnson detect/recognize at 90–120 m** | **6 h** | R3_1 @120 m, R3_2 @90 m — the geometric claim at the as-built 45° mount tilt (3.13 px detect / 4.17 px recognize, along-range axis; nadir would read 6.25 / 8.33 px — see model.sysml OffNadirGsd, 2026-08-12) needs real imagery. The 4.17 px recognition figure is thin — this field test is the load-bearing check. | ☐ |
 | 2.18 | **Bench-test the SBC envelope** — ≤10 W avg (R4_SBC_PWR), sustained passive-cooling thermals (R4_SBC_TEMP) | **4 h** | Do this early with a stock YOLO model; it gates the Phase 3 pipeline design | ☐ |
 
 ---

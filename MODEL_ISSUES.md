@@ -551,6 +551,56 @@ any tool previously.
     px). Same defect class as items 10/11, just a different file; corrected using the
     already-approved numbers, no new derivation.
 
+13. **RESOLVED (2026-08-12) — second sweep pass found four more nadir-figure
+    references in live (non-dated-snapshot) documents.** *(David asked "what other
+    analyses are impacted by the 45 degree look-down angle?" after item 12; this is
+    that answer.)* No new computation — every fix below just propagates the
+    already-approved 3.13 px detect / 4.17 px recognize (T13, 18 mm, 45°) figures
+    from item 11 into places that still read the pre-fix nadir numbers.
+
+    - **`SELECTED_COMPONENTS.md`** (the authoritative locked-components record) cited
+      "8.3 px on 0.5 m @90 m" as the reason the 18 mm lens was picked — the nadir
+      figure, unqualified, in the single doc CLAUDE.md calls out as the one to keep in
+      sync. Updated to the 45° figure (4.17 px), with the nadir number kept
+      parenthetically for context.
+    - **`TASKS.md` item 2.17** ("Field-verify Johnson detect/recognize") — an **open**
+      task, not a log entry — described the geometric claim to field-verify as
+      "6.25 px / 8.33 px at nadir." A field crew reading only this line would aim to
+      confirm the wrong (nadir) numbers instead of the real 45°-tilt requirement
+      basis. Updated to cite 3.13 / 4.17 px as the basis, nadir kept for reference,
+      and flagged the 4.17 px margin as the load-bearing check.
+    - **`cad-resources/README.md` and `cad-resources/cad-resources.md`** — the CAD
+      guide's own two mount write-ups contradicted each other: the 45° section (added
+      later) said the 18 mm lens "recognizes at 45°," while the nadir section
+      (written first) claimed nadir was *required* because "any tilt breaks the
+      R3_1/R3_2 pixel budget" — literally false since item 11. `cad-resources.md`'s
+      build-pathway prose also still said "tilted ~15–25°," an even older estimate
+      predating both the nadir-required claim and the 45° decision. All three
+      corrected; the nadir mount section is now explicitly marked superseded
+      (2026-08-07, TASKS.md 2.8) rather than presented as a live build option.
+    - **`cad-resources/thermal_mount.py`** docstring carried the same false
+      "nadir required" claim as the README section describing it. Corrected in place
+      with a superseded note; the file itself (and its already-correct sibling
+      `thermal_mount_45.py`, `TILT_DEG = 45.0`) needed no geometry change — only the
+      prose was wrong. **Not verified by execution:** `build123d` fails to import in
+      this session's environment (`fontTools` chokes scanning an installed system
+      font — pre-existing, unrelated to this project) so neither mount script could
+      actually be rerun to confirm its STEP/STL outputs regenerate byte-identical.
+      Their generation logic is unchanged, so there's no specific reason to suspect
+      the committed `.step`/`.stl` files are stale, but this is inspection-only, not
+      re-execution.
+
+    **Checked and confirmed NOT camera-angle-dependent, left alone:**
+    `sbc_thermal_analysis.py`, `rf_link_budget.py`, `requirements_traceability.py`
+    (rerun clean in item 12); `analysis/autonomy_sim/` (the frozen prototype has no
+    camera-geometry code at all — grepped for `hfov`/`tilt`/`nadir`/`standoff`, zero
+    hits); `classify_loiter_budget.md` (already cites the correct 4.17 px figure);
+    `BOM.md` (mentions "45° oblique" but cites no pixel number to be stale);
+    `mini640_t13_cad_spec.md` (camera body dimensions, independent of mount angle).
+    The `DroneMissionApp` repo (the live mission-control code, separate from this
+    checkout) was already fixed for 45° per item 10 — not re-checked here since it
+    isn't accessible from this working directory.
+
 ---
 
 ## C. Modeling decisions (SysML v2 representation choices)

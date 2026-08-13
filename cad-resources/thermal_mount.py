@@ -2,10 +2,16 @@
 Thermal-camera nose mount ("beak") for the Chimera9 ECO — v1, parametric.
 
 Holds the PurpleRiver Mini 640 / T13 at the NOSE, aimed at NADIR (straight down),
-cantilevered forward from the top-plate front edge. Nadir is required by the
-detection analysis: model.sysml GroundSampleDistance is "at nadir" (GSD = altitude *
-IFOV), and camera_market_analysis.md computes GSD with range = AGL. Any tilt lengthens
-the slant range and breaks the R3_1/R3_2 Johnson pixel budget. See mini640_t13_cad_spec.md.
+cantilevered forward from the top-plate front edge.
+
+SUPERSEDED 2026-08-07 (TASKS.md 2.8) by thermal_mount_45.py -- kept for reference
+only, do not build this one. This docstring originally argued nadir was required
+because tilt "breaks the R3_1/R3_2 Johnson pixel budget"; that turned out to be
+wrong once computed properly (analysis/thermal_detection_offnadir_analysis.md) --
+the 18 mm lens still recognizes at 45 deg, thin but passing (4.17 px along-range
+@90 m; see model.sysml OffNadirGsd, 2026-08-12) -- which is why the 45 deg mount
+was chosen instead. See mini640_t13_cad_spec.md for the camera's own dimensions
+(unaffected by mount angle, still valid for either bracket).
 
 Geometry: a flat horizontal plate.
   * FRONT region  -> 4x M2 CLEARANCE holes on the camera's 18.40 mm pattern + a central
