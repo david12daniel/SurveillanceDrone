@@ -154,7 +154,13 @@ package DroneSystemModel {
  }
 
  requirement R3_CAM_COST {
- doc /* The camera subsystem cost shall not exceed 600 USD. */
+ doc /* The camera subsystem cost shall not exceed 720 USD. Raised from the original 600 USD cap
+ (David, 2026-08-12) after the locked T13 selection (700 USD: 640 USD base incl. the +50 USD 18mm
+ lens, +60 USD shipping) exceeded it by 100 USD - tracked as a "NOT MET - waiver required" line in
+ analysis/requirements_traceability.csv and analysis/verification_methods.csv since the 18mm lens
+ was selected (2026-07-29). 720 USD keeps a small margin over the as-purchased 700 USD rather than
+ setting the cap exactly at cost. The R4 system-level $2,500 cap is unaffected and remains well
+ clear (system total ~$1,724 per analysis/flight_time_model.py). */
  @PhaseTag { phase = Phase::Phase2; }
  subsets R4;   // refinement traceability (was 'refines')
  }

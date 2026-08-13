@@ -486,6 +486,71 @@ any tool previously.
     surrounding file's proven idiom. **Worth opening `model.sysml` in the editor to
     confirm clean diagnostics before relying on it.**
 
+12. **RESOLVED (2026-08-12) — full analysis sweep for the 45° mount tilt (items
+    10/11 above), plus `R3_CAM_COST` raised to 720 USD.** *(David requested a full
+    rerun of the analysis suite to confirm everything accounts for the 45° mount;
+    approved the cost-cap change separately, same day.)*
+
+    **Sweep result.** `flight_time_model.py`, `sbc_thermal_analysis.py`,
+    `rf_link_budget.py`, and `requirements_traceability.py` were all rerun clean —
+    none depend on camera geometry, zero output drift. `model.sysml`'s Analysis
+    layer (items 10/11), `thermal_detection_offnadir_analysis.md`, and
+    `thermal_sim/generate_thermal_sim.py` already correctly modeled the 45° tilt.
+
+    **Two more stale analyses found and fixed.** `analysis/thermal_camera_analysis.py`
+    and `analysis/thermal_animal_discrimination.py` (→
+    `analysis/thermal_camera_analysis_expanded.csv`, which `model.sysml`'s Analysis
+    package comment cites as its numeric backing pending a SysML v2 execution engine)
+    were still computing pixels-on-target at **nadir only** — the same defect fixed
+    in items 10/11, uncorrected here. Both now take a `tilt_deg` parameter (default
+    45°) and apply the same `1/cos(tilt)` cross-range / `1/cos(tilt)²` along-range
+    degradation as `model.sysml`'s `OffNadirGsd`. `thermal_animal_discrimination.py`
+    additionally: (a) never had T13 in its candidate roster at all — added it with
+    real `candidates.sysml` specs; (b) for the asymmetric animal silhouettes (length
+    × width, unlike the model's symmetric 0.5×0.5 m reference target) applies a
+    worst-case axis pairing — the minor (limiting) dimension assigned to the
+    along-range axis, the major dimension to cross-range. This is the true worst
+    case, not just a conservative guess: since `length ≥ width` for every profile in
+    `TARGETS` and along-range GSD > cross-range GSD, `width / GSD_along` is provably
+    the global minimum pixel count over both physically-realizable headings; (c)
+    gained a CSV writer — none existed in the current script, and the committed CSV's
+    row scheme (`T13_13`, `T6_90`, `T7_fixed` lens-variant IDs) doesn't match any
+    version of the script in git history, so it is **not** a byte-for-byte
+    reproduction of the original file, just a rebuild from the current 16-camera
+    roster (T1–T16 + T13). Cross-check: the rebuilt CSV's T13 R3_CAM_RES margin comes
+    out to 4.17 px — matching item 11's model.sysml figure via an independently-coded
+    path (pitch/focal IFOV vs. HFOV/resolution).
+
+    Left alone, flagged rather than fixed: ground-swath/coverage figures in both
+    scripts stay nadir-approximated (no off-nadir footprint formula has been derived
+    anywhere in this project — see §4 of the offnadir analysis doc, which notes only
+    that lens-to-lens swath *ratios* are tilt-independent, not an absolute formula).
+
+    **`R3_CAM_COST` raised 600 → 720 USD.** Rebuilding the CSV surfaced (and
+    `analysis/requirements_traceability.csv` / `verification_methods.csv` had
+    already independently flagged, since the 18 mm lens was selected 2026-07-29) that
+    the locked T13 costs 700 USD against a 600 USD subsystem cap — a `NOT MET -
+    waiver required` line in both CSVs. David chose to restate the allocation rather
+    than waive it: `model.sysml`'s `R3_CAM_COST` doc now reads 720 USD (a small
+    margin over the 700 USD as-purchased price, not set exactly at cost). Updated
+    everywhere the cap is asserted: `model.sysml`, `verification_methods.csv` (hand
+    file; status flipped `NOT MET - waiver required` → `Verified by inspection`),
+    `requirements_traceability.csv` (regenerated via
+    `requirements_traceability.py`, which joins the two), and the `cost_max_usd` /
+    `R3_CAM_COST` thresholds in both analysis scripts above. The R4 system-level
+    $2,500 cap is unaffected (~$1,724 total system). Historical, dated documents
+    (`camera_market_analysis.md`, `camera_trade_study.md`, `thermal_dvr_market_analysis.md`,
+    `REQUIREMENTS_EXPORT_26_06_30.md`) were deliberately **not** rewritten — they are
+    point-in-time snapshots predating the 18 mm/45° decisions, consistent with how
+    items 10/11 left similarly-dated documents alone.
+
+    **Also incidentally corrected while rebuilding `verification_methods.csv`:** its
+    `R3_1`/`R3_2`/`R3_CAM_RES` success-criterion text still cited the old **nadir**
+    pixel figures (6.25 / 8.33 / 8.33 px) alongside the item-11 model fix, which had
+    already moved the formal verdicts to the off-nadir numbers (3.13 / 4.17 / 4.17
+    px). Same defect class as items 10/11, just a different file; corrected using the
+    already-approved numbers, no new derivation.
+
 ---
 
 ## C. Modeling decisions (SysML v2 representation choices)
