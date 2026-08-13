@@ -28,3 +28,11 @@ analysis/sitl_tests/bin/
 analysis/sitl_tests/eeprom.bin
 analysis/sitl_tests/logs/
 analysis/sitl_tests/terrain/
+
+# OpenClaw agent runtime/session state (machine-local, not project content --
+# churns every run, was never meant to be tracked; see git history for the
+# untrack commit that cleaned this up)
+sessions/
+agent/auth-profiles.json
+agent/auth-state.json
+.openclaw/tmp/
