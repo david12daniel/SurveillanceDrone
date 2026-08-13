@@ -160,12 +160,17 @@ class MissionApp:
             elif t == "PARAM_VALUE":
                 param_id = msg.param_id if isinstance(msg.param_id, str) else msg.param_id.decode("utf-8")
                 param_id = param_id.rstrip("\x00")
-                if param_id == "RTL_SPEED" and msg.param_value > 0:
+                # RTL_SPEED was renamed RTL_SPEED_MS on modern ArduCopter
+                # (confirmed via a full PARAM_REQUEST_LIST dump against
+                # 4.7.0, task D2.13, 2026-08-10 -- see
+                # analysis/sitl_tests/params_sets.py's RTL_CRUISE). Accept
+                # either name so this works across firmware versions.
+                if param_id in ("RTL_SPEED", "RTL_SPEED_MS") and msg.param_value > 0:
                     self._return_speed_mps = msg.param_value / 100.0
                 elif param_id == "WPNAV_SPEED":
                     # Fallback only -- ArduPilot uses WPNAV_SPEED for RTL when
                     # RTL_SPEED == 0. Don't let this overwrite an already-live
-                    # nonzero RTL_SPEED that arrived first.
+                    # nonzero RTL_SPEED/RTL_SPEED_MS that arrived first.
                     if self._return_speed_mps == _DEFAULT_RETURN_SPEED_MPS:
                         self._return_speed_mps = msg.param_value / 100.0
                 elif param_id == "RTL_ALT":
@@ -177,6 +182,7 @@ class MissionApp:
 
         if self._battery_capacity_mah is not None and not self._requested_rtl_params:
             self._request_param("RTL_SPEED")
+            self._request_param("RTL_SPEED_MS")
             self._request_param("WPNAV_SPEED")
             self._request_param("RTL_ALT")
             self._requested_rtl_params = True

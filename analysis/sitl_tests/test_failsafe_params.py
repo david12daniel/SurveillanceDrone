@@ -20,7 +20,7 @@ def _restore_arming_safe_defaults(sitl_process):
     every test file, so those values leak into every LATER test file's arm
     attempts when the full suite runs together (confirmed:
     test_full_mission.py failing to arm, task #141, 2026-08-13). Two
-    distinct issues found, both fixed here:
+    distinct issues found initially:
 
     1. LOW_BATTERY_FS's 6S-pack voltage thresholds (BATT_LOW_VOLT=20.4,
        BATT_CRT_VOLT=19.2) are both ABOVE the fixed 12.6V SIM_BATT_VOLTAGE
@@ -36,24 +36,59 @@ def _restore_arming_safe_defaults(sitl_process):
        side effect like the battery case; 900 is simply never a legal value
        to arm with.
 
-    Restore ArduCopter's own firmware defaults (LOW_VOLT=10.5,
-    CRT_VOLT=0/disabled, FS_THR_VALUE=975 -- see ArduCopter/config.h's
-    FS_THR_VALUE_DEFAULT) once this module's tests are done with them,
-    regardless of which test in this file ran last.
+    A THIRD leak found later (task D2.17/#142, 2026-08-13, running the full
+    suite together again after adding test_battery_rtl_sitl.py): this
+    fixture only restored 3 of the ~10 params ALL_FS_PARAMS actually
+    touches. BATT_LOW_MAH/BATT_CRT_MAH/BATT_FS_LOW_ACT/BATT_FS_CRT_ACT/
+    BATT_MONITOR/RTL_SPEED_MS were left set for the rest of the session --
+    test_battery_rtl_sitl.py's own tests (which shrink BATT_CAPACITY to
+    make a pack deplete in a practical test timeframe) then hit those
+    leaked BATT_CRT_MAH/BATT_FS_CRT_ACT thresholds and failed to arm too,
+    the same failure mode as #141's original finding.
 
-    Uses its own short-lived connection rather than depending on the
+    Rather than hand-maintain a second copy of "what the firmware default
+    for each of these actually is" (error-prone, and this module doesn't
+    need to know that to do its own job), capture every value in
+    ALL_FS_PARAMS as it stood BEFORE this module's tests touch it, and
+    restore exactly those captured values afterward, regardless of which
+    test in this file ran last.
+
+    Uses its own short-lived connections rather than depending on the
     function-scoped sitl_conn fixture: a module-scoped fixture can't depend
-    on a narrower-scoped one, and this only needs to fire once, after every
-    test in this module has finished.
+    on a narrower-scoped one, and this only needs to fire twice (once before
+    this module's tests, once after). Deliberately does NOT hold one
+    connection open across the whole `yield` -- SITL's SERIAL0 TCP port only
+    accepts one client at a time (see sitl_conn's own docstring), and a
+    connection left open for the module's entire duration collides with
+    each individual test's own sitl_conn, corrupting/blocking that stream.
+    First version of this fixture did exactly that and made every one of
+    this module's tests hang/ERROR when run together (confirmed by direct
+    probing, task D2.17/#142, 2026-08-13) -- open, use, and close each
+    connection immediately instead.
     """
+    def _connect():
+        _, conn_str = sitl_process
+        conn = mavutil.mavlink_connection(conn_str, dialect="ardupilotmega",
+                                          source_system=255, source_component=191)
+        conn.wait_heartbeat(timeout=15)
+        # PARAM_REQUEST_READ/PARAM_SET need an explicit component target,
+        # same reasoning as sitl_conn's own target_component line -- without
+        # it this defaults to 0 (broadcast) and reads/writes below each burn
+        # their full timeout instead of resolving in ~0.05 s.
+        conn.target_component = mavutil.mavlink.MAV_COMP_ID_AUTOPILOT1
+        return conn
+
+    conn = _connect()
+    original = {name: get_param(conn, name, timeout=5.0) for name in ALL_FS_PARAMS}
+    conn.close()
+
     yield
-    _, conn_str = sitl_process
-    conn = mavutil.mavlink_connection(conn_str, dialect="ardupilotmega",
-                                      source_system=255, source_component=191)
-    conn.wait_heartbeat(timeout=15)
-    set_param(conn, "BATT_LOW_VOLT", 10.5, mavutil.mavlink.MAV_PARAM_TYPE_REAL32)
-    set_param(conn, "BATT_CRT_VOLT", 0.0, mavutil.mavlink.MAV_PARAM_TYPE_REAL32)
-    set_param(conn, "FS_THR_VALUE", 975, mavutil.mavlink.MAV_PARAM_TYPE_INT16)
+
+    conn = _connect()
+    for name, (_, ptype) in ALL_FS_PARAMS.items():
+        value = original.get(name)
+        if value is not None:
+            set_param(conn, name, value, ptype)
     conn.close()
 
 

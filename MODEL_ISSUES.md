@@ -656,6 +656,82 @@ any tool previously.
     above), which the WSL clone's independent edit had already removed. Folding this
     into strict chronological order is tracked as TASKS.md 0.6.
 
+16. **RESOLVED (2026-08-13) — D2.17 distance-adaptive low-battery RTL trigger
+    wired in and validated against real SITL; found + fixed two cross-test
+    isolation bugs in `analysis/sitl_tests/` along the way.**
+
+    **Context.** Mission Control task #142/TASKS.md D2.17: recompute
+    energy-needed-to-return from live distance-to-home every SBC tick and
+    command RTL at a margin, instead of relying only on the static
+    `R6_FS_BATT` worst-case-distance reserve. A standalone reference
+    implementation (haversine distance, pack-energy accounting, a live EMA
+    of measured cruise power) was built and unit-tested 2026-08-12 but never
+    wired into the real app or run against SITL.
+
+    **What changed.** Ported `energy_model.py`/`battery_rtl_trigger.py`
+    unchanged into `analysis/autonomy_sim/`. `MissionApp._pump()` now
+    handles `HOME_POSITION`, `BATTERY_STATUS`, and `PARAM_VALUE` for
+    `RTL_SPEED`/`RTL_SPEED_MS` (renamed on modern ArduCopter — confirmed via
+    `analysis/sitl_tests/params_sets.py`'s `RTL_CRUISE`) falling back to
+    `WPNAV_SPEED`, and `RTL_ALT`, all read live via `PARAM_REQUEST_READ`
+    rather than hardcoded. `step()` gained a cross-cutting check (same
+    edge-triggered latch pattern as the existing FC-failsafe observation)
+    that commands RTL and goes `PASSIVE` the first tick the adaptive margin
+    is breached. `FakeFC` extended to emit the same telemetry and answer
+    `PARAM_REQUEST_READ`, with a `set_battery()` hook for tests to script a
+    drain profile; 2 new mock-FC integration tests in `test_autonomy_loop.py`
+    prove the far-triggers/near-doesn't-trigger contract over the real
+    MAVLink wire path.
+
+    **Real SITL validation (`analysis/sitl_tests/test_battery_rtl_sitl.py`,
+    2 tests).** Runs the actual `MissionApp`/`BatteryRTLMonitor` classes —
+    not a reimplementation — against real ArduCopter 4.7.0. Two facts
+    established by direct probing, neither guessed: (1) `BATT_CAPACITY`
+    genuinely drains in SITL (`AP_BattMonitor` integrates real simulated
+    current over time, same code as hardware) but a realistic 12 Ah pack
+    takes too long to deplete meaningfully in a short test even at this
+    suite's 3x speedup, so these tests shrink it to 500 mAh, reaching ~0%
+    by ~22 s of hover; (2) `MAV_CMD_DO_SET_HOME` (used to relocate home
+    ~2.8 km away without physically flying there) only succeeds once the
+    vehicle is armed and in GUIDED — called disarmed, even ~25 s after
+    connecting, it came back `MAV_RESULT_FAILED`. Both tests confirm not
+    just the trigger *decision* but that ArduPilot actually *accepts* the
+    resulting RTL command, the same distinction `test_full_mission.py`
+    draws for the rest of the control loop.
+
+    **Two cross-test isolation bugs found running the full `sitl_tests`
+    suite together (not just each file in isolation) — the same class of
+    bug D2.16 already found twice, still not fully eradicated:**
+    1. `test_failsafe_params.py`'s `_restore_arming_safe_defaults` fixture
+       only restored 3 of the ~10 params `ALL_FS_PARAMS` actually touches
+       (`BATT_LOW_MAH`/`BATT_CRT_MAH`/`BATT_FS_LOW_ACT`/`BATT_FS_CRT_ACT`/
+       `BATT_MONITOR`/`RTL_SPEED_MS` leaked). Fixed by capturing every
+       param's real pre-test value and restoring exactly that, rather than
+       hand-maintaining a second copy of "what the firmware default is."
+    2. The fix to (1) introduced a *new*, worse bug: it opened one MAVLink
+       connection at fixture setup and held it open across the whole
+       module's `yield`. `conftest.py`'s own `sitl_conn` docstring already
+       documents that SITL's SERIAL0 TCP port accepts only one client at a
+       time — the lingering connection collided with each test's own
+       `sitl_conn`, making every test in the module hang/`ERROR`
+       regardless of timeout budget (confirmed: identical failure point
+       across three separate timeout wrappers of very different lengths,
+       which is what actually gave this away — a real budget-exhaustion
+       failure moves with the timeout, this didn't). Fixed by using two
+       short-lived connections (capture-then-close at setup, reconnect-
+       restore-close at teardown) instead of one held open throughout.
+
+    **Verification.** Full 30-test `sitl_tests` suite (all six files
+    together, not just isolated) green across 2 consecutive runs
+    (~212-217 s each).
+
+    **Still open:** `climb_energy_j` stays the placeholder `0.0`
+    (conservative-safe direction — the trigger fires slightly later than
+    ideal when RTL needs to climb first, not unsafe, since `BATT_CRT_MAH`
+    remains the firmware-level hard backstop underneath regardless) —
+    needs a real climb-rate measurement from an actual flight to set
+    properly. See TASKS.md D2.17.
+
 ## C. Modeling decisions (SysML v2 representation choices)
 
 1. **DECISION — sub-units absent from the SI library.** `mW`, `mA`, `mK`, and
