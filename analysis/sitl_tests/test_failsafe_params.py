@@ -6,9 +6,55 @@ expected mode transitions.
 """
 import time
 import pytest
+from pymavlink import mavutil
 from helpers import set_param, get_param, set_mode_via_command, \
     wait_mode, MODE, MODE_TIMEOUT_S
 from params_sets import LINK_LOSS_FS, LOW_BATTERY_FS, RTL_CRUISE, ALL_FS_PARAMS
+
+
+@pytest.fixture(scope="module", autouse=True)
+def _restore_arming_safe_defaults(sitl_process):
+    """This module's tests set several params to values that are only valid
+    for "can it be set and read back" testing, not for actually arming --
+    and never reset them. sitl_process is session-scoped and shared across
+    every test file, so those values leak into every LATER test file's arm
+    attempts when the full suite runs together (confirmed:
+    test_full_mission.py failing to arm, task #141, 2026-08-13). Two
+    distinct issues found, both fixed here:
+
+    1. LOW_BATTERY_FS's 6S-pack voltage thresholds (BATT_LOW_VOLT=20.4,
+       BATT_CRT_VOLT=19.2) are both ABOVE the fixed 12.6V SIM_BATT_VOLTAGE
+       this SITL binary simulates (libraries/SITL/SITL.cpp's
+       SIM.batt_voltage default), so every later PreArm battery check sees
+       the battery as critically low.
+    2. LINK_LOSS_FS's FS_THR_VALUE=900 is actually an INVALID value per
+       ArduCopter's own arming-parameter sanity check
+       (AP_Arming_Copter.cpp's parameter_checks(): FS_THR_VALUE must be
+       >= 910, "above ppm encoder's loss-of-signal value of 900" per its own
+       comment) -- once set, PreArm reports "Check FS_THR_VALUE" and blocks
+       arming outright, regardless of RC input. This is not a leaked-state
+       side effect like the battery case; 900 is simply never a legal value
+       to arm with.
+
+    Restore ArduCopter's own firmware defaults (LOW_VOLT=10.5,
+    CRT_VOLT=0/disabled, FS_THR_VALUE=975 -- see ArduCopter/config.h's
+    FS_THR_VALUE_DEFAULT) once this module's tests are done with them,
+    regardless of which test in this file ran last.
+
+    Uses its own short-lived connection rather than depending on the
+    function-scoped sitl_conn fixture: a module-scoped fixture can't depend
+    on a narrower-scoped one, and this only needs to fire once, after every
+    test in this module has finished.
+    """
+    yield
+    _, conn_str = sitl_process
+    conn = mavutil.mavlink_connection(conn_str, dialect="ardupilotmega",
+                                      source_system=255, source_component=191)
+    conn.wait_heartbeat(timeout=15)
+    set_param(conn, "BATT_LOW_VOLT", 10.5, mavutil.mavlink.MAV_PARAM_TYPE_REAL32)
+    set_param(conn, "BATT_CRT_VOLT", 0.0, mavutil.mavlink.MAV_PARAM_TYPE_REAL32)
+    set_param(conn, "FS_THR_VALUE", 975, mavutil.mavlink.MAV_PARAM_TYPE_INT16)
+    conn.close()
 
 
 @pytest.mark.parametrize("name,val_typ", list(ALL_FS_PARAMS.items()))
