@@ -20,10 +20,19 @@ import time
 from typing import Protocol
 from pymavlink import mavutil
 
+from battery_rtl_trigger import BatteryRTLMonitor, RTLTriggerConfig
+from energy_model import pack_voltage_v
+
 # ArduCopter custom flight-mode numbers (verify against your firmware build).
 MODE = {"STABILIZE": 0, "AUTO": 3, "GUIDED": 4, "LOITER": 5, "RTL": 6, "LAND": 9}
 MODE_NAME = {v: k for k, v in MODE.items()}
 _FAILSAFE_MODES = {MODE["RTL"], MODE["LAND"]}
+
+# D2.17 fallbacks, used only until the real PARAM_VALUE arrives from the FC
+# (see MissionApp._pump()'s PARAM_VALUE handling) -- ArduCopter's own stock
+# defaults, not project-specific numbers.
+_DEFAULT_RETURN_SPEED_MPS = 5.0   # stock WPNAV_SPEED = 500 cm/s
+_DEFAULT_RTL_ALT_M = 15.0         # stock RTL_ALT = 1500 cm
 
 SURVEY_ALT_M = 120.0      # R1 sweep altitude
 CLASSIFY_ALT_M = 90.0     # R3_2 recognition altitude
@@ -41,7 +50,11 @@ class MissionApp:
     def __init__(self, conn, detector: Detector, *, target_system: int = 1,
                  detect_thr: float = 0.90, classify_thr: float = 0.80,
                  classify_timeout_ticks: int = 40,
-                 loiter_time_budget_s: float = 30.0):
+                 loiter_time_budget_s: float = 30.0,
+                 battery_capacity_mah: float | None = None,
+                 rtl_margin_fraction: float = 0.10,
+                 rtl_climb_energy_j: float = 0.0,
+                 rtl_power_ema_alpha: float = 0.1):
         self.conn = conn
         self.detector = detector
         self.target_system = target_system
@@ -56,6 +69,25 @@ class MissionApp:
         self._classify_ticks = 0
         self.events: list[tuple[str, str]] = []               # (kind, detail) — for logging/assertions
         self._boot = time.time()
+
+        # D2.17: distance-adaptive low-battery RTL trigger (a tighter, earlier
+        # layer in front of the FC's own static BATT_CRT_MAH backstop -- see
+        # battery_rtl_trigger.py). battery_capacity_mah is the feature flag:
+        # leave it None (default) to disable, matching every existing caller/
+        # test that doesn't configure a pack and doesn't drive HOME_POSITION/
+        # BATTERY_STATUS through FakeFC.
+        self._battery_capacity_mah = battery_capacity_mah
+        self._rtl_config_extra = dict(
+            margin_fraction=rtl_margin_fraction,
+            climb_energy_j=rtl_climb_energy_j,
+            power_ema_alpha=rtl_power_ema_alpha,
+        )
+        self._home: tuple[float, float] | None = None          # (lat_deg, lon_deg)
+        self._battery: tuple[float, float, float] | None = None  # (current_a, voltage_v, consumed_mah)
+        self._return_speed_mps = _DEFAULT_RETURN_SPEED_MPS     # overridden by RTL_SPEED/WPNAV_SPEED PARAM_VALUE
+        self._rtl_alt_m = _DEFAULT_RTL_ALT_M                    # overridden by RTL_ALT PARAM_VALUE
+        self._rtl_monitor: BatteryRTLMonitor | None = None
+        self._requested_rtl_params = False
 
     # ---- MAVLink out ------------------------------------------------------
     def _ms(self) -> int:
@@ -101,6 +133,10 @@ class MissionApp:
             0, 0, 0, 0, 0, 0, 0, 0)
         self.events.append(("position_target", f"{alt_m:.0f}m"))
 
+    def _request_param(self, param_id: str):
+        self.conn.mav.param_request_read_send(
+            self.target_system, 1, param_id.encode("utf-8"), -1)
+
     # ---- MAVLink in -------------------------------------------------------
     def _pump(self):
         while True:
@@ -112,10 +148,38 @@ class MissionApp:
                 self.fc_mode = msg.custom_mode
             elif t == "GLOBAL_POSITION_INT":
                 self.position = (msg.lat, msg.lon, msg.relative_alt / 1000.0)
+            elif t == "HOME_POSITION":
+                self._home = (msg.latitude / 1e7, msg.longitude / 1e7)
+            elif t == "BATTERY_STATUS":
+                # D2.17 telemetry: current_battery (cA), current_consumed (mAh) are
+                # -1 when the FC doesn't know yet -- ignore the sample until both
+                # are populated rather than feeding the RTL monitor a bogus draw.
+                if msg.current_battery >= 0 and msg.current_consumed >= 0:
+                    voltage_v = pack_voltage_v(list(msg.voltages))
+                    self._battery = (msg.current_battery / 100.0, voltage_v, float(msg.current_consumed))
+            elif t == "PARAM_VALUE":
+                param_id = msg.param_id if isinstance(msg.param_id, str) else msg.param_id.decode("utf-8")
+                param_id = param_id.rstrip("\x00")
+                if param_id == "RTL_SPEED" and msg.param_value > 0:
+                    self._return_speed_mps = msg.param_value / 100.0
+                elif param_id == "WPNAV_SPEED":
+                    # Fallback only -- ArduPilot uses WPNAV_SPEED for RTL when
+                    # RTL_SPEED == 0. Don't let this overwrite an already-live
+                    # nonzero RTL_SPEED that arrived first.
+                    if self._return_speed_mps == _DEFAULT_RETURN_SPEED_MPS:
+                        self._return_speed_mps = msg.param_value / 100.0
+                elif param_id == "RTL_ALT":
+                    self._rtl_alt_m = msg.param_value / 100.0
 
     # ---- state machine ----------------------------------------------------
     def step(self):
         self._pump()
+
+        if self._battery_capacity_mah is not None and not self._requested_rtl_params:
+            self._request_param("RTL_SPEED")
+            self._request_param("WPNAV_SPEED")
+            self._request_param("RTL_ALT")
+            self._requested_rtl_params = True
 
         # External failsafe (LinkLossDetected / LowBatteryReached): the FC owns the
         # decision and switches to RTL/LAND on its own. We observe and stand down.
@@ -129,6 +193,40 @@ class MissionApp:
         # Need telemetry before acting (validates the FC link is live).
         if self.fc_mode is None or self.position is None:
             return
+
+        # D2.17: distance-adaptive low-battery RTL trigger -- a second opinion
+        # in front of the FC's static BATT_CRT_MAH backstop, recomputed every
+        # tick from live distance-to-home + measured cruise power rather than
+        # a fixed worst-case-distance reserve (see battery_rtl_trigger.py).
+        # Cross-cutting like the failsafe check above: applies in SWEEP and
+        # INVESTIGATE alike, so it runs before the state-specific branches.
+        if self._battery_capacity_mah is not None and self._battery is not None:
+            if self._rtl_monitor is None and self._home is not None:
+                self._rtl_monitor = BatteryRTLMonitor(
+                    self._home[0], self._home[1],
+                    RTLTriggerConfig(
+                        capacity_mah=self._battery_capacity_mah,
+                        return_speed_mps=self._return_speed_mps,
+                        **self._rtl_config_extra,
+                    ),
+                )
+            if self._rtl_monitor is not None:
+                lat, lon, alt = self.position
+                current_a, voltage_v, consumed_mah = self._battery
+                fired = self._rtl_monitor.update(
+                    lat=lat / 1e7, lon=lon / 1e7,
+                    below_rtl_alt=alt < self._rtl_alt_m,
+                    current_a=current_a, voltage_v=voltage_v, consumed_mah=consumed_mah,
+                )
+                if fired:
+                    d = self._rtl_monitor.last_diagnostics
+                    self._alert(f"BATTERY_RTL dist={d['distance_to_home_m']:.0f}m "
+                                f"need={d['energy_needed_j'] / 3600:.0f}Wh "
+                                f"have={d['remaining_energy_j'] / 3600:.0f}Wh")
+                    self._set_mode("RTL")
+                    self.state = self.PASSIVE
+                    self.events.append(("battery_rtl_triggered", f"{d['distance_to_home_m']:.0f}m"))
+                    return
 
         if self.state == self.SWEEP:
             if self.fc_mode != MODE["AUTO"]:
