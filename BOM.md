@@ -37,7 +37,7 @@ candidate ID (the project's internal part number). Four build phases — **Phase
 | PurpleRiver Mini 640 thermal camera (640×512, 12 µm, **18 mm lens**) | `T13` | [thermal-image.com](https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/) | $700.00† |
 | NanoPi M5, 4 GB SBC (Rockchip RK3576) — real-time onboard AI inference (thermal via USB-UVC) | `SBC3` | [friendlyelec.com](https://www.friendlyelec.com/index.php?route=product/product&path=69&product_id=309) | $126.00 |
 | SBC heatsink — **spec, not yet sourced**: ≤47×35 mm footprint, **25–30 mm fin height**, light/clear finish, thermal-adhesive mount | — | TBD — see note ‡ | ~$10–15 (est.) |
-| SBC mount + cooling (3D-printed deck + 30 mm fan + heat-set hardware) | — | fabricated ([reference/cad-resources.md](reference/cad-resources.md)) | ~$15.00 |
+| SBC mount + cooling (3D-printed deck + 30 mm fan + heat-set hardware) | — | fabricated ([cad-resources/cad-resources.md](cad-resources/cad-resources.md)) | ~$15.00 |
 | SBC power — 2-6S→12V 3A UBEC (2-pack) | — | [amazon.com](https://www.amazon.com/2pcs-2S-6S-DC-DC-Converter-Module/dp/B0CTZHJR5L) | $9.99 |
 | SBC power — USB-C power-only cable (bare wire→USB-C male, 20AWG 5A) | — | [amazon.com](https://www.amazon.com/USB-C-Power-Copper-Connector-Device/dp/B0GBGLNR52) | $7.99 |
 | **Phase 2 subtotal** | | | **~$871.48** |

@@ -31,7 +31,7 @@ are now being **locked in**:
 > **The authoritative, current list of selected vs open components is [`SELECTED_COMPONENTS.md`](SELECTED_COMPONENTS.md).** Read it first.
 
 Next up: **physical integration** — designing a 3D-printed deck to mount the SBC + thermal
-camera on the airframe (see [`reference/cad-resources.md`](reference/cad-resources.md)).
+camera on the airframe (see [`cad-resources/cad-resources.md`](cad-resources/cad-resources.md)).
 
 ## Repository layout
 
@@ -45,7 +45,8 @@ camera on the airframe (see [`reference/cad-resources.md`](reference/cad-resourc
 | [`INTERFACE_REQUIREMENTS_EXPORT_26_06_30.md`](INTERFACE_REQUIREMENTS_EXPORT_26_06_30.md) | Interface Requirements Specification (IRS) export — all system interfaces (DI-IPSC-81434 content). |
 | [`analysis/`](analysis/) | The flight-time/trade-study engine (`flight_time_model.py`), its generated outputs, and the human-readable market-analysis / trade-study write-ups. |
 | [`systems_engineering_plan.md`](systems_engineering_plan.md) | The 4-phase incremental build roadmap. |
-| [`reference/`](reference/) | SysML v2 syntax cheat-sheet + validated examples, and CAD/3D-model resources + modeling pathway. |
+| [`reference/`](reference/) | SysML v2 syntax cheat-sheet + validated examples. |
+| [`cad-resources/`](cad-resources/) | CAD/3D-model resources + modeling pathway (downloaded specs, generated `build123d` parts, mount STEP/STL files). |
 | [`MODEL_ISSUES.md`](MODEL_ISSUES.md) | Chronological decisions log + open items / data gaps. |
 | [`CLAUDE.md`](CLAUDE.md) | Operating guidance for AI assistants working in this repo. |
 | `session-handoffs/` | Multi-session work logs (`YYYY-MM-DD.md`). |

@@ -16,7 +16,7 @@ _Last updated: 2026-07-10._
 > - **Rationale** for each decision is logged in [`MODEL_ISSUES.md`](MODEL_ISSUES.md)
 >   (chronological) and the `analysis/*.md` trade studies.
 > - **CAD / 3D-model resources + the free-CAD modeling pathway** (for building the
->   physical-integration mount) live in [`reference/cad-resources.md`](reference/cad-resources.md).
+>   physical-integration mount) live in [`cad-resources/cad-resources.md`](cad-resources/cad-resources.md).
 > - **Formal requirements & interfaces** are exported as the SSS
 >   [`REQUIREMENTS_EXPORT_26_06_30.md`](REQUIREMENTS_EXPORT_26_06_30.md) and the IRS
 >   [`INTERFACE_REQUIREMENTS_EXPORT_26_06_30.md`](INTERFACE_REQUIREMENTS_EXPORT_26_06_30.md).

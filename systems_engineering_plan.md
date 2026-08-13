@@ -51,7 +51,7 @@ deployed in Phase 3.
 **New Components (vs Phase 1)**
 - Thermal Camera Subsystem — **PurpleRiver Mini 640** (`T13`, 640×512, 12 µm, **18 mm lens**, **USB** variant)
 - Single-Board Computer — **NanoPi M5, 4 GB** (`SBC3`, Rockchip RK3576, RKNN NPU) — real-time inference
-- SBC mount + cooling (3D-printed deck + fan — see [`reference/cad-resources.md`](reference/cad-resources.md))
+- SBC mount + cooling (3D-printed deck + fan — see [`cad-resources/cad-resources.md`](cad-resources/cad-resources.md))
 - SBC power — 2-6S→12 V 3 A UBEC (2-pack) + USB-C power-only cable
 
 **Components Required (full list)** — all of Phase 1, plus the thermal camera and SBC (with mount/cooling and power).
