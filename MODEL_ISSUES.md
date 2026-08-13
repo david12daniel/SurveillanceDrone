@@ -601,6 +601,56 @@ any tool previously.
     checkout) was already fixed for 45° per item 10 — not re-checked here since it
     isn't accessible from this working directory.
 
+14. **RESOLVED (2026-08-12) — `build123d` import fixed in this environment; all
+    four CAD scripts re-executed, item-13's "not verified by execution" gap closed.**
+    *(David: "why would \[the build123d failure\] be impacted by the 45 degree
+    look-down change... go ahead and \[fix it\]" — it turned out not to be related
+    to the camera at all; two unrelated, pre-existing environment bugs.)*
+
+    **Bug 1 — a corrupt stock Windows font.** `build123d.text` scans every font in
+    `C:/Windows/Fonts` as a side effect of import (not lazily), with no error
+    handling around the `fontTools.ttLib.TTFont(path)` call. Tested every font in
+    both Windows font folders through `build123d`'s *actual* code paths (bare
+    `TTFont()` for `.ttf`/`.otf`, `ttLib.ttCollection.TTCollection()` for `.ttc`,
+    since build123d correctly routes collections through the latter): exactly one
+    file fails, `mstmc.ttf` ("bad sfntVersion" — not valid sfnt data). This was
+    **already known and already worked around** in this codebase —
+    `thermal_mount.py`, `nanopi_m5.py`, and `mini640_t13.py` each carry their own
+    `_install_font_loader_shim()` (patches `fontTools.ttLib.TTFont` to fall back to
+    a known-good system font on any parse failure, installed before importing
+    build123d). Only **`thermal_mount_45.py`** had it too, under a different name
+    (`_shim()`) — a naming difference that made an earlier grep for
+    `_install_font_loader_shim` miss it and wrongly report the file as unpatched.
+    All four scripts already had this half of the fix.
+
+    **Bug 2 — genuinely new, unrelated: numpy/pandas ABI mismatch.**
+    `build123d/__init__.py` unconditionally imports `build123d.brep_from_stl`
+    (STL → primitive-shape detection), which imports `sklearn` → `pandas`. The
+    installed `pandas` (2.1.4) predates numpy 2.0's ABI break; the installed numpy
+    is 2.2.6. `import pandas` itself now raises ("numpy.dtype size changed, may
+    indicate binary incompatibility") — this is what actually took down `import
+    build123d` in this session, *after* the already-working font shim did its job.
+    None of the four CAD scripts call `detect_primitives` (they only build
+    parametric shapes and export STEP/STL, never read an existing STL back in), so
+    rather than upgrade `pandas` system-wide — a shared-environment change outside
+    this project's scope, and not requested — added an `_install_brep_from_stl_stub()`
+    function (same style as the existing font shim) to all four scripts:
+    `thermal_mount.py`, `thermal_mount_45.py`, `nanopi_m5.py`, `mini640_t13.py`.
+    It stubs `sys.modules["build123d.brep_from_stl"]` with a `detect_primitives`
+    that raises `NotImplementedError` if ever actually called (loud failure, not
+    silent wrong behavior, for the hypothetical future case where one of these
+    scripts does start using it).
+
+    **Verification — all four scripts now run clean end-to-end** and regenerate
+    their STEP/STL outputs. Diffed the regenerated files against the committed
+    ones: **geometry is identical** in every case; the only diff in any `.step`
+    file is the embedded `FILE_NAME(...)` generation timestamp (OCCT stamps every
+    export with the current time), and the `.stl` files are unchanged entirely.
+    Confirms item 13's inspection-only conclusion — `thermal_mount_45.py`'s
+    `TILT_DEG = 45.0` geometry was already correct — this time by actually running
+    it, not just reading the code. The timestamp-only `.step` diffs were discarded
+    (not committed): no functional change, pure noise.
+
 ---
 
 ## C. Modeling decisions (SysML v2 representation choices)
