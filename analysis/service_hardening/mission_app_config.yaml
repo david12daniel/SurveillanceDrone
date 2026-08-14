@@ -1,0 +1,75 @@
+# Mission Application — Configuration
+# Path on device: /etc/mission_app/config.yaml
+
+# --- MAVLink connection ----------------------------------------------------
+mavlink:
+  connection_string: "/dev/ttyS2"      # NanoPi M5 UART to FC (GPIO header)
+  baudrate: 921600                     # Default SERIALx_BAUD for companion computers
+  target_system: 1
+  source_component: 191                # Companion computer per MAVLink convention
+  heartbeat_interval_s: 1.0            # 1 Hz companion heartbeat
+
+# --- Mission parameters ----------------------------------------------------
+mission:
+  survey_alt_m: 120.0                  # R1 sweep altitude
+  classify_alt_m: 90.0                 # R3_2 recognition altitude
+  survey_speed_mps: 2.23               # WPNAV_SPEED / cruise speed
+  detect_threshold: 0.90               # R3_1 — detection confidence floor
+  classify_threshold: 0.80             # R3_2 — classification confidence floor
+  classify_timeout_ticks: 40           # per-aspect retry limit
+  loiter_time_budget_s: 30.0           # D2.9 — 30 s max per investigation
+
+# --- Battery RTL monitor (D2.17) -------------------------------------------
+battery_rtl:
+  enabled: true
+  capacity_mah: 12000                  # BAT10 / BAT22 pack capacity
+  return_speed_mps: 12.0               # RTL_SPEED (from model: 12 m/s)
+  margin_fraction: 0.10                # 10% reserve margin
+  climb_energy_j: 0.0                  # placeholder until climb-rate measured
+  power_ema_alpha: 0.1                 # smoothing factor for cruise power
+
+# --- Thermal camera (D2.5) --------------------------------------------------
+thermal_camera:
+  device: "/dev/video0"                # T13 UVC device node
+  width: 640
+  height: 512
+  fps: 25
+  pixel_format: "GREY"                 # 8-bit raw LWIR from T13
+
+# --- Inference (D-1 / D2.6) ------------------------------------------------
+inference:
+  model_path: "/opt/mission_app/models/detector.rknn"   # INT8 quantized RKNN
+  confidence_threshold: 0.45           # NMS threshold (0.9 mission = per-class, not per-box)
+  iou_threshold: 0.50                  # NMS IOU threshold
+  input_width: 640
+  input_height: 512
+  class_labels:
+    - "deer"
+    - "turkey"
+    - "human"
+    - "other"
+
+# --- Logging ----------------------------------------------------------------
+logging:
+  level: "INFO"                        # DEBUG, INFO, WARNING, ERROR
+  file_path: "/var/log/mission_app/mission_app.log"
+  max_bytes: 10485760                  # 10 MB per file
+  backup_count: 5                      # keep 5 rotated files
+  format: "json"                       # "json" or "text"
+  forward_to_journal: true             # also emit structured logs to stderr → journald
+
+# --- System ----------------------------------------------------------------
+system:
+  watchdog_interval_s: 10              # sd_notify(WATCHDOG=1) interval
+  safe_standdown_connection_string: "/dev/ttyS2"   # separate conn for stand-down thread
+  safe_standdown_baud: 9600            # slow reliable baud for fallback
+  poweroff_on_critical: false          # if true, poweroff after safe-stand-down (vs just RTL)
+  startup_delay_s: 5                   # wait for FC to boot before connecting
+
+# --- Development overrides (loaded second; these override the defaults) ----
+# Path: /etc/mission_app/config.dev.yaml
+# Provides a way to override settings without modifying the main config.
+# SITL example:
+#   mavlink:
+#     connection_string: "udpin:127.0.0.1:14550"
+#     baudrate: 115200

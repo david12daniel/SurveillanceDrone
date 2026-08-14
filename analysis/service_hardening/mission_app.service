@@ -1,0 +1,44 @@
+[Unit]
+Description=Thermal Surveillance Drone — Onboard Mission Application
+Documentation=https://github.com/david12daniel/SurveillanceDrone
+Wants=network.target
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/mission_app/run_service.py
+WorkingDirectory=/opt/mission_app
+
+# Environment
+EnvironmentFile=-/etc/mission_app/environment
+Environment=PYTHONUNBUFFERED=1
+Environment=MAVLINK_DIALECT=ardupilotmega
+
+# User: run as the default "pi" user (or create a dedicated "mission" user)
+User=mission
+Group=mission
+
+# Restart policy — always restart unless explicitly stopped
+Restart=always
+RestartSec=5
+
+# systemd watchdog — app must call sd_notify("WATCHDOG=1") every 30 s
+WatchdogSec=30
+
+# Limits
+LimitNOFILE=4096
+LimitCORE=0
+
+# Logging — capture stdout/stderr into journald
+StandardOutput=journal
+StandardError=journal
+
+# Security hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+PrivateTmp=yes
+ReadWritePaths=/opt/mission_app /var/log/mission_app
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+
+[Install]
+WantedBy=multi-user.target
