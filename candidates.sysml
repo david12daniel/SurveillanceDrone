@@ -1576,6 +1576,24 @@ package DroneCandidates {
    :>> vtxTypeRequired = "Separate Walksnail VTX (included in kit)";
    :>> goggleCompatibility = "Walksnail Avatar goggles (any)";
   }
+
+  /*
+   * Zero-mass/zero-cost placeholder (MODEL_ISSUES.md §C33, mirrors the cost-
+   * bundling rule in item 13). Bind `drone.fpvCam` to THIS candidate — not a
+   * real camera like A5 — whenever the bound airframe's fpvCameraIncluded =
+   * true, so the totalMass/totalCost rollups don't double-count an FPV camera
+   * already priced/weighed into the airframe's as-shipped figure. Power is a
+   * REAL draw (not zeroed) — set to the category median (0.75 W) of the real
+   * FPV camera candidates above.
+   */
+  part FpvCamBundled : FpvCamera {
+   :>> name = "(bundled with airframe — no separate purchase)";
+   :>> cameraType = "Airframe-integrated, vendor-specific";
+   :>> cost_USD = 0.0;
+   :>> mass = 0.0 [g];
+   :>> power = 0.75 [W];            // category median (representative draw only)
+   :>> includedWithAirframe = true;
+  }
  }
 
  // =========================================================================
@@ -1715,6 +1733,24 @@ package DroneCandidates {
    :>> connector = "u.FL (active antenna) + JST-SH (UART)";
    :>> mounting = "Integrated";
    :>> dimensions = "~15x12mm";
+  }
+
+  /*
+   * Zero-mass/zero-cost placeholder (MODEL_ISSUES.md §C33, mirrors the cost-
+   * bundling rule in item 13). Bind `drone.gps` to THIS candidate — not a real
+   * module like G4 — whenever the bound airframe's gpsIncluded = true, so the
+   * totalMass/totalCost rollups don't double-count a GPS already priced/
+   * weighed into the airframe's as-shipped figure. Power is a REAL draw (not
+   * zeroed) — set to the category median (0.25 W) of the real GPS candidates
+   * above.
+   */
+  part GpsBundled : GpsModule {
+   :>> name = "(bundled with airframe — no separate purchase)";
+   :>> chipset = "Airframe-integrated, vendor-specific";
+   :>> cost_USD = 0.0;
+   :>> mass = 0.0 [g];
+   :>> power = 0.25 [W];            // category median (representative draw only)
+   :>> includedWithAirframe = true;
   }
  }
 
@@ -2068,6 +2104,25 @@ package DroneCandidates {
    :>> mcu = "ESP8285";
    :>> rfChip = "SX1281";
    :>> includedWithAirframe = false;
+  }
+
+  /*
+   * Zero-mass/zero-cost placeholder (MODEL_ISSUES.md §C33, mirrors the cost-
+   * bundling rule in item 13). Bind `drone.rx` to THIS candidate — not a real
+   * receiver like RP3V2 — whenever the bound airframe's receiverIncluded =
+   * true (BNF variants), so the totalMass/totalCost rollups don't double-count
+   * a receiver already priced/weighed into the airframe's as-shipped figure.
+   * Power is a REAL draw (not zeroed) — derived from the category median
+   * currentDraw (0.125 A) of the real RX candidates above at 5 V, matching the
+   * currentDraw*5V convention flight_time_model.py uses for this category.
+   */
+  part RxBundled : RadioReceiver {
+   :>> name = "(bundled with airframe — no separate purchase)";
+   :>> manufacturer = "Airframe-integrated, vendor-specific";
+   :>> cost_USD = 0.0;
+   :>> mass = 0.0 [g];
+   :>> power = 0.63 [W];            // category median (representative draw only)
+   :>> includedWithAirframe = true;
   }
  }
 
@@ -2664,6 +2719,24 @@ package DroneCandidates {
    :>> channelCount = 8;
    :>> pitMode = false;
    :>> includedWithAirframe = false;
+  }
+
+  /*
+   * Zero-mass/zero-cost placeholder (MODEL_ISSUES.md §C33, mirrors the cost-
+   * bundling rule in item 13). Bind `drone.vtx` to THIS candidate — not a real
+   * VTX like V1 — whenever the bound airframe's vtxIncluded = true, so the
+   * totalMass/totalCost rollups don't double-count a VTX already priced/
+   * weighed into the airframe's as-shipped figure. Power is a REAL draw (not
+   * zeroed) — a bundled VTX still pulls from the battery — set to the category
+   * median (4.5 W) of the real VTX candidates above.
+   */
+  part VtxBundled : Vtx {
+   :>> name = "(bundled with airframe — no separate purchase)";
+   :>> vtxType = "Airframe-integrated, vendor-specific";
+   :>> cost_USD = 0.0;
+   :>> mass = 0.0 [g];
+   :>> power = 4.5 [W];             // category median (representative draw only)
+   :>> includedWithAirframe = true;
   }
  }
 

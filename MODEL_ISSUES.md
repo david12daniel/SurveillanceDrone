@@ -1518,6 +1518,69 @@ any tool previously.
       The export header comment + this file are the record of what the lean export
       now omits; regeneration must reapply these cuts.
 
+33. **DECISION (2026-08-14) — `totalMass` rollup added; mass/cost-bundling gotcha
+    documented + closed via placeholder candidates (TASKS.md 0.8 / Mission
+    Control task #11).** David asked for a recheck of whether the flight-time
+    analysis double-counts a BNF/PNP airframe's bundled VTX/FPV-camera/GPS mass
+    (concern: this class of bug had been deliberately avoided when the model
+    was first built, and might have regressed).
+    - **Verified NOT regressed.** `analysis/flight_time_model.py`'s
+      `_peripheral()` (lines ~606-617) still zeroes a bundled peripheral's mass
+      AND cost (`airframe_incl=True` → `(…, 0.0, rep_power, 0.0)`), and the
+      all-up-mass calc (`evaluate()`, ~636-641) is the only place mass gets
+      summed. Cross-checked against the live baseline row (AF3a Chimera9 ECO):
+      `all_up_mass_g` = 1698.7 = 729 (airframe, VTX+cam+GPS already inside that
+      figure) + 868 (battery) + 21 (thermal) + 80 (SBC) + 0.7 (RX) + 0+0+0
+      (bundled VTX/FPV/GPS) — exact, no hidden double-add. `candidates.sysml`'s
+      only change since the last analysis regen was commenting out AF5 (already
+      mass-less, already excluded from the sweep) — a no-op. No rerun needed.
+    - **Real finding: the same unguarded flat-sum pattern was already live in
+      `model.sysml`'s `totalCost`** (`drone.platform.cost_USD + … +
+      drone.vtx.cost_USD + drone.fpvCam.cost_USD + drone.gps.cost_USD + …`),
+      not just the newly-added `totalMass`. Both are harmless *today* only
+      because `part drone : Drone;` (`AerialObservationSystem`) is never bound
+      to a concrete candidate — no `:>>` redefinition wires `drone.platform`
+      etc. to real `candidates.sysml` data anywhere in the file. The bug would
+      fire the moment someone binds a bundled-airframe candidate (most of them)
+      while also independently binding `drone.vtx`/`.fpvCam`/`.gps`/`.rx` to
+      real standalone parts.
+    - **Fix applied (Option 1 from the Mission Control writeup — mirrors the
+      existing cost-bundling convention in item 13, not a new SysML idiom):**
+      added four zero-mass/zero-cost "`*Bundled`" placeholder candidates —
+      `VtxBundled` (`VideoTransmitterCandidates`), `FpvCamBundled`
+      (`FpvCameraCandidates`), `GpsBundled` (`GpsCandidates`), `RxBundled`
+      (`RadioReceiverCandidates`) — each with `cost_USD = 0.0`, `mass = 0.0
+      [g]`, and a REAL representative `power` (category median: VTX 4.5 W, FPV
+      cam 0.75 W, GPS 0.25 W, RX 0.63 W derived from median `currentDraw` ×
+      5 V) since a bundled peripheral still draws real power even though its
+      mass/cost are already inside the airframe's as-shipped figure. Whenever a
+      future task binds `drone.platform` to a candidate with `vtxIncluded`/
+      `fpvCameraIncluded`/`gpsIncluded`/`receiverIncluded` = true, the matching
+      `drone` member should bind to its `*Bundled` placeholder instead of a
+      real component. `totalMass`/`totalCost` themselves stay plain flat sums —
+      the correction lives in candidate selection, per Option 1. Added a
+      comment on both rollups in `model.sysml` pointing here.
+    - **`totalMass` itself:** added mirroring `totalPower`'s style exactly
+      (`platform.mass + battery.mass + antiSpark.mass + camera.mass +
+      fpvCam.mass + gps.mass + sbc.mass + rx.mass + vtx.mass + wifiTx.mass +
+      ubec.mass + vtxAntenna.mass + rxAntennaA.mass + rxAntennaB.mass +
+      wifiAntennaA.mass + wifiAntennaB.mass`), all 16 `Drone` members.
+    - **Not done here:** mirroring `totalMass` into
+      `model_community_balanced.sysml` (TASKS.md row 0.12's existing open
+      scope, not new); wiring `totalMass` against a payload/weight-margin
+      requirement (no `maxTakeoffMass` attribute exists on `Airframe` any
+      more — removed as analytically-inert in item G, 2026-07-10 — so that
+      would need its own attribute decision first); actually binding
+      `drone.platform`/`.vtx`/`.fpvCam`/`.gps`/`.rx` to concrete candidates
+      (nothing does this yet, for any part of `Drone`).
+    - Sources: `Mission-Control/projects/surveillance-drone-totalmass-rollup/
+      README.md` (prior session's investigation + Option-1 recommendation);
+      `analysis/flight_time_model.py:606-648`; `candidates.sysml` (`AF3a`
+      entry + the four `*Bundled` placeholders); `analysis/
+      flight_time_results.csv` (baseline row cross-check); item 13 above (the
+      cost-bundling precedent this mirrors); item G (the `maxTakeoffMass`
+      removal).
+
 ---
 
 ## D. Candidate data gaps & uncertainties (from the source CSVs)
