@@ -1401,6 +1401,26 @@ package DroneSystemModel {
  attribute totalPower : PowerValue =
  platform.power + camera.power + fpvCam.power + gps.power + sbc.power + rx.power + vtx.power + wifiTx.power;
 
+ // Derived total mass rollup (TASKS.md 0.8) — makes payload/weight margin checks
+ // load-bearing SysML instead of analytically inert. NAIVE FLAT SUM, same shape
+ // as totalPower/totalCost above. MASS-BUNDLING GOTCHA (MODEL_ISSUES.md §C33):
+ // platform.mass is NOT scoped like platform.power (which is motor-only draw,
+ // never overlapping the other parts). candidates.sysml populates platform.mass
+ // with AS-SHIPPED PNP/BNF airframe weight, which for most candidates already
+ // includes the bundled VTX/FPV-camera/GPS (e.g. AF3a = 729 g incl. GPS; see
+ // vtxIncluded/fpvCameraIncluded/gpsIncluded on the Airframe candidate). If
+ // `drone.platform` is ever bound to such a candidate AND `drone.vtx`/`.fpvCam`/
+ // `.gps`/`.rx` are independently bound to real standalone component candidates,
+ // this sum double-counts that mass. Convention (mirrors the cost-bundling rule
+ // in MODEL_ISSUES.md item 13): whenever the bound airframe's *Included flag is
+ // true, bind that member to its category's zero-mass/zero-cost "*Bundled"
+ // placeholder candidate (VtxBundled/FpvCamBundled/GpsBundled/RxBundled in
+ // candidates.sysml) instead of a real part — the fix lives in candidate
+ // selection, not in this formula. Currently inert either way: `drone` (line
+ // ~1454) is not bound to any concrete candidate.
+ attribute totalMass : MassValue =
+ platform.mass + battery.mass + antiSpark.mass + camera.mass + fpvCam.mass + gps.mass + sbc.mass + rx.mass + vtx.mass + wifiTx.mass + ubec.mass + vtxAntenna.mass + rxAntennaA.mass + rxAntennaB.mass + wifiAntennaA.mass + wifiAntennaB.mass;
+
  // CATIA MSOSA diagram binding (DS_Views library; does not resolve in Syside).
 
  }
@@ -1489,6 +1509,12 @@ package DroneSystemModel {
  // The laptop (gcs.viewingComputer) and bench charger (gcs.charger) are support/enabling
  // equipment, excluded from gcs.subTotalCost and thus from this rollup — tracked in
  // SELECTED_COMPONENTS, not the R4 per-drone cost.
+ // MASS-BUNDLING GOTCHA APPLIES HERE TOO (MODEL_ISSUES.md §C33, same as totalMass
+ // above): drone.platform.cost_USD is an as-shipped PNP/BNF price that, for most
+ // airframe candidates, already includes the bundled VTX/FPV-camera/GPS/RX price.
+ // Same fix: bind bundled members to their category's zero-cost "*Bundled"
+ // placeholder in candidates.sysml rather than a real standalone candidate.
+ // Currently inert — `drone` is not bound to any concrete candidate.
  attribute totalCost : ScalarValues::Real =
  drone.platform.cost_USD
  + drone.battery.cost_USD
