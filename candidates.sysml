@@ -1143,7 +1143,10 @@ package DroneCandidates {
    :>> purchaseUrl = "https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/";
    :>> brand = "PurpleRiver";
    :>> cost_USD = 700.00;            // $640 base ($590 + $50 for 18mm lens, confirmed 2026-07-29) + $60 shipping
-   :>> mass = 21.0 [g];             // TODO confirm: 18mm lens is heavier than 13mm (core <20g w/o lens); likely +5-10g. Nose payload -> re-check flight-time CG.
+   :>> mass = 15.0 [g];             // TIGHTENED 2026-08-20: module =6g w/o lens (product page), spec sheet <20g w/o lenses & flanges.
+                                    // 18mm Ge lens estimated 6-9g. Total 12-17g, taking midpoint 15g.
+                                    // PDF spec sheet saved in projects/surveillance-drone-t13-mass-confirmation/.
+                                    // Vendor inquiry still needed for exact 18mm-lens-assembled figure.
    :>> power = 0.8 [W];
    :>> resolutionH = 640;
    :>> resolutionV = 512;

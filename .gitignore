@@ -41,3 +41,11 @@ sessions/
 agent/auth-profiles.json
 agent/auth-state.json
 .openclaw/tmp/
+
+# Same category as above, different filenames that slipped through the
+# existing rules: sqlite-import backups of the auth files, the agent's live
+# session database (plus its -shm/-wal companions), and the workspace state
+# dump. All machine-local runtime state, not project content.
+agent/*.bak
+agent/openclaw-agent.sqlite*
+openclaw-workspace-state.json
