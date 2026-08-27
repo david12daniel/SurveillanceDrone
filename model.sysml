@@ -65,6 +65,12 @@ package DroneSystemModel {
  @PhaseTag { phase = Phase::Phase3; } // 'operator viewing' wording predates the Phase-4 downlink deferral — rewording is a logged follow-up
  }
 
+ requirement R3_BHV_SBC_FAILSAFE {
+ doc /* The autonomous flight behavior shall revert to a safe, ground-independent state if the onboard companion computer (SBC) that drives thermal detection/classification and GUIDED-mode target-of-interest maneuvers (adjustOrbit / InvestigateAndClassify) becomes unresponsive, so a surveillance sortie fails safe rather than holding indefinitely on a stale GUIDED setpoint with no autonomy source left to command it or resume the AUTO route. Closes the systems_engineering_plan.md Phase 3 gap ("validate fallback: if the SBC fails, the drone completes the current waypoint and RTLs"), which — like the former SSS §3.7 failsafes (R6_FS_BATT, R7_FS_LINK) — had never been written down as a formal requirement. Realization parameter set: see R3_FS_SBC (not yet written — mechanism confirmed via ArduCopter source + real SITL testing, FS_GCS_ENABLE=1/FS_GCS_TIMEOUT=5/MAV_GCS_SYSID=<TBD distinct id>, pending David's sign-off; MODEL_ISSUES.md item 34 / TASKS.md 3.3). */
+ @PhaseTag { phase = Phase::Phase3; }
+ subsets R3;
+ }
+
  requirement R4 {
  doc /* The total cost for the entire integrated system shall be under $2,500. */
  @PhaseTag { phase = Phase::Phase2; } // procurement completes with Phase 2 hardware (Phase 3 is software-only)

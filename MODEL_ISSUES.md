@@ -1581,6 +1581,102 @@ any tool previously.
       cost-bundling precedent this mirrors); item G (the `maxTakeoffMass`
       removal).
 
+34. **DECISION (2026-08-15) — new `requirement R3_BHV_SBC_FAILSAFE` added
+    (TASKS.md 3.3 / Mission Control task #74); the ArduCopter GCS-failsafe
+    realization mechanism is now CONFIRMED via direct source reading AND real
+    SITL testing — not just proposed. A real bug in the production connection
+    setup was also found along the way. The `R3_FS_SBC` parameter-set
+    requirement is still not written into `model.sysml` (pending David's
+    sign-off, per the R6_FS_BATT/R7_FS_LINK convention), but the investigation
+    itself is complete.**
+    - **Gap closed:** `systems_engineering_plan.md`'s Phase 3 step 3 ("validate
+      fallback: if the SBC fails, the drone completes the current waypoint and
+      RTLs") was prose intent only. Added the parent behavioral requirement
+      `R3_BHV_SBC_FAILSAFE` (`subsets R3`), mirroring the
+      `R6_BHV_RTL_RESERVE`/`R7_BHV_LINKLOSS_RTL` two-layer pattern.
+    - **What already exists to build on:** D2.12's `SafeStandDown` (done,
+      SITL-validated) handles the `mission_app.py` *process* crashing while
+      the SBC OS stays alive. It does **not** cover the SBC board/OS dying
+      outright — for that, the fallback has to live on the FC.
+    - **Mechanism confirmed by reading the actual ArduCopter 4.7.0 source**
+      (checkout at `~/ardupilot-sitl-src`, commit `1511f271`, the exact
+      firmware this project's SITL binary was built from):
+      `ArduCopter/events.cpp::failsafe_gcs_check()` compares
+      `millis() - gcs().sysid_mygcs_last_seen_time_ms()` against
+      `FS_GCS_TIMEOUT`. That "last seen" timestamp is updated **only** by
+      `GCS_MAVLINK::handle_heartbeat()` calling `sysid_mygcs_seen()`, and only
+      `if (gcs().sysid_is_gcs(msg.sysid))` — a check against the FC's
+      `mav_gcs_sysid` parameter, an **exact match by MAVLink system ID**, not
+      a per-port or pooled-across-everything mechanism as an ArduPilot
+      Discourse thread's imprecise paraphrase had suggested
+      ([discuss.ardupilot.org/t/gcs-failsafe-options-with-companion-computer/54531](https://discuss.ardupilot.org/t/gcs-failsafe-options-with-companion-computer/54531)).
+      **The parameter itself is named `MAV_GCS_SYSID` in this firmware**
+      (`GOBJECT(_gcs, "MAV", GCS)` in `ArduCopter/Parameters.cpp:590` +
+      `AP_GROUPINFO("_GCS_SYSID", 2, GCS, mav_gcs_sysid, 255)` in
+      `libraries/GCS_MAVLink/GCS.cpp:51`) — **not** the older `SYSID_MYGCS`
+      name (which doesn't exist in this build; a PARAM_SET against it is
+      silently ignored, confirmed empirically before the real name was
+      found). Default value: **255**.
+    - **Real bug found in the current production code:**
+      `analysis/service_hardening/run_service.py` opens the SBC's MAVLink
+      connection with `source_system=target_sys` (`target_sys` defaults to
+      `1`, the FC's own system ID) — i.e. `mission_app.py`'s heartbeat
+      currently claims to **be** the flight controller, not a distinct
+      companion computer. Against the default `MAV_GCS_SYSID=255`, this means
+      the SBC's heartbeat is **completely invisible** to GCS failsafe today —
+      it neither refreshes the timer nor could ever trigger it. This is
+      independent of anything else in this writeup and is worth fixing
+      regardless of how `R3_FS_SBC` ends up parameterized.
+    - **Empirically confirmed via real ArduCopter SITL** (not just source
+      reading — `analysis/sitl_tests/probe_sbc_gcs_failsafe.py`, scratch
+      investigation script, not part of the permanent suite), disarmed (GCS
+      failsafe still announces via STATUSTEXT while disarmed, per
+      `failsafe_gcs_on_event()`'s `if (!motors->armed())` branch — no need to
+      fly to test this):
+      - Heartbeats as sysid=1 (today's actual config), default
+        `MAV_GCS_SYSID=255`: **no failsafe fired** — confirms the bug above.
+      - Heartbeats as sysid=255 (positive control, matches default
+        `MAV_GCS_SYSID`): **"GCS Failsafe"** STATUSTEXT fired as expected.
+      - `MAV_GCS_SYSID` set to 42, heartbeats as sysid=42: **"GCS Failsafe"**
+        fired on that connection's heartbeat loss alone — proving the
+        per-sysid mechanism works exactly as the source predicts, and that a
+        distinct SBC system ID is sufficient on its own. **This disproves the
+        earlier draft's "needs the 2.16 mavlink-router consolidation onto one
+        FC port" theory** — that was speculation before the source/SITL
+        check; it isn't necessary. A live laptop GCS (a different sysid, e.g.
+        255) would not interfere with detecting the SBC's (sysid, e.g. 42)
+        heartbeat loss, since the FC only watches the one sysid named in
+        `MAV_GCS_SYSID`.
+    - **Recommended parameter set for `R3_FS_SBC` (proposed, not yet written
+      into `model.sysml` — pending David's review, same as
+      R6_FS_BATT/R7_FS_LINK's process):** `FS_GCS_ENABLE = 1` (always RTL,
+      matching R7_FS_LINK's unconditional-abort precedent — and confirmed via
+      source that GCS failsafe has no "continue if GUIDED" exception, unlike
+      Radio failsafe, so it correctly aborts an in-progress
+      `adjustOrbit`/investigate maneuver), `FS_GCS_TIMEOUT = 5` (ArduCopter
+      default), `MAV_GCS_SYSID = <a value distinct from the FC's 1 and from
+      whatever the laptop QGroundControl uses, likely its 255 default>` —
+      **and** a fix to `run_service.py`/`mission_app.py` so the SBC's
+      connection uses that same distinct `source_system` instead of spoofing
+      the FC's own ID. **Open design note, not yet decided:** giving the SBC
+      its own system ID is what the empirical fix requires, but it's a
+      slight departure from the more common MAVLink convention of one
+      system ID per vehicle with different component IDs per onboard
+      subsystem (the SBC already has a distinct component ID, 191,
+      `MAV_COMP_ID_ONBOARD_COMPUTER`) — worth a conscious choice, not a
+      default-and-forget.
+    - Sources: `ArduCopter/events.cpp`, `libraries/GCS_MAVLink/GCS_Common.cpp`,
+      `libraries/GCS_MAVLink/GCS.cpp`, `ArduCopter/Parameters.cpp` (all in the
+      `~/ardupilot-sitl-src` checkout, commit `1511f271`); real SITL run of
+      `analysis/sitl_tests/probe_sbc_gcs_failsafe.py` (2026-08-15);
+      [ArduPilot Copter docs — GCS Failsafe](https://ardupilot.org/copter/docs/gcs-failsafe.html);
+      [ArduPilot Discourse — "GCS Failsafe options with companion computer"](https://discuss.ardupilot.org/t/gcs-failsafe-options-with-companion-computer/54531)
+      (useful for framing the question, but its "pooled across all
+      connections" claim did not hold up against this exact firmware's
+      source — treat as imprecise, not authoritative); `analysis/service_hardening/run_service.py`
+      (the `source_system=target_sys` finding); `analysis/autonomy_sim/mission_app.py`
+      (heartbeat + `sbcMavUart` usage); TASKS.md 3.3 and 2.16.
+
 ---
 
 ## D. Candidate data gaps & uncertainties (from the source CSVs)
