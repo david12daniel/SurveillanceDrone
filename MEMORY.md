@@ -9,7 +9,7 @@
 This project is worked on from both locations. **Git is the single source of truth** — sync via git, not by copying files. Only one user (David) works on the file at a time, so there is no concern about concurrent-edit conflicts; just pull before starting and push when done.
 
 **Policy Statement:**  
-The Surveillance Drone SysML V2 model (`model.sysml`) is a critical engineering artifact that **cannot be modified, updated, moved, or removed** without **explicit prior approval** from the user (David Daniel).
+The Surveillance Drone SysML V2 model (`model.sysml`) is a critical engineering artifact that **cannot be modified, updated, moved, or removed** without **explicit prior approval** from the user (David Laperriere).
 
 **Rationale:**  
 - Ensures traceability and integrity of systems engineering decisions.  

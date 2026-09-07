@@ -2,7 +2,7 @@
 
 _Learn about the person you're helping. Update this as you go._
 
-- **Name:** David Daniel
+- **Name:** David Laperriere
 - **What to call them:** David
 - **Pronouns:** he/him
 - **Timezone:** America/New_York

@@ -49,3 +49,17 @@ agent/auth-state.json
 agent/*.bak
 agent/openclaw-agent.sqlite*
 openclaw-workspace-state.json
+
+# OpenClaw's own model-provider catalog -- rewritten by OpenClaw itself
+# between sessions (provider list, pricing), not project content. Same
+# category as the runtime state untracked in 0e4be23; models.json and
+# plugins/ just slipped through that cleanup.
+agent/models.json
+agent/plugins/
+
+# Bootstrap training dataset (task D1.2) -- multi-GB of images, does not
+# belong in git. See D1_2_BOOTSTRAP_COMPLETE.md for the writeup instead.
+datasets/
+
+# Transient edit backups
+*.bak
