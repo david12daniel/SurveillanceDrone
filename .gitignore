@@ -63,3 +63,4 @@ datasets/
 
 # Transient edit backups
 *.bak
+*.bak.pptx
