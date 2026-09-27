@@ -10,7 +10,8 @@ Purpose:
   DroneSystemModel::Analysis with a momentum-theory (actuator-disk) propulsion
   model plus a forward-flight parasitic-drag term.
 
-  The script READS the SysML model (model.sysml + candidates.sysml) for every
+  The script READS the SysML model (candidates.sysml, via a real SysMLv2MDE
+  parse / its structured export candidates.export.json) for every
   component candidate (including the real battery candidates BAT01–BAT21; it
   falls back to a generic LiPo/Li-ion grid only if none are present), SWEEPS
   complete drone configurations — fully crossing the flight-time drivers
@@ -107,9 +108,12 @@ Usage:
 from __future__ import annotations
 
 import csv
+import json
 import math
+import os
 import re
 import statistics
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -121,6 +125,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 MODEL_SYSML = ROOT / "model.sysml"
 CANDIDATES_SYSML = ROOT / "candidates.sysml"
+CANDIDATES_EXPORT = ROOT / "candidates.export.json"  # SysMLv2MDE structured export
 
 OUT_SYSML = HERE / "flight_time_instances.sysml"
 OUT_MD = HERE / "flight_time_results.md"
@@ -306,44 +311,106 @@ def generate_generic_batteries() -> list[Battery]:
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# Minimal SysML v2 parser (extracts `:>> key = value [unit];` from part blocks)
+# Model input: SysMLv2MDE structured export of candidates.sysml
 # ──────────────────────────────────────────────────────────────────────────
-_PART_RE = re.compile(r"part\s+(\w+)\s*:\s*(\w+)\s*\{", re.MULTILINE)
-_BIND_RE = re.compile(r":>>\s*(\w+)\s*=\s*([^;]+);")
+# The hand-rolled regex parser (_PART_RE/_BIND_RE/_parse_value) was retired for
+# SysMLv2MDE #4.3 (Mission Control #174). Parts now come from a real parse: the
+# SysMLv2MDE D4 structured export (schema 1.x -- nested JSON keyed by qualified
+# name; every `:>>` value carries its verbatim `raw` text plus a typed
+# number/string/boolean/reference field). Unlike the regex, a real parse skips
+# `/* ... */`-commented blocks (e.g. the retired AF5) and keeps string values
+# that contain a `;` whole instead of truncating them.
+#
+# Source, in order: (1) a live parse of candidates.sysml with the sysmlv2mde
+# package (pure stdlib) -- installed, or found at $SYSMLV2MDE_SRC, or at the
+# sibling checkout ../../SysMLv2MDE/src -- so the sweep can never read a stale
+# model; (2) otherwise the committed candidates.export.json. Regenerate that
+# file after editing candidates.sysml:
+#     sysmlv2mde candidates.sysml --view structured-export
+_SYSMLV2MDE_SRC_DEFAULT = ROOT.parent.parent / "SysMLv2MDE" / "src"
 
 
-def _parse_value(raw: str):
-    raw = raw.strip()
-    m = re.match(r'^"(.*)"$', raw)
-    if m:
-        return m.group(1)
-    if raw in ("true", "false"):
-        return raw == "true"
-    num = re.match(r"^(-?\d+(?:\.\d+)?)\s*(\[\w+\])?", raw)
-    if num:
-        val = float(num.group(1))
-        return int(val) if val.is_integer() and "." not in num.group(1) else val
-    return raw
+def _import_sysmlv2mde():
+    """Return (parse_file, build_export) from sysmlv2mde, or None if unavailable."""
+    try:
+        from sysmlv2mde.export import build_export
+        from sysmlv2mde.parser import parse_file
+        return parse_file, build_export
+    except ImportError:
+        pass
+    src = Path(os.environ.get("SYSMLV2MDE_SRC", _SYSMLV2MDE_SRC_DEFAULT))
+    if not (src / "sysmlv2mde" / "parser.py").is_file():
+        return None
+    sys.path.insert(0, str(src))
+    try:
+        from sysmlv2mde.export import build_export
+        from sysmlv2mde.parser import parse_file
+        return parse_file, build_export
+    except ImportError:
+        return None
+    finally:
+        sys.path.remove(str(src))
 
 
-def parse_part_blocks(text: str) -> list[dict]:
-    """Return [{ident, type, attrs:{}}] for every `part X : T { ... }` block."""
-    blocks = []
-    for m in _PART_RE.finditer(text):
-        ident, ptype = m.group(1), m.group(2)
-        depth, i, n = 0, m.end() - 1, len(text)
-        while i < n:
-            if text[i] == "{":
-                depth += 1
-            elif text[i] == "}":
-                depth -= 1
-                if depth == 0:
-                    break
-            i += 1
-        body = text[m.end():i]
-        attrs = {k: _parse_value(v) for k, v in _BIND_RE.findall(body)}
-        blocks.append({"ident": ident, "type": ptype, "attrs": attrs})
-    return blocks
+def load_candidates_export() -> tuple[dict, str]:
+    """The D4 structured export of candidates.sysml, and a label for its source."""
+    mde = _import_sysmlv2mde()
+    if mde is not None:
+        parse_file, build_export = mde
+        doc = build_export(parse_file(CANDIDATES_SYSML),
+                           source_file=CANDIDATES_SYSML.name, generated_utc="")
+        return doc, "live sysmlv2mde parse of " + CANDIDATES_SYSML.name
+    if not CANDIDATES_EXPORT.is_file():
+        raise SystemExit(
+            f"{CANDIDATES_EXPORT.name} not found and sysmlv2mde is not importable. Install "
+            "SysMLv2MDE or set SYSMLV2MDE_SRC, or run: "
+            "sysmlv2mde candidates.sysml --view structured-export")
+    doc = json.loads(CANDIDATES_EXPORT.read_text(encoding="utf-8"))
+    if str(doc.get("schema_version", "")).split(".")[0] != "1":
+        raise SystemExit(f"{CANDIDATES_EXPORT.name}: unsupported schema_version "
+                         f"{doc.get('schema_version')!r} (expected 1.x)")
+    if CANDIDATES_SYSML.stat().st_mtime > CANDIDATES_EXPORT.stat().st_mtime:
+        print(f"WARNING: {CANDIDATES_SYSML.name} is newer than {CANDIDATES_EXPORT.name} "
+              "-- the export may be stale; regenerate it with "
+              "`sysmlv2mde candidates.sysml --view structured-export`.")
+    return doc, f"{CANDIDATES_EXPORT.name} (generated {doc.get('generated_utc', '?')})"
+
+
+def part_blocks_from_export(doc: dict) -> list[dict]:
+    """Return [{ident, type, attrs:{}}] for every part usage in the export.
+
+    attrs holds each `:>>` redefinition's typed value (number / string /
+    boolean / reference), falling back to its raw text. Part usages nested in a
+    part usage or directly in a `part def` body are included too (same set the
+    retired regex matched, minus commented-out blocks).
+    """
+    out: list[dict] = []
+
+    def emit(p: dict) -> None:
+        attrs: dict = {}
+        for a in p.get("attributes", []):
+            v = a.get("value")
+            if a.get("kind") != "redefinition" or v is None:
+                continue
+            attrs[a["name"]] = next(
+                (v[k] for k in ("number", "string", "boolean", "reference") if k in v),
+                v["raw"])
+        out.append({"ident": p["name"], "type": p.get("type_ref") or "", "attrs": attrs})
+        for child in p.get("parts", []):
+            emit(child)
+
+    def walk(pkg: dict) -> None:
+        for p in pkg.get("parts", []):
+            emit(p)
+        for pd in pkg.get("part_defs", []):
+            for p in pd.get("parts", []):
+                emit(p)
+        for sub in pkg.get("packages", []):
+            walk(sub)
+
+    for pkg in doc["model"]["packages"]:
+        walk(pkg)
+    return out
 
 
 # SysML part-def type → component category label
@@ -431,8 +498,11 @@ def _fits_footprint(part, deck) -> tuple:
 
 
 def load_model():
-    """Parse airframes, payload component candidates, and battery candidates from candidates.sysml."""
-    blocks = parse_part_blocks(CANDIDATES_SYSML.read_text(encoding="utf-8"))
+    """Load airframes, payload component candidates, and battery candidates from candidates.sysml
+    (via its SysMLv2MDE structured export -- see load_candidates_export)."""
+    doc, source = load_candidates_export()
+    print(f"Model source          : {source}")
+    blocks = part_blocks_from_export(doc)
 
     airframes: list[Airframe] = []
     components: dict[str, list[Component]] = {c: [] for c in _CATEGORY_BY_TYPE.values()}

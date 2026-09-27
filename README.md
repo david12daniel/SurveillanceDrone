@@ -91,6 +91,8 @@ receivers, and ground video receivers. To add an option, add a typed usage here
 A high-fidelity multirotor **endurance model integrated with the SysML model** — it *reads*
 `candidates.sysml`, runs a holistic configuration sweep, and *writes back* ranked results.
 
+- **Model input:** a real SysML v2 parse of `candidates.sysml` via SysMLv2MDE — live when `sysmlv2mde` is importable (or `SYSMLV2MDE_SRC` / the sibling `../SysMLv2MDE/src` checkout exists), otherwise the committed structured export `candidates.export.json`. Regenerate that file after any `candidates.sysml` edit: `sysmlv2mde candidates.sysml --view structured-export` (the script warns if it looks stale).
+
 - **Physics:** momentum / actuator-disk theory + a forward-flight parasitic-drag term (same family as eCalc; FoM 0.65, η 0.80, ρ 1.225, Cd 1.0). Reports hover, cruise, and headwind endurance + a per-motor thrust feasibility check.
 - **Compatibility filtering (executes the model's rules):** **P1** battery↔airframe cell-count. DVR compatibility filter removed (DVR dropped from architecture 2026-07-05 — SBC handles recording).
 - **Cost + ground station:** per-component + drone + total-system cost, with bundled BNF/PNP peripherals at $0. The **ground video receiver is matched per-airframe to the VTX video format** (analog VRX for analog VTX; DJI/Walksnail goggles for digital air units).
