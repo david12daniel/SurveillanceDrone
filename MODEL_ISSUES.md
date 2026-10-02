@@ -142,7 +142,18 @@ any tool previously.
    22.2 V/14.8 V (3.7 V/cell average). 4S 12000mAh has only one confirmed product
    (Lumenier NAV Amprius, sold out as of 2026-06); alternatives exist at 4S 10Ah.
 
-7. **RESOLVED (2026-08-11) — R3_CAM_FOV restated as a ground-swath floor; new mission
+7. **RESOLVED (2026-07-10) — FC firmware choice: ArduPilot ArduCopter ≥ 4.5.**
+    Previously OPEN as "ArduPilot Copter vs PX4" (2026-07-01). The autonomy-contract
+    build (`analysis/autonomy_sim/`, §C26) is built and tested on ArduCopter AUTO/GUIDED,
+    so David selected ArduPilot ArduCopter ≥ 4.5 on 2026-07-10. `AF3a.fcFirmware` in
+    `candidates.sysml` was updated from `"TBD"` to `"ArduPilot ArduCopter >= 4.5 —
+    SELECTED 2026-07-10"`. The choice affects GCS setup (QGroundControl tuning
+    profiles — Mission Planner is Windows-only, the laptop is a MacBook Air) and the
+    Phase 3 SBC MAVLink integration, but is a configuration choice, not a procurement
+    item, so no ordering impact. See `SELECTED_COMPONENTS.md` for the formal record.
+
+
+8. **RESOLVED (2026-08-11) — R3_CAM_FOV restated as a ground-swath floor; new mission
    requirement R9 (area coverage) added.** *(Was OPEN 2026-07-29: the ≥30° HFOV form was
    violated by the selected 18 mm lens.)*
    The thermal lens was changed **13 mm → 18 mm** (`T13`, `candidates.sysml`; see
@@ -188,7 +199,7 @@ any tool previously.
    Requirements pillar and all `satisfy` statements (see its header), and this change touched
    nothing else. *Still to sync:* the SSS export `REQUIREMENTS_EXPORT_26_06_30.md`.
 
-8. **RESOLVED (2026-08-11) — the two SSS §3.7 failsafe parameter sets captured as
+9. **RESOLVED (2026-08-11) — the two SSS §3.7 failsafe parameter sets captured as
    requirements: new `R6_FS_BATT` / `R7_FS_LINK`.** *(Closes TASKS.md 0.2/0.3; both had
    sat as "TBD"/"open" since the requirements were first written.)*
 
@@ -244,7 +255,7 @@ any tool previously.
    export). TASKS.md 0.2 and 0.3 marked done; a new D2.17 task added for the deferred
    dynamic-reserve idea.
 
-9. **RESOLVED (2026-08-12) — UC-11 operator override authority modeled and
+10. **RESOLVED (2026-08-12) — UC-11 operator override authority modeled and
    implemented.** *(Closes TASKS.md 0.5 / Mission Control task #8; decision itself
    was made 2026-08-06 in `analysis/operator_override_UC11.md`, David approved
    proceeding to modeling + implementation 2026-08-12.)*
@@ -305,7 +316,7 @@ any tool previously.
    the analysis doc are implementation notes, not formal model requirements), so
    `analysis/requirements_traceability.csv` needed no regeneration.
 
-10. **RESOLVED (2026-08-12) — D2.8 `adjustOrbit` implemented; D2.9's loiter budget
+11. **RESOLVED (2026-08-12) — D2.8 `adjustOrbit` implemented; D2.9's loiter budget
     ported to the live `DroneMissionApp` repo.** *(Closes TASKS.md D2.8/D2.9,
     Mission Control tasks #67/#68. Also fixes the stale TASKS.md 0.4 checkbox —
     that decision and D2.9's original patch had already landed via a separate
@@ -421,7 +432,7 @@ any tool previously.
     unaffected. Worth knowing only because the mount angle is now load-bearing in
     software: the standoff geometry above depends on it.
 
-11. **RESOLVED (2026-08-12) — the thermal analysis layer now evaluates the AS-BUILT
+12. **RESOLVED (2026-08-12) — the thermal analysis layer now evaluates the AS-BUILT
     45° tilt, not nadir.** *(David approved the `model.sysml` change 2026-08-12,
     immediately after it was flagged in item 10.)*
 
@@ -474,7 +485,7 @@ any tool previously.
     surrounding file's proven idiom. **Worth opening `model.sysml` in the editor to
     confirm clean diagnostics before relying on it.**
 
-12. **RESOLVED (2026-08-12) — full analysis sweep for the 45° mount tilt (items
+13. **RESOLVED (2026-08-12) — full analysis sweep for the 45° mount tilt (items
     10/11 above), plus `R3_CAM_COST` raised to 720 USD.** *(David requested a full
     rerun of the analysis suite to confirm everything accounts for the 45° mount;
     approved the cost-cap change separately, same day.)*
@@ -539,7 +550,7 @@ any tool previously.
     px). Same defect class as items 10/11, just a different file; corrected using the
     already-approved numbers, no new derivation.
 
-13. **RESOLVED (2026-08-12) — second sweep pass found four more nadir-figure
+14. **RESOLVED (2026-08-12) — second sweep pass found four more nadir-figure
     references in live (non-dated-snapshot) documents.** *(David asked "what other
     analyses are impacted by the 45 degree look-down angle?" after item 12; this is
     that answer.)* No new computation — every fix below just propagates the
@@ -589,7 +600,7 @@ any tool previously.
     checkout) was already fixed for 45° per item 10 — not re-checked here since it
     isn't accessible from this working directory.
 
-14. **RESOLVED (2026-08-12) — `build123d` import fixed in this environment; all
+15. **RESOLVED (2026-08-12) — `build123d` import fixed in this environment; all
     four CAD scripts re-executed, item-13's "not verified by execution" gap closed.**
     *(David: "why would \[the build123d failure\] be impacted by the 45 degree
     look-down change... go ahead and \[fix it\]" — it turned out not to be related
@@ -641,20 +652,7 @@ any tool previously.
 
 ---
 
-15. **RESOLVED (2026-07-10) — FC firmware choice: ArduPilot ArduCopter ≥ 4.5.**
-    Previously OPEN as "ArduPilot Copter vs PX4" (2026-07-01). The autonomy-contract
-    build (`analysis/autonomy_sim/`, §C26) is built and tested on ArduCopter AUTO/GUIDED,
-    so David selected ArduPilot ArduCopter ≥ 4.5 on 2026-07-10. `AF3a.fcFirmware` in
-    `candidates.sysml` was updated from `"TBD"` to `"ArduPilot ArduCopter >= 4.5 —
-    SELECTED 2026-07-10"`. The choice affects GCS setup (QGroundControl tuning
-    profiles — Mission Planner is Windows-only, the laptop is a MacBook Air) and the
-    Phase 3 SBC MAVLink integration, but is a configuration choice, not a procurement
-    item, so no ordering impact. See `SELECTED_COMPONENTS.md` for the formal record.
-    **Numbered out of chronological order** (2026-07-10, earlier than items 8–14
-    above) — appended here during the 2026-08-12 WSL/Windows repo merge; this item
-    previously sat as a misnumbered duplicate "7." earlier in this list (see item 6
-    above), which the WSL clone's independent edit had already removed. Folding this
-    into strict chronological order is tracked as TASKS.md 0.6.
+
 
 16. **RESOLVED (2026-08-13) — D2.17 distance-adaptive low-battery RTL trigger
     wired in and validated against real SITL; found + fixed two cross-test
