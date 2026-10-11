@@ -17,7 +17,11 @@ from PIL import Image
 # ----------------------------------------------------------------------------
 # Paths
 # ----------------------------------------------------------------------------
-PROJ = r"c:\Users\Josiah Laperriere\Documents\Coding\SurveillanceDrone\SurveillanceDrone"
+# Repo root: use the Windows checkout path when present, else derive from this
+# file's location (Linux/OpenClaw checkout). Env var overrides both.
+PROJ = os.environ.get("SURV_DRONE_PROJ", r"c:\Users\Josiah Laperriere\Documents\Coding\SurveillanceDrone\SurveillanceDrone")
+if not os.path.isdir(PROJ):
+    PROJ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 IMG  = os.path.join(PROJ, "presentation", "assets", "diagrams")
 COMP = os.path.join(PROJ, "presentation", "assets", "components")
 CSV  = os.path.join(PROJ, "analysis", "requirements_traceability.csv")
@@ -556,23 +560,12 @@ section_divider("2", "System Architecture",
     "thermal payload, and an onboard inference computer.")
 
 # ---- Block-definition (composition) view — SysML v2 analog of a BDD ----
+# Model-derived diagram (graphviz render of AerialObservationSystem from
+# model.sysml). This replaces the earlier hand-drawn sysml_box/def_panel
+# version, which read as a hand sketch rather than a model artifact — see
+# apply_slide14_diagram.py / verify_cdr_deck.py. Rebuilds keep this slide.
 s = content_slide("Section 2 · Architecture", "System Composition — Block-Definition View")
-sysml_box(s, Inches(5.02), Inches(1.32), Inches(3.3), Inches(0.68), "AerialObservationSystem")
-vline(s, Inches(6.67), Inches(2.0), Inches(2.2))
-hline(s, Inches(3.545), Inches(9.795), Inches(2.2))
-vline(s, Inches(3.545), Inches(2.2), Inches(2.34))
-vline(s, Inches(9.795), Inches(2.2), Inches(2.34))
-def_panel(s, Inches(0.62), Inches(2.34), Inches(5.85), Inches(4.4), "Drone", [
-    ("platform","Airframe"), ("battery","Battery"), ("antiSpark","AntiSparkFilter"),
-    ("camera","IRCamera"), ("fpvCam","FpvCamera"), ("gps","GpsModule"),
-    ("sbc","SBCPayload"), ("rx","RadioReceiver"), ("vtx","Vtx"), ("ubec","Ubec"),
-    ("vtxAntenna, rxAntennaA/B","Antenna [3]"),
-])
-def_panel(s, Inches(6.87), Inches(2.34), Inches(5.85), Inches(4.4), "GCS", [
-    ("viewingComputer","Laptop"), ("videoRx","Vrx"), ("capture","UsbCap"),
-    ("rcTx","RcTx"), ("laptopLink","TelemetryGroundLink"),
-    ("groundAntenna","Antenna"), ("charger","Charger"),
-])
+framed_image(s, im("system_composition.png"), ML, Inches(1.4), Inches(11.0), Inches(5.25))
 txt(s, ML, Inches(6.82), CW, Inches(0.4),
     [[("Block-definition (composition) view — the SysML v2 analog of a BDD: each ", 10, False, MUTED),
       ("part def", 10, True, MUTED),

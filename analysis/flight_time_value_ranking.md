@@ -21,241 +21,241 @@ Full per-config dataset: [`flight_time_results.csv`](flight_time_results.csv); e
 
 ## Top 34 by endurance-per-dollar
 
-### 1. 34.19 min/$1k — 55.9 min hover · drone $1460 / system $1635 · ✅ R4
+### 1. 35.48 min/$1k — 56.4 min hover · drone $1413 / system $1588 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 2. 34.14 min/$1k — 57.4 min hover · drone $1506 / system $1682 · ✅ R4
+### 2. 35.4 min/$1k — 57.9 min hover · drone $1459 / system $1635 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 3. 33.91 min/$1k — 56.9 min hover · drone $1502 / system $1677 · ✅ R4
+### 3. 34.39 min/$1k — 57.2 min hover · drone $1487 / system $1662 · ✅ R4
 - Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy GREEN V2 6S3P 12Ah Amprius SA10**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 4. 33.89 min/$1k — 58.4 min hover · drone $1548 / system $1724 · ✅ R4
+### 4. 34.36 min/$1k — 58.7 min hover · drone $1533 / system $1709 · ✅ R4
 - Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 12000mAh 6S 21700 Amprius**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 5. 31.03 min/$1k — 48.2 min hover · drone $1379 / system $1554 · ✅ R4
+### 5. 32.29 min/$1k — 48.7 min hover · drone $1332 / system $1507 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 6. 30.83 min/$1k — 49.2 min hover · drone $1421 / system $1596 · ✅ R4
-- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
-- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-- Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
-- Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
-
-### 7. 30.72 min/$1k — 45.2 min hover · drone $1295 / system $1470 · ✅ R4
+### 6. 31.95 min/$1k — 45.5 min hover · drone $1248 / system $1423 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **GNB (Gaoneng) 6S3P 12Ah 21700 Li-ion**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 8. 30.36 min/$1k — 45.9 min hover · drone $1335 / system $1510 · ✅ R4
+### 7. 31.58 min/$1k — 46.2 min hover · drone $1288 / system $1463 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Lumenier NAV 10000mAh 6S 21700 Li-Ion**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 9. 30.31 min/$1k — 45.8 min hover · drone $1337 / system $1512 · ✅ R4
-- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **GNB (Gaoneng) 6S3P 12Ah 21700 Li-ion**
+### 8. 31.31 min/$1k — 49.5 min hover · drone $1406 / system $1581 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy GREEN V2 6S2P 8Ah Amprius SA10**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 10. 30.1 min/$1k — 48.5 min hover · drone $1437 / system $1612 · ✅ R4
+### 9. 31.25 min/$1k — 48.9 min hover · drone $1390 / system $1565 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Upgrade Energy RED V3 6S2P 10Ah Molicel P50B**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 11. 30.04 min/$1k — 46.6 min hover · drone $1377 / system $1552 · ✅ R4
+### 10. 30.75 min/$1k — 46.0 min hover · drone $1322 / system $1497 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **GNB (Gaoneng) 6S3P 12Ah 21700 Li-ion**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
+- Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
+- Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
+
+### 11. 30.48 min/$1k — 46.9 min hover · drone $1362 / system $1537 · ✅ R4
 - Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 10000mAh 6S 21700 Li-Ion**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 12. 29.86 min/$1k — 49.4 min hover · drone $1479 / system $1654 · ✅ R4
+### 12. 30.28 min/$1k — 49.6 min hover · drone $1464 / system $1639 · ✅ R4
 - Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy RED V3 6S2P 10Ah Molicel P50B**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 13. 29.01 min/$1k — 47.3 min hover · drone $1455 / system $1630 · ✅ R4
+### 13. 30.11 min/$1k — 47.7 min hover · drone $1408 / system $1583 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 14. 28.78 min/$1k — 48.1 min hover · drone $1497 / system $1672 · ✅ R4
+### 14. 29.19 min/$1k — 48.4 min hover · drone $1482 / system $1657 · ✅ R4
 - Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy GREEN V1 6S2P 10Ah Samsung 50S**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 15. 27.52 min/$1k — 40.8 min hover · drone $1308 / system $1483 · ✅ R4
+### 15. 28.65 min/$1k — 41.2 min hover · drone $1261 / system $1436 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **iFlight Fullsend 6S 8000mAh EVE INR21700-40PL**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 16. 27.24 min/$1k — 41.6 min hover · drone $1350 / system $1525 · ✅ R4
+### 16. 27.66 min/$1k — 41.8 min hover · drone $1335 / system $1510 · ✅ R4
 - Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **iFlight Fullsend 6S 8000mAh EVE INR21700-40PL**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 17. 26.39 min/$1k — 40.9 min hover · drone $1375 / system $1550 · ✅ R4
+### 17. 27.39 min/$1k — 41.2 min hover · drone $1328 / system $1503 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Lumenier NAV 12000mAh 6S 21700 XT90**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 18. 26.05 min/$1k — 41.5 min hover · drone $1417 / system $1592 · ✅ R4
-- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 12000mAh 6S 21700 XT90**
-- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-- Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
-- Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
-
-### 19. 25.99 min/$1k — 36.7 min hover · drone $1235 / system $1410 · ✅ R4
+### 18. 27.16 min/$1k — 37.0 min hover · drone $1188 / system $1363 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 20. 25.95 min/$1k — 37.5 min hover · drone $1269 / system $1445 · ✅ R4
+### 19. 27.07 min/$1k — 37.8 min hover · drone $1222 / system $1398 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **iFlight Fullsend 6S2P 6000mAh Samsung 30Q**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 21. 25.91 min/$1k — 38.8 min hover · drone $1321 / system $1496 · ✅ R4
+### 20. 26.96 min/$1k — 39.1 min hover · drone $1274 / system $1449 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **GNB 8000mAh 6S2P Samsung 21700 40T**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 22. 25.81 min/$1k — 37.5 min hover · drone $1277 / system $1452 · ✅ R4
+### 21. 26.4 min/$1k — 41.7 min hover · drone $1402 / system $1577 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 12000mAh 6S 21700 XT90**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
+- Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
+- Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
+
+### 22. 26.25 min/$1k — 37.7 min hover · drone $1262 / system $1437 · ✅ R4
 - Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **DOGCOM 6S1P 5000mAh Samsung 50S**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 23. 25.73 min/$1k — 38.3 min hover · drone $1311 / system $1487 · ✅ R4
+### 23. 26.15 min/$1k — 38.5 min hover · drone $1296 / system $1472 · ✅ R4
 - Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **iFlight Fullsend 6S2P 6000mAh Samsung 30Q**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 24. 25.64 min/$1k — 39.4 min hover · drone $1363 / system $1538 · ✅ R4
+### 24. 26.03 min/$1k — 39.6 min hover · drone $1348 / system $1523 · ✅ R4
 - Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **GNB 8000mAh 6S2P Samsung 21700 40T**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 25. 25.01 min/$1k — 37.8 min hover · drone $1335 / system $1510 · ✅ R4
+### 25. 25.97 min/$1k — 38.0 min hover · drone $1288 / system $1463 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Tattu G-Tech 6S 12Ah LiPo 30C**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 26. 24.87 min/$1k — 38.1 min hover · drone $1358 / system $1533 · ✅ R4
+### 26. 25.89 min/$1k — 38.5 min hover · drone $1311 / system $1486 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Pyrodrone Hyperjuice 6S2P 6000mAh Sony VTC6**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 27. 24.71 min/$1k — 38.9 min hover · drone $1400 / system $1575 · ✅ R4
-- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Pyrodrone Hyperjuice 6S2P 6000mAh Sony VTC6**
-- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-- Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
-- Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
-
-### 28. 24.65 min/$1k — 38.3 min hover · drone $1377 / system $1552 · ✅ R4
-- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Tattu G-Tech 6S 12Ah LiPo 30C**
-- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
-- Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
-- Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
-
-### 29. 24.43 min/$1k — 36.1 min hover · drone $1304 / system $1479 · ✅ R4
+### 27. 25.49 min/$1k — 36.5 min hover · drone $1257 / system $1432 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Upgrade Energy RED V3 6S1P 5Ah Molicel P50B**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 30. 24.3 min/$1k — 37.0 min hover · drone $1346 / system $1521 · ✅ R4
-- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy RED V3 6S1P 5Ah Molicel P50B**
+### 28. 25.09 min/$1k — 39.2 min hover · drone $1385 / system $1560 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Pyrodrone Hyperjuice 6S2P 6000mAh Sony VTC6**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 31. 23.83 min/$1k — 34.7 min hover · drone $1281 / system $1456 · ✅ R4
+### 29. 24.99 min/$1k — 38.4 min hover · drone $1362 / system $1537 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Tattu G-Tech 6S 12Ah LiPo 30C**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
+- Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
+- Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
+
+### 30. 24.86 min/$1k — 35.0 min hover · drone $1234 / system $1409 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Lumenier NAV 5000mAh 6S 21700**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 32. 23.67 min/$1k — 35.5 min hover · drone $1323 / system $1498 · ✅ R4
-- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 5000mAh 6S 21700**
+### 31. 24.7 min/$1k — 37.2 min hover · drone $1331 / system $1506 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Upgrade Energy RED V3 6S1P 5Ah Molicel P50B**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
-### 33. 23.6 min/$1k — 36.6 min hover · drone $1374 / system $1549 · ✅ R4
+### 32. 24.56 min/$1k — 36.9 min hover · drone $1327 / system $1502 · ✅ R4
 - Airframe **DarwinFPV X9** (`AF4a`) · Battery **Lumenier NAV 6000mAh 6S 18650**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: TBS M10 GPS (`G6`) · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: (bundled with airframe — no separate purchase) (`GpsBundled`) · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit 🟡: SBC 90x62 on deck 100x60 mm (battery top) — marginal: SBC 90x62 vs deck 100x60 mm (-2 mm) — snug/custom deck, slight overhang
 
-### 34. 23.44 min/$1k — 37.3 min hover · drone $1416 / system $1591 · ✅ R4
+### 33. 24.06 min/$1k — 35.7 min hover · drone $1308 / system $1483 · ✅ R4
+- Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 5000mAh 6S 21700**
+- Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
+- Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
+- Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
+
+### 34. 23.8 min/$1k — 37.5 min hover · drone $1401 / system $1576 · ✅ R4
 - Airframe **iFlight Chimera9 ECO** (`AF3a`) · Battery **Lumenier NAV 6000mAh 6S 18650**
 - Thermal camera: PurpleRiver Mini 640 (`T13`) · SBC: NanoPi M5 (4 GB) (`SBC3`) · DVR: (none — SBC records) (`—`)
-- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: GEPRC ELRS Nano 2.4G PA100 (`GEPRCNanoPA100`)
+- VTX: *included with airframe* · FPV cam: *included with airframe* · GPS: *included with airframe* · RX: (bundled with airframe — no separate purchase) (`RxBundled`)
 - Ground receiver (CVBS VTX): **Skydroid 150CH 5.8GHz True-Diversity UVC Receiver** ($44) · GCS subtotal $175
 - Physical fit ✅: SBC 90x62 on deck 110x70 mm (battery top) — fits (SBC on a raised tier; battery on deck) — 8 mm spare
 
