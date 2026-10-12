@@ -1,9 +1,31 @@
 # CDR Briefing Preparation — Task [0.1] / #85
 
-**Prepared:** 2026-09-17
+**Prepared:** 2026-09-17 · **Reconciled to the 41-slide deck:** 2026-10-12
 **Purpose:** Prepare for the CDR briefing to Lisa. All ordering is blocked on this gate.
-**Deck:** `presentation/build_cdr.py` → `CDR_Thermal_Surveillance_Drone.pptx`
-**Due:** Original 2026-08-03 (now 45 days overdue — slide 14 bottleneck just cleared Sep 15)
+**Deck:** `presentation/build_cdr.py` → `CDR_Thermal_Surveillance_Drone.pptx` (41 slides)
+**Due:** Original 2026-08-03. Deck is verified current as of 2026-10-11 (see §0); slide-numbering below is the PHYSICAL deck order (1–41), verified against the regenerated deck.
+
+---
+
+## 0. Deck Status (verified 2026-10-11, re-verified nightly 2026-10-12)
+
+- `presentation/verify_cdr_deck.py` — automated verifier. **All checks PASS** on the current deck:
+  deck opens cleanly (41 slides); slide 14 has exactly one picture, byte-identical to
+  `presentation/assets/diagrams/system_composition.png` (md5 `4067545fb80e`), no legacy hand-drawn
+  labels, caption/title preserved, no caption overlap, no dangling rels; RTM CSV 57 rows, 0 blank
+  verification cells. Full writeup: `presentation/cdr_deck_verification.md`.
+- `build_cdr.py` emits slide 14 natively (framed_image) — rebuilds are idempotent and preserve the
+  diagram. PROJ resolves from `__file__`, so the deck builds from either checkout.
+- **Nightly fix applied 2026-10-12:** Analysis-2 slide (30) and the camera hardware card (26) still
+  showed the OLD 13 mm lens with 13 mm-nadir GSD / pixels-on-target. The model has used the **18 mm
+  lens (HFOV 24.1°)** since the R3_CAM_FOV restatement, and the as-built **45° mount tilt**
+  (OffNadirGsd, mountTilt_deg = 45, model.sysml) since 2026-08-12. Slides 26/30 now state 18 mm and
+  show along-range pixels-on-target (4.2 px recognize @ 90 m / 3.1 px detect @ 120 m) — the honest
+  as-built figures, matching model.sysml `ThermalRecognitionCheck` / `ThermalDetectionCheck`.
+  Verdicts unchanged (R3.1 ✓ comfortable, R3.2 ✓ thin) — see slide 30 talking points.
+- **Known remaining deck note (do NOT "fix" unilaterally):** the deck's hard-coded "CDR · 2026-07-26"
+  date stamp on every slide is the planned review date, not today's date. If David re-schedules, the
+  date should be updated in `build_cdr.py` and the deck rebuilt. Cosmetic; not a data issue.
 
 ---
 
@@ -11,207 +33,296 @@
 
 Verify these BEFORE the meeting:
 
-- [ ] **Slide 14 (System Composition)** — The image was replaced Sep 15 via `apply_slide14_diagram.py`. Confirm the replacement looks correct in the real deck (open the .pptx, verify the graphviz-rendered diagram is present, the 33 old hand-drawn shapes are gone, and the caption text is preserved).
-- [ ] **Deck is current** — `build_cdr.py` generates the full deck. If you modified the model, requirements, or BOM since the last build, re-run `build_cdr.py` to pick up changes.
-- [ ] **Cost slide** — Verify the $2,500 budget constraint is still met (BOM prices can drift). Run `analysis/flight_time_model.py` to confirm the latest selected-configuration cost.
-- [ ] **Open items slide** — Check that resolved items have been cleared from the open-items list. Task 14 (diagram export) is done — remove from open items.
-- [ ] **All RTM tables filling** — Verify `analysis/requirements_traceability.csv` has no blank verification-status cells.
-- [ ] **Lisa's background** — Who is Lisa? (Not documented in the repo.) If she's a domain-area stakeholder (not a project manager), tailor emphasis to her interest areas. If she's a funder/approver, emphasize budget, risk, and schedule.
-- [ ] **Logistics** — Confirm meeting duration. The deck has ~30 slides; allow 45–60 min.
+- [x] **Slide 14 (System Composition)** — CLOSED 2026-10-11. Diagram is model-derived
+  (graphviz from model.sysml, General View of `Architecture::AerialObservationSystem`, 6 interface
+  connections), embedded natively by `build_cdr.py`, md5-verified identical to
+  `presentation/assets/diagrams/system_composition.png`. No manual step remains.
+- [x] **Deck is current** — rebuilt 2026-10-11 from `build_cdr.py` (41 slides) and re-verified
+  2026-10-12 after the Analysis-2 lens/GSD correction; `verify_cdr_deck.py` ALL PASS.
+- [x] **Cost slide** — Analysis 5 (slide 33) shows **≈ $1,848 committed system cost, ≈ 26 % margin**
+  under the $2,500 R4 cap; all four phases ≈ $2,007, also under cap. The old "$2,397 / $103 margin"
+  figure in earlier prep notes is OBSOLETE (it predated the exclusion of the laptop + reusable
+  support gear from the R4 basis).
+- [x] **Open items slide** — slide 40 reflects the current board: 7 rows (RTL reserve value TBR,
+  FC firmware RESOLVED, deck/battery dims TBR, SBC mount design, AF5 RETIRED, Phase 4 pricing TBD,
+  empirical validation Action). Bootstrap dataset (D1.2) and labeling/augmentation (D1.3) are DONE
+  and no longer listed.
+- [x] **All RTM tables filling** — slides 10–12; RTM CSV 57 rows, 0 blank verification cells
+  (verifier PASS). RTM now includes **R3_BHV_SBC_FAILSAFE** (allocated to fcSoftware).
+- [ ] **Lisa's background** — Who is Lisa? (Not documented in the repo.) If she's a domain-area
+  stakeholder (not a project manager), tailor emphasis to her interest areas. If she's a
+  funder/approver, emphasize budget, risk, and schedule.
+- [ ] **Logistics** — deck is 41 slides incl. 5 section dividers; the ~30 content slides carry the
+  briefing. Allow **45–60 min**; the recommended flow in §4 stays within that.
 
 ---
 
-## 2. Slide-by-Slide Talking Points
+## 2. Slide-by-Slide Talking Points (physical slide numbers)
 
-### Section 0 — Introduction (3 slides)
+> Section dividers (slides 6, 13, 21, 24, 35) are one-line transitions — do not dwell.
 
-**Slide 1: CDR Purpose & Agenda**
-- Key message: "This is a review of the COMPLETE design — we're asking for approval to procure and build, not for feedback on whether the design is ready."
-- Agenda: Overview → Requirements → Architecture → Behavior → Analyses → Risk/Closure
-- Duration expectation: 45-60 min
+### Section 0 — Introduction (slides 1–3)
 
-**Slide 2: CDR Data-Item Content — Coverage Map**
-- Map the deck to MIL-STD-1521B / IEEE 15288.2 data items
-- Show that every required CDR data item has a slide
-- Quick reference; don't dwell unless asked
+**Slide 1: Title — CRITICAL DESIGN REVIEW (CDR)**
+- Read the header data: detailed design baseline, requirements traceability, verifying analyses;
+  MBSE (SysML v2); content per MIL-STD-1521B App. E / IEEE 15288.2; budget ≤ $2,500 (R4);
+  design maturity "detailed design complete (pre-fabrication)".
+- Key message: "This is a review of the COMPLETE design — we're asking for approval to procure and
+  build, not for feedback on whether the design is ready."
 
-**Slide 3: Mission & Concept of Operations**
-- Single-paragraph elevator pitch: "Autonomous thermal surveillance UAS — 30+ min endurance, 2.8 km range, detect deer/turkey/human thermal signatures at 90-120 m, classify via onboard AI, report back via WFB-ng digital datalink"
-- Reference the OV-1 graphic on the next slide
+**Slide 2: CDR Purpose & Agenda**
+- Purpose: demonstrate the detailed design meets mission + derived requirements, interfaces defined,
+  design verified by analysis, ready to proceed to fabrication/integration.
+- Agenda: Overview → Requirements → Architecture → Behavior → Analyses → Risk/Closure.
 
-### Section 1 — System Overview (1 slide)
+**Slide 3: CDR Data-Item Content — Coverage Map**
+- Maps the deck to MIL-STD-1521B / IEEE 15288.2 data items. Quick reference; don't dwell unless asked.
 
-**Slide 4: Operational Concept (OV-1)**
-- Walk the diagram: drone takes off → autonomous waypoints → thermal scanning → onboard detect/classify → POI report back
-- Key constraint: the OV-1 image is at `presentation/assets/diagrams/` — verify it exists and renders correctly
+### Section 1 — System Overview (slides 4–5)
 
-### Section 1 — Requirements (5 slides)
+**Slide 4: Mission & Concept of Operations**
+- Elevator pitch: "Autonomous thermal surveillance UAS — 30+ min endurance, 2.8 km range, detect
+  deer/turkey/human thermal signatures at 90–120 m, classify via onboard AI, report back."
+- Operating point: 90–120 m AGL (R1), 2.23 m/s ground speed (R2).
 
-**Slide 5: Requirements — Decomposition by Subsystem**
-- Top-down: system-level R1-R10 → subsystem allocation
-- Show the traceability web is modeled, not manual
-- Highlight: R3_CAM_FOV (swath ≥42 m at 120 m), R9/R10 (30/60 acres per sortie)
+**Slide 5: Operational Concept (OV-1)**
+- Walk the diagram: drone takes off → autonomous waypoints → thermal scanning → onboard
+  detect/classify → POI report back. Callouts trace to R1 · R2 · R3 · R7. Frame at
+  `presentation/assets/diagrams/` — verified to render.
 
-**Slide 6: Mission Requirements (R1-R8)**
-- Read the eight top-level requirements
-- Each with: requirement text, allocated-to, verification method
-- Point out which are HARD vs. STRETCH (R9/R10, R8)
+### Section 1 — Requirements (slides 6–12)
+
+**Slide 6: (Divider) Requirements & Traceability**
+- One-liner: eight mission requirements decomposed into subsystem requirements, each allocated to a
+  component via a formal satisfy link. Source: `analysis/requirements_traceability.csv` (SysML v2).
+
+**Slide 7: Requirements — Decomposition by Subsystem**
+- Top-down: system-level R1–R10 → subsystem packages; the traceability web is modeled, not manual.
+- Highlight: R3_CAM_FOV (≥ 42 m swath at 120 m — T13 @ 18 mm gives 51.2 m, 22 % margin),
+  R9/R10 (30/60 acres per sortie).
+
+**Slide 8: Mission Requirements (R1–R8)**
+- SysON export table; V-methods I/A/D/T; at CDR: A complete for all; T/D planned (see V&V).
 - **Key callouts:**
-  - **R4_BUDGET = $2,500** — we're at ~$2,397 (Analysis 5)
-  - **R7_RANGE = 2.8 km** — RF link budget shows +11.3 dB margin (Analysis 3)
-  - **R6_ENDURANCE = 30 min** — modeled at ~58.6 min hover (Analysis 1)
+  - **R4_BUDGET = $2,500** — committed system ≈ $1,848 (Analysis 5), 26 % margin
+  - **R7_RANGE = 2.8 km** — 4/4 RF links pass with ≥ 10 dB margin (Analysis 3)
+  - **R6_ENDURANCE = 30 min** — modeled at 58.4 min hover (Analysis 1)
 
-**Slide 7: Traceability Approach & Coverage**
-- Show the SysML-modeled RTM (not hand-maintained)
-- Down-trace: requirements → part defs with satisfy links
-- Up-trace: every component → which requirements it fulfills
-- Coverage: all 10 requirements satisfied (verify no blanks)
+**Slide 9: Traceability Approach & Coverage**
+- Up-trace: each subsystem requirement subsets its mission requirement (e.g., R3_CAM_RES ⊂ R3,
+  cost reqs ⊂ R4). Down-trace: each component part def carries satisfy links; the RTM is derived,
+  not hand-maintained. All 10 requirements satisfied, no blanks.
 
-**Slide 8-10: RTM Detail Tables**
-- Grouped by subsystem (airframe/propulsion, avionics/GCS, payload/software)
-- Reference tables, not presentation material — skip unless Lisa asks for detail
+**Slides 10–12: RTM Detail Tables (Airframe & Autonomy / Battery & Camera / SBC & Ground)**
+- Reference tables — skip unless Lisa asks for detail.
+- **Slide 10 note:** R3_BHV_SBC_FAILSAFE now appears (autonomous behavior reverts to a safe state;
+  allocated to fcSoftware) — the formalized SBC-failure fallback (complete waypoint → RTL),
+  developed 2026-08-15 and confirmed against ArduCopter 4.7.0 source + SITL probe.
+- **Slide 11 note:** R3_CAM_COST restated to ≤ $720 (raised from $600) — the ordered T13 with 18 mm
+  lens is $640 + $60 shipping = $700, inside the cap.
+- **Slide 12 note:** R4_GCS_SWEEP_SPACING (line spacing ≤ 90 % of swath) is the new flight-planning
+  requirement behind the R9/R10 area budget.
 
-### Section 2 — System Architecture (7 slides)
+### Section 2 — System Architecture (slides 13–20)
 
-**Slide 11: System Composition — Block-Definition View**
-- **This is Slide 14 of the actual deck** (just updated Sep 15)
-- Shows: `AerialObservationSystem` composed of `Drone` + `GCS` with 6 interface connections
-- Key message: "This is the SysML v2 analog of a BDD — model-derived, not hand-drawn"
-- The diagram is graphviz-rendered from `model.sysml`; the GitHub reference is `presentation/assets/diagrams/system_composition.png`
+**Slide 13: (Divider) System Architecture**
+- One-liner: drone + laptop-based GCS joined by three wireless RF links; the drone integrates
+  propulsion, power, thermal payload, and an onboard inference computer.
 
-**Slide 12: System Context — Aerial Observation System**
-- IBD showing external actors (environment, operator, airspace)
-- Focus on the external interfaces (RF links, GPS constellation)
+**Slide 14: System Composition — Block-Definition View**
+- **The money architecture slide.** `AerialObservationSystem` = `Drone` + `GCS` with 6 interface
+  connections (videoDownlinkRf, elrsTelemetry, ctrlUplinkBackupRf, ohdDownlinkRfA/B, batteryCharge).
+- Key message: "SysML v2 analog of a BDD — model-derived, not hand-drawn." Phase-4 OpenHD parts
+  omitted for the committed build.
 
-**Slide 13: Drone — Internal Block Diagram**
-- The core architecture: FC (BLITZ F7) ↔ SBC (NanoPi M5) ↔ Thermal (PurpleRiver T13)
-- Three serial/PWM paths: analog FPV → 5.8 GHz VTX, ELRS telemetry, MAVLink over UART
-- Power chain: 6S Li-Ion → anti-spark → UBEC (12V → SBC) / direct (FC)
+**Slide 15: System Context — Aerial Observation System**
+- IBD: drone ↔ GCS wireless interfaces + operator actor. MacBook Air is an existing external actor,
+  excluded from system cost.
 
-**Slide 14: Onboard Compute (SBC) — Software Architecture**
-- The key Phase 2/3 slide
-- Show the software stack: Ubuntu → V4L2 capture → RKNN inference → mission_app.py → pymavlink → FC
-- Highlight: no ROS needed, zero middleware overhead
-- This diagram should show the D-2/D-1 software partition
+**Slide 16: Drone — Internal Block Diagram**
+- Core architecture: FC (BLITZ F7) ↔ SBC (NanoPi M5) ↔ Thermal (PurpleRiver T13, nose-mounted).
+- Paths: analog FPV → 5.8 GHz VTX; ELRS telemetry; MAVLink over UART. Power chain:
+  6S Li-Ion → anti-spark (XT60) → UBEC (12 V → SBC) / direct (FC).
 
-**Slide 15: GCS — Internal Block Diagram**
-- MacBook running QGC + WFB-ng decode
-- VRX6 UVC receiver + patch antenna
-- Hermes ELRS USB dongle for laptop telemetry link
-- TX12 Mark II as manual backup
+**Slide 17: Onboard Compute (SBC) — Software Architecture**
+- The key Phase 2/3 slide. Stack: Ubuntu → V4L2 capture → RKNN inference → mission_app.py →
+  pymavlink → FC. **No ROS, zero middleware overhead.** Amber boxes = to-be-developed software
+  (D-1 thermalModel · D-2 missionApp). NanoPi M5: RK3576, 6 TOPS NPU, passive-cooled ≤ 10 W
+  (R4_SBC_PWR / R4_SBC_TEMP).
 
-**Slide 16: Interface Design**
-- The big signal diagram: all RF links, baud rates, protocols
-- Highlight: dual-redundant control links (ELRS laptop primary + TX12 backup)
+**Slide 18: Ground Control Station — Internal Block Diagram**
+- MacBook Air running QGroundControl 4.4+; VRX6 UVC video receiver + TrueRC patch; Hermes ELRS USB
+  dongle (primary laptop link); TX12 Mark II as manual backup. No goggles in the architecture.
 
-**Slide 17: Standards Profile (StdV-1)**
-- Quick reference to standards used (MAVLink, CRSF, UVC, WFB-ng, etc.)
-- Only dwell if asked about certification/compliance
+**Slide 19: Interface Design (Internal & External)**
+- The big signal diagram: all RF links, baud rates, protocols. Highlight dual-redundant control
+  links (ELRS laptop primary + TX12 backup) and the modeled compatibility rules (P1 cell-count rule
+  etc.) enforced by the configuration sweep.
 
-### Section 3 — Functional & Behavioral Design (2 slides)
+**Slide 20: Standards Profile (StdV-1)**
+- Mature open/de-facto protocols (MAVLink, CRSF, UVC, WFB-ng, ELRS) — no proprietary lock-in on the
+  committed build. Only dwell if asked about certification/compliance.
 
-**Slide 18: Flight-Mode State Machine & Failsafes**
-- State machine: MANUAL → GUIDED (takeoff) → AUTO (waypoints) → LOITER (investigate) → RTL
-- Failsafe transitions: link loss → RTL, low battery → RTL, SBC heartbeat loss → complete waypoint → RTL
-- **Decision needed:** Lisa verifies these behavior choices are acceptable
+### Section 3 — Functional & Behavioral Design (slides 21–23)
 
-**Slide 19: Autonomous Detect · Investigate · Classify Loop**
-- The autonomy loop: scan → detect candidate → loiter → classify → log → resume
-- 30-second loiter budget per investigation, then give up
-- Operator override via QGC mode switch at any point
+**Slide 21: (Divider) Functional & Behavioral Design** — state machine + autonomy loop.
 
-### Section 4 — Engineering Analyses (9 slides)
+**Slide 22: Flight-Mode State Machine & Failsafes**
+- Nominal path: disarmed → armed → flying (route execution) → returnToLaunch → land.
+- Failsafe transitions: **link loss → RTL** (R7_BHV_LINKLOSS_RTL), **low battery → RTL**
+  (R6_BHV_RTL_RESERVE). Realization: ArduPilot FS_* / BATT_* parameters; executeRtl /
+  touchDownAndDisarm are modeled actions.
+- **Open policy to name aloud:** the RTL reserve-energy threshold value is still TBR (tracked as an
+  open item on slide 40) — policy set before first autonomous flight, per R6_BHV_RTL_RESERVE.
+- **Decision needed:** Lisa verifies these behavior choices are acceptable.
 
-**Slide 20: Detailed Design — Selected Configuration**
-- Photo gallery of selected hardware (airframe, thermal, SBC, radio, battery)
-- Show the actual components so Lisa can visualize the build
+**Slide 23: Autonomous Detect · Investigate · Classify Loop**
+- SweepAndDetect (UC-5a) → InvestigateAndClassify (UC-5b): scan → detect candidate → reroute →
+  loiter → classify → log → resume. 30-second loiter budget per investigation, then give up.
+  Operator override via QGC mode switch at any point. (Both behaviors are implemented and
+  contract-tested — D2.8/D2.9 in the mission app.)
 
-**Slide 21: Photo Gallery (continued)**
-- Remaining components
+### Section 4 — Engineering Analyses (slides 24–34)
 
-**Slide 22: Analysis 1 — Endurance (Flight Time)**
-- **~58.6 min hover** (BAT10 Amprius 12 Ah, 6S)
-- The key assumptions: 950 g all-up mass, 193 W hover power
-- Sensitivity: +100 g → -4.6 min; wind adds 15-25% drag power
-- 2x GNB dev packs (BAT22) will be used for shakedown; Amprius saved for mission flights
-- **Risk to flag:** BAT09 already OOS; BAT10 Amprius is stock-fragile
+**Slide 24: (Divider) Engineering Analyses** — four quantitative analyses + detail slides.
 
-**Slide 23: Endurance vs. Cost — Full Configuration Trade Space**
-- The scatter plot from the model sweep
-- Our pick is on the Pareto frontier
-- Quick reference — the decision is already made
+**Slide 25: Detailed Design — Selected Configuration**
+- Reference build: Chimera9 ECO + 6S 12 Ah Amprius + Mini 640 + NanoPi M5 → ≈ 58 min hover,
+  ≈ $1,850 committed system cost (≤ $2,500 R4), SBC fits the deck. Down-selected from ~110 real
+  market candidates; version-controlled, machine-enforced in the analysis.
 
-**Slide 24: Analysis 2 — Thermal Detection (Johnson Criteria)**
-- **R3_1 (detect @120 m): 6.25 px** nadir → **3.13 px** along-range at 45° tilt → PASS (3 px threshold)
-- **R3_2 (recognize @90 m): 8.33 px** nadir → **4.17 px** along-range at 45° tilt → PASS (4 px threshold)
-- Key caveat: the along-range numbers are thin — field verification is critical (TBD task 2.17)
-- The 45° mount tilt was modeled 2026-08-12 per TASKS.md 0.15; margin is honest now
+**Slide 26: Selected Hardware — Air Vehicle & Payload**
+- Photo gallery: Chimera9 ECO 9" (PNP, 729 g, 6S, XING-E 2809) · Amprius 6S 12 Ah (XT60, ~57 min) ·
+  **PurpleRiver Mini 640 — 640×512, 12 µm, 18 mm lens (corrected 2026-10-12), USB-UVC** ·
+  NanoPi M5 (6 TOPS NPU, ≤ 10 W passive, 90×62 mm) · iFlight True-Diversity ELRS · iFlight
+  Anti-Spark Filter (XT60, 150 A).
 
-**Slide 25: Analysis 3 — RF Link Budget (2.8 km / R7)**
-- ELRS (control/telemetry): +11.8 dB margin @ 2.8 km
-- Analog FPV (video): +15 dB margin with patch antenna
-- WFB-ng (future digital): +11.3 dB margin, reliable to ~3.3 km
-- **Worst-case:** Largest Free-Space Path Loss at 2.8 km for 5.8 GHz = 116.5 dB — all three links stack positive margin
+**Slide 27: Selected Hardware — Ground Control & Support**
+- TX12 Mark II (ELRS 2.4 GHz, EdgeTX) · TrueRC X-AIR 5.8 MK II (10 dBic patch, 120°, RHCP) ·
+  HOTA D6 Pro (AC 200 / DC 650 W dual). Also in kit: Skydroid 150CH UVC VRX ($44), Hermes ELRS
+  dongle ($16), GPS (iFlight BLITZ M10, bundled), MacBook Air GCS (existing).
 
-**Slide 26: Analysis 4 — Physical Integration ("Does It Fit?")**
-- Top-plate bolt pattern: assumed 30.5 mm (standard 30.5×30.5 stack)
-- SBC deck clearance above battery: ~8 mm spare
-- Thermal mount: lens tip ~31 mm below plate — verify landing gear clearance
-- **Open:** bolt pattern needs caliper confirmation (task 1.23)
+**Slide 28: Analysis 1 — Endurance (Flight Time)**
+- Momentum/actuator-disk (blade-element) model, 34 compatible configs swept (T13 + M5 fixed).
+- **58.4 min hover** at ~15 % throttle (16.85 W payload), 1,751 g AUW; slow cruise ≈ 60 min via
+  translational lift. R6 ✓ (30 min), R8 ✗ (60 min stretch not met — documented).
+- Fidelity: first-order comparative; **not yet validated against measured hover current** — the
+  Phase-1 instrumented flight (task 1.22) is the correlation gate. Risk to flag: BAT10 Amprius is
+  stock-fragile (BAT09 already OOS).
 
-**Slide 27: Analysis 5 — Cost & Budget (R4 ≤ $2,500)**
-- Current total: **~$2,397 of $2,500** (96% — tight)
-- Top 3 cost drivers: T13 thermal ($700), Chimera9 airframe ($491), Amprius BAT10 ($275)
-- Remaining $103 margin — no room for unplanned purchases
-- **Decision needed:** Lisa approves budget — acknowledge it's tight
+**Slide 29: Endurance vs. Cost — Full Configuration Trade Space**
+- Scatter of every compatible real configuration; R4 vertical line + R6/R8 horizontals. Entire
+  selected trade space sits left of $2,500 and above 30 min. Reference build ≈ $1,850 / 58 min.
+  Quick reference — the decision is already made.
 
-**Slide 28: Performance Measures (SV-7)**
-- Key metrics table: endurance, range, detection range, classification accuracy (TBD), coverage per sortie
-- Some values have TBD (classification accuracy) — honest about what's not yet measured
+**Slide 30: Analysis 2 — Thermal Detection (Johnson Criteria)**
+- **Corrected 2026-10-12 to the as-built geometry (18 mm lens, 45° mount tilt, along-range axis).**
+  Nadir GSD: 6.0 cm @ 90 m / 8.0 cm @ 120 m. Pixels-on-target ALONG-RANGE (×2.0 vs nadir):
+  - 0.5 m target @ 90 m: **4.2 px — Recognize ✓ (THIN — the tightest margin in the chain)**
+  - 0.5 m target @ 120 m: 3.1 px — Detect ✓
+  - **Deer @ 120 m (R3.1): 3.1 px — Detect ✓** (comfortable vs 1.5 px floor)
+  - Deer @ 90 m: 4.2 px — detect/recog.; Human @ 90 m: 4.2 px — Detect ✓; Turkey @ 120 m: 1.9 px — Marginal
+- Honest framing for Lisa: detection is comfortable across 90–120 m; **recognition of a 0.5 m
+  target ~4.2 px vs the 4 px floor is thin — field capture (task 2.17) is the load-bearing check.**
+  Species classification (R3.2) is the trained AI model's job, not geometry alone.
+- (Old deck figures — 13 mm lens, 6.0/4.5 px nadir — overstated these margins; the deck now matches
+  model.sysml ThermalRecognitionCheck / ThermalDetectionCheck.)
 
-### Section 5 — Verification, Risk & Closure (5 slides)
+**Slide 31: Analysis 3 — RF Link Budget (2.8 km / R7)**
+- FSPL at each link's frequency; design target ≥ 10 dB fade margin at 2.8 km. **4/4 links pass.**
+  Control/telemetry (ELRS) close the range many times over; the BINDING link is analog FPV — the
+  TrueRC X-AIR patch (10 dBic) is the enabling component (stock omni would fail). Phase 4 OpenHD
+  shown for completeness (+11.3 dB with dual-diversity Foxeer panels).
+- Not yet range-tested — task 1.21 is the field check.
 
-**Slide 29: Verification Cross-Reference Matrix (VCRM)**
-- Every requirement → verification method (Analysis, Demonstration, Test, Inspection)
-- Highlight which are analysis-only (will need TBD field test)
-- **Open:** R3_1/R3_2 field verification (task 2.17)
+**Slide 32: Analysis 4 — Physical Integration ("Does It Fit?")**
+- Dimensional model, 3-tier fit verdict (±12 mm). Binding constraint: **NanoPi M5 footprint
+  (90 × 62 mm)**; Chimera9 ECO deck ≈ 110 × 70 mm → SBC fits with ~8 mm spare (key reason it beat
+  the endurance leader). 9–10" frames fit cleanly; the pure endurance winner (DarwinFPV 129) is
+  NO-FIT. Deck dims are mostly ESTIMATES (≈ 0.27 × wheelbase) — confirm the real frame's deck pre-
+  build (task 1.23).
+- Endurance and fit trade against each other; the selected frame is the best endurance-per-dollar
+  option that physically integrates the compute.
 
-**Slide 30: Manufacturing & Producibility**
-- Build steps: Phase 1 (flight+FPV) → Phase 2 (thermal+SBC) → Phase 3 (AI) → Phase 4 (digital downlink)
-- Key dependencies: ordering → hardware arrival → bench assembly → field test
-- No exotic tooling — standard 3D printer, soldering iron, heat-set insert tool
+**Slide 33: Analysis 5 — Cost & Budget (R4 ≤ $2,500)**
+- Method: phased BOM rolled up from candidates.sysml with actual quoted prices for locked parts;
+  **laptop (existing) and reusable support gear (dev packs, charger) excluded from the R4 figure.**
+- **≈ $1,848 committed system cost (~26 % margin); all four phases ≈ $2,007 — both under $2,500.
+  R4 VERDICT: PASS.** Thermal camera ($650) is the single largest line.
+- (The endurance sweep reports ≈ $1,674 using cost-representative radio/RX; the BOM figure uses the
+  actual selected parts, hence higher.)
+- **Decision needed:** Lisa approves the budget — now with a comfortable 26 % margin (the old
+  96 %-of-budget "$103 margin" story is obsolete).
 
-**Slide 31: Project Timeline (PV-2)**
-- Gantt-style overview
-- Current status: gridlocked at task 85 → ordering → hardware
-- Total remaining: ~150 h hands-on + shipping leads + collection season
-- **Critical path:** CDR approval → order Phase 1 → bench build Phase 1 → field test → Phase 2 → Phase 3
+**Slide 34: Performance Measures (SV-7)**
+- KPPs vs requirement thresholds with as-designed value and margin. All hard requirements met with
+  margin; only R8 stretch endurance not met (documented). *Compute fit marginal (custom deck);
+  speed is a control-tuned target verified by flight test.
 
-**Slide 32: Risk Assessment**
-- Top risks:
-  1. **Battery OOS** (HIGH, ~55%): BAT09 already gone; BAT10 stock-fragile
-  2. **Thermal data collection** (HIGH): season/opportunity dependent, 40+ h collection
-  3. **T13 shipping** (MEDIUM): long lead, Alibaba
-  4. **Shutdown at range** (MEDIUM): 58.6 min is borderline on a 30 min mission
+### Section 5 — Verification, Risk & Closure (slides 35–41)
 
-**Slide 33: Open Items (TBD / TBR / Action)**
-- Remaining open items from the design phase (tasks not yet Done):
-  - Caliper top-plate bolt pattern
-  - Confirm T13 18mm mass with vendor (15.0g estimate sufficient)
-  - Field-test thermal detection range
-  - Collect deer/turkey/human LWIR training data
-  - Bootstrap ML dataset assembly (BIRDSAI done, need FLIR ADAS download)
-- **Key ask for Lisa:** authorization to proceed with ordering despite these open items being carried forward
+**Slide 35: (Divider) Verification, Risk & Closure.**
+
+**Slide 36: Verification Cross-Reference Matrix (VCRM)**
+- Every requirement → method (A/D/T/I) + status @ CDR: R1/R2/R6/R7 analysis ✓ test planned; R3.1
+  analysis ✓ demo planned; R3.2 analysis ✓ AI test planned; R4/R5 verified by inspection; **R8 not
+  met (documented).**
+- At CDR: design compliance shown by analysis; demonstration/test gated at the Test Readiness Review.
+
+**Slide 37: Manufacturing & Producibility**
+- Minimize soldering (R5): PNP airframe pre-soldered; **the only solder joint in the committed
+  build is the SBC UBEC's 12 V leads.** COTS-first (~110 real parts traded); only fabricated part is
+  the 3D-printed SBC deck + 30 mm fan + heat-set hardware (~$15). Standardization: XT60 power chain,
+  single ELRS ecosystem. Phased integration (1–3), each phase independently testable.
+
+**Slide 38: Project Timeline (PV-2)**
+- NOW — CDR: detailed design complete, verified by analysis. Next gate → **procurement**, then
+  phased build & test. Phase 1 ≈ $1,371 (airframe, ELRS, battery, FPV, GPS, ArduPilot+QGC) ·
+  Phase 2 ≈ $809 (Mini 640, M5, UBEC, mount) · Phase 3 $0 HW (AI software) · Phase 4 deferred.
+- Critical path: **CDR approval → order → hardware arrival → bench assembly → field test.**
+  Total remaining hands-on ~150 h + shipping leads + collection season.
+
+**Slide 39: Risk Assessment**
+- Top risks to voice:
+  1. **Battery OOS** (HIGH): BAT09 gone; BAT10 Amprius stock-fragile — every week of delay raises risk.
+  2. **Thermal data collection** (HIGH): season/opportunity dependent, ~40 h collection; October
+     still viable in MI (pre-rut/rut activity improves thermal contrast), window narrows with cold.
+  3. **R3.2 recognition margin is thin** (MEDIUM-HIGH): 4.2 px along-range vs 4 px floor — field
+     capture (2.17) is the load-bearing check.
+  4. **T13 shipping** (MEDIUM): long lead (Alibaba-class).
+  5. **Endurance model unvalidated** (MEDIUM): 58.4 min is modeled, not measured — task 1.22.
+
+**Slide 40: Open Items (TBD / TBR / Action)**
+- 7 rows, none design-blocking: RTL reserve-energy value (TBR, set before first autonomous flight) ·
+  FC firmware (RESOLVED) · deck/battery dims estimates (TBR, Phase 2 gate) · SBC mount design
+  (Phase 2 gate) · AF5 mass gap (RETIRED) · Phase 4 pricing (TBD) · empirical validation (Action).
+- **Key ask for Lisa:** authorization to proceed with ordering despite these items being carried
+  forward — all bounded and assignable.
+
+**Slide 41: CDR Exit Assessment & Recommendation** (final slide — close strong)
+- Exit criteria: all ✓ (design complete & traced; interfaces defined; analyses show compliance with
+  margin; R4 ✓ 26 % margin · R6 ✓ · R7 ✓ · thermal detect ✓); ▲ R8 stretch not met (documented);
+  ▲ empirical validation pending (design gate, not yet test).
+- **RECOMMENDATION: Proceed to procurement, fabrication & integration.** Gates to operations:
+  (1) instrumented Phase-1 flight to correlate the endurance model, (2) field thermal capture to
+  validate detection/classification, (3) established FAA BVLOS regulatory path (Part 107).
+- This is the explicit "yes" slide — end the briefing here.
 
 ---
 
 ## 3. Key Decisions Lisa Needs to Make
 
 1. **Approve the design → unlock ordering** — This is THE decision. Everything else is secondary.
-2. **Accept the $2,397 of $2,500 budget** — $103 margin is tight. Acknowledge it; propose contingency plan if prices drift.
-3. **Acknowledge open-item carry-forward** — Some open items (bolt-pattern caliper, vendor mass confirmation) don't block ordering. Get explicit agreement that ordering can proceed before these are closed.
-4. **Confirm failsafe behavior choices** — RTL on link loss, RTL on low battery, complete-waypoint-then-RTL on SBC failure. These are the safety-critical R6_FS_BATT / R7_FS_LINK decisions.
-5. **Scope of review** — Is this a formal CDR sign-off or an informal progress review? Set expectations at the start.
+2. **Accept the budget** — ≈ $1,848 committed of $2,500 (**26 % margin**); all four phases ≈ $2,007
+   also under cap. The former tight-budget concern is resolved; contingency still wise if prices
+   drift (see Risk #1).
+3. **Acknowledge open-item carry-forward** — bolt-pattern caliper (1.23), vendor mass confirmation
+   (2.1), SBC deck dims — none block ordering. Get explicit agreement that ordering proceeds before
+   these close.
+4. **Confirm failsafe behavior choices** — RTL on link loss, RTL on low battery, complete-waypoint-
+   then-RTL on SBC failure (R7_BHV_LINKLOSS_RTL / R6_BHV_RTL_RESERVE / R3_BHV_SBC_FAILSAFE). The
+   RTL reserve value itself remains TBR until first autonomous flight.
+5. **Scope of review** — formal CDR sign-off or informal progress review? Set expectations at the start.
 
 ---
 
@@ -219,12 +330,12 @@ Verify these BEFORE the meeting:
 
 | Segment | Slides | Time |
 |---------|--------|------|
-| Intro + overview | 1–4 | 5 min |
-| Requirements (highlights only) | 5–7 | 5 min |
-| Architecture (walk the key diagrams) | 11–16 | 10 min |
-| Behavior (state machine + autonomy) | 18–19 | 5 min |
-| Analyses (the numbers that matter) | 22–28 | 10 min |
-| Risk + open items | 29–33 | 5 min |
+| Intro + overview | 1–5 | 5 min |
+| Requirements (highlights only) | 7–9 (skip 10–12 unless asked) | 5 min |
+| Architecture (walk the key diagrams) | 14–19 | 10 min |
+| Behavior (state machine + autonomy) | 22–23 | 5 min |
+| Analyses (the numbers that matter) | 28, 30, 31, 32, 33 | 10 min |
+| Risk + open items + exit assessment | 39–41 | 5 min |
 | **Decision: approve to proceed** | — | 5–10 min |
 | **Total** | | **~45–55 min** |
 
@@ -234,19 +345,26 @@ Verify these BEFORE the meeting:
 
 Approval of this CDR enables the following (in order):
 
-1. **Ordering all Phase 1 hardware** ($1,371): airframe, RX, TX, batteries, charger
-2. **Ordering Phase 2 hardware** ($958): T13 thermal, SBC, UBEC
+1. **Ordering all Phase 1 hardware** (~$1,371): airframe, RX, TX, batteries, charger, VRX, patch
+2. **Ordering Phase 2 hardware** (~$809): T13 thermal, SBC, UBEC, mount hardware
 3. **Physical build and bench test** — the first time real hardware gets assembled
 4. **Field flight tests** — LOS envelope, waypoint missions, range verification
 5. **Phase 3 AI pipeline** — training with real thermal data, on-target benchmarking
 
-Every task from #16 through #83 is blocked on this decision. There are ~40 tasks totaling ~150+ h of remaining work that cannot begin until the CDR briefing is delivered and Lisa signs off.
+Every remaining task (#16–#83) is blocked on this decision: ~40 tasks, ~150+ h of work that cannot
+begin until the CDR briefing is delivered and Lisa signs off. The board-wide blocker is task #85.
 
 ---
 
 ## 6. Risk Flags for the Meeting
 
-- **Task 14 export is done** but re-verify the deck opens cleanly — the Sep 15 change modified slide 14
-- **Battery supply:** BAT09 (Amprius predecessor) is already out of stock. BAT10 is the single most stock-fragile line in the BOM. Every week of delay increases risk of having no flight battery.
-- **T13 thermal shipping:** Alibaba — 3–6 week typical lead. This is the highest-value single line in the BOM ($700).
-- **Training data collection:** Season-dependent. September is still viable for deer/turkey thermal collection in Michigan, but the window narrows as temperatures drop.
+- **Deck accuracy:** the 2026-10-12 correction (slides 26/30: 18 mm lens, along-range px) makes the
+  deck match the model — but be ready for a question on why recognition reads 4.2 px when older
+  material said more; answer is the 45° mount tilt (×2.0 along-range GSD) — the honest as-built
+  figure, and the reason task 2.17 is load-bearing.
+- **Battery supply:** BAT09 is out of stock; BAT10 is the single most stock-fragile line in the BOM.
+- **T13 thermal shipping:** long lead; highest-value single line in the BOM ($700).
+- **Training data collection:** season-dependent; October in Michigan still viable (rut activity
+  raises deer movement/thermal contrast), but the window narrows as temperatures drop.
+- **Endurance figure is modeled, not measured** — say so; the instrumented Phase-1 flight (1.22)
+  closes it.

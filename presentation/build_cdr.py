@@ -811,7 +811,7 @@ def hardware_gallery(kicker, title, items, note=None):
 hardware_gallery("Section 4 · Analyses  ·  Detailed Design", "Selected Hardware — Air Vehicle & Payload", [
     (comp("airframe.png"),  "iFlight Chimera9 ECO 9\"", "PNP airframe · 729 g · 6S · XING-E 2809"),
     (comp("battery.png"),   "Upgrade Energy 6S 12 Ah",  "Amprius Si-anode Li-ion · XT60 · ~57 min"),
-    (comp("thermal.png"),   "PurpleRiver Mini 640",     "640×512 · 12 µm · 13 mm · USB-UVC"),
+    (comp("thermal.png"),   "PurpleRiver Mini 640",     "640×512 · 12 µm · 18 mm · USB-UVC"),
     (comp("sbc.png"),       "NanoPi M5 (RK3576)",       "6 TOPS NPU · ≤10 W passive · 90×62 mm"),
     (comp("receiver.png"),  "iFlight True-Diversity ELRS","2.4 GHz · dual-antenna · 250 mW"),
     (comp("antispark.png"), "iFlight Anti-Spark Filter","XT60 · 6S · 150 A · inrush limiter"),
@@ -863,17 +863,20 @@ s = content_slide("Section 4 · Analyses", "Analysis 2 — Thermal Detection (Jo
 rect(s, ML, Inches(1.3), Inches(6.05), Inches(1.55), PANEL, line=LINEC, line_w=Pt(0.75), shape=MSO_SHAPE.ROUNDED_RECTANGLE)
 txt(s, Inches(0.8), Inches(1.42), Inches(5.6), Inches(0.3), [[("METHOD & FIDELITY", 11, True, ACCENT)]])
 txt(s, Inches(0.8), Inches(1.75), Inches(5.6), Inches(1.05),
-    [[("Geometric optics: ground sample distance (GSD) from sensor pitch, lens, altitude → pixels-on-target vs. Johnson criteria (detect ≥ 1.5 px, recognize ≥ 4 px across the target's minimum dimension). ", 10.5, False, TEXT),
+    [[("Geometric optics: ground sample distance (GSD) from sensor pitch, lens, altitude → pixels-on-target vs. Johnson criteria (detect ≥ 1.5 px, recognize ≥ 4 px across the target's minimum dimension). Pixels-on-target are ALONG-RANGE at the as-built 45° mount tilt (GSD ×2.0 vs nadir) — the binding axis; nadir would read ~2× higher. ", 10.5, False, TEXT),
       ("Fidelity: deterministic; assumes ≥ 5 °C target-to-background thermal contrast (daytime IR signature). Species-level classification ultimately relies on the trained AI model (Phase 3) — field capture pending.", 10.5, True, RED)]], line_spacing=1.02)
-# T13 results table
+# T13 results table — pixels on target ALONG-RANGE at the as-built 45 deg mount (T13 @ 18 mm):
+# nadir GSD = 2*alt*tan(12.05 deg)/640 = 6.0 cm @ 90 m / 8.0 cm @ 120 m; along-range x2.0 -> 12.0/16.0 cm.
+# 0.5 m target: 4.17 px @ 90 m (recog, thin), 3.13 px @ 120 m (detect). Matches model.sysml
+# ThermalRecognitionCheck / ThermalDetectionCheck (OffNadirGsd, mountTilt_deg = 45).
 th = [["Target @ altitude", "Min px", "Verdict"]]
 for a,b,c in [
-    ("0.5 m target @ 90 m","6.0","Recognize ✓"),
-    ("0.5 m target @ 120 m","4.5","Recognize ✓"),
-    ("Deer @ 120 m (R3.1)","4.5","Detect ✓"),
-    ("Deer @ 90 m","6.0","Detect / recog."),
-    ("Human @ 90 m","6.0","Detect ✓"),
-    ("Turkey @ 120 m","2.7","Marginal"),
+    ("0.5 m target @ 90 m","4.2","Recognize ✓"),
+    ("0.5 m target @ 120 m","3.1","Detect ✓"),
+    ("Deer @ 120 m (R3.1)","3.1","Detect ✓"),
+    ("Deer @ 90 m","4.2","Detect / recog."),
+    ("Human @ 90 m","4.2","Detect ✓"),
+    ("Turkey @ 120 m","1.9","Marginal"),
 ]:
     th.append([a,b,c])
 bcth = {}
@@ -884,14 +887,14 @@ add_table(s, ML, Inches(3.05), Inches(6.05), len(th),
           [Inches(3.35), Inches(1.1), Inches(1.6)], th,
           aligns=[PP_ALIGN.LEFT,PP_ALIGN.CENTER,PP_ALIGN.CENTER], row_h=Inches(0.38), body_size=10.5, header_size=10.5, body_colors=bcth)
 # right column
-stat(s, Inches(7.0), Inches(1.3), Inches(2.75), Inches(1.5), "8.3 cm", "GSD per pixel @ 90 m")
-stat(s, Inches(9.95), Inches(1.3), Inches(2.75), Inches(1.5), "11.1 cm", "GSD per pixel @ 120 m")
-stat(s, Inches(7.0), Inches(3.0), Inches(2.75), Inches(1.5), "640×512", "Sensor, 12 µm pitch, 13 mm lens", accent=OKGRN)
+stat(s, Inches(7.0), Inches(1.3), Inches(2.75), Inches(1.5), "6.0 cm", "Nadir GSD per pixel @ 90 m")
+stat(s, Inches(9.95), Inches(1.3), Inches(2.75), Inches(1.5), "8.0 cm", "Nadir GSD per pixel @ 120 m")
+stat(s, Inches(7.0), Inches(3.0), Inches(2.75), Inches(1.5), "640×512", "Sensor, 12 µm pitch, 18 mm lens", accent=OKGRN)
 stat(s, Inches(9.95), Inches(3.0), Inches(2.75), Inches(1.5), "R3.1 ✓", "Deer detection @ 120 m", accent=OKGRN)
 rect(s, Inches(7.0), Inches(4.75), Inches(5.7), Inches(1.75), PANEL, line=LINEC, line_w=Pt(0.75), shape=MSO_SHAPE.ROUNDED_RECTANGLE)
 txt(s, Inches(7.2), Inches(4.88), Inches(5.4), Inches(0.3), [[("INTERPRETATION", 11, True, ACCENT)]])
 txt(s, Inches(7.2), Inches(5.2), Inches(5.4), Inches(1.2),
-    [[("Optics deliver detection-grade pixels-on-target for deer/human across 90–120 m and recognition-grade for a 0.5 m target. Robust species classification (R3.2) is the AI model's job and the key validation risk — confirmed by field thermal capture, not geometry alone.", 10.5, False, TEXT)]], line_spacing=1.03)
+    [[("Detection is comfortable across 90–120 m (3.1–4.2 px along-range at the 45° mount vs a 1.5 px floor). RECOGNITION of a 0.5 m target is the tightest margin in the thermal chain — ~4.2 px vs a 4 px floor at 90 m — so the as-built figure must be confirmed by field capture (task 2.17), not geometry alone. Species classification (R3.2) is the trained AI model's job.", 10.5, False, TEXT)]], line_spacing=1.03)
 
 # ---- 26. RF link budget ----
 s = content_slide("Section 4 · Analyses", "Analysis 3 — RF Link Budget (2.8 km / R7)")
