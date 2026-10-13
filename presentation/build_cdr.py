@@ -50,6 +50,15 @@ LINEC  = RGBColor(0xD4, 0xDD, 0xE4)
 FONT   = "Segoe UI"
 FONTL  = "Segoe UI Light"
 
+# ----------------------------------------------------------------------------
+# Review date (stamped on EVERY slide's footer + title meta line + closing
+# strip). Single source of truth: change it HERE (or set CDR_DATE=YYYY-MM-DD
+# in the environment) and rebuild — do not edit the three string literals
+# inline, they will drift. The default is the originally planned review date;
+# update it to the actual meeting date before presenting (task #85).
+# ----------------------------------------------------------------------------
+CDR_DATE = os.environ.get("CDR_DATE", "2026-07-26")
+
 prs = Presentation()
 prs.slide_width  = Inches(13.333)
 prs.slide_height = Inches(7.5)
@@ -118,7 +127,7 @@ def footer(slide, title_txt="Thermal Surveillance UAS  ·  Critical Design Revie
     txt(slide, ML, SH - Inches(0.32), Inches(9), Inches(0.28),
         [[(title_txt, 8.5, False, MUTED)]], anchor=MSO_ANCHOR.MIDDLE)
     txt(slide, SW - Inches(2.3), SH - Inches(0.32), Inches(1.68), Inches(0.28),
-        [[("CDR  ·  2026-07-26", 8.5, False, MUTED)]], align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
+        [[(f"CDR  ·  {CDR_DATE}", 8.5, False, MUTED)]], align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
     txt(slide, SW - Inches(0.62), SH - Inches(0.32), Inches(0.4), Inches(0.28),
         [[(str(slide_no), 8.5, True, SLATE)]], align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
 
@@ -297,7 +306,7 @@ txt(s, ML, Inches(5.15), CW, Inches(1.4),
     space_after=Pt(6))
 # meta line
 txt(s, ML, Inches(6.55), CW, Inches(0.4),
-    [[("Review date  2026-07-26        Design maturity  Detailed design complete (pre-fabrication)        Budget  ≤ $2,500 (R4)", 11, False, RGBColor(0x7F,0x95,0xAB))]])
+    [[(f"Review date  {CDR_DATE}        Design maturity  Detailed design complete (pre-fabrication)        Budget  ≤ $2,500 (R4)", 11, False, RGBColor(0x7F,0x95,0xAB))]])
 
 # ============================================================================
 # 2. AGENDA / PURPOSE
@@ -1185,7 +1194,7 @@ txt(s, Inches(7.8), Inches(2.7), Inches(4.6), Inches(3.9),
      [("Gate to operations on: (1) an instrumented Phase-1 flight to correlate the endurance model, (2) field thermal capture to validate detection/classification, and (3) an established FAA BVLOS regulatory path (Part 107).", 12.5, False, RGBColor(0xC9,0xD8,0xE6))]],
     space_after=Pt(10), line_spacing=1.06)
 txt(s, ML, SH-Inches(0.5), CW, Inches(0.3),
-    [[("Thermal Surveillance UAS · Critical Design Review · 2026-07-26 · Model-based (SysML v2), git-controlled", 10, False, RGBColor(0x7F,0x95,0xAB))]])
+    [[(f"Thermal Surveillance UAS · Critical Design Review · {CDR_DATE} · Model-based (SysML v2), git-controlled", 10, False, RGBColor(0x7F,0x95,0xAB))]])
 
 # ============================================================================
 # ============================================================================

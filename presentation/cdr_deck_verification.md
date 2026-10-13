@@ -91,8 +91,16 @@ All other 35 slides are text-identical to the pre-rebuild deck.
 ## Files touched
 
 - `presentation/build_cdr.py` — slide 14 now native diagram; portable PROJ root;
-  **2026-10-12: slides 26/30 corrected to 18 mm lens + along-range (45°) px**.
+  **2026-10-12: slides 26/30 corrected to 18 mm lens + along-range (45°) px**;
+  **2026-10-13: review-date stamp centralized into a single `CDR_DATE` constant
+  (env-overridable) — footer (all slides) + title meta line + closing strip no
+  longer hold three independent string literals**.
 - `presentation/verify_cdr_deck.py` — new automated verifier (re-runnable).
+  **2026-10-13: added date-stamp integrity checks — all slide stamps must agree
+  with each other AND with build_cdr.py's `CDR_DATE` default (hard FAIL on any
+  drift); a stamp > 14 days old prints a WARNING** (the deck currently stamps
+  2026-07-26, the original planned review date — 79 days old; David should
+  re-set `CDR_DATE` to the actual meeting date before presenting).
 - `presentation/cdr_briefing_prep.md` — **2026-10-12: reconciled to the 41-slide
   physical numbering; cost/open-items/failsafe content updated**.
 - `CDR_Thermal_Surveillance_Drone.pptx` — regenerated deck (verified; rebuilt
@@ -107,6 +115,10 @@ All other 35 slides are text-identical to the pre-rebuild deck.
   lens/GSD correction is applied. See `presentation/cdr_briefing_prep.md`
   (reconciled to physical slide numbers 1–41) for the up-to-date talking points
   and the five decisions to put to Lisa.
+- **Set the review date before presenting:** deck stamps 2026-07-26 (original
+  planned date, now 79 days stale). One-liner: `CDR_DATE=YYYY-MM-DD python3
+  presentation/build_cdr.py`, then re-run `verify_cdr_deck.py`. The verifier
+  will warn until this is done.
 - Per prep checklist: confirm meeting logistics (duration, audience tailoring) and
   re-confirm the $2,500 cost slide figure at briefing time if prices drift (deck
   Analysis 5 shows ≈ $1,848 committed / 26 % margin; `analysis/flight_time_model.py`

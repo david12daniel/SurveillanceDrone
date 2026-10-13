@@ -14,6 +14,10 @@ requires before David presents to Lisa:
   4. Picture placement does not overlap the caption text box.
   5. Deck has a backup (.bak.pptx) so the swap is reversible.
   6. Broad integrity: every ISLIDE/RELATIONSHIP resolves; no dangling image refs.
+  7. Date-stamp integrity: every slide footer carries the SAME review date, and
+     the stamped date matches build_cdr.py's CDR_DATE default (hard FAIL on drift).
+     A stamp > 14 days old prints a loud WARNING (overdue review — David must
+     re-set CDR_DATE when the meeting is actually scheduled).
 
 Also flags the known hazard: build_cdr.py regenerates slide 14 from hand-drawn
 shapes, so re-running it clobbers the picture swap.
@@ -152,14 +156,60 @@ def main():
     except Exception as e:
         check("package: all slide rel targets resolve", False, str(e))
 
+    # 6b. Date-stamp integrity: every slide footer carries the SAME review date
+    #     (build_cdr.py stamps CDR_DATE on all 41 footers + title + closing),
+    #     and the stamped date matches what build_cdr.py would emit today.
+    #     Inconsistent stamps = a partial edit in a 200KB generator = must fail.
+    #     A date far in the past = overdue review = loud warning, not a fail
+    #     (the date is a planned-review marker; only David can re-set it).
+    import re as _re
+    # footer stamp "CDR  ·  2026-07-26" (all content slides), title meta
+    # "Review date  2026-07-26", and closing strip
+    # "...Critical Design Review · 2026-07-26 · ..." (slide 41)
+    stamp_re = _re.compile(r"(?:CDR|Critical Design Review)\s*·\s*(\d{4}-\d{2}-\d{2})")
+    all_dates = []
+    for sl in prs.slides:
+        for s in sl.shapes:
+            if s.has_text_frame:
+                all_dates += stamp_re.findall(s.text_frame.text)
+    # title-slide meta line uses "Review date  YYYY-MM-DD"
+    for sl in [prs.slides[0]]:
+        for s in sl.shapes:
+            if s.has_text_frame:
+                all_dates += _re.findall(r"Review date\s+(\d{4}-\d{2}-\d{2})", s.text_frame.text)
+    uniq = sorted(set(all_dates))
+    check("deck: all date stamps consistent", len(uniq) == 1,
+          f"{len(all_dates)} stamps, dates: {uniq}" if len(uniq) != 1 else f"stamped {uniq[0]} ({len(all_dates)} occurrences)")
+    if uniq:
+        stamped = uniq[0]
+        bpath = os.path.join(PROJ, "presentation", "build_cdr.py")
+        gen_src = open(bpath, encoding="utf-8", errors="replace").read() if os.path.exists(bpath) else ""
+        m = _re.search(r'CDR_DATE\s*=\s*os\.environ\.get\("CDR_DATE",\s*"(\d{4}-\d{2}-\d{2})"\)', gen_src)
+        env_date = os.environ.get("CDR_DATE")
+        # Effective generator date: env override wins (same logic as build_cdr.py),
+        # else the file's default.
+        src_date = env_date if env_date else (m.group(1) if m else None)
+        if src_date and src_date != stamped:
+            check("deck: stamped date matches build_cdr.py CDR_DATE", False,
+                  f"deck {stamped} vs effective generator date {src_date} ({'env CDR_DATE' if env_date else 'file default'}) — rebuild the deck")
+        else:
+            check("deck: stamped date matches build_cdr.py CDR_DATE", True,
+                  f"{stamped} == effective generator date {src_date}")
+        try:
+            import datetime as _dt
+            age_days = (_dt.date.today() - _dt.date.fromisoformat(stamped)).days
+            if age_days > 14:
+                print(f"\nWARNING  deck stamped {stamped} — {age_days} days ago. If the review was "
+                      f"re-scheduled, update CDR_DATE in presentation/build_cdr.py "
+                      f"(e.g. CDR_DATE={_dt.date.today().isoformat()} python3 presentation/build_cdr.py) "
+                      f"and rebuild before presenting.")
+        except Exception:
+            pass
+
     # 7. Hazard flag no longer applies to native rebuilds (build_cdr.py now
     #    emits the diagram itself), but detect if the generator regressed to the
     #    legacy hand-drawn slide-14 code.
-    with zipfile.ZipFile(args.deck) as z:
-        pass  # (already validated above)
-    bpath = os.path.join(PROJ, "presentation", "build_cdr.py")
     if os.path.exists(bpath):
-        gen_src = open(bpath, encoding="utf-8", errors="replace").read()
         if "def_panel" in gen_src and "system_composition.png" in gen_src:
             print("NOTE  build_cdr.py still defines def_panel for other slides, but slide 14 "
                   "emits system_composition.png natively — rebuilds preserve the diagram. "

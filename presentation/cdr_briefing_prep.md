@@ -23,9 +23,18 @@
   show along-range pixels-on-target (4.2 px recognize @ 90 m / 3.1 px detect @ 120 m) — the honest
   as-built figures, matching model.sysml `ThermalRecognitionCheck` / `ThermalDetectionCheck`.
   Verdicts unchanged (R3.1 ✓ comfortable, R3.2 ✓ thin) — see slide 30 talking points.
-- **Known remaining deck note (do NOT "fix" unilaterally):** the deck's hard-coded "CDR · 2026-07-26"
-  date stamp on every slide is the planned review date, not today's date. If David re-schedules, the
-  date should be updated in `build_cdr.py` and the deck rebuilt. Cosmetic; not a data issue.
+- **Known remaining deck note (date stamp):** the deck's "CDR · 2026-07-26" date stamp on every
+  slide is the *planned* review date, not today's date (the review is overdue — due 2026-08-03, not
+  yet presented). It is now a **single source of truth**: `CDR_DATE` in `build_cdr.py`
+  (env-overridable: `CDR_DATE=YYYY-MM-DD python3 presentation/build_cdr.py`). **Before presenting,
+  set `CDR_DATE` to the actual meeting date and rebuild** — the verifier now checks all 35+ stamps
+  are consistent with each other AND with the effective generator date (hard FAIL if they drift),
+  and prints a loud WARNING when the stamped date is > 14 days old. Cosmetic; not a data issue —
+  but presenting a deck stamped 3 months ago reads as stale, so set it.
+  ⚠️ *Env-var gotcha:* if you set the date via `CDR_DATE=...` on the build, verify with the same
+  env var (`CDR_DATE=... python3 presentation/verify_cdr_deck.py`); verifying without it reports a
+  FAIL (the deck wouldn't match a plain rebuild — that's correct). Cleanest: edit the `CDR_DATE`
+  default line in `build_cdr.py` once, then build+verify with no env var at all.
 
 ---
 
@@ -49,6 +58,13 @@ Verify these BEFORE the meeting:
   and no longer listed.
 - [x] **All RTM tables filling** — slides 10–12; RTM CSV 57 rows, 0 blank verification cells
   (verifier PASS). RTM now includes **R3_BHV_SBC_FAILSAFE** (allocated to fcSoftware).
+- [x] **Date stamp integrity** — CLOSED 2026-10-13. The review-date stamp is now a single
+  `CDR_DATE` constant in `build_cdr.py` (env-overridable); `verify_cdr_deck.py` checks all stamped
+  dates are consistent with each other and with the effective generator date (hard FAIL on drift)
+  and warns if > 14 days old. ⚠️ **Before presenting:** `CDR_DATE=<meeting date> python3
+  presentation/build_cdr.py`, rebuild, re-verify (same env var on the verifier, or edit the
+  `CDR_DATE` default line and use no env var). Current stamp: 2026-07-26 (the original planned
+  date — update it to the real meeting date).
 - [ ] **Lisa's background** — Who is Lisa? (Not documented in the repo.) If she's a domain-area
   stakeholder (not a project manager), tailor emphasis to her interest areas. If she's a
   funder/approver, emphasize budget, risk, and schedule.
