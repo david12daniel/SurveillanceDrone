@@ -1147,6 +1147,11 @@ package DroneCandidates {
                                     // 18mm Ge lens estimated 6-9g. Total 12-17g, taking midpoint 15g.
                                     // PDF spec sheet saved in projects/surveillance-drone-t13-mass-confirmation/.
                                     // Vendor inquiry still needed for exact 18mm-lens-assembled figure.
+                                    // RE-VERIFIED 2026-10-14 (task 2.1): spec sheet updated 2026-08-24 re-downloaded, mass section
+                                    // unchanged (<20g); NOTE: radiometric version only offers 9/13/18mm lenses -> 18mm valid AND the
+                                    // longest radiometric option (25/35/50/60/75mm are non-radiometric only); no source publishes an
+                                    // assembled weight; 12-17g range reaffirmed (CG delta vs old 21g <1mm @ ~1.9kg AUW).
+                                    // See projects/surveillance-drone-t13-mass-confirmation/research-findings-oct-2026.md.
    :>> power = 0.8 [W];
    :>> resolutionH = 640;
    :>> resolutionV = 512;
