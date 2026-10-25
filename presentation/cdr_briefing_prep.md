@@ -384,3 +384,14 @@ begin until the CDR briefing is delivered and Lisa signs off. The board-wide blo
   raises deer movement/thermal contrast), but the window narrows as temperatures drop.
 - **Endurance figure is modeled, not measured** — say so; the instrumented Phase-1 flight (1.22)
   closes it.
+
+---
+
+## 5. Supplementary Documents Created During Preparation
+
+- **`presentation/cdr_executive_summary.md`** — 1-page condensed briefing that covers the key
+  decisions, budget snapshot, top risks, and recommendation. Useful if Lisa has 5 minutes instead
+  of 45. Print it as a handout or email it ahead of time so she walks in already briefed.
+- **`presentation/post_cdr_transition.md`** — Step-by-step plan for the 48 hours after sign-off:
+  ordering priority sequence (Tier 1 → 2 → 3), what to do while parts ship, dependency
+  unblocking order, and contact info. Prevents the 
