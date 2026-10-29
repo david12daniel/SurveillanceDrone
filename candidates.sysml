@@ -1143,15 +1143,17 @@ package DroneCandidates {
    :>> purchaseUrl = "https://www.thermal-image.com/product/mini-640-uncooled-lwir-thermal-camera-module/";
    :>> brand = "PurpleRiver";
    :>> cost_USD = 700.00;            // $640 base ($590 + $50 for 18mm lens, confirmed 2026-07-29) + $60 shipping
-   :>> mass = 15.0 [g];             // TIGHTENED 2026-08-20: module =6g w/o lens (product page), spec sheet <20g w/o lenses & flanges.
+   :>> mass = 15.0 [g];             // TIGHTENED 2026-08-20: module ~6g w/o lens (made-in-china listing, product page ~6.4g claim),
+                                    // product page spec ceiling <14.9g (2026-10-24 re-verify); PDF spec sheet <20g w/o lenses & flanges.
                                     // 18mm Ge lens estimated 6-9g. Total 12-17g, taking midpoint 15g.
                                     // PDF spec sheet saved in projects/surveillance-drone-t13-mass-confirmation/.
-                                    // Vendor inquiry still needed for exact 18mm-lens-assembled figure.
-                                    // RE-VERIFIED 2026-10-14 (task 2.1): spec sheet updated 2026-08-24 re-downloaded, mass section
-                                    // unchanged (<20g); NOTE: radiometric version only offers 9/13/18mm lenses -> 18mm valid AND the
-                                    // longest radiometric option (25/35/50/60/75mm are non-radiometric only); no source publishes an
-                                    // assembled weight; 12-17g range reaffirmed (CG delta vs old 21g <1mm @ ~1.9kg AUW).
-                                    // See projects/surveillance-drone-t13-mass-confirmation/research-findings-oct-2026.md.
+                                    // Vendor inquiry sent to justin.lu@purpleriver.cn 2026-10-19, awaiting reply.
+                                    // RE-VERIFIED 2026-10-14: spec sheet updated 2026-08-24, mass section unchanged (<20g).
+                                    // NOTE: radiometric version only offers 9/13/18mm lenses -> 18mm valid AND the
+                                    // longest radiometric option (25/35/50/60/75mm are non-radiometric only).
+                                    // RE-VERIFIED 2026-10-24 (nightly): product page <14.9g ceiling confirmed (TIGHTER than PDF <20g);
+                                    // worst-case bound (14.9g mod + 9g lens = 23.9g) CG <1.3mm @ ~1.9kg AUW — ACCEPTABLE.
+                                    // 12-17g range reaffirmed. See research-findings-oct-2026-nightly.md.
    :>> power = 0.8 [W];
    :>> resolutionH = 640;
    :>> resolutionV = 512;
