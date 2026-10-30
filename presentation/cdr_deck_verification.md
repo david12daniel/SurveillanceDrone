@@ -108,6 +108,20 @@ All other 35 slides are text-identical to the pre-rebuild deck.
 - `CDR_Thermal_Surveillance_Drone.pptx.pre-rebuild.bak` — pre-rebuild copy
   (identical slide-14 state to the Sep 15 deck; kept for diffing).
 
+## Re-verification log
+
+- **2026-10-25** — rebuilt + verified (commit 5a5fc48): exec summary and
+  post-signoff transition plan added; no model-content drift since Oct 13.
+- **2026-10-26** — fresh run: ALL CHECKS PASS. Proved working-tree .pptx
+  byte-different from committed but content-identical (build nondeterminism
+  only); restored to HEAD (commit bd90633).
+- **2026-10-30** — fresh run: ALL CHECKS PASS (41 slides; slide-14 diagram
+  md5 4067545fb80e stable; 36/36 date stamps consistent; RTM rows intact;
+  only WARNING: stamp 2026-07-26 now 96 days old). Model edits since Oct 25
+  are comment-only (candidates.sysml T13 mass comment re-verify, Oct 28 —
+  T13 mass unchanged at 15.0 g), so no deck content drift is possible;
+  working tree clean, committed deck current. No rebuild needed.
+
 ## Remaining (David)
 
 - Present the CDR briefing to Lisa and obtain design sign-off. Deck is verified
