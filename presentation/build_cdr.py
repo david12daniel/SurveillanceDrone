@@ -777,7 +777,7 @@ add_table(s, ML, Inches(1.75), CW, len(sel),
           aligns=[PP_ALIGN.LEFT,PP_ALIGN.LEFT,PP_ALIGN.LEFT], row_h=Inches(0.44), body_size=10.5, header_size=11)
 txt(s, ML, Inches(6.35), CW, Inches(0.5),
     [[("Reference build: ", 10.5, True, NAVY),
-      ("Chimera9 ECO + 6S 12 Ah Amprius + Mini 640 + NanoPi M5 → ≈ 58 min hover, ≈ $1,850 committed system cost (≤ $2,500 R4), SBC fits the deck.", 10.5, False, TEXT)]])
+      ("Chimera9 ECO + 6S 12 Ah Amprius + Mini 640 + NanoPi M5 → ≈ 57 min hover, ≈ $1,910 committed system cost (≤ $2,500 R4), SBC fits the deck.", 10.5, False, TEXT)]])
 
 # ---- Selected-hardware photo gallery ----
 import math as _math
@@ -843,11 +843,11 @@ txt(s, Inches(0.8), Inches(1.75), Inches(5.6), Inches(1.05),
 bullets(s, ML, Inches(3.05), Inches(6.05), Inches(3.5), [
     bullet_para(lead="Requirements verified.  ", size=13, text="R6 (≥ 30 min) and R8 stretch (≥ 60 min); R4 cost checked per config."),
     bullet_para(lead="Scope.  ", size=13, text="34 compatible configs (airframe × battery × VTX crossed; T13 + NanoPi M5 fixed) — filtered by the cell-count rule (P1)."),
-    bullet_para(lead="Result — baseline.  ", size=13, text="Chimera9 ECO + 6S 12 Ah Amprius → 58.4 min hover at ~15% throttle (16.85 W payload), 1,751 g AUW."),
+    bullet_para(lead="Result — baseline.  ", size=13, text="Chimera9 ECO + 6S 12 Ah Amprius → 57.2 min hover at ~15% throttle (16.9 W payload), 1,743 g AUW."),
     bullet_para(lead="Power bucket.  ", size=13, text="Slow cruise (2.23 m/s) can exceed hover via translational lift — cruise ≈ 60 min, modeled explicitly."),
 ])
 # result stats
-stat(s, Inches(7.0), Inches(1.3), Inches(2.75), Inches(1.5), "58.4 min", "Baseline hover endurance", accent=OKGRN)
+stat(s, Inches(7.0), Inches(1.3), Inches(2.75), Inches(1.5), "57.2 min", "Baseline hover endurance", accent=OKGRN)
 stat(s, Inches(9.95), Inches(1.3), Inches(2.75), Inches(1.5), "≈ 15 %", "Hover throttle (large margin)")
 stat(s, Inches(7.0), Inches(3.0), Inches(2.75), Inches(1.5), "R6 ✓ / R8 ✗", "30 min met; 60 min stretch not", accent=AMBER)
 stat(s, Inches(9.95), Inches(3.0), Inches(2.75), Inches(1.5), "34", "Compatible configs swept")
@@ -863,7 +863,7 @@ caption(s, ML, Inches(6.62), Inches(8.4), "Every compatible real configuration: 
 bullets(s, Inches(9.05), Inches(1.5), Inches(3.65), Inches(5.0), [
     bullet_para(lead="Reading it.  ", size=13, text="Each point is a real, purchasable build. Vertical line = $2,500 (R4); horizontals = 30 min (R6) and 60 min (R8)."),
     bullet_para(lead="Result.  ", size=13, text="The entire selected trade space sits left of the R4 cap and above R6 — cost is not the binding constraint."),
-    bullet_para(lead="Selected region.  ", size=13, text="The reference build lands at ≈ $1,850 / 58 min — comfortable margin on both axes."),
+    bullet_para(lead="Selected region.  ", size=13, text="The reference build lands at ≈ $1,910 / 57 min — comfortable margin on both axes."),
     bullet_para(lead="Stretch (R8).  ", size=13, text="60 min hover is not reached by any config with the fixed T13 + NanoPi M5 payload; cruise endurance approaches it."),
 ])
 
@@ -965,10 +965,10 @@ txt(s, ML, Inches(1.28), CW, Inches(0.3),
 cost = [["Build phase", "Scope", "Subtotal"]]
 for a,b,c in [
     ("Phase 1","Flight + FPV downlink + waypoints","$1,371"),
-    ("Phase 2","Thermal camera + onboard SBC","$809"),
+    ("Phase 2","Thermal camera + onboard SBC","$871"),
     ("Phase 3","AI detection + autonomy (software only)","$0"),
-    ("Committed (1–3)","As-flown system","$2,180"),
-    ("R4 integrated","Excl. reusable dev packs + charger","≈ $1,848"),
+    ("Committed (1–3)","As-flown system","$2,242"),
+    ("R4 integrated","Excl. reusable dev packs + charger","≈ $1,910"),
     ("Phase 4 (deferred)","OpenHD digital downlink","$159"),
 ]:
     cost.append([a,b,c])
@@ -977,15 +977,15 @@ add_table(s, ML, Inches(1.85), Inches(7.3), len(cost),
           [Inches(2.2), Inches(3.7), Inches(1.4)], cost,
           aligns=[PP_ALIGN.LEFT,PP_ALIGN.LEFT,PP_ALIGN.RIGHT], row_h=Inches(0.42), body_size=11, header_size=11)
 # margin visual
-stat(s, Inches(8.15), Inches(1.85), Inches(4.55), Inches(1.35), "≈ $1,848", "Committed system cost (R4 basis)", accent=OKGRN)
-stat(s, Inches(8.15), Inches(3.35), Inches(4.55), Inches(1.35), "≈ 26 %", "Margin under the $2,500 R4 cap", accent=OKGRN)
+stat(s, Inches(8.15), Inches(1.85), Inches(4.55), Inches(1.35), "≈ $1,910", "Committed system cost (R4 basis)", accent=OKGRN)
+stat(s, Inches(8.15), Inches(3.35), Inches(4.55), Inches(1.35), "≈ 24 %", "Margin under the $2,500 R4 cap", accent=OKGRN)
 rect(s, Inches(8.15), Inches(4.85), Inches(4.55), Inches(1.65), PANEL, line=LINEC, line_w=Pt(0.75), shape=MSO_SHAPE.ROUNDED_RECTANGLE)
 txt(s, Inches(8.35), Inches(4.98), Inches(4.2), Inches(0.3), [[("R4 VERDICT", 11, True, ACCENT)]])
 txt(s, Inches(8.35), Inches(5.3), Inches(4.2), Inches(1.1),
     [[("PASS. ", 11, True, OKGRN),
-      ("Committed system (≈ $1,848) and all four phases (≈ $2,007) are both under $2,500. Thermal camera ($650) is the single largest line.", 10.5, False, TEXT)]], line_spacing=1.03)
+      ("Committed system (≈ $1,910) and all four phases (≈ $2,069) are both under $2,500. Thermal camera ($700) is the single largest line.", 10.5, False, TEXT)]], line_spacing=1.03)
 txt(s, ML, Inches(6.45), Inches(7.2), Inches(0.4),
-    [[("The endurance sweep reports ≈ $1,674 using cost-representative radio/RX; the BOM figure uses the actual selected parts, hence higher.", 9.5, False, MUTED, True)]])
+    [[("The endurance sweep reports ≈ $1,662 (config C000009) using cost-representative radio/RX; the BOM figure uses the actual selected parts plus the O(10 $) heatsink estimate, hence higher.", 9.5, False, MUTED, True)]])
 
 # ---- Systems Measures / performance scorecard (SV-7) ----
 s = content_slide("Section 4 · Analyses", "Performance Measures  (SV-7)")
@@ -993,13 +993,13 @@ txt(s, ML, Inches(1.28), CW, Inches(0.3),
     [[("Key performance parameters vs. their requirement thresholds, with the as-designed (analysis) value and margin — the quantitative scorecard behind the analyses.", 12, False, MUTED)]])
 sv7 = [["Measure", "Requirement", "As-designed (predicted)", "Margin", "Status"]]
 for r_ in [
-    ("Hover endurance","R6 ≥ 30 min","58.4 min (momentum model)","+95%","PASS"),
-    ("Stretch endurance","R8 ≥ 60 min","58.4 min hover (~60 cruise)","−3%","NOT MET"),
+    ("Hover endurance","R6 ≥ 30 min","57.2 min (momentum model)","+91%","PASS"),
+    ("Stretch endurance","R8 ≥ 60 min","57.2 min hover (58.7 cruise)","−5%","NOT MET"),
     ("Surveillance range","R7 ≥ 2.8 km","≥ 3.3 km (weakest RF link)","+0.5 km","PASS"),
     ("RF fade margin","Design ≥ 10 dB @ 2.8 km","+11.3 dB (weakest link)","+1.3 dB","PASS"),
     ("Thermal detection @ 120 m","R3.1 ≥ 1.5 px","4.5 px on-target (deer)","+3.0 px","PASS"),
     ("Thermal recognition @ 90 m","R3_CAM_RES ≥ 4 px","6.0 px (0.5 m target)","+2.0 px","PASS"),
-    ("System cost","R4 ≤ $2,500","≈ $1,848 committed","+$652 (26%)","PASS"),
+    ("System cost","R4 ≤ $2,500","≈ $1,910 committed","+$590 (24%)","PASS"),
     ("SBC power","R4_SBC_PWR ≤ 10 W","≤ 10 W passive (RK3576)","at limit","PASS"),
     ("Payload compute fit","Deck ≥ SBC footprint","110×70 vs 90×62 mm","+8 mm","PASS*"),
     ("Cruise speed","R2 = 2.23 m/s","design point (control-tuned)","—","PLANNED"),
@@ -1081,7 +1081,7 @@ _phases = [
      "LOS manual flight, waypoint routes, video to laptop","≈ $1,371"),
     ("PHASE 2","Committed","Thermal payload + onboard compute",
      ["PurpleRiver Mini 640 (thermal)","NanoPi M5 · UBEC · 3D-print mount"],
-     "Live onboard thermal inference (no recording / downlink)","≈ $809"),
+     "Live onboard thermal inference (no recording / downlink)","≈ $871"),
     ("PHASE 3","Committed","AI detection + autonomy (software)",
      ["RKNN model deploy (D-1)","Mission app + MAVLink route mod (D-2)"],
      "Real-time inference drives autonomous re-route","$0 HW"),
@@ -1168,7 +1168,7 @@ crit = [
     ("Detailed design complete & traces to R1–R8", True),
     ("Interfaces defined (internal + external)", True),
     ("Analyses show compliance with margin", True),
-    ("R4 cost ✓ (26% margin) · R6 ✓ · R7 ✓ · thermal detect ✓", True),
+    ("R4 cost ✓ (24% margin) · R6 ✓ · R7 ✓ · thermal detect ✓", True),
     ("R8 stretch (60 min) not met — documented", False),
     ("Risks identified with mitigations", True),
     ("Open items bounded (none design-blocking)", True),
@@ -1251,13 +1251,13 @@ NOTES = [
 # 21 Divider Analyses
 "Now the quantitative analyses that verify the design. For each one I'll state the method and, just as importantly, its fidelity — what it does and does not yet prove.",
 # 22 Selected config
-"These components were down-selected from about 110 real market candidates through documented trade studies. The selections are version-controlled and machine-enforced in the analysis code, so they cannot silently drift. The reference build lands at roughly 58 minutes hover and about eighteen-hundred-fifty dollars — inside every requirement. On the next two slides, here is the actual hardware.",
+"These components were down-selected from about 110 real market candidates through documented trade studies. The selections are version-controlled and machine-enforced in the analysis code, so they cannot silently drift. The reference build lands at roughly fifty-seven minutes hover and about nineteen-hundred-ten dollars — inside every requirement. On the next two slides, here is the actual hardware.",
 # 23 HW air vehicle
 "Here is the actual selected flight hardware, all real purchasable parts: the iFlight Chimera9 ECO airframe, the Amprius silicon-anode Li-ion pack that drives our endurance, the PurpleRiver Mini 640 thermal core, the NanoPi M5 inference computer, the true-diversity ELRS receiver, and the anti-spark filter on the power chain. These are not concept renders — they are the components in the bill of materials.",
 # 24 HW ground
 "And the ground-control and support hardware: the RadioMaster TX12 handheld radio, the TrueRC directional patch antenna that closes the 2.8-kilometer link, and the HOTA dual-channel charger for the Li-ion packs. The ground kit also includes the Skydroid USB video receiver, the ELRS telemetry dongle, the airframe-bundled GPS, and the existing laptop as the ground station.",
 # 25 Endurance
-"Analysis one, endurance. The method is momentum, or actuator-disk, theory with a forward-flight drag term — the same physics family as eCalc. The fidelity is first-order comparative, with standard assumptions for figure-of-merit and efficiency, and — this is important — it is not yet validated against a measured hover current. The baseline predicts 58 minutes hover at only about 15 percent throttle, comfortably meeting the 30-minute requirement, though not the 60-minute stretch. Notably, the analysis is closed-loop with the model: it reads components and batteries from the model and writes ranked results back.",
+"Analysis one, endurance. The method is momentum, or actuator-disk, theory with a forward-flight drag term — the same physics family as eCalc. The fidelity is first-order comparative, with standard assumptions for figure-of-merit and efficiency, and — this is important — it is not yet validated against a measured hover current. The baseline predicts about fifty-seven minutes hover at only about 15 percent throttle, comfortably meeting the 30-minute requirement, though not the 60-minute stretch. Notably, the analysis is closed-loop with the model: it reads components and batteries from the model and writes ranked results back.",
 # 26 Endurance vs cost
 "This scatter plots every compatible configuration — total system cost against flight time, with the requirement lines overlaid. The takeaway is simple: the entire selected trade space sits to the left of the cost cap and above the 30-minute line, so cost is not the binding constraint. Our reference build sits comfortably in that sweet spot.",
 # 27 Thermal

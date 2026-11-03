@@ -121,6 +121,18 @@ All other 35 slides are text-identical to the pre-rebuild deck.
   are comment-only (candidates.sysml T13 mass comment re-verify, Oct 28 —
   T13 mass unchanged at 15.0 g), so no deck content drift is possible;
   working tree clean, committed deck current. No rebuild needed.
+- **2026-11-03** — numeric audit against the artifacts the deck claims to roll
+  up from (not just a structural re-run): found and fixed two content drifts.
+  (a) Cost: deck Phase 2 read $809 because it priced the T13 at $650 (pre-shipping)
+  and dropped the SBC heatsink line; true BOM Phase 2 = $871.48, so committed is
+  ≈ $1,910 on the R4 basis (24 % margin), not $1,848 / 26 %, and all four phases
+  are ≈ $2,069. (b) Endurance: deck read 58.4 min / 1,751 g from an older export;
+  the reproducible sweep gives 57.2 min / 1,743 g / 58.7 cruise for config C000009.
+  Both regenerated, plus SV-7, exit criteria, timeline and speaker notes; RTM
+  evidence rows reconciled (and two never-refreshed model rows picked up).
+  Verifier: ALL CHECKS PASS (slide-14 md5 unchanged; 36/36 stamps; RTM 57 rows
+  0 blanks); automated stale-figure sweep over the rebuilt pptx = 0 hits. Full
+  audit trail: `presentation/cdr_cost_basis_reconciliation_2026-11-03.md`.
 
 ## Remaining (David)
 
@@ -134,7 +146,7 @@ All other 35 slides are text-identical to the pre-rebuild deck.
   presentation/build_cdr.py`, then re-run `verify_cdr_deck.py`. The verifier
   will warn until this is done.
 - Per prep checklist: confirm meeting logistics (duration, audience tailoring) and
-  re-confirm the $2,500 cost slide figure at briefing time if prices drift (deck
-  Analysis 5 shows ≈ $1,848 committed / 26 % margin; `analysis/flight_time_model.py`
-  sweep total ≈ $1,674 uses cost-representative parts — the BOM figure is the R4
-  basis).
+  re-confirm the cost slide figure at briefing time if prices drift (deck
+  Analysis 5 shows ≈ $1,910 committed / 24 % margin after the 2026-11-03 BOM
+  reconciliation; `analysis/flight_time_model.py` sweep total ≈ $1,662 for config
+  C000009 uses cost-representative parts — the BOM figure is the R4 basis).

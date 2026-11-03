@@ -48,10 +48,12 @@ Verify these BEFORE the meeting:
   `presentation/assets/diagrams/system_composition.png`. No manual step remains.
 - [x] **Deck is current** — rebuilt 2026-10-11 from `build_cdr.py` (41 slides) and re-verified
   2026-10-12 after the Analysis-2 lens/GSD correction; `verify_cdr_deck.py` ALL PASS.
-- [x] **Cost slide** — Analysis 5 (slide 33) shows **≈ $1,848 committed system cost, ≈ 26 % margin**
-  under the $2,500 R4 cap; all four phases ≈ $2,007, also under cap. The old "$2,397 / $103 margin"
+- [x] **Cost slide** — Analysis 5 (slide 33) shows **≈ $1,910 committed system cost, ≈ 24 % margin**
+  under the $2,500 R4 cap; all four phases ≈ $2,069, also under cap. The old "$2,397 / $103 margin"
   figure in earlier prep notes is OBSOLETE (it predated the exclusion of the laptop + reusable
-  support gear from the R4 basis).
+  support gear from the R4 basis). **Reconciled to `BOM.md` 2026-11-03** — the pre-11-03 deck carried
+  $1,848 / $2,007 / $650, which understated Phase 2 by $62 (it used the pre-shipping camera price and
+  omitted the SBC heatsink line). See `presentation/cdr_cost_basis_reconciliation_2026-11-03.md`.
 - [x] **Open items slide** — slide 40 reflects the current board: 7 rows (RTL reserve value TBR,
   FC firmware RESOLVED, deck/battery dims TBR, SBC mount design, AF5 RETIRED, Phase 4 pricing TBD,
   empirical validation Action). Bootstrap dataset (D1.2) and labeling/augmentation (D1.3) are DONE
@@ -120,9 +122,9 @@ Verify these BEFORE the meeting:
 **Slide 8: Mission Requirements (R1–R8)**
 - SysON export table; V-methods I/A/D/T; at CDR: A complete for all; T/D planned (see V&V).
 - **Key callouts:**
-  - **R4_BUDGET = $2,500** — committed system ≈ $1,848 (Analysis 5), 26 % margin
+  - **R4_BUDGET = $2,500** — committed system ≈ $1,910 (Analysis 5), 24 % margin
   - **R7_RANGE = 2.8 km** — 4/4 RF links pass with ≥ 10 dB margin (Analysis 3)
-  - **R6_ENDURANCE = 30 min** — modeled at 58.4 min hover (Analysis 1)
+  - **R6_ENDURANCE = 30 min** — modeled at 57.2 min hover (Analysis 1)
 
 **Slide 9: Traceability Approach & Coverage**
 - Up-trace: each subsystem requirement subsets its mission requirement (e.g., R3_CAM_RES ⊂ R3,
@@ -203,8 +205,8 @@ Verify these BEFORE the meeting:
 **Slide 24: (Divider) Engineering Analyses** — four quantitative analyses + detail slides.
 
 **Slide 25: Detailed Design — Selected Configuration**
-- Reference build: Chimera9 ECO + 6S 12 Ah Amprius + Mini 640 + NanoPi M5 → ≈ 58 min hover,
-  ≈ $1,850 committed system cost (≤ $2,500 R4), SBC fits the deck. Down-selected from ~110 real
+- Reference build: Chimera9 ECO + 6S 12 Ah Amprius + Mini 640 + NanoPi M5 → ≈ 57 min hover,
+  ≈ $1,910 committed system cost (≤ $2,500 R4), SBC fits the deck. Down-selected from ~110 real
   market candidates; version-controlled, machine-enforced in the analysis.
 
 **Slide 26: Selected Hardware — Air Vehicle & Payload**
@@ -220,7 +222,7 @@ Verify these BEFORE the meeting:
 
 **Slide 28: Analysis 1 — Endurance (Flight Time)**
 - Momentum/actuator-disk (blade-element) model, 34 compatible configs swept (T13 + M5 fixed).
-- **58.4 min hover** at ~15 % throttle (16.85 W payload), 1,751 g AUW; slow cruise ≈ 60 min via
+- **57.2 min hover** at ~15 % throttle (16.9 W payload), 1,743 g AUW; slow cruise 58.7 min via
   translational lift. R6 ✓ (30 min), R8 ✗ (60 min stretch not met — documented).
 - Fidelity: first-order comparative; **not yet validated against measured hover current** — the
   Phase-1 instrumented flight (task 1.22) is the correlation gate. Risk to flag: BAT10 Amprius is
@@ -228,7 +230,7 @@ Verify these BEFORE the meeting:
 
 **Slide 29: Endurance vs. Cost — Full Configuration Trade Space**
 - Scatter of every compatible real configuration; R4 vertical line + R6/R8 horizontals. Entire
-  selected trade space sits left of $2,500 and above 30 min. Reference build ≈ $1,850 / 58 min.
+  selected trade space sits left of $2,500 and above 30 min. Reference build ≈ $1,910 / 57 min.
   Quick reference — the decision is already made.
 
 **Slide 30: Analysis 2 — Thermal Detection (Johnson Criteria)**
@@ -263,11 +265,11 @@ Verify these BEFORE the meeting:
 **Slide 33: Analysis 5 — Cost & Budget (R4 ≤ $2,500)**
 - Method: phased BOM rolled up from candidates.sysml with actual quoted prices for locked parts;
   **laptop (existing) and reusable support gear (dev packs, charger) excluded from the R4 figure.**
-- **≈ $1,848 committed system cost (~26 % margin); all four phases ≈ $2,007 — both under $2,500.
-  R4 VERDICT: PASS.** Thermal camera ($650) is the single largest line.
-- (The endurance sweep reports ≈ $1,674 using cost-representative radio/RX; the BOM figure uses the
-  actual selected parts, hence higher.)
-- **Decision needed:** Lisa approves the budget — now with a comfortable 26 % margin (the old
+- **≈ $1,910 committed system cost (~24 % margin); all four phases ≈ $2,069 — both under $2,500.
+  R4 VERDICT: PASS.** Thermal camera ($700) is the single largest line.
+- (The endurance sweep reports ≈ $1,662 for config C000009 using cost-representative radio/RX; the
+  BOM figure uses the actual selected parts plus the O(10 $) heatsink estimate, hence higher.)
+- **Decision needed:** Lisa approves the budget — now with a comfortable 24 % margin (the old
   96 %-of-budget "$103 margin" story is obsolete).
 
 **Slide 34: Performance Measures (SV-7)**
@@ -306,7 +308,7 @@ Verify these BEFORE the meeting:
   3. **R3.2 recognition margin is thin** (MEDIUM-HIGH): 4.2 px along-range vs 4 px floor — field
      capture (2.17) is the load-bearing check.
   4. **T13 shipping** (MEDIUM): long lead (Alibaba-class).
-  5. **Endurance model unvalidated** (MEDIUM): 58.4 min is modeled, not measured — task 1.22.
+  5. **Endurance model unvalidated** (MEDIUM): 57.2 min is modeled, not measured — task 1.22.
 
 **Slide 40: Open Items (TBD / TBR / Action)**
 - 7 rows, none design-blocking: RTL reserve-energy value (TBR, set before first autonomous flight) ·
@@ -317,7 +319,7 @@ Verify these BEFORE the meeting:
 
 **Slide 41: CDR Exit Assessment & Recommendation** (final slide — close strong)
 - Exit criteria: all ✓ (design complete & traced; interfaces defined; analyses show compliance with
-  margin; R4 ✓ 26 % margin · R6 ✓ · R7 ✓ · thermal detect ✓); ▲ R8 stretch not met (documented);
+  margin; R4 ✓ 24 % margin · R6 ✓ · R7 ✓ · thermal detect ✓); ▲ R8 stretch not met (documented);
   ▲ empirical validation pending (design gate, not yet test).
 - **RECOMMENDATION: Proceed to procurement, fabrication & integration.** Gates to operations:
   (1) instrumented Phase-1 flight to correlate the endurance model, (2) field thermal capture to
@@ -329,7 +331,7 @@ Verify these BEFORE the meeting:
 ## 3. Key Decisions Lisa Needs to Make
 
 1. **Approve the design → unlock ordering** — This is THE decision. Everything else is secondary.
-2. **Accept the budget** — ≈ $1,848 committed of $2,500 (**26 % margin**); all four phases ≈ $2,007
+2. **Accept the budget** — ≈ $1,910 committed of $2,500 (**24 % margin**); all four phases ≈ $2,069
    also under cap. The former tight-budget concern is resolved; contingency still wise if prices
    drift (see Risk #1).
 3. **Acknowledge open-item carry-forward** — bolt-pattern caliper (1.23), vendor mass confirmation

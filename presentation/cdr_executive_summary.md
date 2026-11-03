@@ -19,7 +19,7 @@
 | # | Decision | My recommendation |
 |---|----------|-------------------|
 | 1 | **Approve the baseline design** — Chimera9 ECO frame, BLITZ F7 FC, T-Motor 2806.7 motors, 8× props, 6S 12 Ah battery, ELRS telemetry, analog FPV, PurpleRiver Mini 640 18mm thermal, NanoPi M5 SBC onboard | Approve — all analyses show compliance with margin |
-| 2 | **Authorize Phase 1–3 procurement** — total committed system cost ≈ $1,848 (26% under the $2,500 R4 cap) | Authorize — best-value parts selected; no single point of failure |
+| 2 | **Authorize Phase 1–3 procurement** — total committed system cost ≈ $1,910 (24% under the $2,500 R4 cap) | Authorize — best-value parts selected; no single point of failure |
 | 3 | **Acknowledge three validation gates for operational release** — (a) instrumented Phase-1 hover to correlate endurance model, (b) field thermal capture to validate detection, (c) FAA BVLOS path | Acknowledge — these are normal for a first-build design review |
 
 ---
@@ -29,13 +29,13 @@
 | Phase | Scope | Cost | Status |
 |-------|-------|------|--------|
 | Phase 1 | Airframe + FPV + waypoints | $1,371 | Committed |
-| Phase 2 | Thermal camera + SBC | $809 | Committed |
+| Phase 2 | Thermal camera + SBC | $871 | Committed |
 | Phase 3 | AI detection (software only) | $0 | Committed |
-| **Committed system** | Phases 1–3 | **≈ $1,848** | **26% margin** |
+| **Committed system** | Phases 1–3 | **≈ $2,242** | **24% R4 margin** |
 | Phase 4 (deferred) | OpenHD digital downlink | $159 | Future |
-| **All four phases** | | **≈ $2,007** | **20% margin** |
+| **All four phases** | | **≈ $2,069** | **17% margin** |
 
-Laptop (existing) and reusable support gear excluded from R4 basis per req. R4. The largest single line item is the thermal camera ($650).
+Laptop (existing) and reusable support gear excluded from R4 basis per req. R4 (2× GNB dev packs $220 + HOTA charger $112). The largest single line item is the thermal camera ($700).
 
 ---
 
