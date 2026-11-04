@@ -1154,6 +1154,18 @@ package DroneCandidates {
                                     // RE-VERIFIED 2026-10-24 (nightly): product page <14.9g ceiling confirmed (TIGHTER than PDF <20g);
                                     // worst-case bound (14.9g mod + 9g lens = 23.9g) CG <1.3mm @ ~1.9kg AUW — ACCEPTABLE.
                                     // 12-17g range reaffirmed. See research-findings-oct-2026-nightly.md.
+                                    // VENDOR REPLY RECEIVED 2026-10-20 (gmail 1a158dc0ced11c0a, zowen.gu@zichuan-tech.com,
+                                    // replying to the inquiry sent to justin.lu@purpleriver.cn): stated "Weight: 0.27kg",
+                                    // dimension 21x21mm, lens 18mm, and "cannot output detailed temperature data".
+                                    // 270g is 18x this model value and physically implausible (own product page 6g w/o
+                                    // lens; PDF spec sheet <20g w/o lenses & flanges) -> held as UNRESOLVED, suspected
+                                    // unit slip (0.027kg = 27g) or a different housed MINI2 SKU. Mass HELD at 15.0g
+                                    // pending clarification; do NOT apply 270g without a full task-2.11 re-check
+                                    // (270g => CG +20..37mm, AUW 1999g, hover 48.5min, and a breach of R3_CAM_WT's
+                                    // 200g camera cap). radiometric=true above is likewise UNCONFIRMED against that
+                                    // reply, but no R3_CAM_* requirement needs calibrated temperature (imagery only).
+                                    // Analysis + clarification draft: projects/surveillance-drone-t13-mass-confirmation/
+                                    // vendor-reply-reconciliation-2026-11-04.md
    :>> power = 0.8 [W];
    :>> resolutionH = 640;
    :>> resolutionV = 512;
